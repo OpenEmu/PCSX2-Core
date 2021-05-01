@@ -25,7 +25,6 @@
 		5517E8C0263D4361000219EC /* OpenEmuBase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5517E8BF263D4361000219EC /* OpenEmuBase.framework */; };
 		5517E8C1263D4361000219EC /* OpenEmuBase.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5517E8BF263D4361000219EC /* OpenEmuBase.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		5517E8C7263D45F4000219EC /* PCSX2GameCore.m in Sources */ = {isa = PBXBuildFile; fileRef = 5517E8C6263D45F4000219EC /* PCSX2GameCore.m */; };
-		5517FE37263D4B6C000219EC /* pxTranslate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FA7C263D48AE000219EC /* pxTranslate.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -7328,7 +7327,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5517FE37263D4B6C000219EC /* pxTranslate.cpp in Sources */,
 				5517E8C7263D45F4000219EC /* PCSX2GameCore.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

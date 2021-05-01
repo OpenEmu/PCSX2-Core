@@ -26,8 +26,45 @@
 	<dict>
 		<key>openemu.system.ps2</key>
 		<dict>
+			<key>OERequiredFiles</key>
+			<array>
+				<dict>
+					<key>Description</key>
+					<string>PlayStation 2 SCPH-10000 (v1.0 Japan) BIOS</string>
+					<key>MD5</key>
+					<string>acf4730ceb38ac9d8c7d8e21f2614600</string>
+					<key>Name</key>
+					<string>scph10000.bin</string>
+					<key>Size</key>
+					<real>4194304</real>
+				</dict>
+				<dict>
+					<key>Description</key>
+					<string>PlayStation 2 SCPH-39001 (v1.60 USA) BIOS</string>
+					<key>MD5</key>
+					<string>d5ce2c7d119f563ce04bc04dbc3a323e</string>
+					<key>Name</key>
+					<string>scph39001.bin</string>
+					<key>Size</key>
+					<real>4194304</real>
+				</dict>
+				<dict>
+					<key>Description</key>
+					<string>PlayStation 2 SCPH-70004 (v2.0 Europe) BIOS</string>
+					<key>MD5</key>
+					<string>dc752f160044f2ed5fc1f4964db2a095</string>
+					<key>Name</key>
+					<string>scph70004.bin</string>
+					<key>Size</key>
+					<real>4194304</real>
+				</dict>
+			</array>
 			<key>OEGameCoreHasGlitches</key>
 			<true/>
+			<key>OEGameCoreSupportsMultipleDiscs</key>
+			<false/>
+			<key>OEGameCoreSupportsCheatCode</key>
+			<false/>
 		</dict>
 	</dict>
 	<key>OEGameCorePlayerCount</key>
@@ -38,5 +75,9 @@
 	<array>
 		<string>openemu.system.ps2</string>
 	</array>
+	<key>SUEnableAutomaticChecks</key>
+	<false/>
+	<key>SUFeedURL</key>
+	<string>https://raw.github.com/OpenEmu/OpenEmu-Update/master/pcsx2_appcast.xml</string>
 </dict>
 </plist>
