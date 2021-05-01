@@ -24,6 +24,91 @@
 
 #import "PCSX2GameCore.h"
 
+static __weak PCSX2GameCore *_current;
+
+
 @implementation PCSX2GameCore
+
+- (oneway void)didMovePS2JoystickDirection:(OEPS2Button)button withValue:(CGFloat)value forPlayer:(NSUInteger)player
+{
+	
+}
+
+- (oneway void)didPushPS2Button:(OEPS2Button)button forPlayer:(NSUInteger)player
+{
+	
+}
+
+- (oneway void)didReleasePS2Button:(OEPS2Button)button forPlayer:(NSUInteger)player {
+	
+}
+
+- (BOOL)loadFileAtPath:(NSString *)path error:(NSError **)error
+{
+	if (error) {
+		*error = [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotLoadROMError userInfo:nil];
+	}
+	return NO;
+}
+
+- (void)loadStateFromFileAtPath:(NSString *)fileName completionHandler:(void (^)(BOOL, NSError *))block
+{
+	block(NO, [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotLoadROMError userInfo:nil]);
+}
+
+- (void)saveStateToFileAtPath:(NSString *)fileName completionHandler:(void (^)(BOOL, NSError *))block
+{
+	block(NO, [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotLoadROMError userInfo:nil]);
+}
+
+- (void)resetEmulation
+{
+	
+}
+
+- (void)stopEmulation
+{
+	[super stopEmulation];
+}
+
+- (OEIntSize)aspectSize
+{
+	return (OEIntSize){ 4, 3 };
+}
+
+- (BOOL)tryToResizeVideoTo:(OEIntSize)size
+{
+	return YES;
+}
+
+- (OEGameCoreRendering)gameCoreRendering
+{
+	return OEGameCoreRenderingOpenGL3Video;
+}
+
+- (NSUInteger)channelCount
+{
+	return 2;
+}
+
+- (NSUInteger)audioBitDepth
+{
+	return 16;
+}
+
+- (double)audioSampleRate
+{
+	return 44100;
+}
+
+- (OEIntSize)bufferSize
+{
+	return (OEIntSize){ 640, 480 };
+}
+
+- (void)executeFrame
+{
+	
+}
 
 @end
