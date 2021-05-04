@@ -6,6 +6,8 @@
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIconFile</key>
+	<string>PCSX2</string>
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
@@ -26,6 +28,12 @@
 	<dict>
 		<key>openemu.system.ps2</key>
 		<dict>
+			<key>OEGameCoreHasGlitches</key>
+			<true/>
+			<key>OEGameCoreSupportsCheatCode</key>
+			<false/>
+			<key>OEGameCoreSupportsMultipleDiscs</key>
+			<false/>
 			<key>OERequiredFiles</key>
 			<array>
 				<dict>
@@ -59,12 +67,6 @@
 					<real>4194304</real>
 				</dict>
 			</array>
-			<key>OEGameCoreHasGlitches</key>
-			<true/>
-			<key>OEGameCoreSupportsMultipleDiscs</key>
-			<false/>
-			<key>OEGameCoreSupportsCheatCode</key>
-			<false/>
 		</dict>
 	</dict>
 	<key>OEGameCorePlayerCount</key>
