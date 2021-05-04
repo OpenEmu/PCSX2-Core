@@ -24,6 +24,10 @@
 
 #import "PCSX2GameCore.h"
 
+#define BOOL PCSX2BOOL
+#include "../pcsx2/pcsx2/PrecompiledHeader.h"
+#undef BOOL
+
 static __weak PCSX2GameCore *_current;
 
 

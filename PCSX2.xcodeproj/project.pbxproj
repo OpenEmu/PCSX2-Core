@@ -24,7 +24,7 @@
 /* Begin PBXBuildFile section */
 		550E0D462640C702008A1E48 /* PCSX2.icns in Resources */ = {isa = PBXBuildFile; fileRef = 550E0D452640C702008A1E48 /* PCSX2.icns */; };
 		5517E8C0263D4361000219EC /* OpenEmuBase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5517E8BF263D4361000219EC /* OpenEmuBase.framework */; };
-		5517E8C7263D45F4000219EC /* PCSX2GameCore.m in Sources */ = {isa = PBXBuildFile; fileRef = 5517E8C6263D45F4000219EC /* PCSX2GameCore.m */; };
+		5517E8C7263D45F4000219EC /* PCSX2GameCore.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5517E8C6263D45F4000219EC /* PCSX2GameCore.mm */; };
 		5517FE43263E1129000219EC /* libchdr_huffman.c in Sources */ = {isa = PBXBuildFile; fileRef = 5517EF51263D4837000219EC /* libchdr_huffman.c */; };
 		5517FE44263E1129000219EC /* libchdr_bitstream.c in Sources */ = {isa = PBXBuildFile; fileRef = 5517EF50263D4837000219EC /* libchdr_bitstream.c */; };
 		5517FE45263E1129000219EC /* libchdr_chd.c in Sources */ = {isa = PBXBuildFile; fileRef = 5517EF4F263D4837000219EC /* libchdr_chd.c */; };
@@ -590,6 +590,10 @@
 		551BF557264200310008C529 /* pxStreams.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FA80263D48AE000219EC /* pxStreams.cpp */; };
 		551BF559264200310008C529 /* VirtualMemory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FA8E263D48AE000219EC /* VirtualMemory.cpp */; };
 		551BF5602642006B0008C529 /* libPCSX2Utils.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 551BF53A2641FFAA0008C529 /* libPCSX2Utils.a */; };
+		551BF56226420DA00008C529 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 551BF56126420DA00008C529 /* Cocoa.framework */; };
+		551BF56426420DA70008C529 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 551BF56326420DA70008C529 /* OpenGL.framework */; };
+		551BF56626420DC80008C529 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 551BF56526420DC80008C529 /* IOKit.framework */; };
+		551BF56726420DE90008C529 /* SymbolMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FDD5263D49BC000219EC /* SymbolMap.cpp */; };
 		553CF8382640D2F8003A437C /* jmp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FA79263D48AE000219EC /* jmp.cpp */; };
 		553CF8392640D2F8003A437C /* x86emitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FA78263D48AE000219EC /* x86emitter.cpp */; };
 		553CF83A2640D2F8003A437C /* legacy_sse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FA6F263D48AE000219EC /* legacy_sse.cpp */; };
@@ -681,7 +685,7 @@
 		5517E8BF263D4361000219EC /* OpenEmuBase.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = OpenEmuBase.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5517E8C3263D4598000219EC /* OEPS2SystemResponderClient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OEPS2SystemResponderClient.h; path = "../OpenEmu/SystemPlugins/PlayStation 2/OEPS2SystemResponderClient.h"; sourceTree = SOURCE_ROOT; };
 		5517E8C5263D45F4000219EC /* PCSX2GameCore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCSX2GameCore.h; sourceTree = "<group>"; };
-		5517E8C6263D45F4000219EC /* PCSX2GameCore.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCSX2GameCore.m; sourceTree = "<group>"; };
+		5517E8C6263D45F4000219EC /* PCSX2GameCore.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = PCSX2GameCore.mm; sourceTree = "<group>"; };
 		5517E8D3263D4831000219EC /* FIFOSampleBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FIFOSampleBuffer.h; sourceTree = "<group>"; };
 		5517E8D4263D4831000219EC /* STTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = STTypes.h; sourceTree = "<group>"; };
 		5517E8D5263D4831000219EC /* BPMDetect.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BPMDetect.h; sourceTree = "<group>"; };
@@ -3823,6 +3827,9 @@
 		551BF52B2641FBFF0008C529 /* AppCoreThread.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppCoreThread.h; sourceTree = "<group>"; };
 		551BF52C2641FBFF0008C529 /* pxEventThread.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = pxEventThread.h; sourceTree = "<group>"; };
 		551BF53A2641FFAA0008C529 /* libPCSX2Utils.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPCSX2Utils.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		551BF56126420DA00008C529 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		551BF56326420DA70008C529 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+		551BF56526420DC80008C529 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		553CF8172640CCCD003A437C /* libx86emitter_PCSX2.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libx86emitter_PCSX2.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -3831,6 +3838,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				551BF56626420DC80008C529 /* IOKit.framework in Frameworks */,
+				551BF56426420DA70008C529 /* OpenGL.framework in Frameworks */,
+				551BF56226420DA00008C529 /* Cocoa.framework in Frameworks */,
 				551BF5602642006B0008C529 /* libPCSX2Utils.a in Frameworks */,
 				551BF4912641F9530008C529 /* libpng-pcsx2.a in Frameworks */,
 				551BF3D72641F6B60008C529 /* libiconv.tbd in Frameworks */,
@@ -4364,7 +4374,7 @@
 			children = (
 				5517E8C3263D4598000219EC /* OEPS2SystemResponderClient.h */,
 				5517E8C5263D45F4000219EC /* PCSX2GameCore.h */,
-				5517E8C6263D45F4000219EC /* PCSX2GameCore.m */,
+				5517E8C6263D45F4000219EC /* PCSX2GameCore.mm */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -4381,6 +4391,9 @@
 		5517E8BE263D4361000219EC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				551BF56526420DC80008C529 /* IOKit.framework */,
+				551BF56326420DA70008C529 /* OpenGL.framework */,
+				551BF56126420DA00008C529 /* Cocoa.framework */,
 				551BF3D62641F6B60008C529 /* libiconv.tbd */,
 				551BF2E32641F5430008C529 /* Carbon.framework */,
 				5517FE4B263E120F000219EC /* libz.tbd */,
@@ -8856,7 +8869,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5517E8C7263D45F4000219EC /* PCSX2GameCore.m in Sources */,
+				551BF56726420DE90008C529 /* SymbolMap.cpp in Sources */,
+				5517E8C7263D45F4000219EC /* PCSX2GameCore.mm in Sources */,
 				551BF52D2641FC0A0008C529 /* AppMain.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
