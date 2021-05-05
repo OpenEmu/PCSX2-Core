@@ -26,9 +26,15 @@
 
 #define BOOL PCSX2BOOL
 #include "../pcsx2/pcsx2/PrecompiledHeader.h"
+#include "../pcsx2/pcsx2/Plugins.h"
+#include "../pcsx2/pcsx2/GS.h"
+#include "../pcsx2/pcsx2/gui/AppConfig.h"
+#include "../pcsx2/pcsx2/gui/App.h"
+//#include "gui/Dialogs/ModalPopups.h"
 #undef BOOL
 
 static __weak PCSX2GameCore *_current;
+__aligned16 AppCorePlugins CorePlugins;
 
 
 @implementation PCSX2GameCore

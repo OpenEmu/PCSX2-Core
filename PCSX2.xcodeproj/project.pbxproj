@@ -561,7 +561,6 @@
 		551BF4A02641F98C0008C529 /* pngget.c in Sources */ = {isa = PBXBuildFile; fileRef = 5517E9F3263D4832000219EC /* pngget.c */; };
 		551BF4A12641F98C0008C529 /* pngrtran.c in Sources */ = {isa = PBXBuildFile; fileRef = 5517E9F5263D4832000219EC /* pngrtran.c */; };
 		551BF4A22641F98C0008C529 /* pngread.c in Sources */ = {isa = PBXBuildFile; fileRef = 5517E9B1263D4831000219EC /* pngread.c */; };
-		551BF52D2641FC0A0008C529 /* AppMain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551BF4BE2641FBFF0008C529 /* AppMain.cpp */; };
 		551BF53E264200030008C529 /* LnxHostSys.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551BE8882641EF4E0008C529 /* LnxHostSys.cpp */; };
 		551BF53F264200030008C529 /* wxAppWithHelpers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551BF4A42641F9FB0008C529 /* wxAppWithHelpers.cpp */; };
 		551BF540264200030008C529 /* wxHelpers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551BF4A32641F9FB0008C529 /* wxHelpers.cpp */; };
@@ -710,6 +709,69 @@
 		551BF620264214530008C529 /* iCOP0.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FD0C263D49BC000219EC /* iCOP0.cpp */; };
 		551BF621264214530008C529 /* iR3000Atables.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FD42263D49BC000219EC /* iR3000Atables.cpp */; };
 		551BF622264215690008C529 /* ConfigDebug.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FE35263D4A9B000219EC /* ConfigDebug.cpp */; };
+		551BF6272642167A0008C529 /* FileUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FBE2263D49BC000219EC /* FileUtils.cpp */; };
+		551BF628264216A40008C529 /* System.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FD4A263D49BC000219EC /* System.cpp */; };
+		551BF629264216B70008C529 /* SysCoreThread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FCB9263D49BC000219EC /* SysCoreThread.cpp */; };
+		551BF62A264216B70008C529 /* SysThreadBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FCBB263D49BC000219EC /* SysThreadBase.cpp */; };
+		551BF62B264216F50008C529 /* CDVDdiscReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FC97263D49BC000219EC /* CDVDdiscReader.cpp */; };
+		551BF62C264216F50008C529 /* GzippedFileReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FC8B263D49BC000219EC /* GzippedFileReader.cpp */; };
+		551BF62D264216F50008C529 /* OutputIsoFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FCA3263D49BC000219EC /* OutputIsoFile.cpp */; };
+		551BF62E264216F50008C529 /* CsoFileReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FCB5263D49BC000219EC /* CsoFileReader.cpp */; };
+		551BF62F264216F50008C529 /* CDVDisoReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FCA4263D49BC000219EC /* CDVDisoReader.cpp */; };
+		551BF630264216F50008C529 /* CompressedFileReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FC90263D49BC000219EC /* CompressedFileReader.cpp */; };
+		551BF631264216F50008C529 /* InputIsoFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FCA1263D49BC000219EC /* InputIsoFile.cpp */; };
+		551BF632264216F50008C529 /* ChunksCache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FC99263D49BC000219EC /* ChunksCache.cpp */; };
+		551BF633264216F50008C529 /* ChdFileReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FC98263D49BC000219EC /* ChdFileReader.cpp */; };
+		551BF634264216F50008C529 /* CDVDaccess.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FC93263D49BC000219EC /* CDVDaccess.cpp */; };
+		551BF635264216F50008C529 /* CDVDdiscThread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FCA8263D49BC000219EC /* CDVDdiscThread.cpp */; };
+		551BF636264216F50008C529 /* CdRom.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FC8E263D49BC000219EC /* CdRom.cpp */; };
+		551BF637264216F50008C529 /* BlockdumpFileReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FCA2263D49BC000219EC /* BlockdumpFileReader.cpp */; };
+		551BF638264216F50008C529 /* CDVD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FC8F263D49BC000219EC /* CDVD.cpp */; };
+		551BF641264217670008C529 /* LzmaEnc.c in Sources */ = {isa = PBXBuildFile; fileRef = 5517EF43263D4837000219EC /* LzmaEnc.c */; };
+		551BF6422642181C0008C529 /* iR5900-32.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FD3C263D49BC000219EC /* iR5900-32.cpp */; };
+		551BF643264218380008C529 /* iR5900Arit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FD33263D49BC000219EC /* iR5900Arit.cpp */; };
+		551BF644264218380008C529 /* iR5900Jump.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FD34263D49BC000219EC /* iR5900Jump.cpp */; };
+		551BF645264218380008C529 /* iR5900Branch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FD36263D49BC000219EC /* iR5900Branch.cpp */; };
+		551BF646264218380008C529 /* iR5900AritImm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FD3D263D49BC000219EC /* iR5900AritImm.cpp */; };
+		551BF647264218380008C529 /* iR5900Move.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FD35263D49BC000219EC /* iR5900Move.cpp */; };
+		551BF648264218380008C529 /* iCore-32.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FD39263D49BC000219EC /* iCore-32.cpp */; };
+		551BF649264218380008C529 /* iR5900MultDiv.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FD3B263D49BC000219EC /* iR5900MultDiv.cpp */; };
+		551BF64A264218380008C529 /* iR5900LoadStore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FD37263D49BC000219EC /* iR5900LoadStore.cpp */; };
+		551BF64B264218380008C529 /* iR5900Templates.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FD38263D49BC000219EC /* iR5900Templates.cpp */; };
+		551BF64C264218380008C529 /* recVTLB.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FD3E263D49BC000219EC /* recVTLB.cpp */; };
+		551BF64D264218380008C529 /* iR5900Shift.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FD3A263D49BC000219EC /* iR5900Shift.cpp */; };
+		551BF6562642187A0008C529 /* libyaml-PCSX2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 551BF6522642186F0008C529 /* libyaml-PCSX2.a */; };
+		551BF659264218940008C529 /* parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517F2D5263D483A000219EC /* parser.cpp */; };
+		551BF65A264218940008C529 /* simplekey.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517F2A8263D483A000219EC /* simplekey.cpp */; };
+		551BF65B264218940008C529 /* scantoken.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517F2C9263D483A000219EC /* scantoken.cpp */; };
+		551BF65C264218940008C529 /* emit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517F2C0263D483A000219EC /* emit.cpp */; };
+		551BF65D264218940008C529 /* memory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517F2A2263D483A000219EC /* memory.cpp */; };
+		551BF65E264218940008C529 /* nodeevents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517F2B7263D483A000219EC /* nodeevents.cpp */; };
+		551BF65F264218940008C529 /* ostream_wrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517F2A5263D483A000219EC /* ostream_wrapper.cpp */; };
+		551BF660264218940008C529 /* singledocparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517F2B3263D483A000219EC /* singledocparser.cpp */; };
+		551BF661264218940008C529 /* emitfromevents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517F2A7263D483A000219EC /* emitfromevents.cpp */; };
+		551BF662264218940008C529 /* binary.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517F2B5263D483A000219EC /* binary.cpp */; };
+		551BF663264218940008C529 /* convert.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517F2AD263D483A000219EC /* convert.cpp */; };
+		551BF664264218940008C529 /* depthguard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517F2C4263D483A000219EC /* depthguard.cpp */; };
+		551BF665264218940008C529 /* scanner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517F2BF263D483A000219EC /* scanner.cpp */; };
+		551BF666264218940008C529 /* emitterutils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517F2C5263D483A000219EC /* emitterutils.cpp */; };
+		551BF667264218940008C529 /* node_data.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517F2D3263D483A000219EC /* node_data.cpp */; };
+		551BF668264218940008C529 /* null.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517F2B1263D483A000219EC /* null.cpp */; };
+		551BF669264218940008C529 /* scanscalar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517F2AF263D483A000219EC /* scanscalar.cpp */; };
+		551BF66A264218940008C529 /* regex_yaml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517F2AE263D483A000219EC /* regex_yaml.cpp */; };
+		551BF66B264218940008C529 /* exp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517F2B0263D483A000219EC /* exp.cpp */; };
+		551BF66C264218940008C529 /* nodebuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517F2CB263D483A000219EC /* nodebuilder.cpp */; };
+		551BF66D264218940008C529 /* stream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517F2C7263D483A000219EC /* stream.cpp */; };
+		551BF66E264218940008C529 /* tag.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517F2C1263D483A000219EC /* tag.cpp */; };
+		551BF66F264218940008C529 /* parse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517F2A9263D483A000219EC /* parse.cpp */; };
+		551BF670264218940008C529 /* exceptions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517F2A1263D483A000219EC /* exceptions.cpp */; };
+		551BF671264218940008C529 /* directives.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517F2CD263D483A000219EC /* directives.cpp */; };
+		551BF672264218940008C529 /* emitterstate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517F2D4263D483A000219EC /* emitterstate.cpp */; };
+		551BF673264218940008C529 /* node.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517F2B2263D483A000219EC /* node.cpp */; };
+		551BF674264218940008C529 /* scantag.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517F2C8263D483A000219EC /* scantag.cpp */; };
+		551BF675264218940008C529 /* emitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517F2AB263D483A000219EC /* emitter.cpp */; };
+		551BF676264219BD0008C529 /* DebugInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FDDF263D49BC000219EC /* DebugInterface.cpp */; };
+		551BF67726421A320008C529 /* ExecutorThread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551BF4E82641FBFF0008C529 /* ExecutorThread.cpp */; };
 		553CF8382640D2F8003A437C /* jmp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FA79263D48AE000219EC /* jmp.cpp */; };
 		553CF8392640D2F8003A437C /* x86emitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FA78263D48AE000219EC /* x86emitter.cpp */; };
 		553CF83A2640D2F8003A437C /* legacy_sse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FA6F263D48AE000219EC /* legacy_sse.cpp */; };
@@ -774,6 +836,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 551BF5FF264213470008C529;
 			remoteInfo = "SoundTouch-PCSX2";
+		};
+		551BF657264218800008C529 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5517E8AC263D4213000219EC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 551BF6512642186F0008C529;
+			remoteInfo = "yaml-PCSX2";
 		};
 		553CF8442640D308003A437C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -3962,6 +4031,7 @@
 		551BF5B626420FFC0008C529 /* svnrev.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = svnrev.h; sourceTree = "<group>"; };
 		551BF5ED264212D60008C529 /* soundtouch_config.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = soundtouch_config.h; sourceTree = "<group>"; };
 		551BF600264213470008C529 /* libSoundTouch-PCSX2.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libSoundTouch-PCSX2.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		551BF6522642186F0008C529 /* libyaml-PCSX2.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libyaml-PCSX2.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		553CF8172640CCCD003A437C /* libx86emitter_PCSX2.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libx86emitter_PCSX2.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -3970,6 +4040,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				551BF6562642187A0008C529 /* libyaml-PCSX2.a in Frameworks */,
 				551BF6122642136D0008C529 /* libSoundTouch-PCSX2.a in Frameworks */,
 				551BF56626420DC80008C529 /* IOKit.framework in Frameworks */,
 				551BF56426420DA70008C529 /* OpenGL.framework in Frameworks */,
@@ -4023,6 +4094,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		551BF5FE264213470008C529 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		551BF6502642186F0008C529 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -4506,6 +4584,7 @@
 				551BF48D2641F9470008C529 /* libpng-pcsx2.a */,
 				551BF53A2641FFAA0008C529 /* libPCSX2Utils.a */,
 				551BF600264213470008C529 /* libSoundTouch-PCSX2.a */,
+				551BF6522642186F0008C529 /* libyaml-PCSX2.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -5854,9 +5933,8 @@
 			children = (
 				5517F263263D4839000219EC /* yaml-cpp */,
 			);
-			name = include;
-			path = "pcsx2/3rdparty/yaml-cpp/yaml-cpp/include";
-			sourceTree = SOURCE_ROOT;
+			path = include;
+			sourceTree = "<group>";
 		};
 		5517F263263D4839000219EC /* yaml-cpp */ = {
 			isa = PBXGroup;
@@ -5929,57 +6007,57 @@
 		5517F29F263D483A000219EC /* src */ = {
 			isa = PBXGroup;
 			children = (
-				5517F2A0263D483A000219EC /* scanscalar.h */,
-				5517F2A1263D483A000219EC /* exceptions.cpp */,
-				5517F2A2263D483A000219EC /* memory.cpp */,
-				5517F2A3263D483A000219EC /* scantag.h */,
-				5517F2A4263D483A000219EC /* regeximpl.h */,
-				5517F2A5263D483A000219EC /* ostream_wrapper.cpp */,
-				5517F2A6263D483A000219EC /* tag.h */,
-				5517F2A7263D483A000219EC /* emitfromevents.cpp */,
-				5517F2A8263D483A000219EC /* simplekey.cpp */,
-				5517F2A9263D483A000219EC /* parse.cpp */,
-				5517F2AA263D483A000219EC /* indentation.h */,
-				5517F2AB263D483A000219EC /* emitter.cpp */,
-				5517F2AC263D483A000219EC /* nodeevents.h */,
-				5517F2AD263D483A000219EC /* convert.cpp */,
-				5517F2AE263D483A000219EC /* regex_yaml.cpp */,
-				5517F2AF263D483A000219EC /* scanscalar.cpp */,
-				5517F2B0263D483A000219EC /* exp.cpp */,
-				5517F2B1263D483A000219EC /* null.cpp */,
-				5517F2B2263D483A000219EC /* node.cpp */,
-				5517F2B3263D483A000219EC /* singledocparser.cpp */,
-				5517F2B4263D483A000219EC /* emitterutils.h */,
 				5517F2B5263D483A000219EC /* binary.cpp */,
-				5517F2B6263D483A000219EC /* stream.h */,
-				5517F2B7263D483A000219EC /* nodeevents.cpp */,
-				5517F2B8263D483A000219EC /* contrib */,
-				5517F2BE263D483A000219EC /* nodebuilder.h */,
-				5517F2BF263D483A000219EC /* scanner.cpp */,
-				5517F2C0263D483A000219EC /* emit.cpp */,
-				5517F2C1263D483A000219EC /* tag.cpp */,
-				5517F2C2263D483A000219EC /* streamcharsource.h */,
-				5517F2C3263D483A000219EC /* stringsource.h */,
+				5517F2AD263D483A000219EC /* convert.cpp */,
 				5517F2C4263D483A000219EC /* depthguard.cpp */,
+				5517F2CD263D483A000219EC /* directives.cpp */,
+				5517F2C0263D483A000219EC /* emit.cpp */,
+				5517F2A7263D483A000219EC /* emitfromevents.cpp */,
+				5517F2AB263D483A000219EC /* emitter.cpp */,
+				5517F2D4263D483A000219EC /* emitterstate.cpp */,
 				5517F2C5263D483A000219EC /* emitterutils.cpp */,
-				5517F2C6263D483A000219EC /* scanner.h */,
-				5517F2C7263D483A000219EC /* stream.cpp */,
+				5517F2A1263D483A000219EC /* exceptions.cpp */,
+				5517F2B0263D483A000219EC /* exp.cpp */,
+				5517F2A2263D483A000219EC /* memory.cpp */,
+				5517F2D3263D483A000219EC /* node_data.cpp */,
+				5517F2B2263D483A000219EC /* node.cpp */,
+				5517F2CB263D483A000219EC /* nodebuilder.cpp */,
+				5517F2B7263D483A000219EC /* nodeevents.cpp */,
+				5517F2B1263D483A000219EC /* null.cpp */,
+				5517F2A5263D483A000219EC /* ostream_wrapper.cpp */,
+				5517F2A9263D483A000219EC /* parse.cpp */,
+				5517F2D5263D483A000219EC /* parser.cpp */,
+				5517F2AE263D483A000219EC /* regex_yaml.cpp */,
+				5517F2BF263D483A000219EC /* scanner.cpp */,
+				5517F2AF263D483A000219EC /* scanscalar.cpp */,
 				5517F2C8263D483A000219EC /* scantag.cpp */,
 				5517F2C9263D483A000219EC /* scantoken.cpp */,
-				5517F2CA263D483A000219EC /* emitterstate.h */,
-				5517F2CB263D483A000219EC /* nodebuilder.cpp */,
+				5517F2A8263D483A000219EC /* simplekey.cpp */,
+				5517F2B3263D483A000219EC /* singledocparser.cpp */,
+				5517F2C7263D483A000219EC /* stream.cpp */,
+				5517F2C1263D483A000219EC /* tag.cpp */,
 				5517F2CC263D483A000219EC /* collectionstack.h */,
-				5517F2CD263D483A000219EC /* directives.cpp */,
-				5517F2CE263D483A000219EC /* ptr_vector.h */,
-				5517F2CF263D483A000219EC /* singledocparser.h */,
-				5517F2D0263D483A000219EC /* exp.h */,
-				5517F2D1263D483A000219EC /* token.h */,
-				5517F2D2263D483A000219EC /* regex_yaml.h */,
-				5517F2D3263D483A000219EC /* node_data.cpp */,
-				5517F2D4263D483A000219EC /* emitterstate.cpp */,
-				5517F2D5263D483A000219EC /* parser.cpp */,
-				5517F2D6263D483A000219EC /* setting.h */,
 				5517F2D7263D483A000219EC /* directives.h */,
+				5517F2CA263D483A000219EC /* emitterstate.h */,
+				5517F2B4263D483A000219EC /* emitterutils.h */,
+				5517F2D0263D483A000219EC /* exp.h */,
+				5517F2AA263D483A000219EC /* indentation.h */,
+				5517F2BE263D483A000219EC /* nodebuilder.h */,
+				5517F2AC263D483A000219EC /* nodeevents.h */,
+				5517F2CE263D483A000219EC /* ptr_vector.h */,
+				5517F2D2263D483A000219EC /* regex_yaml.h */,
+				5517F2A4263D483A000219EC /* regeximpl.h */,
+				5517F2C6263D483A000219EC /* scanner.h */,
+				5517F2A0263D483A000219EC /* scanscalar.h */,
+				5517F2A3263D483A000219EC /* scantag.h */,
+				5517F2D6263D483A000219EC /* setting.h */,
+				5517F2CF263D483A000219EC /* singledocparser.h */,
+				5517F2B6263D483A000219EC /* stream.h */,
+				5517F2C2263D483A000219EC /* streamcharsource.h */,
+				5517F2C3263D483A000219EC /* stringsource.h */,
+				5517F2A6263D483A000219EC /* tag.h */,
+				5517F2D1263D483A000219EC /* token.h */,
+				5517F2B8263D483A000219EC /* contrib */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -8787,6 +8865,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		551BF64E2642186F0008C529 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		553CF8132640CCCD003A437C /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -8809,12 +8894,13 @@
 			buildRules = (
 			);
 			dependencies = (
+				551BF658264218800008C529 /* PBXTargetDependency */,
+				5517FE68263E1279000219EC /* PBXTargetDependency */,
 				551BF614264213720008C529 /* PBXTargetDependency */,
 				551BF55F264200630008C529 /* PBXTargetDependency */,
 				551BF4932641F9590008C529 /* PBXTargetDependency */,
 				551BF1DF2641F2470008C529 /* PBXTargetDependency */,
 				553CF8452640D308003A437C /* PBXTargetDependency */,
-				5517FE68263E1279000219EC /* PBXTargetDependency */,
 				5517FE4A263E1152000219EC /* PBXTargetDependency */,
 			);
 			name = PCSX2;
@@ -8924,6 +9010,23 @@
 			productReference = 551BF600264213470008C529 /* libSoundTouch-PCSX2.a */;
 			productType = "com.apple.product-type.library.static";
 		};
+		551BF6512642186F0008C529 /* yaml-PCSX2 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 551BF6532642186F0008C529 /* Build configuration list for PBXNativeTarget "yaml-PCSX2" */;
+			buildPhases = (
+				551BF64E2642186F0008C529 /* Headers */,
+				551BF64F2642186F0008C529 /* Sources */,
+				551BF6502642186F0008C529 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "yaml-PCSX2";
+			productName = "yaml-PCSX2";
+			productReference = 551BF6522642186F0008C529 /* libyaml-PCSX2.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 		553CF8162640CCCD003A437C /* x86emitter_PCSX2 */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 553CF8182640CCCD003A437C /* Build configuration list for PBXNativeTarget "x86emitter_PCSX2" */;
@@ -8974,6 +9077,9 @@
 					551BF5FF264213470008C529 = {
 						CreatedOnToolsVersion = 12.5;
 					};
+					551BF6512642186F0008C529 = {
+						CreatedOnToolsVersion = 12.5;
+					};
 					553CF8162640CCCD003A437C = {
 						CreatedOnToolsVersion = 12.5;
 					};
@@ -9001,6 +9107,7 @@
 				551BF5392641FFAA0008C529 /* PCSX2Utils */,
 				551BF1632641F1AF0008C529 /* WxWidgets */,
 				551BF5FF264213470008C529 /* SoundTouch-PCSX2 */,
+				551BF6512642186F0008C529 /* yaml-PCSX2 */,
 			);
 		};
 /* End PBXProject section */
@@ -9043,6 +9150,8 @@
 			files = (
 				551BF5BD264210A30008C529 /* FiFo.cpp in Sources */,
 				551BF5C2264210AB0008C529 /* GS.cpp in Sources */,
+				551BF629264216B70008C529 /* SysCoreThread.cpp in Sources */,
+				551BF676264219BD0008C529 /* DebugInterface.cpp in Sources */,
 				551BF58526420E9A0008C529 /* SourceLog.cpp in Sources */,
 				551BF5CE264212070008C529 /* IPU_Fifo.cpp in Sources */,
 				551BF5D4264212270008C529 /* Mdec.cpp in Sources */,
@@ -9050,6 +9159,7 @@
 				551BF5C7264211540008C529 /* os.cc in Sources */,
 				551BF59026420E9A0008C529 /* SPR.cpp in Sources */,
 				551BF57F26420E9A0008C529 /* Sif0.cpp in Sources */,
+				551BF62C264216F50008C529 /* GzippedFileReader.cpp in Sources */,
 				551BF61A264214530008C529 /* iR3000A.cpp in Sources */,
 				551BF57126420E720008C529 /* VUflags.cpp in Sources */,
 				551BF5BF264210A30008C529 /* FPU.cpp in Sources */,
@@ -9060,8 +9170,11 @@
 				551BF5D1264212270008C529 /* MTVU.cpp in Sources */,
 				551BF5C0264210A50008C529 /* GameDatabase.cpp in Sources */,
 				551BF5BA2642108D0008C529 /* DarwinFlatFileReader.cpp in Sources */,
+				551BF62A264216B70008C529 /* SysThreadBase.cpp in Sources */,
 				551BF5B026420FA50008C529 /* IopIrq.cpp in Sources */,
+				551BF630264216F50008C529 /* CompressedFileReader.cpp in Sources */,
 				551BF56D26420E710008C529 /* Vif_Codes.cpp in Sources */,
+				551BF62E264216F50008C529 /* CsoFileReader.cpp in Sources */,
 				551BF57B26420E9A0008C529 /* SaveState.cpp in Sources */,
 				551BF57326420E720008C529 /* VU0micro.cpp in Sources */,
 				551BF5C1264210AB0008C529 /* GSState.cpp in Sources */,
@@ -9070,7 +9183,9 @@
 				551BF57526420E720008C529 /* Vif.cpp in Sources */,
 				551BF58E26420E9A0008C529 /* sif2.cpp in Sources */,
 				551BF618264214530008C529 /* iCore.cpp in Sources */,
+				551BF64B264218380008C529 /* iR5900Templates.cpp in Sources */,
 				551BF61D264214530008C529 /* BaseblockEx.cpp in Sources */,
+				551BF64C264218380008C529 /* recVTLB.cpp in Sources */,
 				551BF5D0264212270008C529 /* PrecompiledHeader.cpp in Sources */,
 				551BF617264214530008C529 /* iFPU.cpp in Sources */,
 				551BF58926420E9A0008C529 /* Sif1.cpp in Sources */,
@@ -9084,36 +9199,51 @@
 				551BF58826420E9A0008C529 /* R5900OpcodeTables.cpp in Sources */,
 				551BF5C6264211540008C529 /* format.cc in Sources */,
 				551BF61F264214530008C529 /* iMisc.cpp in Sources */,
+				551BF6272642167A0008C529 /* FileUtils.cpp in Sources */,
 				551BF58B26420E9A0008C529 /* IopHwWrite.cpp in Sources */,
+				551BF64A264218380008C529 /* iR5900LoadStore.cpp in Sources */,
 				551BF5A926420FA50008C529 /* IopSio2.cpp in Sources */,
 				551BF5CA264212070008C529 /* IPUdither.cpp in Sources */,
 				551BF58326420E9A0008C529 /* IopHwRead.cpp in Sources */,
 				551BF5C3264210AB0008C529 /* Gif.cpp in Sources */,
 				551BF57A26420E720008C529 /* VU1microInterp.cpp in Sources */,
+				551BF647264218380008C529 /* iR5900Move.cpp in Sources */,
 				551BF57D26420E9A0008C529 /* ShiftJisToUnicode.cpp in Sources */,
+				551BF631264216F50008C529 /* InputIsoFile.cpp in Sources */,
 				551BF58426420E9A0008C529 /* R3000AInterpreter.cpp in Sources */,
 				551BF5C9264212070008C529 /* IPUdma.cpp in Sources */,
 				551BF5D8264212270008C529 /* Pcsx2Config.cpp in Sources */,
 				551BF5B526420FA50008C529 /* HwRead.cpp in Sources */,
 				551BF5BB2642109D0008C529 /* Dump.cpp in Sources */,
+				551BF646264218380008C529 /* iR5900AritImm.cpp in Sources */,
 				551BF5CF264212070008C529 /* yuv2rgb.cpp in Sources */,
+				551BF628264216A40008C529 /* System.cpp in Sources */,
+				551BF633264216F50008C529 /* ChdFileReader.cpp in Sources */,
 				551BF6152642142F0008C529 /* microVU.cpp in Sources */,
 				551BF5AA26420FA50008C529 /* Hw.cpp in Sources */,
+				551BF648264218380008C529 /* iCore-32.cpp in Sources */,
 				551BF61B264214530008C529 /* iR5900Misc.cpp in Sources */,
 				551BF5B126420FA50008C529 /* IPC.cpp in Sources */,
 				551BF5B7264210860008C529 /* COP0.cpp in Sources */,
+				551BF643264218380008C529 /* iR5900Arit.cpp in Sources */,
 				551BF620264214530008C529 /* iCOP0.cpp in Sources */,
+				551BF635264216F50008C529 /* CDVDdiscThread.cpp in Sources */,
 				5517E8C7263D45F4000219EC /* PCSX2GameCore.mm in Sources */,
 				551BF5BC2642109F0008C529 /* Elfheader.cpp in Sources */,
+				551BF649264218380008C529 /* iR5900MultDiv.cpp in Sources */,
 				551BF57626420E720008C529 /* Vif1_MFIFO.cpp in Sources */,
 				551BF5CB264212070008C529 /* Idct.cpp in Sources */,
 				551BF56C26420E710008C529 /* Vif_Transfer.cpp in Sources */,
 				551BF5DA264212270008C529 /* Memory.cpp in Sources */,
+				551BF637264216F50008C529 /* BlockdumpFileReader.cpp in Sources */,
 				551BF57926420E720008C529 /* Vif0_Dma.cpp in Sources */,
 				551BF56826420E3B0008C529 /* newVif_Unpack.cpp in Sources */,
+				551BF67726421A320008C529 /* ExecutorThread.cpp in Sources */,
 				551BF5CD264212070008C529 /* Mpeg.cpp in Sources */,
+				551BF62F264216F50008C529 /* CDVDisoReader.cpp in Sources */,
 				551BF5AE26420FA50008C529 /* IopCounters.cpp in Sources */,
 				551BF622264215690008C529 /* ConfigDebug.cpp in Sources */,
+				551BF6422642181C0008C529 /* iR5900-32.cpp in Sources */,
 				551BF58026420E9A0008C529 /* R5900OpcodeImpl.cpp in Sources */,
 				551BF61C264214530008C529 /* ir5900tables.cpp in Sources */,
 				551BF5C4264210AB0008C529 /* Gif_Logger.cpp in Sources */,
@@ -9135,16 +9265,24 @@
 				551BF56926420E5A0008C529 /* newVif_UnpackSSE.cpp in Sources */,
 				551BF56B26420E710008C529 /* VUmicroMem.cpp in Sources */,
 				551BF58C26420E9A0008C529 /* PsxBios.cpp in Sources */,
+				551BF632264216F50008C529 /* ChunksCache.cpp in Sources */,
 				551BF5AD26420FA50008C529 /* IopBios.cpp in Sources */,
 				551BF5B226420FA50008C529 /* IopGte.cpp in Sources */,
 				551BF58126420E9A0008C529 /* BiosTools.cpp in Sources */,
 				551BF5D7264212270008C529 /* Patch_Memory.cpp in Sources */,
-				551BF52D2641FC0A0008C529 /* AppMain.cpp in Sources */,
+				551BF638264216F50008C529 /* CDVD.cpp in Sources */,
+				551BF62B264216F50008C529 /* CDVDdiscReader.cpp in Sources */,
+				551BF636264216F50008C529 /* CdRom.cpp in Sources */,
+				551BF634264216F50008C529 /* CDVDaccess.cpp in Sources */,
 				551BF5AF26420FA50008C529 /* IopDma.cpp in Sources */,
 				551BF58F26420E9A0008C529 /* R5900.cpp in Sources */,
 				551BF58D26420E9A0008C529 /* Sif.cpp in Sources */,
+				551BF64D264218380008C529 /* iR5900Shift.cpp in Sources */,
 				551BF5D3264212270008C529 /* OutputIsoFile.cpp in Sources */,
+				551BF644264218380008C529 /* iR5900Jump.cpp in Sources */,
 				551BF56A26420E710008C529 /* Vif_Unpack.cpp in Sources */,
+				551BF62D264216F50008C529 /* OutputIsoFile.cpp in Sources */,
+				551BF645264218380008C529 /* iR5900Branch.cpp in Sources */,
 				551BF621264214530008C529 /* iR3000Atables.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -9169,6 +9307,7 @@
 				5517FE61263E126A000219EC /* LzmaDec.c in Sources */,
 				5517FE5F263E126A000219EC /* Bra86.c in Sources */,
 				5517FE5E263E126A000219EC /* Delta.c in Sources */,
+				551BF641264217670008C529 /* LzmaEnc.c in Sources */,
 				5517FE63263E126A000219EC /* Alloc.c in Sources */,
 				5517FE66263E126A000219EC /* Lzma86Dec.c in Sources */,
 				5517FE62263E126A000219EC /* LzFind.c in Sources */,
@@ -9760,6 +9899,42 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		551BF64F2642186F0008C529 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				551BF666264218940008C529 /* emitterutils.cpp in Sources */,
+				551BF66B264218940008C529 /* exp.cpp in Sources */,
+				551BF673264218940008C529 /* node.cpp in Sources */,
+				551BF65E264218940008C529 /* nodeevents.cpp in Sources */,
+				551BF660264218940008C529 /* singledocparser.cpp in Sources */,
+				551BF675264218940008C529 /* emitter.cpp in Sources */,
+				551BF669264218940008C529 /* scanscalar.cpp in Sources */,
+				551BF65D264218940008C529 /* memory.cpp in Sources */,
+				551BF668264218940008C529 /* null.cpp in Sources */,
+				551BF65C264218940008C529 /* emit.cpp in Sources */,
+				551BF659264218940008C529 /* parser.cpp in Sources */,
+				551BF670264218940008C529 /* exceptions.cpp in Sources */,
+				551BF66C264218940008C529 /* nodebuilder.cpp in Sources */,
+				551BF667264218940008C529 /* node_data.cpp in Sources */,
+				551BF663264218940008C529 /* convert.cpp in Sources */,
+				551BF671264218940008C529 /* directives.cpp in Sources */,
+				551BF65A264218940008C529 /* simplekey.cpp in Sources */,
+				551BF665264218940008C529 /* scanner.cpp in Sources */,
+				551BF66E264218940008C529 /* tag.cpp in Sources */,
+				551BF66A264218940008C529 /* regex_yaml.cpp in Sources */,
+				551BF672264218940008C529 /* emitterstate.cpp in Sources */,
+				551BF65B264218940008C529 /* scantoken.cpp in Sources */,
+				551BF66F264218940008C529 /* parse.cpp in Sources */,
+				551BF65F264218940008C529 /* ostream_wrapper.cpp in Sources */,
+				551BF662264218940008C529 /* binary.cpp in Sources */,
+				551BF661264218940008C529 /* emitfromevents.cpp in Sources */,
+				551BF674264218940008C529 /* scantag.cpp in Sources */,
+				551BF664264218940008C529 /* depthguard.cpp in Sources */,
+				551BF66D264218940008C529 /* stream.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		553CF8142640CCCD003A437C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -9816,6 +9991,11 @@
 			isa = PBXTargetDependency;
 			target = 551BF5FF264213470008C529 /* SoundTouch-PCSX2 */;
 			targetProxy = 551BF613264213720008C529 /* PBXContainerItemProxy */;
+		};
+		551BF658264218800008C529 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 551BF6512642186F0008C529 /* yaml-PCSX2 */;
+			targetProxy = 551BF657264218800008C529 /* PBXContainerItemProxy */;
 		};
 		553CF8452640D308003A437C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -10059,6 +10239,10 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				EXECUTABLE_PREFIX = lib;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"_7ZIP_ST=1",
+					"$(inherited)",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -10069,6 +10253,10 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				EXECUTABLE_PREFIX = lib;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"_7ZIP_ST=1",
+					"$(inherited)",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -10195,6 +10383,28 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				EXECUTABLE_PREFIX = lib;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		551BF6542642186F0008C529 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				EXECUTABLE_PREFIX = lib;
+				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/pcsx2/3rdparty/yaml-cpp/yaml-cpp/include\"";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		551BF6552642186F0008C529 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				EXECUTABLE_PREFIX = lib;
+				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/pcsx2/3rdparty/yaml-cpp/yaml-cpp/include\"";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -10332,6 +10542,15 @@
 			buildConfigurations = (
 				551BF602264213470008C529 /* Debug */,
 				551BF603264213470008C529 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		551BF6532642186F0008C529 /* Build configuration list for PBXNativeTarget "yaml-PCSX2" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				551BF6542642186F0008C529 /* Debug */,
+				551BF6552642186F0008C529 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
