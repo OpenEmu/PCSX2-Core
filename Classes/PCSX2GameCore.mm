@@ -203,6 +203,17 @@ SysCpuProviderPack& GetCpuProviders()
 	return *wxGetApp().m_CpuProviders;
 }
 
+wxDirName GetProgramDataDir()
+{
+	GET_CURRENT_OR_RETURN(wxDirName(""));
+	return wxDirName([NSBundle bundleForClass:[current class]].resourceURL.fileSystemRepresentation);
+}
+
+void StateCopy_LoadFromSlot(uint slot, bool isFromBackup)
+{
+	// do nothing
+}
+
 // Safe to remove these lines when this is handled properly.
 #ifdef __WXMAC__
 // Great joy....
