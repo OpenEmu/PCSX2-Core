@@ -802,7 +802,6 @@
 		551BF694264242510008C529 /* Cache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FCBC263D49BC000219EC /* Cache.cpp */; };
 		551BF6952642427A0008C529 /* USBNull.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FC27263D49BC000219EC /* USBNull.cpp */; };
 		551BF697264242A80008C529 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 551BF696264242A80008C529 /* QuartzCore.framework */; };
-		551BF698264242CE0008C529 /* MemoryCardFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551BF4F12641FBFF0008C529 /* MemoryCardFile.cpp */; };
 		551BF699264242FE0008C529 /* spu2sys.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FCEE263D49BC000219EC /* spu2sys.cpp */; };
 		551BF69A264243310008C529 /* DriveUtility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FC9E263D49BC000219EC /* DriveUtility.cpp */; };
 		551BF69B264243680008C529 /* ATA_Command.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FAF5263D49BB000219EC /* ATA_Command.cpp */; };
@@ -835,6 +834,15 @@
 		551BF6B926424A010008C529 /* AppCoreThread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551BF4AE2641FBFF0008C529 /* AppCoreThread.cpp */; };
 		551BF6BA26424A9A0008C529 /* Dialogs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FE30263D4A9B000219EC /* Dialogs.cpp */; };
 		551BF6BD26424BAA0008C529 /* ThreadedFileReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551BF6BC26424BAA0008C529 /* ThreadedFileReader.cpp */; };
+		551BF6E826424D030008C529 /* InputRecordingControls.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551BF6BF26424D020008C529 /* InputRecordingControls.cpp */; };
+		551BF6E926424D030008C529 /* InputRecording.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551BF6C026424D020008C529 /* InputRecording.cpp */; };
+		551BF6EA26424D030008C529 /* VirtualPadResources.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551BF6C426424D020008C529 /* VirtualPadResources.cpp */; };
+		551BF70026424D030008C529 /* VirtualPadData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551BF6DB26424D020008C529 /* VirtualPadData.cpp */; };
+		551BF70226424D030008C529 /* InputRecordingFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551BF6E326424D020008C529 /* InputRecordingFile.cpp */; };
+		551BF70326424D030008C529 /* NewRecordingFrame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551BF6E426424D020008C529 /* NewRecordingFrame.cpp */; };
+		551BF70426424D030008C529 /* PadData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551BF6E526424D020008C529 /* PadData.cpp */; };
+		551BF71826424ED50008C529 /* bin2cpp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551BF71626424EC60008C529 /* bin2cpp.cpp */; };
+		551BF71C264252370008C529 /* OEPCSX2MemCardManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551BF71B264252370008C529 /* OEPCSX2MemCardManager.cpp */; };
 		553CF8382640D2F8003A437C /* jmp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FA79263D48AE000219EC /* jmp.cpp */; };
 		553CF8392640D2F8003A437C /* x86emitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FA78263D48AE000219EC /* x86emitter.cpp */; };
 		553CF83A2640D2F8003A437C /* legacy_sse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FA6F263D48AE000219EC /* legacy_sse.cpp */; };
@@ -926,6 +934,15 @@
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
+		};
+		551BF70726424E7D0008C529 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
@@ -4101,6 +4118,45 @@
 		551BF6B6264248D10008C529 /* OEPCSX2SPUConfig.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OEPCSX2SPUConfig.cpp; sourceTree = "<group>"; };
 		551BF6BB26424BA90008C529 /* ThreadedFileReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThreadedFileReader.h; sourceTree = "<group>"; };
 		551BF6BC26424BAA0008C529 /* ThreadedFileReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ThreadedFileReader.cpp; sourceTree = "<group>"; };
+		551BF6BF26424D020008C529 /* InputRecordingControls.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InputRecordingControls.cpp; sourceTree = "<group>"; };
+		551BF6C026424D020008C529 /* InputRecording.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InputRecording.cpp; sourceTree = "<group>"; };
+		551BF6C226424D020008C529 /* VirtualPad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VirtualPad.h; sourceTree = "<group>"; };
+		551BF6C326424D020008C529 /* VirtualPadResources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VirtualPadResources.h; sourceTree = "<group>"; };
+		551BF6C426424D020008C529 /* VirtualPadResources.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VirtualPadResources.cpp; sourceTree = "<group>"; };
+		551BF6C626424D020008C529 /* controllerFull.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = controllerFull.png; sourceTree = "<group>"; };
+		551BF6C726424D020008C529 /* upPressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = upPressed.png; sourceTree = "<group>"; };
+		551BF6C826424D020008C529 /* l2Pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = l2Pressed.png; sourceTree = "<group>"; };
+		551BF6C926424D020008C529 /* downPressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = downPressed.png; sourceTree = "<group>"; };
+		551BF6CA26424D020008C529 /* r3Pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = r3Pressed.png; sourceTree = "<group>"; };
+		551BF6CC26424D020008C529 /* startPressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = startPressed.png; sourceTree = "<group>"; };
+		551BF6CD26424D020008C529 /* r1Pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = r1Pressed.png; sourceTree = "<group>"; };
+		551BF6CE26424D020008C529 /* controllerHalf.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = controllerHalf.png; sourceTree = "<group>"; };
+		551BF6CF26424D020008C529 /* crossPressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = crossPressed.png; sourceTree = "<group>"; };
+		551BF6D026424D020008C529 /* leftPressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = leftPressed.png; sourceTree = "<group>"; };
+		551BF6D126424D020008C529 /* squarePressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = squarePressed.png; sourceTree = "<group>"; };
+		551BF6D226424D020008C529 /* l3Pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = l3Pressed.png; sourceTree = "<group>"; };
+		551BF6D326424D020008C529 /* r2Pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = r2Pressed.png; sourceTree = "<group>"; };
+		551BF6D526424D020008C529 /* selectPressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = selectPressed.png; sourceTree = "<group>"; };
+		551BF6D626424D020008C529 /* circlePressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = circlePressed.png; sourceTree = "<group>"; };
+		551BF6D726424D020008C529 /* l1Pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = l1Pressed.png; sourceTree = "<group>"; };
+		551BF6D826424D020008C529 /* trianglePressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = trianglePressed.png; sourceTree = "<group>"; };
+		551BF6D926424D020008C529 /* rightPressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rightPressed.png; sourceTree = "<group>"; };
+		551BF6DA26424D020008C529 /* controllerThreeQuarters.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = controllerThreeQuarters.png; sourceTree = "<group>"; };
+		551BF6DB26424D020008C529 /* VirtualPadData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VirtualPadData.cpp; sourceTree = "<group>"; };
+		551BF6DC26424D020008C529 /* VirtualPad.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VirtualPad.cpp; sourceTree = "<group>"; };
+		551BF6DD26424D020008C529 /* VirtualPadData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VirtualPadData.h; sourceTree = "<group>"; };
+		551BF6DE26424D020008C529 /* InputRecordingFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputRecordingFile.h; sourceTree = "<group>"; };
+		551BF6DF26424D020008C529 /* PadData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PadData.h; sourceTree = "<group>"; };
+		551BF6E026424D020008C529 /* InputRecordingControls.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputRecordingControls.h; sourceTree = "<group>"; };
+		551BF6E226424D020008C529 /* InputRecordingLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputRecordingLogger.h; sourceTree = "<group>"; };
+		551BF6E326424D020008C529 /* InputRecordingFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InputRecordingFile.cpp; sourceTree = "<group>"; };
+		551BF6E426424D020008C529 /* NewRecordingFrame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NewRecordingFrame.cpp; sourceTree = "<group>"; };
+		551BF6E526424D020008C529 /* PadData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PadData.cpp; sourceTree = "<group>"; };
+		551BF6E626424D020008C529 /* InputRecording.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputRecording.h; sourceTree = "<group>"; };
+		551BF6E726424D020008C529 /* NewRecordingFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewRecordingFrame.h; sourceTree = "<group>"; };
+		551BF70926424E7D0008C529 /* bin2cpp */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = bin2cpp; sourceTree = BUILT_PRODUCTS_DIR; };
+		551BF71626424EC60008C529 /* bin2cpp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = bin2cpp.cpp; sourceTree = "<group>"; };
+		551BF71B264252370008C529 /* OEPCSX2MemCardManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OEPCSX2MemCardManager.cpp; sourceTree = "<group>"; };
 		553CF8172640CCCD003A437C /* libx86emitter_PCSX2.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libx86emitter_PCSX2.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -4172,6 +4228,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		551BF6502642186F0008C529 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		551BF70626424E7D0008C529 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -4656,6 +4719,7 @@
 				551BF53A2641FFAA0008C529 /* libPCSX2Utils.a */,
 				551BF600264213470008C529 /* libSoundTouch-PCSX2.a */,
 				551BF6522642186F0008C529 /* libyaml-PCSX2.a */,
+				551BF70926424E7D0008C529 /* bin2cpp */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -4670,6 +4734,7 @@
 				551BF5ED264212D60008C529 /* soundtouch_config.h */,
 				551BF6B0264244AB0008C529 /* OEPCSX2Pad.cpp */,
 				551BF6B6264248D10008C529 /* OEPCSX2SPUConfig.cpp */,
+				551BF71B264252370008C529 /* OEPCSX2MemCardManager.cpp */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -4702,6 +4767,7 @@
 		5517E8C8263D46D3000219EC /* pcsx2 */ = {
 			isa = PBXGroup;
 			children = (
+				551BF71026424EC60008C529 /* tools */,
 				5517E8D0263D4831000219EC /* 3rdparty */,
 				5517FA02263D48AD000219EC /* common */,
 				5517FAA7263D49BB000219EC /* pcsx2 */,
@@ -6454,6 +6520,7 @@
 				5517FBDA263D49BC000219EC /* Sif.cpp */,
 				5517FB33263D49BB000219EC /* Sif.h */,
 				5517FB31263D49BB000219EC /* Sif0.cpp */,
+				551BF6BE26424D020008C529 /* Recording */,
 				5517FB45263D49BB000219EC /* Sif1.cpp */,
 				5517FB00263D49BB000219EC /* sif2.cpp */,
 				5517FCBE263D49BC000219EC /* Sifcmd.h */,
@@ -8897,6 +8964,89 @@
 			path = ghc;
 			sourceTree = "<group>";
 		};
+		551BF6BE26424D020008C529 /* Recording */ = {
+			isa = PBXGroup;
+			children = (
+				551BF6C026424D020008C529 /* InputRecording.cpp */,
+				551BF6E626424D020008C529 /* InputRecording.h */,
+				551BF6BF26424D020008C529 /* InputRecordingControls.cpp */,
+				551BF6E026424D020008C529 /* InputRecordingControls.h */,
+				551BF6E326424D020008C529 /* InputRecordingFile.cpp */,
+				551BF6DE26424D020008C529 /* InputRecordingFile.h */,
+				551BF6E426424D020008C529 /* NewRecordingFrame.cpp */,
+				551BF6E726424D020008C529 /* NewRecordingFrame.h */,
+				551BF6E526424D020008C529 /* PadData.cpp */,
+				551BF6DF26424D020008C529 /* PadData.h */,
+				551BF6E126424D020008C529 /* Utilities */,
+				551BF6C126424D020008C529 /* VirtualPad */,
+			);
+			path = Recording;
+			sourceTree = "<group>";
+		};
+		551BF6C126424D020008C529 /* VirtualPad */ = {
+			isa = PBXGroup;
+			children = (
+				551BF6C526424D020008C529 /* img */,
+				551BF6DC26424D020008C529 /* VirtualPad.cpp */,
+				551BF6C226424D020008C529 /* VirtualPad.h */,
+				551BF6DB26424D020008C529 /* VirtualPadData.cpp */,
+				551BF6DD26424D020008C529 /* VirtualPadData.h */,
+				551BF6C426424D020008C529 /* VirtualPadResources.cpp */,
+				551BF6C326424D020008C529 /* VirtualPadResources.h */,
+			);
+			path = VirtualPad;
+			sourceTree = "<group>";
+		};
+		551BF6C526424D020008C529 /* img */ = {
+			isa = PBXGroup;
+			children = (
+				551BF6C626424D020008C529 /* controllerFull.png */,
+				551BF6C726424D020008C529 /* upPressed.png */,
+				551BF6C826424D020008C529 /* l2Pressed.png */,
+				551BF6C926424D020008C529 /* downPressed.png */,
+				551BF6CA26424D020008C529 /* r3Pressed.png */,
+				551BF6CC26424D020008C529 /* startPressed.png */,
+				551BF6CD26424D020008C529 /* r1Pressed.png */,
+				551BF6CE26424D020008C529 /* controllerHalf.png */,
+				551BF6CF26424D020008C529 /* crossPressed.png */,
+				551BF6D026424D020008C529 /* leftPressed.png */,
+				551BF6D126424D020008C529 /* squarePressed.png */,
+				551BF6D226424D020008C529 /* l3Pressed.png */,
+				551BF6D326424D020008C529 /* r2Pressed.png */,
+				551BF6D526424D020008C529 /* selectPressed.png */,
+				551BF6D626424D020008C529 /* circlePressed.png */,
+				551BF6D726424D020008C529 /* l1Pressed.png */,
+				551BF6D826424D020008C529 /* trianglePressed.png */,
+				551BF6D926424D020008C529 /* rightPressed.png */,
+				551BF6DA26424D020008C529 /* controllerThreeQuarters.png */,
+			);
+			path = img;
+			sourceTree = "<group>";
+		};
+		551BF6E126424D020008C529 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				551BF6E226424D020008C529 /* InputRecordingLogger.h */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		551BF71026424EC60008C529 /* tools */ = {
+			isa = PBXGroup;
+			children = (
+				551BF71226424EC60008C529 /* bin2cpp */,
+			);
+			path = tools;
+			sourceTree = "<group>";
+		};
+		551BF71226424EC60008C529 /* bin2cpp */ = {
+			isa = PBXGroup;
+			children = (
+				551BF71626424EC60008C529 /* bin2cpp.cpp */,
+			);
+			path = bin2cpp;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -9104,6 +9254,23 @@
 			productReference = 551BF6522642186F0008C529 /* libyaml-PCSX2.a */;
 			productType = "com.apple.product-type.library.static";
 		};
+		551BF70826424E7D0008C529 /* bin2cpp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 551BF70D26424E7D0008C529 /* Build configuration list for PBXNativeTarget "bin2cpp" */;
+			buildPhases = (
+				551BF70526424E7D0008C529 /* Sources */,
+				551BF70626424E7D0008C529 /* Frameworks */,
+				551BF70726424E7D0008C529 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = bin2cpp;
+			productName = bin2cpp;
+			productReference = 551BF70926424E7D0008C529 /* bin2cpp */;
+			productType = "com.apple.product-type.tool";
+		};
 		553CF8162640CCCD003A437C /* x86emitter_PCSX2 */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 553CF8182640CCCD003A437C /* Build configuration list for PBXNativeTarget "x86emitter_PCSX2" */;
@@ -9157,6 +9324,9 @@
 					551BF6512642186F0008C529 = {
 						CreatedOnToolsVersion = 12.5;
 					};
+					551BF70826424E7D0008C529 = {
+						CreatedOnToolsVersion = 12.5;
+					};
 					553CF8162640CCCD003A437C = {
 						CreatedOnToolsVersion = 12.5;
 					};
@@ -9185,6 +9355,7 @@
 				551BF1632641F1AF0008C529 /* WxWidgets */,
 				551BF5FF264213470008C529 /* SoundTouch-PCSX2 */,
 				551BF6512642186F0008C529 /* yaml-PCSX2 */,
+				551BF70826424E7D0008C529 /* bin2cpp */,
 			);
 		};
 /* End PBXProject section */
@@ -9227,6 +9398,7 @@
 			files = (
 				551BF5BD264210A30008C529 /* FiFo.cpp in Sources */,
 				551BF680264240660008C529 /* ATA_State.cpp in Sources */,
+				551BF6E926424D030008C529 /* InputRecording.cpp in Sources */,
 				551BF5C2264210AB0008C529 /* GS.cpp in Sources */,
 				551BF629264216B70008C529 /* SysCoreThread.cpp in Sources */,
 				551BF676264219BD0008C529 /* DebugInterface.cpp in Sources */,
@@ -9248,16 +9420,17 @@
 				551BF6B2264245DF0008C529 /* state_management.cpp in Sources */,
 				551BF5B326420FA50008C529 /* IopMem.cpp in Sources */,
 				551BF56E26420E710008C529 /* Vif1_Dma.cpp in Sources */,
-				551BF698264242CE0008C529 /* MemoryCardFile.cpp in Sources */,
 				551BF5B8264210860008C529 /* COP2.cpp in Sources */,
 				551BF5D1264212270008C529 /* MTVU.cpp in Sources */,
 				551BF5C0264210A50008C529 /* GameDatabase.cpp in Sources */,
 				551BF5BA2642108D0008C529 /* DarwinFlatFileReader.cpp in Sources */,
+				551BF70226424D030008C529 /* InputRecordingFile.cpp in Sources */,
 				551BF62A264216B70008C529 /* SysThreadBase.cpp in Sources */,
 				551BF5B026420FA50008C529 /* IopIrq.cpp in Sources */,
 				551BF630264216F50008C529 /* CompressedFileReader.cpp in Sources */,
 				551BF56D26420E710008C529 /* Vif_Codes.cpp in Sources */,
 				551BF62E264216F50008C529 /* CsoFileReader.cpp in Sources */,
+				551BF71C264252370008C529 /* OEPCSX2MemCardManager.cpp in Sources */,
 				551BF6AA264244530008C529 /* Lowpass.cpp in Sources */,
 				551BF57B26420E9A0008C529 /* SaveState.cpp in Sources */,
 				551BF6A0264243C50008C529 /* ATA_CmdDMA.cpp in Sources */,
@@ -9287,6 +9460,7 @@
 				551BF689264241E80008C529 /* DisR5900asm.cpp in Sources */,
 				551BF57E26420E9A0008C529 /* Sio.cpp in Sources */,
 				551BF57C26420E9A0008C529 /* LegacyDmac.cpp in Sources */,
+				551BF70326424D030008C529 /* NewRecordingFrame.cpp in Sources */,
 				551BF5CC264212070008C529 /* IPU.cpp in Sources */,
 				551BF56726420DE90008C529 /* SymbolMap.cpp in Sources */,
 				551BF5B9264210860008C529 /* Counters.cpp in Sources */,
@@ -9312,6 +9486,7 @@
 				551BF68D264241F10008C529 /* ExpressionParser.cpp in Sources */,
 				551BF631264216F50008C529 /* InputIsoFile.cpp in Sources */,
 				551BF67A264240560008C529 /* DEV9.cpp in Sources */,
+				551BF6E826424D030008C529 /* InputRecordingControls.cpp in Sources */,
 				551BF679264240560008C529 /* smap.cpp in Sources */,
 				551BF58426420E9A0008C529 /* R3000AInterpreter.cpp in Sources */,
 				551BF5C9264212070008C529 /* IPUdma.cpp in Sources */,
@@ -9361,6 +9536,7 @@
 				551BF622264215690008C529 /* ConfigDebug.cpp in Sources */,
 				551BF684264241570008C529 /* IsoFS.cpp in Sources */,
 				551BF67D264240660008C529 /* HddCreate.cpp in Sources */,
+				551BF70026424D030008C529 /* VirtualPadData.cpp in Sources */,
 				551BF6422642181C0008C529 /* iR5900-32.cpp in Sources */,
 				551BF58026420E9A0008C529 /* R5900OpcodeImpl.cpp in Sources */,
 				551BF69A264243310008C529 /* DriveUtility.cpp in Sources */,
@@ -9379,6 +9555,7 @@
 				551BF5D5264212270008C529 /* MTGS.cpp in Sources */,
 				551BF616264214320008C529 /* newVif_Dynarec.cpp in Sources */,
 				551BF6A1264243C90008C529 /* ATA_CmdNoData.cpp in Sources */,
+				551BF70426424D030008C529 /* PadData.cpp in Sources */,
 				551BF57426420E720008C529 /* VU0microInterp.cpp in Sources */,
 				551BF57226420E720008C529 /* VUmicro.cpp in Sources */,
 				551BF6B8264249D00008C529 /* Patch.cpp in Sources */,
@@ -9417,6 +9594,7 @@
 				551BF68B264241E80008C529 /* DisVU1Micro.cpp in Sources */,
 				551BF644264218380008C529 /* iR5900Jump.cpp in Sources */,
 				551BF56A26420E710008C529 /* Vif_Unpack.cpp in Sources */,
+				551BF6EA26424D030008C529 /* VirtualPadResources.cpp in Sources */,
 				551BF62D264216F50008C529 /* OutputIsoFile.cpp in Sources */,
 				551BF645264218380008C529 /* iR5900Branch.cpp in Sources */,
 				551BF6A4264244280008C529 /* Wavedump_wav.cpp in Sources */,
@@ -10073,6 +10251,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		551BF70526424E7D0008C529 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				551BF71826424ED50008C529 /* bin2cpp.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		553CF8142640CCCD003A437C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -10278,6 +10464,7 @@
 					"\"$(SRCROOT)/WxBridging\"",
 					"\"$(SRCROOT)/pcsx2/3rdparty/yaml-cpp/yaml-cpp/include\"",
 					"\"$(SRCROOT)/pcsx2/common/include\"",
+					"\"$(SRCROOT)/pcsx2/3rdparty/fmt/fmt/include\"",
 				);
 				USER_HEADER_SEARCH_PATHS = (
 					"\"$(SRCROOT)/pcsx2/pcsx2\"/**",
@@ -10318,6 +10505,7 @@
 					"\"$(SRCROOT)/WxBridging\"",
 					"\"$(SRCROOT)/pcsx2/3rdparty/yaml-cpp/yaml-cpp/include\"",
 					"\"$(SRCROOT)/pcsx2/common/include\"",
+					"\"$(SRCROOT)/pcsx2/3rdparty/fmt/fmt/include\"",
 				);
 				USER_HEADER_SEARCH_PATHS = (
 					"\"$(SRCROOT)/pcsx2/pcsx2\"/**",
@@ -10549,6 +10737,24 @@
 			};
 			name = Release;
 		};
+		551BF70E26424E7D0008C529 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				MACOSX_DEPLOYMENT_TARGET = 11.3;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		551BF70F26424E7D0008C529 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				MACOSX_DEPLOYMENT_TARGET = 11.3;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		553CF8192640CCCD003A437C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -10686,6 +10892,15 @@
 			buildConfigurations = (
 				551BF6542642186F0008C529 /* Debug */,
 				551BF6552642186F0008C529 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		551BF70D26424E7D0008C529 /* Build configuration list for PBXNativeTarget "bin2cpp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				551BF70E26424E7D0008C529 /* Debug */,
+				551BF70F26424E7D0008C529 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
