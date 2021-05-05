@@ -772,6 +772,69 @@
 		551BF675264218940008C529 /* emitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517F2AB263D483A000219EC /* emitter.cpp */; };
 		551BF676264219BD0008C529 /* DebugInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FDDF263D49BC000219EC /* DebugInterface.cpp */; };
 		551BF67726421A320008C529 /* ExecutorThread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551BF4E82641FBFF0008C529 /* ExecutorThread.cpp */; };
+		551BF678264240560008C529 /* net.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FAD7263D49BB000219EC /* net.cpp */; };
+		551BF679264240560008C529 /* smap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FAD2263D49BB000219EC /* smap.cpp */; };
+		551BF67A264240560008C529 /* DEV9.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FAD6263D49BB000219EC /* DEV9.cpp */; };
+		551BF67B264240560008C529 /* flash.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FADE263D49BB000219EC /* flash.cpp */; };
+		551BF67C264240560008C529 /* pcap_io.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FAF7263D49BB000219EC /* pcap_io.cpp */; };
+		551BF67D264240660008C529 /* HddCreate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FAED263D49BB000219EC /* HddCreate.cpp */; };
+		551BF67E264240660008C529 /* ATA_Info.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FAEB263D49BB000219EC /* ATA_Info.cpp */; };
+		551BF67F264240660008C529 /* ATA_Transfer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FAE9263D49BB000219EC /* ATA_Transfer.cpp */; };
+		551BF680264240660008C529 /* ATA_State.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FAEC263D49BB000219EC /* ATA_State.cpp */; };
+		551BF6812642408B0008C529 /* IOCtlSrc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FC9F263D49BC000219EC /* IOCtlSrc.cpp */; };
+		551BF6822642414E0008C529 /* IsoFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FCAA263D49BC000219EC /* IsoFile.cpp */; };
+		551BF683264241530008C529 /* IsoFSCDVD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FCAE263D49BC000219EC /* IsoFSCDVD.cpp */; };
+		551BF684264241570008C529 /* IsoFS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FCAF263D49BC000219EC /* IsoFS.cpp */; };
+		551BF685264241BF0008C529 /* DisR3000A.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FDDB263D49BC000219EC /* DisR3000A.cpp */; };
+		551BF686264241D80008C529 /* BiosDebugData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FDD8263D49BC000219EC /* BiosDebugData.cpp */; };
+		551BF687264241DB0008C529 /* Breakpoints.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FDE4263D49BC000219EC /* Breakpoints.cpp */; };
+		551BF688264241E10008C529 /* DisassemblyManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FDE3263D49BC000219EC /* DisassemblyManager.cpp */; };
+		551BF689264241E80008C529 /* DisR5900asm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FDE5263D49BC000219EC /* DisR5900asm.cpp */; };
+		551BF68A264241E80008C529 /* DisVU0Micro.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FDDA263D49BC000219EC /* DisVU0Micro.cpp */; };
+		551BF68B264241E80008C529 /* DisVU1Micro.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FDD9263D49BC000219EC /* DisVU1Micro.cpp */; };
+		551BF68C264241F10008C529 /* MIPSAnalyst.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FDE1263D49BC000219EC /* MIPSAnalyst.cpp */; };
+		551BF68D264241F10008C529 /* ExpressionParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FDE7263D49BC000219EC /* ExpressionParser.cpp */; };
+		551BF68E264241F10008C529 /* MipsAssembler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FDD4263D49BC000219EC /* MipsAssembler.cpp */; };
+		551BF68F264241F10008C529 /* MipsAssemblerTables.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FDD6263D49BC000219EC /* MipsAssemblerTables.cpp */; };
+		551BF690264241F10008C529 /* MipsStackWalk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FDD7263D49BC000219EC /* MipsStackWalk.cpp */; };
+		551BF6912642420B0008C529 /* spu2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FCCB263D49BC000219EC /* spu2.cpp */; };
+		551BF693264242250008C529 /* libpcap.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 551BF692264242250008C529 /* libpcap.tbd */; };
+		551BF694264242510008C529 /* Cache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FCBC263D49BC000219EC /* Cache.cpp */; };
+		551BF6952642427A0008C529 /* USBNull.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FC27263D49BC000219EC /* USBNull.cpp */; };
+		551BF697264242A80008C529 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 551BF696264242A80008C529 /* QuartzCore.framework */; };
+		551BF698264242CE0008C529 /* MemoryCardFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551BF4F12641FBFF0008C529 /* MemoryCardFile.cpp */; };
+		551BF699264242FE0008C529 /* spu2sys.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FCEE263D49BC000219EC /* spu2sys.cpp */; };
+		551BF69A264243310008C529 /* DriveUtility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FC9E263D49BC000219EC /* DriveUtility.cpp */; };
+		551BF69B264243680008C529 /* ATA_Command.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FAF5263D49BB000219EC /* ATA_Command.cpp */; };
+		551BF69C264243B30008C529 /* ATA_CmdPIOData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FAF1263D49BB000219EC /* ATA_CmdPIOData.cpp */; };
+		551BF69D264243B60008C529 /* ATA_CmdSMART.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FAF4263D49BB000219EC /* ATA_CmdSMART.cpp */; };
+		551BF69E264243BC0008C529 /* ATA_SCE.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FAF0263D49BB000219EC /* ATA_SCE.cpp */; };
+		551BF69F264243C20008C529 /* ATA_CmdExecuteDeviceDiag.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FAEF263D49BB000219EC /* ATA_CmdExecuteDeviceDiag.cpp */; };
+		551BF6A0264243C50008C529 /* ATA_CmdDMA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FAF2263D49BB000219EC /* ATA_CmdDMA.cpp */; };
+		551BF6A1264243C90008C529 /* ATA_CmdNoData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FAF3263D49BB000219EC /* ATA_CmdNoData.cpp */; };
+		551BF6A2264244050008C529 /* spu2freeze.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FCF0263D49BC000219EC /* spu2freeze.cpp */; };
+		551BF6A3264244210008C529 /* Timestretcher.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FCCA263D49BC000219EC /* Timestretcher.cpp */; };
+		551BF6A4264244280008C529 /* Wavedump_wav.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FCC9263D49BC000219EC /* Wavedump_wav.cpp */; };
+		551BF6A5264244340008C529 /* WavFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FCEB263D49BC000219EC /* WavFile.cpp */; };
+		551BF6A6264244400008C529 /* ADSR.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FCED263D49BC000219EC /* ADSR.cpp */; };
+		551BF6A7264244440008C529 /* Debug.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FCEC263D49BC000219EC /* Debug.cpp */; };
+		551BF6A8264244480008C529 /* Dma.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FCD2263D49BC000219EC /* Dma.cpp */; };
+		551BF6A92642444F0008C529 /* DplIIdecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FD03263D49BC000219EC /* DplIIdecoder.cpp */; };
+		551BF6AA264244530008C529 /* Lowpass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FCD4263D49BC000219EC /* Lowpass.cpp */; };
+		551BF6AB264244560008C529 /* Mixer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FCD7263D49BC000219EC /* Mixer.cpp */; };
+		551BF6AC264244590008C529 /* ReadInput.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FCD1263D49BC000219EC /* ReadInput.cpp */; };
+		551BF6AD2642445C0008C529 /* RegLog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FCD8263D49BC000219EC /* RegLog.cpp */; };
+		551BF6AE264244600008C529 /* RegTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FD04263D49BC000219EC /* RegTable.cpp */; };
+		551BF6AF264244640008C529 /* Reverb.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FCEF263D49BC000219EC /* Reverb.cpp */; };
+		551BF6B1264244AB0008C529 /* OEPCSX2Pad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551BF6B0264244AB0008C529 /* OEPCSX2Pad.cpp */; };
+		551BF6B2264245DF0008C529 /* state_management.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FB7C263D49BB000219EC /* state_management.cpp */; };
+		551BF6B3264246550008C529 /* SndOut.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FCD0263D49BC000219EC /* SndOut.cpp */; };
+		551BF6B42642468A0008C529 /* GamePad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FB7D263D49BB000219EC /* GamePad.cpp */; };
+		551BF6B7264248D10008C529 /* OEPCSX2SPUConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551BF6B6264248D10008C529 /* OEPCSX2SPUConfig.cpp */; };
+		551BF6B8264249D00008C529 /* Patch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FAFC263D49BB000219EC /* Patch.cpp */; };
+		551BF6B926424A010008C529 /* AppCoreThread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551BF4AE2641FBFF0008C529 /* AppCoreThread.cpp */; };
+		551BF6BA26424A9A0008C529 /* Dialogs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FE30263D4A9B000219EC /* Dialogs.cpp */; };
+		551BF6BD26424BAA0008C529 /* ThreadedFileReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551BF6BC26424BAA0008C529 /* ThreadedFileReader.cpp */; };
 		553CF8382640D2F8003A437C /* jmp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FA79263D48AE000219EC /* jmp.cpp */; };
 		553CF8392640D2F8003A437C /* x86emitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FA78263D48AE000219EC /* x86emitter.cpp */; };
 		553CF83A2640D2F8003A437C /* legacy_sse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FA6F263D48AE000219EC /* legacy_sse.cpp */; };
@@ -4032,6 +4095,12 @@
 		551BF5ED264212D60008C529 /* soundtouch_config.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = soundtouch_config.h; sourceTree = "<group>"; };
 		551BF600264213470008C529 /* libSoundTouch-PCSX2.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libSoundTouch-PCSX2.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		551BF6522642186F0008C529 /* libyaml-PCSX2.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libyaml-PCSX2.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		551BF692264242250008C529 /* libpcap.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libpcap.tbd; path = usr/lib/libpcap.tbd; sourceTree = SDKROOT; };
+		551BF696264242A80008C529 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		551BF6B0264244AB0008C529 /* OEPCSX2Pad.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OEPCSX2Pad.cpp; sourceTree = "<group>"; };
+		551BF6B6264248D10008C529 /* OEPCSX2SPUConfig.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OEPCSX2SPUConfig.cpp; sourceTree = "<group>"; };
+		551BF6BB26424BA90008C529 /* ThreadedFileReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThreadedFileReader.h; sourceTree = "<group>"; };
+		551BF6BC26424BAA0008C529 /* ThreadedFileReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ThreadedFileReader.cpp; sourceTree = "<group>"; };
 		553CF8172640CCCD003A437C /* libx86emitter_PCSX2.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libx86emitter_PCSX2.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -4040,6 +4109,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				551BF697264242A80008C529 /* QuartzCore.framework in Frameworks */,
+				551BF693264242250008C529 /* libpcap.tbd in Frameworks */,
 				551BF6562642187A0008C529 /* libyaml-PCSX2.a in Frameworks */,
 				551BF6122642136D0008C529 /* libSoundTouch-PCSX2.a in Frameworks */,
 				551BF56626420DC80008C529 /* IOKit.framework in Frameworks */,
@@ -4597,6 +4668,8 @@
 				5517E8C6263D45F4000219EC /* PCSX2GameCore.mm */,
 				551BF5B626420FFC0008C529 /* svnrev.h */,
 				551BF5ED264212D60008C529 /* soundtouch_config.h */,
+				551BF6B0264244AB0008C529 /* OEPCSX2Pad.cpp */,
+				551BF6B6264248D10008C529 /* OEPCSX2SPUConfig.cpp */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -4613,6 +4686,8 @@
 		5517E8BE263D4361000219EC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				551BF696264242A80008C529 /* QuartzCore.framework */,
+				551BF692264242250008C529 /* libpcap.tbd */,
 				551BF56526420DC80008C529 /* IOKit.framework */,
 				551BF56326420DA70008C529 /* OpenGL.framework */,
 				551BF56126420DA00008C529 /* Cocoa.framework */,
@@ -6993,6 +7068,8 @@
 				5517FCA9263D49BC000219EC /* IsoFS */,
 				5517FC9D263D49BC000219EC /* Linux */,
 				5517FCA3263D49BC000219EC /* OutputIsoFile.cpp */,
+				551BF6BC26424BAA0008C529 /* ThreadedFileReader.cpp */,
+				551BF6BB26424BA90008C529 /* ThreadedFileReader.h */,
 				5517FCB3263D49BC000219EC /* zlib_indexed.h */,
 			);
 			path = CDVD;
@@ -9149,6 +9226,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				551BF5BD264210A30008C529 /* FiFo.cpp in Sources */,
+				551BF680264240660008C529 /* ATA_State.cpp in Sources */,
 				551BF5C2264210AB0008C529 /* GS.cpp in Sources */,
 				551BF629264216B70008C529 /* SysCoreThread.cpp in Sources */,
 				551BF676264219BD0008C529 /* DebugInterface.cpp in Sources */,
@@ -9160,12 +9238,17 @@
 				551BF59026420E9A0008C529 /* SPR.cpp in Sources */,
 				551BF57F26420E9A0008C529 /* Sif0.cpp in Sources */,
 				551BF62C264216F50008C529 /* GzippedFileReader.cpp in Sources */,
+				551BF69C264243B30008C529 /* ATA_CmdPIOData.cpp in Sources */,
 				551BF61A264214530008C529 /* iR3000A.cpp in Sources */,
+				551BF6812642408B0008C529 /* IOCtlSrc.cpp in Sources */,
 				551BF57126420E720008C529 /* VUflags.cpp in Sources */,
 				551BF5BF264210A30008C529 /* FPU.cpp in Sources */,
 				551BF56F26420E710008C529 /* VU1micro.cpp in Sources */,
+				551BF6B1264244AB0008C529 /* OEPCSX2Pad.cpp in Sources */,
+				551BF6B2264245DF0008C529 /* state_management.cpp in Sources */,
 				551BF5B326420FA50008C529 /* IopMem.cpp in Sources */,
 				551BF56E26420E710008C529 /* Vif1_Dma.cpp in Sources */,
+				551BF698264242CE0008C529 /* MemoryCardFile.cpp in Sources */,
 				551BF5B8264210860008C529 /* COP2.cpp in Sources */,
 				551BF5D1264212270008C529 /* MTVU.cpp in Sources */,
 				551BF5C0264210A50008C529 /* GameDatabase.cpp in Sources */,
@@ -9175,28 +9258,42 @@
 				551BF630264216F50008C529 /* CompressedFileReader.cpp in Sources */,
 				551BF56D26420E710008C529 /* Vif_Codes.cpp in Sources */,
 				551BF62E264216F50008C529 /* CsoFileReader.cpp in Sources */,
+				551BF6AA264244530008C529 /* Lowpass.cpp in Sources */,
 				551BF57B26420E9A0008C529 /* SaveState.cpp in Sources */,
+				551BF6A0264243C50008C529 /* ATA_CmdDMA.cpp in Sources */,
 				551BF57326420E720008C529 /* VU0micro.cpp in Sources */,
 				551BF5C1264210AB0008C529 /* GSState.cpp in Sources */,
 				551BF5B426420FA50008C529 /* Interpreter.cpp in Sources */,
+				551BF688264241E10008C529 /* DisassemblyManager.cpp in Sources */,
 				551BF57726420E720008C529 /* VUops.cpp in Sources */,
 				551BF57526420E720008C529 /* Vif.cpp in Sources */,
 				551BF58E26420E9A0008C529 /* sif2.cpp in Sources */,
 				551BF618264214530008C529 /* iCore.cpp in Sources */,
+				551BF6A7264244440008C529 /* Debug.cpp in Sources */,
 				551BF64B264218380008C529 /* iR5900Templates.cpp in Sources */,
 				551BF61D264214530008C529 /* BaseblockEx.cpp in Sources */,
+				551BF683264241530008C529 /* IsoFSCDVD.cpp in Sources */,
+				551BF69D264243B60008C529 /* ATA_CmdSMART.cpp in Sources */,
 				551BF64C264218380008C529 /* recVTLB.cpp in Sources */,
 				551BF5D0264212270008C529 /* PrecompiledHeader.cpp in Sources */,
 				551BF617264214530008C529 /* iFPU.cpp in Sources */,
 				551BF58926420E9A0008C529 /* Sif1.cpp in Sources */,
 				551BF57026420E710008C529 /* VU0.cpp in Sources */,
+				551BF67C264240560008C529 /* pcap_io.cpp in Sources */,
+				551BF67F264240660008C529 /* ATA_Transfer.cpp in Sources */,
 				551BF5BE264210A30008C529 /* FW.cpp in Sources */,
+				551BF6AC264244590008C529 /* ReadInput.cpp in Sources */,
+				551BF6A3264244210008C529 /* Timestretcher.cpp in Sources */,
+				551BF689264241E80008C529 /* DisR5900asm.cpp in Sources */,
 				551BF57E26420E9A0008C529 /* Sio.cpp in Sources */,
 				551BF57C26420E9A0008C529 /* LegacyDmac.cpp in Sources */,
 				551BF5CC264212070008C529 /* IPU.cpp in Sources */,
 				551BF56726420DE90008C529 /* SymbolMap.cpp in Sources */,
 				551BF5B9264210860008C529 /* Counters.cpp in Sources */,
+				551BF694264242510008C529 /* Cache.cpp in Sources */,
 				551BF58826420E9A0008C529 /* R5900OpcodeTables.cpp in Sources */,
+				551BF6AF264244640008C529 /* Reverb.cpp in Sources */,
+				551BF6B926424A010008C529 /* AppCoreThread.cpp in Sources */,
 				551BF5C6264211540008C529 /* format.cc in Sources */,
 				551BF61F264214530008C529 /* iMisc.cpp in Sources */,
 				551BF6272642167A0008C529 /* FileUtils.cpp in Sources */,
@@ -9209,7 +9306,13 @@
 				551BF57A26420E720008C529 /* VU1microInterp.cpp in Sources */,
 				551BF647264218380008C529 /* iR5900Move.cpp in Sources */,
 				551BF57D26420E9A0008C529 /* ShiftJisToUnicode.cpp in Sources */,
+				551BF6A6264244400008C529 /* ADSR.cpp in Sources */,
+				551BF6952642427A0008C529 /* USBNull.cpp in Sources */,
+				551BF699264242FE0008C529 /* spu2sys.cpp in Sources */,
+				551BF68D264241F10008C529 /* ExpressionParser.cpp in Sources */,
 				551BF631264216F50008C529 /* InputIsoFile.cpp in Sources */,
+				551BF67A264240560008C529 /* DEV9.cpp in Sources */,
+				551BF679264240560008C529 /* smap.cpp in Sources */,
 				551BF58426420E9A0008C529 /* R3000AInterpreter.cpp in Sources */,
 				551BF5C9264212070008C529 /* IPUdma.cpp in Sources */,
 				551BF5D8264212270008C529 /* Pcsx2Config.cpp in Sources */,
@@ -9217,72 +9320,107 @@
 				551BF5BB2642109D0008C529 /* Dump.cpp in Sources */,
 				551BF646264218380008C529 /* iR5900AritImm.cpp in Sources */,
 				551BF5CF264212070008C529 /* yuv2rgb.cpp in Sources */,
+				551BF68C264241F10008C529 /* MIPSAnalyst.cpp in Sources */,
 				551BF628264216A40008C529 /* System.cpp in Sources */,
+				551BF6A2264244050008C529 /* spu2freeze.cpp in Sources */,
+				551BF6B7264248D10008C529 /* OEPCSX2SPUConfig.cpp in Sources */,
+				551BF68A264241E80008C529 /* DisVU0Micro.cpp in Sources */,
 				551BF633264216F50008C529 /* ChdFileReader.cpp in Sources */,
+				551BF6912642420B0008C529 /* spu2.cpp in Sources */,
+				551BF685264241BF0008C529 /* DisR3000A.cpp in Sources */,
+				551BF690264241F10008C529 /* MipsStackWalk.cpp in Sources */,
 				551BF6152642142F0008C529 /* microVU.cpp in Sources */,
 				551BF5AA26420FA50008C529 /* Hw.cpp in Sources */,
 				551BF648264218380008C529 /* iCore-32.cpp in Sources */,
 				551BF61B264214530008C529 /* iR5900Misc.cpp in Sources */,
 				551BF5B126420FA50008C529 /* IPC.cpp in Sources */,
 				551BF5B7264210860008C529 /* COP0.cpp in Sources */,
+				551BF68F264241F10008C529 /* MipsAssemblerTables.cpp in Sources */,
 				551BF643264218380008C529 /* iR5900Arit.cpp in Sources */,
 				551BF620264214530008C529 /* iCOP0.cpp in Sources */,
+				551BF6822642414E0008C529 /* IsoFile.cpp in Sources */,
+				551BF69B264243680008C529 /* ATA_Command.cpp in Sources */,
 				551BF635264216F50008C529 /* CDVDdiscThread.cpp in Sources */,
 				5517E8C7263D45F4000219EC /* PCSX2GameCore.mm in Sources */,
+				551BF6AB264244560008C529 /* Mixer.cpp in Sources */,
 				551BF5BC2642109F0008C529 /* Elfheader.cpp in Sources */,
 				551BF649264218380008C529 /* iR5900MultDiv.cpp in Sources */,
 				551BF57626420E720008C529 /* Vif1_MFIFO.cpp in Sources */,
 				551BF5CB264212070008C529 /* Idct.cpp in Sources */,
 				551BF56C26420E710008C529 /* Vif_Transfer.cpp in Sources */,
+				551BF6BA26424A9A0008C529 /* Dialogs.cpp in Sources */,
 				551BF5DA264212270008C529 /* Memory.cpp in Sources */,
 				551BF637264216F50008C529 /* BlockdumpFileReader.cpp in Sources */,
 				551BF57926420E720008C529 /* Vif0_Dma.cpp in Sources */,
 				551BF56826420E3B0008C529 /* newVif_Unpack.cpp in Sources */,
 				551BF67726421A320008C529 /* ExecutorThread.cpp in Sources */,
 				551BF5CD264212070008C529 /* Mpeg.cpp in Sources */,
+				551BF6A8264244480008C529 /* Dma.cpp in Sources */,
 				551BF62F264216F50008C529 /* CDVDisoReader.cpp in Sources */,
 				551BF5AE26420FA50008C529 /* IopCounters.cpp in Sources */,
 				551BF622264215690008C529 /* ConfigDebug.cpp in Sources */,
+				551BF684264241570008C529 /* IsoFS.cpp in Sources */,
+				551BF67D264240660008C529 /* HddCreate.cpp in Sources */,
 				551BF6422642181C0008C529 /* iR5900-32.cpp in Sources */,
 				551BF58026420E9A0008C529 /* R5900OpcodeImpl.cpp in Sources */,
+				551BF69A264243310008C529 /* DriveUtility.cpp in Sources */,
+				551BF6AD2642445C0008C529 /* RegLog.cpp in Sources */,
+				551BF678264240560008C529 /* net.cpp in Sources */,
 				551BF61C264214530008C529 /* ir5900tables.cpp in Sources */,
+				551BF6B42642468A0008C529 /* GamePad.cpp in Sources */,
+				551BF6B3264246550008C529 /* SndOut.cpp in Sources */,
 				551BF5C4264210AB0008C529 /* Gif_Logger.cpp in Sources */,
 				551BF58A26420E9A0008C529 /* R3000A.cpp in Sources */,
 				551BF5D2264212270008C529 /* MultipartFileReader.cpp in Sources */,
 				551BF5AC26420FA50008C529 /* IopHw.cpp in Sources */,
+				551BF67E264240660008C529 /* ATA_Info.cpp in Sources */,
 				551BF5A826420FA50008C529 /* HwWrite.cpp in Sources */,
 				551BF57826420E720008C529 /* vtlb.cpp in Sources */,
 				551BF5D5264212270008C529 /* MTGS.cpp in Sources */,
 				551BF616264214320008C529 /* newVif_Dynarec.cpp in Sources */,
+				551BF6A1264243C90008C529 /* ATA_CmdNoData.cpp in Sources */,
 				551BF57426420E720008C529 /* VU0microInterp.cpp in Sources */,
 				551BF57226420E720008C529 /* VUmicro.cpp in Sources */,
+				551BF6B8264249D00008C529 /* Patch.cpp in Sources */,
 				551BF58726420E9A0008C529 /* pgif.cpp in Sources */,
+				551BF6A5264244340008C529 /* WavFile.cpp in Sources */,
 				551BF61E264214530008C529 /* iMMI.cpp in Sources */,
 				551BF5DB264212270008C529 /* MMI.cpp in Sources */,
 				551BF5D9264212270008C529 /* PluginManager.cpp in Sources */,
 				551BF5C5264210AB0008C529 /* Gif_Unit.cpp in Sources */,
+				551BF67B264240560008C529 /* flash.cpp in Sources */,
 				551BF58226420E9A0008C529 /* R3000AOpcodeTables.cpp in Sources */,
 				551BF56926420E5A0008C529 /* newVif_UnpackSSE.cpp in Sources */,
+				551BF686264241D80008C529 /* BiosDebugData.cpp in Sources */,
+				551BF6BD26424BAA0008C529 /* ThreadedFileReader.cpp in Sources */,
+				551BF687264241DB0008C529 /* Breakpoints.cpp in Sources */,
 				551BF56B26420E710008C529 /* VUmicroMem.cpp in Sources */,
 				551BF58C26420E9A0008C529 /* PsxBios.cpp in Sources */,
 				551BF632264216F50008C529 /* ChunksCache.cpp in Sources */,
+				551BF6AE264244600008C529 /* RegTable.cpp in Sources */,
 				551BF5AD26420FA50008C529 /* IopBios.cpp in Sources */,
 				551BF5B226420FA50008C529 /* IopGte.cpp in Sources */,
 				551BF58126420E9A0008C529 /* BiosTools.cpp in Sources */,
 				551BF5D7264212270008C529 /* Patch_Memory.cpp in Sources */,
+				551BF68E264241F10008C529 /* MipsAssembler.cpp in Sources */,
 				551BF638264216F50008C529 /* CDVD.cpp in Sources */,
 				551BF62B264216F50008C529 /* CDVDdiscReader.cpp in Sources */,
 				551BF636264216F50008C529 /* CdRom.cpp in Sources */,
 				551BF634264216F50008C529 /* CDVDaccess.cpp in Sources */,
+				551BF6A92642444F0008C529 /* DplIIdecoder.cpp in Sources */,
 				551BF5AF26420FA50008C529 /* IopDma.cpp in Sources */,
+				551BF69E264243BC0008C529 /* ATA_SCE.cpp in Sources */,
 				551BF58F26420E9A0008C529 /* R5900.cpp in Sources */,
 				551BF58D26420E9A0008C529 /* Sif.cpp in Sources */,
 				551BF64D264218380008C529 /* iR5900Shift.cpp in Sources */,
 				551BF5D3264212270008C529 /* OutputIsoFile.cpp in Sources */,
+				551BF68B264241E80008C529 /* DisVU1Micro.cpp in Sources */,
 				551BF644264218380008C529 /* iR5900Jump.cpp in Sources */,
 				551BF56A26420E710008C529 /* Vif_Unpack.cpp in Sources */,
 				551BF62D264216F50008C529 /* OutputIsoFile.cpp in Sources */,
 				551BF645264218380008C529 /* iR5900Branch.cpp in Sources */,
+				551BF6A4264244280008C529 /* Wavedump_wav.cpp in Sources */,
+				551BF69F264243C20008C529 /* ATA_CmdExecuteDeviceDiag.cpp in Sources */,
 				551BF621264214530008C529 /* iR3000Atables.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -10163,6 +10301,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					__M_X86_64,
 					"$(inherited)",
@@ -10423,8 +10562,6 @@
 					_M_X86_64,
 					"$(inherited)",
 					"__WXOSX_COCOA__=1",
-					"x86EMIT_MULTITHREADED=0",
-					"__tls_emit=\"\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"\"$(SRCROOT)/pcsx2/common/include\"",
@@ -10449,8 +10586,6 @@
 					_M_X86_64,
 					"$(inherited)",
 					"__WXOSX_COCOA__=1",
-					"x86EMIT_MULTITHREADED=0",
-					"__tls_emit=\"\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"\"$(SRCROOT)/pcsx2/common/include\"",

@@ -30,12 +30,20 @@
 #include "../pcsx2/pcsx2/GS.h"
 #include "../pcsx2/pcsx2/gui/AppConfig.h"
 #include "../pcsx2/pcsx2/gui/App.h"
+#include "../pcsx2/pcsx2/SPU2/Global.h"
+#include "../pcsx2/pcsx2/SPU2/SndOut.h"
 //#include "gui/Dialogs/ModalPopups.h"
 #undef BOOL
 
 static __weak PCSX2GameCore *_current;
 __aligned16 AppCorePlugins CorePlugins;
 
+SysCorePlugins& GetCorePlugins()
+{
+	return CorePlugins;
+}
+
+wxString AppConfig::FullpathToBios() const				{ return Path::Combine( Folders.Bios, BaseFilenames.Bios ); }
 
 @implementation PCSX2GameCore
 
@@ -122,3 +130,90 @@ __aligned16 AppCorePlugins CorePlugins;
 }
 
 @end
+
+//Hijack the SDL plug-in
+struct SDLAudioMod : public SndOutModule
+{
+	static SDLAudioMod mod;
+	std::string m_api;
+
+	s32 Init()
+	{
+		return -1;
+	}
+
+	const wchar_t* GetIdent() const { return L"OEAudio"; }
+	const wchar_t* GetLongName() const { return L"OpenEmu Audio"; }
+
+	void Close()
+	{
+	}
+
+	~SDLAudioMod() { Close(); }
+
+	s32 Test() const { return 0; }
+	int GetEmptySampleCount() { return 0; }
+
+	void Configure(uptr parent) {}
+
+	void ReadSettings()
+	{
+	}
+
+	void WriteSettings() const
+	{
+	};
+
+	void SetApiSettings(wxString api)
+	{
+	}
+
+
+private:
+//	SDL_AudioSpec spec;
+
+	SDLAudioMod()
+		: m_api("pulseaudio")
+	{
+		// Number of samples must be a multiple of packet size.
+	}
+};
+
+SDLAudioMod SDLAudioMod::mod;
+
+SndOutModule* const SDLOut = &SDLAudioMod::mod;
+
+SysMainMemory& GetVmMemory()
+{
+	return wxGetApp().GetVmReserve();
+}
+
+SysCoreThread& GetCoreThread()
+{
+	return CoreThread;
+}
+
+SysMtgsThread& GetMTGS()
+{
+	return mtgsThread;
+}
+
+SysCpuProviderPack& GetCpuProviders()
+{
+	return *wxGetApp().m_CpuProviders;
+}
+
+// Safe to remove these lines when this is handled properly.
+#ifdef __WXMAC__
+// Great joy....
+#undef EBP
+#undef ESP
+#undef EDI
+#undef ESI
+#undef EDX
+#undef EAX
+#undef EBX
+#undef ECX
+#include <wx/osx/private.h>		// needed to implement the app!
+#endif
+wxIMPLEMENT_APP(Pcsx2App);
