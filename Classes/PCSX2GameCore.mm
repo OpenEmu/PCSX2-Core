@@ -35,6 +35,8 @@
 //#include "gui/Dialogs/ModalPopups.h"
 #undef BOOL
 
+#include <wx/stdpaths.h>
+
 static __weak PCSX2GameCore *_current;
 __aligned16 AppCorePlugins CorePlugins;
 
@@ -212,6 +214,33 @@ wxDirName GetProgramDataDir()
 void StateCopy_LoadFromSlot(uint slot, bool isFromBackup)
 {
 	// do nothing
+}
+
+class Pcsx2StandardPaths : public wxStandardPaths
+{
+public:
+	virtual wxString GetExecutablePath() const
+	{
+		const char* system = [NSBundle bundleForClass:[PCSX2GameCore class]].resourceURL.fileSystemRepresentation;
+		return system;
+	}
+	wxString GetResourcesDir() const
+	{
+		const char* system = [NSBundle bundleForClass:[PCSX2GameCore class]].resourceURL.fileSystemRepresentation;
+		return system;
+	}
+	wxString GetUserLocalDataDir() const
+	{
+		PCSX2GameCore *current = _current;
+		const char* savedir = current.batterySavesDirectoryPath.fileSystemRepresentation;
+		return Path::Combine(savedir, "pcsx2");
+	}
+};
+
+wxStandardPaths& Pcsx2AppTraits::GetStandardPaths()
+{
+	static Pcsx2StandardPaths stdPaths;
+	return stdPaths;
 }
 
 // Safe to remove these lines when this is handled properly.
