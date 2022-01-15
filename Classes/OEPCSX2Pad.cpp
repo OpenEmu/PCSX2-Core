@@ -71,7 +71,7 @@ void PADshutdown()
 //	CloseLogging();
 }
 
-s32 PADopen(void* pDsp)
+s32 PADopen(const WindowInfo& wi)
 {
 	memset(&event, 0, sizeof(event));
 	g_key_status.Init();
@@ -262,4 +262,9 @@ s32 _PADopen(void* pDsp)
 void PADconfigure()
 {
 	// Do nothing
+}
+
+void PADLoadConfig()
+{
+	
 }

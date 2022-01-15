@@ -48,3 +48,21 @@ size_t GSOsdManager::Size()
 void GSOsdManager::Monitor(const char* key, const char* value)
 {
 }
+
+size_t GSOsdManager::GeneratePrimitives(GSVertexPT1* dst, size_t count)
+{
+	return count;
+}
+
+void GSOsdManager::upload_texture_atlas(GSTexture* t)
+{
+}
+
+GSVector2i GSOsdManager::get_texture_font_size()
+{
+	return GSVector2i(m_atlas_w, m_atlas_h);
+}
+
+void GSOsdManager::Log(const char* utf8)
+{
+}

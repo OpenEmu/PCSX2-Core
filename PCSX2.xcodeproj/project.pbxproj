@@ -185,6 +185,12 @@
 		551AA4B72793625B00658151 /* Misc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551AA4B62793625B00658151 /* Misc.cpp */; };
 		551AA4BA279362BB00658151 /* FastJmp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551AA4B9279362BA00658151 /* FastJmp.cpp */; };
 		551AA4BF2793642B00658151 /* FileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551AA4BE2793642B00658151 /* FileSystem.cpp */; };
+		551AA4CF27936D7400658151 /* StreamBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551AA4C127936D7400658151 /* StreamBuffer.cpp */; };
+		551AA4D227936D7500658151 /* Context.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551AA4C427936D7400658151 /* Context.cpp */; };
+		551AA4D527936D7500658151 /* ContextAGL.mm in Sources */ = {isa = PBXBuildFile; fileRef = 551AA4CE27936D7400658151 /* ContextAGL.mm */; };
+		551AA4DE2793736B00658151 /* glad.c in Sources */ = {isa = PBXBuildFile; fileRef = 551AA40F2792C12E00658151 /* glad.c */; };
+		551AA4E12793741F00658151 /* libglad-pcsx2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 551AA4DA2793734900658151 /* libglad-pcsx2.a */; };
+		551AA4E22793756000658151 /* Pcsx2Config.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FB5E263D49BB000219EC /* Pcsx2Config.cpp */; };
 		551BF1682641F1CD0008C529 /* dirdlg.mm in Sources */ = {isa = PBXBuildFile; fileRef = 551BF0692641F1710008C529 /* dirdlg.mm */; };
 		551BF1692641F1CD0008C529 /* dnd_osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551BF03A2641F1710008C529 /* dnd_osx.cpp */; };
 		551BF16A2641F1CD0008C529 /* statbmp.mm in Sources */ = {isa = PBXBuildFile; fileRef = 551BF05D2641F1710008C529 /* statbmp.mm */; };
@@ -961,13 +967,8 @@
 		551BF6B926424A010008C529 /* AppCoreThread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551BF4AE2641FBFF0008C529 /* AppCoreThread.cpp */; };
 		551BF6BA26424A9A0008C529 /* Dialogs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FE30263D4A9B000219EC /* Dialogs.cpp */; };
 		551BF6BD26424BAA0008C529 /* ThreadedFileReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551BF6BC26424BAA0008C529 /* ThreadedFileReader.cpp */; };
-		551BF6E826424D030008C529 /* InputRecordingControls.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551BF6BF26424D020008C529 /* InputRecordingControls.cpp */; };
 		551BF6E926424D030008C529 /* InputRecording.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551BF6C026424D020008C529 /* InputRecording.cpp */; };
 		551BF6EA26424D030008C529 /* VirtualPadResources.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551BF6C426424D020008C529 /* VirtualPadResources.cpp */; };
-		551BF70026424D030008C529 /* VirtualPadData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551BF6DB26424D020008C529 /* VirtualPadData.cpp */; };
-		551BF70226424D030008C529 /* InputRecordingFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551BF6E326424D020008C529 /* InputRecordingFile.cpp */; };
-		551BF70326424D030008C529 /* NewRecordingFrame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551BF6E426424D020008C529 /* NewRecordingFrame.cpp */; };
-		551BF70426424D030008C529 /* PadData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551BF6E526424D020008C529 /* PadData.cpp */; };
 		551BF71826424ED50008C529 /* bin2cpp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551BF71626424EC60008C529 /* bin2cpp.cpp */; };
 		553CF8382640D2F8003A437C /* jmp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FA79263D48AE000219EC /* jmp.cpp */; };
 		553CF8392640D2F8003A437C /* x86emitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FA78263D48AE000219EC /* x86emitter.cpp */; };
@@ -1011,6 +1012,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 551AA3D22792BEC500658151;
 			remoteInfo = gs2;
+		};
+		551AA4DF2793741200658151 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5517E8AC263D4213000219EC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 551AA4D92793734900658151;
+			remoteInfo = "glad-pcsx2";
 		};
 		551BF1DE2641F2470008C529 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -3281,6 +3289,13 @@
 		551AA4BC2793635B00658151 /* pxEvents.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = pxEvents.h; sourceTree = "<group>"; };
 		551AA4BD2793642B00658151 /* FileSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileSystem.h; sourceTree = "<group>"; };
 		551AA4BE2793642B00658151 /* FileSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystem.cpp; sourceTree = "<group>"; };
+		551AA4C127936D7400658151 /* StreamBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StreamBuffer.cpp; sourceTree = "<group>"; };
+		551AA4C427936D7400658151 /* Context.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Context.cpp; sourceTree = "<group>"; };
+		551AA4C727936D7400658151 /* Context.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Context.h; sourceTree = "<group>"; };
+		551AA4C927936D7400658151 /* ContextAGL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContextAGL.h; sourceTree = "<group>"; };
+		551AA4CB27936D7400658151 /* StreamBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StreamBuffer.h; sourceTree = "<group>"; };
+		551AA4CE27936D7400658151 /* ContextAGL.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ContextAGL.mm; sourceTree = "<group>"; };
+		551AA4DA2793734900658151 /* libglad-pcsx2.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libglad-pcsx2.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		551BE8882641EF4E0008C529 /* LnxHostSys.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LnxHostSys.cpp; sourceTree = "<group>"; };
 		551BE8892641EF4E0008C529 /* LnxThreads.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LnxThreads.cpp; sourceTree = "<group>"; };
 		551BE88A2641EF4E0008C529 /* LnxMisc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LnxMisc.cpp; sourceTree = "<group>"; };
@@ -4980,6 +4995,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				551AA4E12793741F00658151 /* libglad-pcsx2.a in Frameworks */,
 				551AA3FA2792BF6300658151 /* libgs2.a in Frameworks */,
 				551BF693264242250008C529 /* libpcap.tbd in Frameworks */,
 				551BF3D72641F6B60008C529 /* libiconv.tbd in Frameworks */,
@@ -5017,6 +5033,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		551AA3E02792BEC500658151 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		551AA4D82793734900658151 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -5545,6 +5568,7 @@
 				551BF6522642186F0008C529 /* libyaml-PCSX2.a */,
 				551BF70926424E7D0008C529 /* bin2cpp */,
 				551AA3E42792BEC500658151 /* libgs2.a */,
+				551AA4DA2793734900658151 /* libglad-pcsx2.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -7048,6 +7072,7 @@
 		5517FA02263D48AD000219EC /* common */ = {
 			isa = PBXGroup;
 			children = (
+				551AA4C027936D7400658151 /* GL */,
 				5517FA90263D48AE000219EC /* AlignedMalloc.cpp */,
 				5517FA2A263D48AD000219EC /* AppTrait.h */,
 				5517FA30263D48AD000219EC /* Assertions.h */,
@@ -9254,6 +9279,19 @@
 			path = DNS;
 			sourceTree = "<group>";
 		};
+		551AA4C027936D7400658151 /* GL */ = {
+			isa = PBXGroup;
+			children = (
+				551AA4C427936D7400658151 /* Context.cpp */,
+				551AA4C727936D7400658151 /* Context.h */,
+				551AA4C927936D7400658151 /* ContextAGL.h */,
+				551AA4CE27936D7400658151 /* ContextAGL.mm */,
+				551AA4C127936D7400658151 /* StreamBuffer.cpp */,
+				551AA4CB27936D7400658151 /* StreamBuffer.h */,
+			);
+			path = GL;
+			sourceTree = "<group>";
+		};
 		551BE8872641EF4E0008C529 /* Linux */ = {
 			isa = PBXGroup;
 			children = (
@@ -10946,6 +10984,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		551AA4D62793734900658151 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		551BF1602641F1AF0008C529 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -11003,6 +11048,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				551AA4E02793741200658151 /* PBXTargetDependency */,
 				551AA3FC2792BF8700658151 /* PBXTargetDependency */,
 				551BF658264218800008C529 /* PBXTargetDependency */,
 				5517FE68263E1279000219EC /* PBXTargetDependency */,
@@ -11067,6 +11113,23 @@
 			name = gs2;
 			productName = x86emitter_PCSX2;
 			productReference = 551AA3E42792BEC500658151 /* libgs2.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		551AA4D92793734900658151 /* glad-pcsx2 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 551AA4DB2793734900658151 /* Build configuration list for PBXNativeTarget "glad-pcsx2" */;
+			buildPhases = (
+				551AA4D62793734900658151 /* Headers */,
+				551AA4D72793734900658151 /* Sources */,
+				551AA4D82793734900658151 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "glad-pcsx2";
+			productName = "glad-pcsx2";
+			productReference = 551AA4DA2793734900658151 /* libglad-pcsx2.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 		551BF1632641F1AF0008C529 /* WxWidgets */ = {
@@ -11209,6 +11272,9 @@
 					5517FE58263E124E000219EC = {
 						CreatedOnToolsVersion = 12.5;
 					};
+					551AA4D92793734900658151 = {
+						CreatedOnToolsVersion = 13.2;
+					};
 					551BF1632641F1AF0008C529 = {
 						CreatedOnToolsVersion = 12.5;
 					};
@@ -11256,6 +11322,7 @@
 				551BF5FF264213470008C529 /* SoundTouch-PCSX2 */,
 				551BF6512642186F0008C529 /* yaml-PCSX2 */,
 				551AA3D22792BEC500658151 /* gs2 */,
+				551AA4D92793734900658151 /* glad-pcsx2 */,
 				551BF70826424E7D0008C529 /* bin2cpp */,
 			);
 		};
@@ -11308,6 +11375,7 @@
 				551BF58526420E9A0008C529 /* SourceLog.cpp in Sources */,
 				551BF5CE264212070008C529 /* IPU_Fifo.cpp in Sources */,
 				551BF5D4264212270008C529 /* Mdec.cpp in Sources */,
+				551AA4CF27936D7400658151 /* StreamBuffer.cpp in Sources */,
 				551BF619264214530008C529 /* iFPUd.cpp in Sources */,
 				551BF5C7264211540008C529 /* os.cc in Sources */,
 				551BF59026420E9A0008C529 /* SPR.cpp in Sources */,
@@ -11326,6 +11394,7 @@
 				551AA3D02792BD5300658151 /* merge.metal in Sources */,
 				551BF6B1264244AB0008C529 /* OEPCSX2Pad.cpp in Sources */,
 				551BF6B2264245DF0008C529 /* state_management.cpp in Sources */,
+				551AA4E22793756000658151 /* Pcsx2Config.cpp in Sources */,
 				551AA12C2792AB1700658151 /* GSTextureCacheSW.cpp in Sources */,
 				551BF5B326420FA50008C529 /* IopMem.cpp in Sources */,
 				551BF56E26420E710008C529 /* Vif1_Dma.cpp in Sources */,
@@ -11337,7 +11406,6 @@
 				551AA3CE2792BD5300658151 /* interlace.metal in Sources */,
 				551BF5C0264210A50008C529 /* GameDatabase.cpp in Sources */,
 				551BF5BA2642108D0008C529 /* DarwinFlatFileReader.cpp in Sources */,
-				551BF70226424D030008C529 /* InputRecordingFile.cpp in Sources */,
 				551BF62A264216B70008C529 /* SysThreadBase.cpp in Sources */,
 				551BF5B026420FA50008C529 /* IopIrq.cpp in Sources */,
 				551BF630264216F50008C529 /* CompressedFileReader.cpp in Sources */,
@@ -11383,7 +11451,6 @@
 				551AA48927935DF400658151 /* GSTextureNull.cpp in Sources */,
 				551BF57E26420E9A0008C529 /* Sio.cpp in Sources */,
 				551BF57C26420E9A0008C529 /* LegacyDmac.cpp in Sources */,
-				551BF70326424D030008C529 /* NewRecordingFrame.cpp in Sources */,
 				551BF5CC264212070008C529 /* IPU.cpp in Sources */,
 				551BF56726420DE90008C529 /* SymbolMap.cpp in Sources */,
 				551BF5B9264210860008C529 /* Counters.cpp in Sources */,
@@ -11412,7 +11479,6 @@
 				551BF631264216F50008C529 /* InputIsoFile.cpp in Sources */,
 				551AA4AF27935E9100658151 /* IP_Options.cpp in Sources */,
 				551BF67A264240560008C529 /* DEV9.cpp in Sources */,
-				551BF6E826424D030008C529 /* InputRecordingControls.cpp in Sources */,
 				551BF679264240560008C529 /* smap.cpp in Sources */,
 				551BF58426420E9A0008C529 /* R3000AInterpreter.cpp in Sources */,
 				551BF5C9264212070008C529 /* IPUdma.cpp in Sources */,
@@ -11428,6 +11494,7 @@
 				551BF6A2264244050008C529 /* spu2freeze.cpp in Sources */,
 				551BF6B7264248D10008C529 /* OEPCSX2SPUConfig.cpp in Sources */,
 				551BF68A264241E80008C529 /* DisVU0Micro.cpp in Sources */,
+				551AA4D227936D7500658151 /* Context.cpp in Sources */,
 				551BF633264216F50008C529 /* ChdFileReader.cpp in Sources */,
 				551BF6912642420B0008C529 /* spu2.cpp in Sources */,
 				551BF685264241BF0008C529 /* DisR3000A.cpp in Sources */,
@@ -11475,7 +11542,6 @@
 				551BF622264215690008C529 /* ConfigDebug.cpp in Sources */,
 				551BF684264241570008C529 /* IsoFS.cpp in Sources */,
 				551BF67D264240660008C529 /* HddCreate.cpp in Sources */,
-				551BF70026424D030008C529 /* VirtualPadData.cpp in Sources */,
 				551BF6422642181C0008C529 /* iR5900-32.cpp in Sources */,
 				551BF58026420E9A0008C529 /* R5900OpcodeImpl.cpp in Sources */,
 				551BF69A264243310008C529 /* DriveUtility.cpp in Sources */,
@@ -11496,9 +11562,9 @@
 				551BF5D5264212270008C529 /* MTGS.cpp in Sources */,
 				551BF616264214320008C529 /* newVif_Dynarec.cpp in Sources */,
 				551BF6A1264243C90008C529 /* ATA_CmdNoData.cpp in Sources */,
-				551BF70426424D030008C529 /* PadData.cpp in Sources */,
 				551AA1242792AB1700658151 /* GSVertexSW.cpp in Sources */,
 				551BF57426420E720008C529 /* VU0microInterp.cpp in Sources */,
+				551AA4D527936D7500658151 /* ContextAGL.mm in Sources */,
 				551BF57226420E720008C529 /* VUmicro.cpp in Sources */,
 				551BF6B8264249D00008C529 /* Patch.cpp in Sources */,
 				551AA4AE27935E9100658151 /* DNS_Packet.cpp in Sources */,
@@ -11668,6 +11734,14 @@
 				551AA3DF2792BEC500658151 /* groups.cpp in Sources */,
 				551AA3F42792BF1800658151 /* GSClut.cpp in Sources */,
 				551AA3E52792BEE800658151 /* GSUtil.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		551AA4D72793734900658151 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				551AA4DE2793736B00658151 /* glad.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -12332,6 +12406,11 @@
 			target = 551AA3D22792BEC500658151 /* gs2 */;
 			targetProxy = 551AA3FB2792BF8700658151 /* PBXContainerItemProxy */;
 		};
+		551AA4E02793741200658151 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 551AA4D92793734900658151 /* glad-pcsx2 */;
+			targetProxy = 551AA4DF2793741200658151 /* PBXContainerItemProxy */;
+		};
 		551BF1DF2641F2470008C529 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 551BF1632641F1AF0008C529 /* WxWidgets */;
@@ -12495,11 +12574,12 @@
 				GCC_PREFIX_HEADER = pcsx2/pcsx2/PrecompiledHeader.h;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					__M_X86_64,
+					_M_X86_64,
 					"$(inherited)",
 					"__WXOSX_COCOA__=1",
-					_M_X86_64,
 					"GIT_TAGGED_COMMIT=1",
 					"GIT_TAG=\"\\\"Oh dear...\\\"\"",
+					DISABLE_RECORDING,
 				);
 				INFOPLIST_FILE = Resources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
@@ -12547,11 +12627,12 @@
 				GCC_PREFIX_HEADER = pcsx2/pcsx2/PrecompiledHeader.h;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					__M_X86_64,
+					_M_X86_64,
 					"$(inherited)",
 					"__WXOSX_COCOA__=1",
-					_M_X86_64,
 					"GIT_TAGGED_COMMIT=1",
 					"GIT_TAG=\"\\\"Oh dear...\\\"\"",
+					DISABLE_RECORDING,
 				);
 				INFOPLIST_FILE = Resources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
@@ -12787,6 +12868,28 @@
 					"\"$(SRCROOT)/pcsx2/3rdparty/soundtouch/soundtouch\"",
 				);
 				USE_HEADERMAP = NO;
+			};
+			name = Release;
+		};
+		551AA4DC2793734900658151 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				EXECUTABLE_PREFIX = lib;
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		551AA4DD2793734900658151 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				EXECUTABLE_PREFIX = lib;
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
 			};
 			name = Release;
 		};
@@ -13063,6 +13166,15 @@
 			buildConfigurations = (
 				551AA3E22792BEC500658151 /* Debug */,
 				551AA3E32792BEC500658151 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		551AA4DB2793734900658151 /* Build configuration list for PBXNativeTarget "glad-pcsx2" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				551AA4DC2793734900658151 /* Debug */,
+				551AA4DD2793734900658151 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

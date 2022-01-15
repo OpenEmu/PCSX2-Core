@@ -37,6 +37,8 @@
 
 #include <wx/stdpaths.h>
 
+bool renderswitch = false;
+
 static __weak PCSX2GameCore *_current;
 //__aligned16 AppCorePlugins CorePlugins;
 //
@@ -193,16 +195,6 @@ SysMainMemory& GetVmMemory()
 	return wxGetApp().GetVmReserve();
 }
 
-SysCoreThread& GetCoreThread()
-{
-	return CoreThread;
-}
-
-SysMtgsThread& GetMTGS()
-{
-	return mtgsThread;
-}
-
 SysCpuProviderPack& GetCpuProviders()
 {
 	return *wxGetApp().m_CpuProviders;
@@ -311,6 +303,102 @@ void SynchronousActionState::PostResult()
 		return;
 	m_posted = true;
 	m_sema.Post();
+}
+
+wxDEFINE_EVENT(pxEvt_StartIdleEventTimer, wxCommandEvent);
+wxDEFINE_EVENT(pxEvt_DeleteObject, wxCommandEvent);
+wxDEFINE_EVENT(pxEvt_DeleteThread, wxCommandEvent);
+wxDEFINE_EVENT(pxEvt_InvokeAction, pxActionEvent);
+wxDEFINE_EVENT(pxEvt_SynchronousCommand, pxSynchronousCommandEvent);
+
+wxIMPLEMENT_DYNAMIC_CLASS(pxSimpleEvent, wxEvent);
+
+// --------------------------------------------------------------------------------------
+//  pxActionEvent Implementations
+// --------------------------------------------------------------------------------------
+
+wxIMPLEMENT_DYNAMIC_CLASS(pxActionEvent, wxEvent);
+
+pxActionEvent::pxActionEvent(SynchronousActionState* sema, int msgtype)
+	: wxEvent(0, msgtype)
+{
+	m_state = sema;
+}
+
+pxActionEvent::pxActionEvent(SynchronousActionState& sema, int msgtype)
+	: wxEvent(0, msgtype)
+{
+	m_state = &sema;
+}
+
+pxActionEvent::pxActionEvent(const pxActionEvent& src)
+	: wxEvent(src)
+{
+	m_state = src.m_state;
+}
+
+void pxActionEvent::SetException(const BaseException& ex)
+{
+	SetException(ex.Clone());
+}
+
+void pxActionEvent::SetException(BaseException* ex)
+{
+	const wxString& prefix(pxsFmt(L"(%s) ", GetClassInfo()->GetClassName()));
+	ex->DiagMsg() = prefix + ex->DiagMsg();
+
+	if (!m_state)
+	{
+		ScopedExcept exptr(ex); // auto-delete it after handling.
+		ex->Rethrow();
+	}
+
+	m_state->SetException(ex);
+}
+
+// --------------------------------------------------------------------------------------
+//  pxExceptionEvent implementations
+// --------------------------------------------------------------------------------------
+pxExceptionEvent::pxExceptionEvent(const BaseException& ex)
+{
+	m_except = ex.Clone();
+}
+
+void pxExceptionEvent::InvokeEvent()
+{
+	ScopedExcept deleteMe(m_except);
+	if (deleteMe)
+		deleteMe->Rethrow();
+}
+
+// --------------------------------------------------------------------------------------
+//  CoreThreadStatusEvent Implementations
+// --------------------------------------------------------------------------------------
+CoreThreadStatusEvent::CoreThreadStatusEvent( CoreThreadStatus evt, SynchronousActionState* sema )
+	: pxActionEvent( sema )
+{
+	m_evt = evt;
+}
+
+CoreThreadStatusEvent::CoreThreadStatusEvent( CoreThreadStatus evt, SynchronousActionState& sema )
+	: pxActionEvent( sema )
+{
+	m_evt = evt;
+}
+
+void CoreThreadStatusEvent::InvokeEvent()
+{
+	sApp.DispatchEvent( m_evt );
+}
+
+
+void OSDlog(ConsoleColors color, bool console, const std::string& str)
+{
+}
+
+wxString pxGetAppName()
+{
+	return wxString("OpenEmu");
 }
 
 // Safe to remove these lines when this is handled properly.
