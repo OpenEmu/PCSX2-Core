@@ -23,8 +23,8 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "PrecompiledHeader.h"
-#include "../Global.h"
-#include "Dialogs.h"
+#include "PAD/Linux/Global.h"
+#include "SPU2/Linux/Dialogs.h"
 #include "Config.h"
 
 int AutoDMAPlayRate[2] = {0, 0};

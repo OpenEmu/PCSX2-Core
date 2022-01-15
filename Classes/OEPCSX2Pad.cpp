@@ -28,9 +28,9 @@
 #include <string.h>
 #include <stdarg.h>
 
-#include "Utilities/pxStreams.h"
-#include "PAD.h"
-#include "state_management.h"
+#include "pxStreams.h"
+#include "PAD/Gamepad.h"
+#include "PAD/Linux/state_management.h"
 
 #include <unistd.h>
 
@@ -39,16 +39,16 @@ const u32 build = 0; // increase that with each version
 #define PAD_SAVE_STATE_VERSION ((revision << 8) | (build << 0))
 
 PADconf g_conf;
-keyEvent event;
+HostKeyEvent event;
 
-static keyEvent s_event;
+static HostKeyEvent s_event;
 std::string s_padstrLogPath("logs/");
 
 FILE* padLog = NULL;
 
 KeyStatus g_key_status;
 
-MtQueue<keyEvent> g_ev_fifo;
+MtQueue<HostKeyEvent> g_ev_fifo;
 
 s32 PADinit()
 {
@@ -78,10 +78,7 @@ s32 PADopen(void* pDsp)
 
 	g_ev_fifo.reset();
 
-#if defined(__unix__) || defined(__APPLE__)
-	GamePad::EnumerateGamePads(s_vgamePad);
-#endif
-	return _PADopen(pDsp);
+	return 0;
 }
 
 void PADsetLogDir(const char* dir)
@@ -91,12 +88,12 @@ void PADsetLogDir(const char* dir)
 
 	// Reload the log file after updated the path
 //	CloseLogging();
-	initLogging();
+//	initLogging();
 }
 
 void PADclose()
 {
-	_PADclose();
+	//device_manager.devices.clear();
 }
 
 s32 PADsetSlot(u8 port, u8 slot)
@@ -113,22 +110,22 @@ s32 PADsetSlot(u8 port, u8 slot)
 	return 1;
 }
 
-s32 PADfreeze(int mode, freezeData* data)
+s32 PADfreeze(FreezeAction mode, freezeData* data)
 {
 	if (!data)
 		return -1;
 
-	if (mode == FREEZE_SIZE)
+	if (mode == FreezeAction::Size)
 	{
-		data->size = sizeof(PadPluginFreezeData);
+		data->size = sizeof(PadFullFreezeData);
 	}
-	else if (mode == FREEZE_LOAD)
+	else if (mode == FreezeAction::Load)
 	{
-		PadPluginFreezeData* pdata = (PadPluginFreezeData*)(data->data);
+		PadFullFreezeData* pdata = (PadFullFreezeData*)(data->data);
 
 		Pad::stop_vibrate_all();
 
-		if (data->size != sizeof(PadPluginFreezeData) || pdata->version != PAD_SAVE_STATE_VERSION ||
+		if (data->size != sizeof(PadFullFreezeData) || pdata->version != PAD_SAVE_STATE_VERSION ||
 			strncmp(pdata->format, "LinPad", sizeof(pdata->format)))
 			return 0;
 
@@ -158,12 +155,12 @@ s32 PADfreeze(int mode, freezeData* data)
 				slots[port] = pdata->slot[port];
 		}
 	}
-	else if (mode == FREEZE_SAVE)
+	else if (mode == FreezeAction::Save)
 	{
-		if (data->size != sizeof(PadPluginFreezeData))
+		if (data->size != sizeof(PadFullFreezeData))
 			return 0;
 
-		PadPluginFreezeData* pdata = (PadPluginFreezeData*)(data->data);
+		PadFullFreezeData* pdata = (PadFullFreezeData*)(data->data);
 
 		// Tales of the Abyss - pad fix
 		// - PCSX2 only saves port0 (save #1), then port1 (save #2)
@@ -202,7 +199,7 @@ u8 PADpoll(u8 value)
 }
 
 // PADkeyEvent is called every vsync (return NULL if no event)
-keyEvent* PADkeyEvent()
+HostKeyEvent* PADkeyEvent()
 {
 #ifdef SDL_BUILD
 	// Take the opportunity to handle hot plugging here
@@ -236,7 +233,7 @@ keyEvent* PADkeyEvent()
 	return &s_event;
 #else // MacOS
 	s_event = event;
-	event.evt = 0;
+	event.type = HostKeyEvent::Type::NoEvent;
 	event.key = 0;
 	return &s_event;
 #endif
@@ -251,57 +248,6 @@ void PADWriteEvent(keyEvent& evt)
 	g_ev_fifo.push(evt);
 }
 #endif
-
-void PADDoFreezeOut(void* dest)
-{
-	freezeData fP = {0, (s8*)dest};
-	if (PADfreeze(FREEZE_SIZE, &fP) != 0)
-		return;
-	if (!fP.size)
-		return;
-
-	Console.Indent().WriteLn("Saving PAD");
-
-	if (PADfreeze(FREEZE_SAVE, &fP) != 0)
-		throw std::runtime_error(" * PAD: Error saving state!\n");
-}
-
-
-void PADDoFreezeIn(pxInputStream& infp)
-{
-	freezeData fP = {0, nullptr};
-	if (PADfreeze(FREEZE_SIZE, &fP) != 0)
-		fP.size = 0;
-
-	Console.Indent().WriteLn("Loading PAD");
-
-	if (!infp.IsOk() || !infp.Length())
-	{
-		// no state data to read, but PAD expects some state data?
-		// Issue a warning to console...
-		if (fP.size != 0)
-			Console.Indent().Warning("Warning: No data for PAD found. Status may be unpredictable.");
-
-		return;
-
-		// Note: Size mismatch check could also be done here on loading, but
-		// some plugins may have built-in version support for non-native formats or
-		// older versions of a different size... or could give different sizes depending
-		// on the status of the plugin when loading, so let's ignore it.
-	}
-
-	ScopedAlloc<s8> data(fP.size);
-	fP.data = data.GetPtr();
-
-	infp.Read(fP.data, fP.size);
-	if (PADfreeze(FREEZE_LOAD, &fP) != 0)
-		throw std::runtime_error(" * PAD: Error loading state!\n");
-}
-
-void _PADclose()
-{
-	s_vgamePad.clear();
-}
 
 s32 _PADopen(void* pDsp)
 {

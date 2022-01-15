@@ -26,7 +26,7 @@
 #include "wx/mstream.h"
 #include "wx/scopedptr.h"
 #include "wx/wfstream.h"
-#include "zlib.h"
+#include <zlib.h>
 
 // value for the 'version needed to extract' field (20 means 2.0)
 enum {

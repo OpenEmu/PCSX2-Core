@@ -26,7 +26,7 @@
 
 #define BOOL PCSX2BOOL
 #include "../pcsx2/pcsx2/PrecompiledHeader.h"
-#include "../pcsx2/pcsx2/Plugins.h"
+//#include "../pcsx2/pcsx2/Plugins.h"
 #include "../pcsx2/pcsx2/GS.h"
 #include "../pcsx2/pcsx2/gui/AppConfig.h"
 #include "../pcsx2/pcsx2/gui/App.h"
@@ -38,14 +38,14 @@
 #include <wx/stdpaths.h>
 
 static __weak PCSX2GameCore *_current;
-__aligned16 AppCorePlugins CorePlugins;
-
-SysCorePlugins& GetCorePlugins()
-{
-	return CorePlugins;
-}
-
-wxString AppConfig::FullpathToBios() const				{ return Path::Combine( Folders.Bios, BaseFilenames.Bios ); }
+//__aligned16 AppCorePlugins CorePlugins;
+//
+//SysCorePlugins& GetCorePlugins()
+//{
+//	return CorePlugins;
+//}
+//
+//wxString AppConfig::FullpathToBios() const				{ return Path::Combine( Folders.Bios, BaseFilenames.Bios ); }
 
 @implementation PCSX2GameCore
 
@@ -139,9 +139,9 @@ struct SDLAudioMod : public SndOutModule
 	static SDLAudioMod mod;
 	std::string m_api;
 
-	s32 Init()
+	bool Init()
 	{
-		return -1;
+		return true;
 	}
 
 	const wchar_t* GetIdent() const { return L"OEAudio"; }
@@ -170,6 +170,9 @@ struct SDLAudioMod : public SndOutModule
 	{
 	}
 
+	void SetPaused(bool paused)
+	{
+	}
 
 private:
 //	SDL_AudioSpec spec;

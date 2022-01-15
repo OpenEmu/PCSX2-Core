@@ -23,7 +23,7 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "PrecompiledHeader.h"
-#include "Utilities/SafeArray.inl"
+#include "common/SafeArray.inl"
 #include <wx/file.h>
 #include <wx/dir.h>
 #include <wx/stopwatch.h>
@@ -188,7 +188,7 @@ public:
 	void Close();
 
 	s32 IsPresent(uint slot);
-	void GetSizeInfo(uint slot, PS2E_McdSizeInfo& outways);
+	void GetSizeInfo(uint slot, McdSizeInfo& outways);
 	bool IsPSX(uint slot);
 	s32 Read(uint slot, u8* dest, u32 adr, int size);
 	s32 Save(uint slot, const u8* src, u32 adr, int size);

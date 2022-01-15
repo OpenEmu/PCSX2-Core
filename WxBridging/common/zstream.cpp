@@ -31,7 +31,7 @@
 #if defined(__WINDOWS__) && !defined(__WX_SETUP_H__) && !defined(wxUSE_ZLIB_H_IN_PATH)
     #include "../zlib/zlib.h"
 #else
-    #include "zlib.h"
+    #include <zlib.h>
 #endif
 
 enum {
