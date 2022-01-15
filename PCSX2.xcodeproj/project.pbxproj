@@ -807,7 +807,6 @@
 		551BF5D4264212270008C529 /* Mdec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FB5C263D49BB000219EC /* Mdec.cpp */; };
 		551BF5D5264212270008C529 /* MTGS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FAAA263D49BB000219EC /* MTGS.cpp */; };
 		551BF5D7264212270008C529 /* Patch_Memory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FB75263D49BB000219EC /* Patch_Memory.cpp */; };
-		551BF5D8264212270008C529 /* Pcsx2Config.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FB5E263D49BB000219EC /* Pcsx2Config.cpp */; };
 		551BF5DA264212270008C529 /* Memory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FAAC263D49BB000219EC /* Memory.cpp */; };
 		551BF5DB264212270008C529 /* MMI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FB61263D49BB000219EC /* MMI.cpp */; };
 		551BF6042642135F0008C529 /* FIFOSampleBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517E8E5263D4831000219EC /* FIFOSampleBuffer.cpp */; };
@@ -11417,7 +11416,6 @@
 				551BF679264240560008C529 /* smap.cpp in Sources */,
 				551BF58426420E9A0008C529 /* R3000AInterpreter.cpp in Sources */,
 				551BF5C9264212070008C529 /* IPUdma.cpp in Sources */,
-				551BF5D8264212270008C529 /* Pcsx2Config.cpp in Sources */,
 				551AA1262792AB1700658151 /* GSTextureSW.cpp in Sources */,
 				551BF5B526420FA50008C529 /* HwRead.cpp in Sources */,
 				551AA4B5279360A100658151 /* GSOsdManagerStubs.cpp in Sources */,
@@ -12411,6 +12409,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
+					PCSX2_CORE,
 					"$(inherited)",
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -12468,6 +12467,10 @@
 				EXCLUDED_ARCHS = "arm64 arm64e";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					PCSX2_CORE,
+					"$(inherited)",
+				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
