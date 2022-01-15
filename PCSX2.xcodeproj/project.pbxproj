@@ -197,6 +197,7 @@
 		551AA4E827937A4B00658151 /* GSDrawScanlineCodeGenerator.all.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551AA0922792AB1700658151 /* GSDrawScanlineCodeGenerator.all.cpp */; settings = {COMPILER_FLAGS = "-fno-operator-names"; }; };
 		551AA4E927937B3000658151 /* CfgHelpers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FE2E263D4A9B000219EC /* CfgHelpers.cpp */; };
 		551AA4EA27937B5800658151 /* GSSetupPrimCodeGenerator.all.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551AA0962792AB1700658151 /* GSSetupPrimCodeGenerator.all.cpp */; settings = {COMPILER_FLAGS = "-fno-operator-names"; }; };
+		551AA4F027938D6900658151 /* GSNewCodeGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551AA0942792AB1700658151 /* GSNewCodeGenerator.cpp */; settings = {COMPILER_FLAGS = "-fno-operator-names"; }; };
 		551BF1682641F1CD0008C529 /* dirdlg.mm in Sources */ = {isa = PBXBuildFile; fileRef = 551BF0692641F1710008C529 /* dirdlg.mm */; };
 		551BF1692641F1CD0008C529 /* dnd_osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551BF03A2641F1710008C529 /* dnd_osx.cpp */; };
 		551BF16A2641F1CD0008C529 /* statbmp.mm in Sources */ = {isa = PBXBuildFile; fileRef = 551BF05D2641F1710008C529 /* statbmp.mm */; };
@@ -11405,6 +11406,7 @@
 				551BF6B1264244AB0008C529 /* OEPCSX2Pad.cpp in Sources */,
 				551BF6B2264245DF0008C529 /* state_management.cpp in Sources */,
 				551AA4E22793756000658151 /* Pcsx2Config.cpp in Sources */,
+				551AA4F027938D6900658151 /* GSNewCodeGenerator.cpp in Sources */,
 				551AA12C2792AB1700658151 /* GSTextureCacheSW.cpp in Sources */,
 				551BF5B326420FA50008C529 /* IopMem.cpp in Sources */,
 				551BF56E26420E710008C529 /* Vif1_Dma.cpp in Sources */,
