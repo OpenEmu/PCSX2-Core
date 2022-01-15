@@ -191,6 +191,12 @@
 		551AA4DE2793736B00658151 /* glad.c in Sources */ = {isa = PBXBuildFile; fileRef = 551AA40F2792C12E00658151 /* glad.c */; };
 		551AA4E12793741F00658151 /* libglad-pcsx2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 551AA4DA2793734900658151 /* libglad-pcsx2.a */; };
 		551AA4E22793756000658151 /* Pcsx2Config.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FB5E263D49BB000219EC /* Pcsx2Config.cpp */; };
+		551AA4E52793775E00658151 /* StringUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551AA4E42793775E00658151 /* StringUtil.cpp */; };
+		551AA4E6279377A100658151 /* GSDrawScanlineCodeGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551AA0A12792AB1700658151 /* GSDrawScanlineCodeGenerator.cpp */; settings = {COMPILER_FLAGS = "-fno-operator-names"; }; };
+		551AA4E72793789300658151 /* GSSetupPrimCodeGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551AA0982792AB1700658151 /* GSSetupPrimCodeGenerator.cpp */; settings = {COMPILER_FLAGS = "-fno-operator-names"; }; };
+		551AA4E827937A4B00658151 /* GSDrawScanlineCodeGenerator.all.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551AA0922792AB1700658151 /* GSDrawScanlineCodeGenerator.all.cpp */; settings = {COMPILER_FLAGS = "-fno-operator-names"; }; };
+		551AA4E927937B3000658151 /* CfgHelpers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FE2E263D4A9B000219EC /* CfgHelpers.cpp */; };
+		551AA4EA27937B5800658151 /* GSSetupPrimCodeGenerator.all.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551AA0962792AB1700658151 /* GSSetupPrimCodeGenerator.all.cpp */; settings = {COMPILER_FLAGS = "-fno-operator-names"; }; };
 		551BF1682641F1CD0008C529 /* dirdlg.mm in Sources */ = {isa = PBXBuildFile; fileRef = 551BF0692641F1710008C529 /* dirdlg.mm */; };
 		551BF1692641F1CD0008C529 /* dnd_osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551BF03A2641F1710008C529 /* dnd_osx.cpp */; };
 		551BF16A2641F1CD0008C529 /* statbmp.mm in Sources */ = {isa = PBXBuildFile; fileRef = 551BF05D2641F1710008C529 /* statbmp.mm */; };
@@ -3296,6 +3302,8 @@
 		551AA4CB27936D7400658151 /* StreamBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StreamBuffer.h; sourceTree = "<group>"; };
 		551AA4CE27936D7400658151 /* ContextAGL.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ContextAGL.mm; sourceTree = "<group>"; };
 		551AA4DA2793734900658151 /* libglad-pcsx2.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libglad-pcsx2.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		551AA4E32793775E00658151 /* StringUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StringUtil.h; sourceTree = "<group>"; };
+		551AA4E42793775E00658151 /* StringUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StringUtil.cpp; sourceTree = "<group>"; };
 		551BE8882641EF4E0008C529 /* LnxHostSys.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LnxHostSys.cpp; sourceTree = "<group>"; };
 		551BE8892641EF4E0008C529 /* LnxThreads.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LnxThreads.cpp; sourceTree = "<group>"; };
 		551BE88A2641EF4E0008C529 /* LnxMisc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LnxMisc.cpp; sourceTree = "<group>"; };
@@ -7072,7 +7080,6 @@
 		5517FA02263D48AD000219EC /* common */ = {
 			isa = PBXGroup;
 			children = (
-				551AA4C027936D7400658151 /* GL */,
 				5517FA90263D48AE000219EC /* AlignedMalloc.cpp */,
 				5517FA2A263D48AD000219EC /* AppTrait.h */,
 				5517FA30263D48AD000219EC /* Assertions.h */,
@@ -7094,6 +7101,7 @@
 				551AA4BE2793642B00658151 /* FileSystem.cpp */,
 				551AA4BD2793642B00658151 /* FileSystem.h */,
 				5517FA35263D48AD000219EC /* General.h */,
+				551AA4C027936D7400658151 /* GL */,
 				5517FA8C263D48AE000219EC /* IniInterface.cpp */,
 				5517FA46263D48AD000219EC /* IniInterface.h */,
 				551BE8872641EF4E0008C529 /* Linux */,
@@ -7126,6 +7134,8 @@
 				5517FAA2263D48AE000219EC /* Semaphore.cpp */,
 				5517FAA6263D48AE000219EC /* StringHelpers.cpp */,
 				5517FA43263D48AD000219EC /* StringHelpers.h */,
+				551AA4E42793775E00658151 /* StringUtil.cpp */,
+				551AA4E32793775E00658151 /* StringUtil.h */,
 				5517FA36263D48AD000219EC /* Threading.h */,
 				5517FA8D263D48AE000219EC /* ThreadingInternal.h */,
 				5517FA97263D48AE000219EC /* ThreadTools.cpp */,
@@ -11469,6 +11479,7 @@
 				551BF58326420E9A0008C529 /* IopHwRead.cpp in Sources */,
 				551BF5C3264210AB0008C529 /* Gif.cpp in Sources */,
 				551BF57A26420E720008C529 /* VU1microInterp.cpp in Sources */,
+				551AA4E6279377A100658151 /* GSDrawScanlineCodeGenerator.cpp in Sources */,
 				551BF647264218380008C529 /* iR5900Move.cpp in Sources */,
 				551AA4B327935F9400658151 /* Timer.cpp in Sources */,
 				551BF57D26420E9A0008C529 /* ShiftJisToUnicode.cpp in Sources */,
@@ -11492,6 +11503,7 @@
 				551BF628264216A40008C529 /* System.cpp in Sources */,
 				551AA4AD27935E9100658151 /* DNS_Classes.cpp in Sources */,
 				551BF6A2264244050008C529 /* spu2freeze.cpp in Sources */,
+				551AA4E72793789300658151 /* GSSetupPrimCodeGenerator.cpp in Sources */,
 				551BF6B7264248D10008C529 /* OEPCSX2SPUConfig.cpp in Sources */,
 				551BF68A264241E80008C529 /* DisVU0Micro.cpp in Sources */,
 				551AA4D227936D7500658151 /* Context.cpp in Sources */,
@@ -11500,6 +11512,7 @@
 				551BF685264241BF0008C529 /* DisR3000A.cpp in Sources */,
 				551BF690264241F10008C529 /* MipsStackWalk.cpp in Sources */,
 				551BF6152642142F0008C529 /* microVU.cpp in Sources */,
+				551AA4E827937A4B00658151 /* GSDrawScanlineCodeGenerator.all.cpp in Sources */,
 				551BF5AA26420FA50008C529 /* Hw.cpp in Sources */,
 				551AA1792792B66400658151 /* DNS_Server.cpp in Sources */,
 				551BF648264218380008C529 /* iCore-32.cpp in Sources */,
@@ -11540,6 +11553,7 @@
 				551BF62F264216F50008C529 /* CDVDisoReader.cpp in Sources */,
 				551BF5AE26420FA50008C529 /* IopCounters.cpp in Sources */,
 				551BF622264215690008C529 /* ConfigDebug.cpp in Sources */,
+				551AA4E927937B3000658151 /* CfgHelpers.cpp in Sources */,
 				551BF684264241570008C529 /* IsoFS.cpp in Sources */,
 				551BF67D264240660008C529 /* HddCreate.cpp in Sources */,
 				551BF6422642181C0008C529 /* iR5900-32.cpp in Sources */,
@@ -11559,6 +11573,7 @@
 				551BF5A826420FA50008C529 /* HwWrite.cpp in Sources */,
 				551AA48A27935DF400658151 /* GSDeviceNull.cpp in Sources */,
 				551BF57826420E720008C529 /* vtlb.cpp in Sources */,
+				551AA4E52793775E00658151 /* StringUtil.cpp in Sources */,
 				551BF5D5264212270008C529 /* MTGS.cpp in Sources */,
 				551BF616264214320008C529 /* newVif_Dynarec.cpp in Sources */,
 				551BF6A1264243C90008C529 /* ATA_CmdNoData.cpp in Sources */,
@@ -11589,6 +11604,7 @@
 				551AA1492792AB1800658151 /* GLLoader.cpp in Sources */,
 				551BF58126420E9A0008C529 /* BiosTools.cpp in Sources */,
 				551BF5D7264212270008C529 /* Patch_Memory.cpp in Sources */,
+				551AA4EA27937B5800658151 /* GSSetupPrimCodeGenerator.all.cpp in Sources */,
 				551BF68E264241F10008C529 /* MipsAssembler.cpp in Sources */,
 				551BF638264216F50008C529 /* CDVD.cpp in Sources */,
 				551BF62B264216F50008C529 /* CDVDdiscReader.cpp in Sources */,

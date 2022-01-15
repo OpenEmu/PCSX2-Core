@@ -29,15 +29,22 @@
 //#include "../pcsx2/pcsx2/Plugins.h"
 #include "../pcsx2/pcsx2/GS.h"
 #include "../pcsx2/pcsx2/gui/AppConfig.h"
+#include "../pcsx2/pcsx2/gui/AppAccelerators.h"
+#include "../pcsx2/pcsx2/gui/ConsoleLogger.h"
 #include "../pcsx2/pcsx2/gui/App.h"
 #include "../pcsx2/pcsx2/SPU2/Global.h"
 #include "../pcsx2/pcsx2/SPU2/SndOut.h"
-//#include "gui/Dialogs/ModalPopups.h"
+#include "MTVU.h"
 #undef BOOL
 
 #include <wx/stdpaths.h>
 
 bool renderswitch = false;
+
+namespace GSDump
+{
+	bool isRunning = false;
+}
 
 static __weak PCSX2GameCore *_current;
 //__aligned16 AppCorePlugins CorePlugins;
@@ -206,6 +213,14 @@ wxDirName GetProgramDataDir()
 	return wxDirName([NSBundle bundleForClass:[current class]].resourceURL.fileSystemRepresentation);
 }
 
+void UI_UpdateSysControls()
+{
+}
+
+void UI_EnableSysActions()
+{
+}
+
 void StateCopy_LoadFromSlot(uint slot, bool isFromBackup)
 {
 	// do nothing
@@ -313,9 +328,7 @@ wxDEFINE_EVENT(pxEvt_SynchronousCommand, pxSynchronousCommandEvent);
 
 wxIMPLEMENT_DYNAMIC_CLASS(pxSimpleEvent, wxEvent);
 
-// --------------------------------------------------------------------------------------
-//  pxActionEvent Implementations
-// --------------------------------------------------------------------------------------
+#pragma mark - pxActionEvent Implementations
 
 wxIMPLEMENT_DYNAMIC_CLASS(pxActionEvent, wxEvent);
 
@@ -356,9 +369,33 @@ void pxActionEvent::SetException(BaseException* ex)
 	m_state->SetException(ex);
 }
 
-// --------------------------------------------------------------------------------------
-//  pxExceptionEvent implementations
-// --------------------------------------------------------------------------------------
+// Executes the event with exception handling.  If the event throws an exception, the exception
+// will be neatly packaged and transported back to the thread that posted the event.
+// This function is virtual, however overloading it is not recommended.  Derrived classes
+// should overload InvokeEvent() instead.
+void pxActionEvent::_DoInvokeEvent()
+{
+	AffinityAssert_AllowFrom_MainUI();
+
+	try
+	{
+		InvokeEvent();
+	}
+	catch (BaseException& ex)
+	{
+		SetException(ex);
+	}
+	catch (std::runtime_error& ex)
+	{
+		SetException(new Exception::RuntimeError(ex));
+	}
+
+	if (m_state)
+		m_state->PostResult();
+}
+
+#pragma mark - pxExceptionEvent implementations
+
 pxExceptionEvent::pxExceptionEvent(const BaseException& ex)
 {
 	m_except = ex.Clone();
@@ -371,9 +408,8 @@ void pxExceptionEvent::InvokeEvent()
 		deleteMe->Rethrow();
 }
 
-// --------------------------------------------------------------------------------------
-//  CoreThreadStatusEvent Implementations
-// --------------------------------------------------------------------------------------
+#pragma mark - CoreThreadStatusEvent Implementations
+
 CoreThreadStatusEvent::CoreThreadStatusEvent( CoreThreadStatus evt, SynchronousActionState* sema )
 	: pxActionEvent( sema )
 {
@@ -401,6 +437,69 @@ wxString pxGetAppName()
 	return wxString("OpenEmu");
 }
 
+#pragma mark - pxSynchronousCommandEvent
+
+wxIMPLEMENT_DYNAMIC_CLASS(pxSynchronousCommandEvent, wxCommandEvent);
+
+pxSynchronousCommandEvent::pxSynchronousCommandEvent(SynchronousActionState* sema, wxEventType commandType, int winid)
+	: wxCommandEvent(pxEvt_SynchronousCommand, winid)
+{
+	m_sync = sema;
+	m_realEvent = commandType;
+}
+
+pxSynchronousCommandEvent::pxSynchronousCommandEvent(SynchronousActionState& sema, wxEventType commandType, int winid)
+	: wxCommandEvent(pxEvt_SynchronousCommand)
+{
+	m_sync = &sema;
+	m_realEvent = commandType;
+}
+
+pxSynchronousCommandEvent::pxSynchronousCommandEvent(SynchronousActionState* sema, const wxCommandEvent& evt)
+	: wxCommandEvent(evt)
+{
+	m_sync = sema;
+	m_realEvent = evt.GetEventType();
+	SetEventType(pxEvt_SynchronousCommand);
+}
+
+pxSynchronousCommandEvent::pxSynchronousCommandEvent(SynchronousActionState& sema, const wxCommandEvent& evt)
+	: wxCommandEvent(evt)
+{
+	m_sync = &sema;
+	m_realEvent = evt.GetEventType();
+	SetEventType(pxEvt_SynchronousCommand);
+}
+
+pxSynchronousCommandEvent::pxSynchronousCommandEvent(const pxSynchronousCommandEvent& src)
+	: wxCommandEvent(src)
+{
+	m_sync = src.m_sync;
+	m_realEvent = src.m_realEvent;
+}
+
+void pxSynchronousCommandEvent::SetException(const BaseException& ex)
+{
+	if (!m_sync)
+		ex.Rethrow();
+	m_sync->SetException(ex);
+}
+
+void pxSynchronousCommandEvent::SetException(BaseException* ex)
+{
+	if (!m_sync)
+	{
+		ScopedExcept exptr(ex); // auto-delete it after handling.
+		ex->Rethrow();
+	}
+
+	m_sync->SetException(ex);
+}
+
+
+
+#pragma mark - Pcsx2App stubs
+
 // Safe to remove these lines when this is handled properly.
 #ifdef __WXMAC__
 // Great joy....
@@ -415,3 +514,78 @@ wxString pxGetAppName()
 #include <wx/osx/private.h>		// needed to implement the app!
 #endif
 wxIMPLEMENT_APP(Pcsx2App);
+
+std::unique_ptr<AppConfig> g_Conf;
+
+WindowInfo g_gs_window_info;
+
+// --------------------------------------------------------------------------------------
+//  SysEventHandler
+// --------------------------------------------------------------------------------------
+//class SysEvtHandler : public pxEvtQueue
+//{
+//public:
+//	wxString GetEvtHandlerName() const { return L"SysExecutor"; }
+//
+//protected:
+//	// When the SysExec message queue is finally empty, we should check the state of
+//	// the menus and make sure they're all consistent to the current emulation states.
+//	void _DoIdle()
+//	{
+//		UI_UpdateSysControls();
+//	}
+//};
+
+//Pcsx2App::Pcsx2App()
+//	: SysExecutorThread(new SysEvtHandler())
+//{
+//	m_PendingSaves = 0;
+//	m_ScheduledTermination = false;
+//	m_UseGUI = false;
+//	m_NoGuiExitPrompt = true;
+//
+//}
+	
+Pcsx2App::~Pcsx2App()
+{
+//	pxDoAssert = pxAssertImpl_LogIt;
+	try
+	{
+		vu1Thread.Cancel();
+	}
+	catch (...)
+	{
+		
+	}
+//	DESTRUCTOR_CATCHALL
+}
+
+void Pcsx2App::OpenGsPanel()
+{
+}
+
+void Pcsx2App::CloseGsPanel()
+{
+}
+
+SysMainMemory& Pcsx2App::GetVmReserve()
+{
+	if (!m_VmReserve) m_VmReserve = std::unique_ptr<SysMainMemory>(new SysMainMemory());
+	return *m_VmReserve;
+}
+
+void Pcsx2App::LogicalVsync()
+{
+}
+
+void Pcsx2App::enterDebugMode()
+{
+}
+
+void Pcsx2App::leaveDebugMode()
+{
+}
+
+void Pcsx2App::resetDebugger()
+{
+}
