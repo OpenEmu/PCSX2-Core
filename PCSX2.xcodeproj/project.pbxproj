@@ -63,8 +63,6 @@
 		551AA14A2792AB1800658151 /* GSShaderOGL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551AA0E32792AB1700658151 /* GSShaderOGL.cpp */; };
 		551AA14B2792AB1800658151 /* GSDeviceOGL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551AA0E72792AB1700658151 /* GSDeviceOGL.cpp */; };
 		551AA14C2792AB1800658151 /* GSTextureOGL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551AA0E82792AB1700658151 /* GSTextureOGL.cpp */; };
-		551AA15C2792AB1800658151 /* GSwxDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551AA10F2792AB1700658151 /* GSwxDialog.cpp */; };
-		551AA15D2792AB1800658151 /* GSSetting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551AA1112792AB1700658151 /* GSSetting.cpp */; };
 		551AA1682792AE1E00658151 /* InputManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551AA1652792AE1E00658151 /* InputManager.cpp */; };
 		551AA16D2792B0EA00658151 /* MemoryCardFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551AA16B2792B0EA00658151 /* MemoryCardFile.cpp */; };
 		551AA16E2792B0EA00658151 /* MemoryCardFolder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551AA16C2792B0EA00658151 /* MemoryCardFolder.cpp */; };
@@ -195,7 +193,6 @@
 		551AA4E6279377A100658151 /* GSDrawScanlineCodeGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551AA0A12792AB1700658151 /* GSDrawScanlineCodeGenerator.cpp */; settings = {COMPILER_FLAGS = "-fno-operator-names"; }; };
 		551AA4E72793789300658151 /* GSSetupPrimCodeGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551AA0982792AB1700658151 /* GSSetupPrimCodeGenerator.cpp */; settings = {COMPILER_FLAGS = "-fno-operator-names"; }; };
 		551AA4E827937A4B00658151 /* GSDrawScanlineCodeGenerator.all.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551AA0922792AB1700658151 /* GSDrawScanlineCodeGenerator.all.cpp */; settings = {COMPILER_FLAGS = "-fno-operator-names"; }; };
-		551AA4E927937B3000658151 /* CfgHelpers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FE2E263D4A9B000219EC /* CfgHelpers.cpp */; };
 		551AA4EA27937B5800658151 /* GSSetupPrimCodeGenerator.all.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551AA0962792AB1700658151 /* GSSetupPrimCodeGenerator.all.cpp */; settings = {COMPILER_FLAGS = "-fno-operator-names"; }; };
 		551AA4F027938D6900658151 /* GSNewCodeGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551AA0942792AB1700658151 /* GSNewCodeGenerator.cpp */; settings = {COMPILER_FLAGS = "-fno-operator-names"; }; };
 		551BF1782641F1CD0008C529 /* stdpaths.mm in Sources */ = {isa = PBXBuildFile; fileRef = 551BF0642641F1710008C529 /* stdpaths.mm */; };
@@ -481,7 +478,6 @@
 		551BF61F264214530008C529 /* iMisc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FD44263D49BC000219EC /* iMisc.cpp */; };
 		551BF620264214530008C529 /* iCOP0.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FD0C263D49BC000219EC /* iCOP0.cpp */; };
 		551BF621264214530008C529 /* iR3000Atables.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FD42263D49BC000219EC /* iR3000Atables.cpp */; };
-		551BF622264215690008C529 /* ConfigDebug.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FE35263D4A9B000219EC /* ConfigDebug.cpp */; };
 		551BF6272642167A0008C529 /* FileUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FBE2263D49BC000219EC /* FileUtils.cpp */; };
 		551BF628264216A40008C529 /* System.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FD4A263D49BC000219EC /* System.cpp */; };
 		551BF629264216B70008C529 /* SysCoreThread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FCB9263D49BC000219EC /* SysCoreThread.cpp */; };
@@ -544,7 +540,6 @@
 		551BF674264218940008C529 /* scantag.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517F2C8263D483A000219EC /* scantag.cpp */; };
 		551BF675264218940008C529 /* emitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517F2AB263D483A000219EC /* emitter.cpp */; };
 		551BF676264219BD0008C529 /* DebugInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FDDF263D49BC000219EC /* DebugInterface.cpp */; };
-		551BF67726421A320008C529 /* ExecutorThread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551BF4E82641FBFF0008C529 /* ExecutorThread.cpp */; };
 		551BF678264240560008C529 /* net.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FAD7263D49BB000219EC /* net.cpp */; };
 		551BF679264240560008C529 /* smap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FAD2263D49BB000219EC /* smap.cpp */; };
 		551BF67A264240560008C529 /* DEV9.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FAD6263D49BB000219EC /* DEV9.cpp */; };
@@ -602,11 +597,8 @@
 		551BF6B3264246550008C529 /* SndOut.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FCD0263D49BC000219EC /* SndOut.cpp */; };
 		551BF6B7264248D10008C529 /* OEPCSX2SPUConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551BF6B6264248D10008C529 /* OEPCSX2SPUConfig.cpp */; };
 		551BF6B8264249D00008C529 /* Patch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FAFC263D49BB000219EC /* Patch.cpp */; };
-		551BF6B926424A010008C529 /* AppCoreThread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551BF4AE2641FBFF0008C529 /* AppCoreThread.cpp */; };
-		551BF6BA26424A9A0008C529 /* Dialogs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FE30263D4A9B000219EC /* Dialogs.cpp */; };
 		551BF6BD26424BAA0008C529 /* ThreadedFileReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551BF6BC26424BAA0008C529 /* ThreadedFileReader.cpp */; };
 		551BF6E926424D030008C529 /* InputRecording.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551BF6C026424D020008C529 /* InputRecording.cpp */; };
-		551BF6EA26424D030008C529 /* VirtualPadResources.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551BF6C426424D020008C529 /* VirtualPadResources.cpp */; };
 		551BF71826424ED50008C529 /* bin2cpp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551BF71626424EC60008C529 /* bin2cpp.cpp */; };
 		553CF8382640D2F8003A437C /* jmp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FA79263D48AE000219EC /* jmp.cpp */; };
 		553CF8392640D2F8003A437C /* x86emitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FA78263D48AE000219EC /* x86emitter.cpp */; };
@@ -1778,14 +1770,6 @@
 		5517FB9E263D49BC000219EC /* joystick.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = joystick.cpp; sourceTree = "<group>"; };
 		5517FB9F263D49BC000219EC /* keyboard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = keyboard.h; sourceTree = "<group>"; };
 		5517FBA0263D49BC000219EC /* PAD.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PAD.cpp; sourceTree = "<group>"; };
-		5517FBA3263D49BC000219EC /* JoystickConfiguration.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JoystickConfiguration.h; sourceTree = "<group>"; };
-		5517FBA4263D49BC000219EC /* dialog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = dialog.h; sourceTree = "<group>"; };
-		5517FBA5263D49BC000219EC /* JoystickConfiguration.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = JoystickConfiguration.cpp; sourceTree = "<group>"; };
-		5517FBA6263D49BC000219EC /* opPanel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = opPanel.cpp; sourceTree = "<group>"; };
-		5517FBA7263D49BC000219EC /* dialog.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = dialog.cpp; sourceTree = "<group>"; };
-		5517FBA8263D49BC000219EC /* opPanel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = opPanel.h; sourceTree = "<group>"; };
-		5517FBA9263D49BC000219EC /* GamepadConfiguration.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GamepadConfiguration.cpp; sourceTree = "<group>"; };
-		5517FBAA263D49BC000219EC /* GamepadConfiguration.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GamepadConfiguration.h; sourceTree = "<group>"; };
 		5517FBAC263D49BC000219EC /* KeyStatus.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeyStatus.h; sourceTree = "<group>"; };
 		5517FBAE263D49BC000219EC /* keyboard.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = keyboard.cpp; sourceTree = "<group>"; };
 		5517FBAF263D49BC000219EC /* Gamepad.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Gamepad.h; sourceTree = "<group>"; };
@@ -1947,7 +1931,6 @@
 		5517FC8F263D49BC000219EC /* CDVD.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CDVD.cpp; sourceTree = "<group>"; };
 		5517FC90263D49BC000219EC /* CompressedFileReader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CompressedFileReader.cpp; sourceTree = "<group>"; };
 		5517FC91263D49BC000219EC /* GzippedFileReader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GzippedFileReader.h; sourceTree = "<group>"; };
-		5517FC92263D49BC000219EC /* CompressedFileReaderUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CompressedFileReaderUtils.h; sourceTree = "<group>"; };
 		5517FC93263D49BC000219EC /* CDVDaccess.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CDVDaccess.cpp; sourceTree = "<group>"; };
 		5517FC94263D49BC000219EC /* CsoFileReader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CsoFileReader.h; sourceTree = "<group>"; };
 		5517FC95263D49BC000219EC /* CompressedFileReader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CompressedFileReader.h; sourceTree = "<group>"; };
@@ -2162,15 +2145,7 @@
 		5517FE29263D49BC000219EC /* IopCommon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IopCommon.h; sourceTree = "<group>"; };
 		5517FE2A263D49BC000219EC /* VU.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VU.h; sourceTree = "<group>"; };
 		5517FE2B263D49BC000219EC /* PathDefs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PathDefs.h; sourceTree = "<group>"; };
-		5517FE2E263D4A9B000219EC /* CfgHelpers.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CfgHelpers.cpp; sourceTree = "<group>"; };
 		5517FE2F263D4A9B000219EC /* Config.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Config.h; sourceTree = "<group>"; };
-		5517FE30263D4A9B000219EC /* Dialogs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Dialogs.cpp; sourceTree = "<group>"; };
-		5517FE31263D4A9B000219EC /* Alsa.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Alsa.cpp; sourceTree = "<group>"; };
-		5517FE32263D4A9B000219EC /* ConfigSoundTouch.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ConfigSoundTouch.cpp; sourceTree = "<group>"; };
-		5517FE33263D4A9B000219EC /* Dialogs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Dialogs.h; sourceTree = "<group>"; };
-		5517FE34263D4A9B000219EC /* Config.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Config.cpp; sourceTree = "<group>"; };
-		5517FE35263D4A9B000219EC /* ConfigDebug.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ConfigDebug.cpp; sourceTree = "<group>"; };
-		5517FE36263D4A9B000219EC /* Alsa.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Alsa.h; sourceTree = "<group>"; };
 		5517FE3F263E1118000219EC /* libchdr-pcsx2.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libchdr-pcsx2.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5517FE4B263E120F000219EC /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		5517FE59263E124E000219EC /* liblzma-pcsx2.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "liblzma-pcsx2.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2923,8 +2898,6 @@
 		551AA4B62793625B00658151 /* Misc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Misc.cpp; sourceTree = "<group>"; };
 		551AA4B8279362BA00658151 /* FastJmp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FastJmp.h; sourceTree = "<group>"; };
 		551AA4B9279362BA00658151 /* FastJmp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FastJmp.cpp; sourceTree = "<group>"; };
-		551AA4BB2793635B00658151 /* pxEventThread.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = pxEventThread.h; sourceTree = "<group>"; };
-		551AA4BC2793635B00658151 /* pxEvents.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = pxEvents.h; sourceTree = "<group>"; };
 		551AA4BD2793642B00658151 /* FileSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileSystem.h; sourceTree = "<group>"; };
 		551AA4BE2793642B00658151 /* FileSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystem.cpp; sourceTree = "<group>"; };
 		551AA4C127936D7400658151 /* StreamBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StreamBuffer.cpp; sourceTree = "<group>"; };
@@ -3614,113 +3587,6 @@
 		551BF3F82641F71E0008C529 /* wakeuppipe.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wakeuppipe.cpp; sourceTree = "<group>"; };
 		551BF3FB2641F71E0008C529 /* appunix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = appunix.cpp; sourceTree = "<group>"; };
 		551BF48D2641F9470008C529 /* libpng-pcsx2.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libpng-pcsx2.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		551BF4AE2641FBFF0008C529 /* AppCoreThread.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AppCoreThread.cpp; sourceTree = "<group>"; };
-		551BF4B02641FBFF0008C529 /* AppAccelerators.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppAccelerators.h; sourceTree = "<group>"; };
-		551BF4B22641FBFF0008C529 /* AppEventListeners.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppEventListeners.h; sourceTree = "<group>"; };
-		551BF4B32641FBFF0008C529 /* ConsoleLogger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConsoleLogger.h; sourceTree = "<group>"; };
-		551BF4B42641FBFF0008C529 /* Saveslots.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Saveslots.h; sourceTree = "<group>"; };
-		551BF4B72641FBFF0008C529 /* Saveslots.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Saveslots.cpp; sourceTree = "<group>"; };
-		551BF4B82641FBFF0008C529 /* UpdateUI.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = UpdateUI.cpp; sourceTree = "<group>"; };
-		551BF4BA2641FBFF0008C529 /* AppCommon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppCommon.h; sourceTree = "<group>"; };
-		551BF4BB2641FBFF0008C529 /* AppSaveStates.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppSaveStates.h; sourceTree = "<group>"; };
-		551BF4BC2641FBFF0008C529 /* AppEventSources.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AppEventSources.cpp; sourceTree = "<group>"; };
-		551BF4BD2641FBFF0008C529 /* MessageBoxes.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MessageBoxes.cpp; sourceTree = "<group>"; };
-		551BF4BE2641FBFF0008C529 /* AppMain.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AppMain.cpp; sourceTree = "<group>"; };
-		551BF4C12641FBFF0008C529 /* ConfigIcon_MemoryCard.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ConfigIcon_MemoryCard.png; sourceTree = "<group>"; };
-		551BF4C22641FBFF0008C529 /* AppIcon16.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AppIcon16.png; sourceTree = "<group>"; };
-		551BF4C32641FBFF0008C529 /* BackgroundLogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BackgroundLogo.png; sourceTree = "<group>"; };
-		551BF4C42641FBFF0008C529 /* Breakpoint_Inactive.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Breakpoint_Inactive.png; sourceTree = "<group>"; };
-		551BF4C52641FBFF0008C529 /* NoIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = NoIcon.png; sourceTree = "<group>"; };
-		551BF4C62641FBFF0008C529 /* bin2cpp.cmd */ = {isa = PBXFileReference; lastKnownFileType = text; path = bin2cpp.cmd; sourceTree = "<group>"; };
-		551BF4C72641FBFF0008C529 /* ConfigIcon_Gamefixes.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ConfigIcon_Gamefixes.png; sourceTree = "<group>"; };
-		551BF4C82641FBFF0008C529 /* AppIcon64.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AppIcon64.png; sourceTree = "<group>"; };
-		551BF4C92641FBFF0008C529 /* ConfigIcon_Speedhacks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ConfigIcon_Speedhacks.png; sourceTree = "<group>"; };
-		551BF4CA2641FBFF0008C529 /* ConfigIcon_Paths.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ConfigIcon_Paths.png; sourceTree = "<group>"; };
-		551BF4CB2641FBFF0008C529 /* Breakpoint_Active.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Breakpoint_Active.png; sourceTree = "<group>"; };
-		551BF4CC2641FBFF0008C529 /* Logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Logo.png; sourceTree = "<group>"; };
-		551BF4CD2641FBFF0008C529 /* ButtonIcon_Camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ButtonIcon_Camera.png; sourceTree = "<group>"; };
-		551BF4CE2641FBFF0008C529 /* ConfigIcon_Cpu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ConfigIcon_Cpu.png; sourceTree = "<group>"; };
-		551BF4CF2641FBFF0008C529 /* AppIcon32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AppIcon32.png; sourceTree = "<group>"; };
-		551BF4D02641FBFF0008C529 /* ConfigIcon_Video.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ConfigIcon_Video.png; sourceTree = "<group>"; };
-		551BF4D12641FBFF0008C529 /* PCSX2.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = PCSX2.icns; sourceTree = "<group>"; };
-		551BF4D32641FBFF0008C529 /* Info.plist.in */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Info.plist.in; sourceTree = "<group>"; };
-		551BF4D42641FBFF0008C529 /* MainFrame.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MainFrame.cpp; sourceTree = "<group>"; };
-		551BF4D52641FBFF0008C529 /* RecentIsoList.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RecentIsoList.cpp; sourceTree = "<group>"; };
-		551BF4D72641FBFF0008C529 /* DirPickerPanel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DirPickerPanel.cpp; sourceTree = "<group>"; };
-		551BF4D82641FBFF0008C529 /* LogOptionsPanels.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LogOptionsPanels.cpp; sourceTree = "<group>"; };
-		551BF4D92641FBFF0008C529 /* BiosSelectorPanel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BiosSelectorPanel.cpp; sourceTree = "<group>"; };
-		551BF4DA2641FBFF0008C529 /* PathsPanel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PathsPanel.cpp; sourceTree = "<group>"; };
-		551BF4DB2641FBFF0008C529 /* MiscPanelStuff.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MiscPanelStuff.cpp; sourceTree = "<group>"; };
-		551BF4DC2641FBFF0008C529 /* MemoryCardPanels.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MemoryCardPanels.h; sourceTree = "<group>"; };
-		551BF4DD2641FBFF0008C529 /* LogOptionsPanels.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LogOptionsPanels.h; sourceTree = "<group>"; };
-		551BF4DE2641FBFF0008C529 /* MemoryCardListPanel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MemoryCardListPanel.cpp; sourceTree = "<group>"; };
-		551BF4E02641FBFF0008C529 /* CpuPanel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CpuPanel.cpp; sourceTree = "<group>"; };
-		551BF4E12641FBFF0008C529 /* VideoPanel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VideoPanel.cpp; sourceTree = "<group>"; };
-		551BF4E22641FBFF0008C529 /* ConfigurationPanels.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConfigurationPanels.h; sourceTree = "<group>"; };
-		551BF4E32641FBFF0008C529 /* GameFixesPanel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GameFixesPanel.cpp; sourceTree = "<group>"; };
-		551BF4E42641FBFF0008C529 /* GSWindowPanel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GSWindowPanel.cpp; sourceTree = "<group>"; };
-		551BF4E52641FBFF0008C529 /* MemoryCardListView.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MemoryCardListView.cpp; sourceTree = "<group>"; };
-		551BF4E62641FBFF0008C529 /* SpeedhacksPanel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SpeedhacksPanel.cpp; sourceTree = "<group>"; };
-		551BF4E72641FBFF0008C529 /* BaseApplicableConfigPanel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BaseApplicableConfigPanel.cpp; sourceTree = "<group>"; };
-		551BF4E82641FBFF0008C529 /* ExecutorThread.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ExecutorThread.cpp; sourceTree = "<group>"; };
-		551BF4E92641FBFF0008C529 /* FrameForGS.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FrameForGS.cpp; sourceTree = "<group>"; };
-		551BF4EA2641FBFF0008C529 /* AppInit.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AppInit.cpp; sourceTree = "<group>"; };
-		551BF4EB2641FBFF0008C529 /* App.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = App.h; sourceTree = "<group>"; };
-		551BF4EC2641FBFF0008C529 /* ApplyState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ApplyState.h; sourceTree = "<group>"; };
-		551BF4ED2641FBFF0008C529 /* AppAssert.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AppAssert.cpp; sourceTree = "<group>"; };
-		551BF4EE2641FBFF0008C529 /* i18n.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = i18n.cpp; sourceTree = "<group>"; };
-		551BF4EF2641FBFF0008C529 /* i18n.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = i18n.h; sourceTree = "<group>"; };
-		551BF4F02641FBFF0008C529 /* DriveList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DriveList.h; sourceTree = "<group>"; };
-		551BF4F32641FBFF0008C529 /* GSFrame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GSFrame.h; sourceTree = "<group>"; };
-		551BF4F42641FBFF0008C529 /* AppConfig.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AppConfig.cpp; sourceTree = "<group>"; };
-		551BF4F52641FBFF0008C529 /* AppForwardDefs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppForwardDefs.h; sourceTree = "<group>"; };
-		551BF4F62641FBFF0008C529 /* AppConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppConfig.h; sourceTree = "<group>"; };
-		551BF4F72641FBFF0008C529 /* DriveList.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DriveList.cpp; sourceTree = "<group>"; };
-		551BF4F92641FBFF0008C529 /* IsoDropTarget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = IsoDropTarget.cpp; sourceTree = "<group>"; };
-		551BF4FD2641FBFF0008C529 /* SysState.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SysState.cpp; sourceTree = "<group>"; };
-		551BF4FE2641FBFF0008C529 /* ConsoleLogger.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ConsoleLogger.cpp; sourceTree = "<group>"; };
-		551BF4FF2641FBFF0008C529 /* RecentIsoList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RecentIsoList.h; sourceTree = "<group>"; };
-		551BF5002641FBFF0008C529 /* MainMenuClicks.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MainMenuClicks.cpp; sourceTree = "<group>"; };
-		551BF5012641FBFF0008C529 /* GlobalCommands.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GlobalCommands.cpp; sourceTree = "<group>"; };
-		551BF5022641FBFF0008C529 /* AppRes.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AppRes.cpp; sourceTree = "<group>"; };
-		551BF5042641FBFF0008C529 /* BreakpointWindow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BreakpointWindow.h; sourceTree = "<group>"; };
-		551BF5052641FBFF0008C529 /* DebugEvents.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DebugEvents.h; sourceTree = "<group>"; };
-		551BF5062641FBFF0008C529 /* CtrlRegisterList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CtrlRegisterList.h; sourceTree = "<group>"; };
-		551BF5072641FBFF0008C529 /* CtrlRegisterList.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CtrlRegisterList.cpp; sourceTree = "<group>"; };
-		551BF5082641FBFF0008C529 /* DebuggerLists.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DebuggerLists.cpp; sourceTree = "<group>"; };
-		551BF5092641FBFF0008C529 /* CtrlDisassemblyView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CtrlDisassemblyView.h; sourceTree = "<group>"; };
-		551BF50A2641FBFF0008C529 /* CtrlMemView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CtrlMemView.h; sourceTree = "<group>"; };
-		551BF50B2641FBFF0008C529 /* CtrlDisassemblyView.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CtrlDisassemblyView.cpp; sourceTree = "<group>"; };
-		551BF50C2641FBFF0008C529 /* BreakpointWindow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BreakpointWindow.cpp; sourceTree = "<group>"; };
-		551BF50D2641FBFF0008C529 /* CtrlMemView.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CtrlMemView.cpp; sourceTree = "<group>"; };
-		551BF50E2641FBFF0008C529 /* DisassemblyDialog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DisassemblyDialog.h; sourceTree = "<group>"; };
-		551BF50F2641FBFF0008C529 /* DebugEvents.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DebugEvents.cpp; sourceTree = "<group>"; };
-		551BF5102641FBFF0008C529 /* DisassemblyDialog.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DisassemblyDialog.cpp; sourceTree = "<group>"; };
-		551BF5112641FBFF0008C529 /* DebuggerLists.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DebuggerLists.h; sourceTree = "<group>"; };
-		551BF5132641FBFF0008C529 /* ConfigurationDialog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConfigurationDialog.h; sourceTree = "<group>"; };
-		551BF5142641FBFF0008C529 /* AboutBoxDialog.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AboutBoxDialog.cpp; sourceTree = "<group>"; };
-		551BF5152641FBFF0008C529 /* FirstTimeWizard.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FirstTimeWizard.cpp; sourceTree = "<group>"; };
-		551BF5162641FBFF0008C529 /* LogOptionsDialog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LogOptionsDialog.h; sourceTree = "<group>"; };
-		551BF5172641FBFF0008C529 /* PickUserModeDialog.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PickUserModeDialog.cpp; sourceTree = "<group>"; };
-		551BF5182641FBFF0008C529 /* GSDumpDialog.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GSDumpDialog.cpp; sourceTree = "<group>"; };
-		551BF5192641FBFF0008C529 /* BaseConfigurationDialog.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BaseConfigurationDialog.cpp; sourceTree = "<group>"; };
-		551BF51A2641FBFF0008C529 /* ConvertMemoryCardDialog.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ConvertMemoryCardDialog.cpp; sourceTree = "<group>"; };
-		551BF51B2641FBFF0008C529 /* ImportSettingsDialog.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ImportSettingsDialog.cpp; sourceTree = "<group>"; };
-		551BF51C2641FBFF0008C529 /* ModalPopups.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ModalPopups.h; sourceTree = "<group>"; };
-		551BF51D2641FBFF0008C529 /* SysConfigDialog.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SysConfigDialog.cpp; sourceTree = "<group>"; };
-		551BF51E2641FBFF0008C529 /* AssertionDialog.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AssertionDialog.cpp; sourceTree = "<group>"; };
-		551BF51F2641FBFF0008C529 /* ConfirmationDialogs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ConfirmationDialogs.cpp; sourceTree = "<group>"; };
-		551BF5202641FBFF0008C529 /* McdConfigDialog.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = McdConfigDialog.cpp; sourceTree = "<group>"; };
-		551BF5212641FBFF0008C529 /* CreateMemoryCardDialog.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CreateMemoryCardDialog.cpp; sourceTree = "<group>"; };
-		551BF5232641FBFF0008C529 /* LogOptionsDialog.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LogOptionsDialog.cpp; sourceTree = "<group>"; };
-		551BF5242641FBFF0008C529 /* BaseConfigurationDialog.inl */ = {isa = PBXFileReference; lastKnownFileType = text; path = BaseConfigurationDialog.inl; sourceTree = "<group>"; };
-		551BF5252641FBFF0008C529 /* IsoDropTarget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IsoDropTarget.h; sourceTree = "<group>"; };
-		551BF5262641FBFF0008C529 /* MSWstuff.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSWstuff.h; sourceTree = "<group>"; };
-		551BF5272641FBFF0008C529 /* MSWstuff.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MSWstuff.cpp; sourceTree = "<group>"; };
-		551BF5282641FBFF0008C529 /* MainFrame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainFrame.h; sourceTree = "<group>"; };
-		551BF52A2641FBFF0008C529 /* AppUserMode.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AppUserMode.cpp; sourceTree = "<group>"; };
-		551BF52B2641FBFF0008C529 /* AppCoreThread.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppCoreThread.h; sourceTree = "<group>"; };
-		551BF52C2641FBFF0008C529 /* pxEventThread.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = pxEventThread.h; sourceTree = "<group>"; };
 		551BF53A2641FFAA0008C529 /* libPCSX2Utils.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPCSX2Utils.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		551BF56126420DA00008C529 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		551BF56326420DA70008C529 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
@@ -3757,31 +3623,6 @@
 		551BF6BC26424BAA0008C529 /* ThreadedFileReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ThreadedFileReader.cpp; sourceTree = "<group>"; };
 		551BF6BF26424D020008C529 /* InputRecordingControls.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InputRecordingControls.cpp; sourceTree = "<group>"; };
 		551BF6C026424D020008C529 /* InputRecording.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InputRecording.cpp; sourceTree = "<group>"; };
-		551BF6C226424D020008C529 /* VirtualPad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VirtualPad.h; sourceTree = "<group>"; };
-		551BF6C326424D020008C529 /* VirtualPadResources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VirtualPadResources.h; sourceTree = "<group>"; };
-		551BF6C426424D020008C529 /* VirtualPadResources.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VirtualPadResources.cpp; sourceTree = "<group>"; };
-		551BF6C626424D020008C529 /* controllerFull.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = controllerFull.png; sourceTree = "<group>"; };
-		551BF6C726424D020008C529 /* upPressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = upPressed.png; sourceTree = "<group>"; };
-		551BF6C826424D020008C529 /* l2Pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = l2Pressed.png; sourceTree = "<group>"; };
-		551BF6C926424D020008C529 /* downPressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = downPressed.png; sourceTree = "<group>"; };
-		551BF6CA26424D020008C529 /* r3Pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = r3Pressed.png; sourceTree = "<group>"; };
-		551BF6CC26424D020008C529 /* startPressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = startPressed.png; sourceTree = "<group>"; };
-		551BF6CD26424D020008C529 /* r1Pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = r1Pressed.png; sourceTree = "<group>"; };
-		551BF6CE26424D020008C529 /* controllerHalf.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = controllerHalf.png; sourceTree = "<group>"; };
-		551BF6CF26424D020008C529 /* crossPressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = crossPressed.png; sourceTree = "<group>"; };
-		551BF6D026424D020008C529 /* leftPressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = leftPressed.png; sourceTree = "<group>"; };
-		551BF6D126424D020008C529 /* squarePressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = squarePressed.png; sourceTree = "<group>"; };
-		551BF6D226424D020008C529 /* l3Pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = l3Pressed.png; sourceTree = "<group>"; };
-		551BF6D326424D020008C529 /* r2Pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = r2Pressed.png; sourceTree = "<group>"; };
-		551BF6D526424D020008C529 /* selectPressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = selectPressed.png; sourceTree = "<group>"; };
-		551BF6D626424D020008C529 /* circlePressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = circlePressed.png; sourceTree = "<group>"; };
-		551BF6D726424D020008C529 /* l1Pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = l1Pressed.png; sourceTree = "<group>"; };
-		551BF6D826424D020008C529 /* trianglePressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = trianglePressed.png; sourceTree = "<group>"; };
-		551BF6D926424D020008C529 /* rightPressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rightPressed.png; sourceTree = "<group>"; };
-		551BF6DA26424D020008C529 /* controllerThreeQuarters.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = controllerThreeQuarters.png; sourceTree = "<group>"; };
-		551BF6DB26424D020008C529 /* VirtualPadData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VirtualPadData.cpp; sourceTree = "<group>"; };
-		551BF6DC26424D020008C529 /* VirtualPad.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VirtualPad.cpp; sourceTree = "<group>"; };
-		551BF6DD26424D020008C529 /* VirtualPadData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VirtualPadData.h; sourceTree = "<group>"; };
 		551BF6DE26424D020008C529 /* InputRecordingFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputRecordingFile.h; sourceTree = "<group>"; };
 		551BF6DF26424D020008C529 /* PadData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PadData.h; sourceTree = "<group>"; };
 		551BF6E026424D020008C529 /* InputRecordingControls.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputRecordingControls.h; sourceTree = "<group>"; };
@@ -5930,7 +5771,6 @@
 				5517FCBD263D49BC000219EC /* GS.cpp */,
 				5517FDF7263D49BC000219EC /* GS.h */,
 				5517FAFF263D49BB000219EC /* GSState.cpp */,
-				551BF4AD2641FBFF0008C529 /* gui */,
 				5517FE19263D49BC000219EC /* Hardware.h */,
 				551AA4132792C76A00658151 /* Host.h */,
 				5517FB03263D49BB000219EC /* Hw.cpp */,
@@ -6200,7 +6040,6 @@
 				5517FB9C263D49BB000219EC /* SDL */,
 				5517FB7C263D49BB000219EC /* state_management.cpp */,
 				5517FB9B263D49BB000219EC /* state_management.h */,
-				5517FBA2263D49BC000219EC /* wx_dialog */,
 			);
 			path = Linux;
 			sourceTree = "<group>";
@@ -6243,21 +6082,6 @@
 				5517FB9E263D49BC000219EC /* joystick.cpp */,
 			);
 			path = SDL;
-			sourceTree = "<group>";
-		};
-		5517FBA2263D49BC000219EC /* wx_dialog */ = {
-			isa = PBXGroup;
-			children = (
-				5517FBA7263D49BC000219EC /* dialog.cpp */,
-				5517FBA4263D49BC000219EC /* dialog.h */,
-				5517FBA9263D49BC000219EC /* GamepadConfiguration.cpp */,
-				5517FBAA263D49BC000219EC /* GamepadConfiguration.h */,
-				5517FBA5263D49BC000219EC /* JoystickConfiguration.cpp */,
-				5517FBA3263D49BC000219EC /* JoystickConfiguration.h */,
-				5517FBA6263D49BC000219EC /* opPanel.cpp */,
-				5517FBA8263D49BC000219EC /* opPanel.h */,
-			);
-			path = wx_dialog;
 			sourceTree = "<group>";
 		};
 		5517FBE0263D49BC000219EC /* Utilities */ = {
@@ -6574,7 +6398,6 @@
 				5517FCB4263D49BC000219EC /* ChunksCache.h */,
 				5517FC90263D49BC000219EC /* CompressedFileReader.cpp */,
 				5517FC95263D49BC000219EC /* CompressedFileReader.h */,
-				5517FC92263D49BC000219EC /* CompressedFileReaderUtils.h */,
 				5517FCB5263D49BC000219EC /* CsoFileReader.cpp */,
 				5517FC94263D49BC000219EC /* CsoFileReader.h */,
 				5517FC8B263D49BC000219EC /* GzippedFileReader.cpp */,
@@ -6797,15 +6620,7 @@
 		5517FE2D263D4A9B000219EC /* Linux */ = {
 			isa = PBXGroup;
 			children = (
-				5517FE31263D4A9B000219EC /* Alsa.cpp */,
-				5517FE36263D4A9B000219EC /* Alsa.h */,
-				5517FE2E263D4A9B000219EC /* CfgHelpers.cpp */,
-				5517FE34263D4A9B000219EC /* Config.cpp */,
 				5517FE2F263D4A9B000219EC /* Config.h */,
-				5517FE35263D4A9B000219EC /* ConfigDebug.cpp */,
-				5517FE32263D4A9B000219EC /* ConfigSoundTouch.cpp */,
-				5517FE30263D4A9B000219EC /* Dialogs.cpp */,
-				5517FE33263D4A9B000219EC /* Dialogs.h */,
 			);
 			path = Linux;
 			sourceTree = "<group>";
@@ -8606,154 +8421,6 @@
 			path = unix;
 			sourceTree = "<group>";
 		};
-		551BF4AD2641FBFF0008C529 /* gui */ = {
-			isa = PBXGroup;
-			children = (
-				551BF4EB2641FBFF0008C529 /* App.h */,
-				551BF4B02641FBFF0008C529 /* AppAccelerators.h */,
-				551BF4ED2641FBFF0008C529 /* AppAssert.cpp */,
-				551BF4BA2641FBFF0008C529 /* AppCommon.h */,
-				551AA4BC2793635B00658151 /* pxEvents.h */,
-				551AA4BB2793635B00658151 /* pxEventThread.h */,
-				551BF4F42641FBFF0008C529 /* AppConfig.cpp */,
-				551BF4F62641FBFF0008C529 /* AppConfig.h */,
-				551BF4AE2641FBFF0008C529 /* AppCoreThread.cpp */,
-				551BF52B2641FBFF0008C529 /* AppCoreThread.h */,
-				551BF4B22641FBFF0008C529 /* AppEventListeners.h */,
-				551BF4BC2641FBFF0008C529 /* AppEventSources.cpp */,
-				551BF4F52641FBFF0008C529 /* AppForwardDefs.h */,
-				551BF4EA2641FBFF0008C529 /* AppInit.cpp */,
-				551BF4EC2641FBFF0008C529 /* ApplyState.h */,
-				551BF4BE2641FBFF0008C529 /* AppMain.cpp */,
-				551BF5022641FBFF0008C529 /* AppRes.cpp */,
-				551BF4BB2641FBFF0008C529 /* AppSaveStates.h */,
-				551BF52A2641FBFF0008C529 /* AppUserMode.cpp */,
-				551BF4FE2641FBFF0008C529 /* ConsoleLogger.cpp */,
-				551BF4B32641FBFF0008C529 /* ConsoleLogger.h */,
-				551BF5032641FBFF0008C529 /* Debugger */,
-				551BF5122641FBFF0008C529 /* Dialogs */,
-				551BF4F72641FBFF0008C529 /* DriveList.cpp */,
-				551BF4F02641FBFF0008C529 /* DriveList.h */,
-				551BF4E82641FBFF0008C529 /* ExecutorThread.cpp */,
-				551BF4E92641FBFF0008C529 /* FrameForGS.cpp */,
-				551BF5012641FBFF0008C529 /* GlobalCommands.cpp */,
-				551BF4F32641FBFF0008C529 /* GSFrame.h */,
-				551BF4EE2641FBFF0008C529 /* i18n.cpp */,
-				551BF4EF2641FBFF0008C529 /* i18n.h */,
-				551BF4F92641FBFF0008C529 /* IsoDropTarget.cpp */,
-				551BF5252641FBFF0008C529 /* IsoDropTarget.h */,
-				551BF4D42641FBFF0008C529 /* MainFrame.cpp */,
-				551BF5282641FBFF0008C529 /* MainFrame.h */,
-				551BF5002641FBFF0008C529 /* MainMenuClicks.cpp */,
-				551BF4BD2641FBFF0008C529 /* MessageBoxes.cpp */,
-				551BF5272641FBFF0008C529 /* MSWstuff.cpp */,
-				551BF5262641FBFF0008C529 /* MSWstuff.h */,
-				551BF4D62641FBFF0008C529 /* Panels */,
-				551BF52C2641FBFF0008C529 /* pxEventThread.h */,
-				551BF4D52641FBFF0008C529 /* RecentIsoList.cpp */,
-				551BF4FF2641FBFF0008C529 /* RecentIsoList.h */,
-				551BF4C02641FBFF0008C529 /* Resources */,
-				551BF4B72641FBFF0008C529 /* Saveslots.cpp */,
-				551BF4B42641FBFF0008C529 /* Saveslots.h */,
-				551BF4FD2641FBFF0008C529 /* SysState.cpp */,
-				551BF4B82641FBFF0008C529 /* UpdateUI.cpp */,
-			);
-			path = gui;
-			sourceTree = "<group>";
-		};
-		551BF4C02641FBFF0008C529 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				551BF4C22641FBFF0008C529 /* AppIcon16.png */,
-				551BF4CF2641FBFF0008C529 /* AppIcon32.png */,
-				551BF4C82641FBFF0008C529 /* AppIcon64.png */,
-				551BF4C32641FBFF0008C529 /* BackgroundLogo.png */,
-				551BF4C62641FBFF0008C529 /* bin2cpp.cmd */,
-				551BF4CB2641FBFF0008C529 /* Breakpoint_Active.png */,
-				551BF4C42641FBFF0008C529 /* Breakpoint_Inactive.png */,
-				551BF4CD2641FBFF0008C529 /* ButtonIcon_Camera.png */,
-				551BF4CE2641FBFF0008C529 /* ConfigIcon_Cpu.png */,
-				551BF4C72641FBFF0008C529 /* ConfigIcon_Gamefixes.png */,
-				551BF4C12641FBFF0008C529 /* ConfigIcon_MemoryCard.png */,
-				551BF4CA2641FBFF0008C529 /* ConfigIcon_Paths.png */,
-				551BF4C92641FBFF0008C529 /* ConfigIcon_Speedhacks.png */,
-				551BF4D02641FBFF0008C529 /* ConfigIcon_Video.png */,
-				551BF4D32641FBFF0008C529 /* Info.plist.in */,
-				551BF4CC2641FBFF0008C529 /* Logo.png */,
-				551BF4C52641FBFF0008C529 /* NoIcon.png */,
-				551BF4D12641FBFF0008C529 /* PCSX2.icns */,
-			);
-			path = Resources;
-			sourceTree = "<group>";
-		};
-		551BF4D62641FBFF0008C529 /* Panels */ = {
-			isa = PBXGroup;
-			children = (
-				551BF4E72641FBFF0008C529 /* BaseApplicableConfigPanel.cpp */,
-				551BF4D92641FBFF0008C529 /* BiosSelectorPanel.cpp */,
-				551BF4E22641FBFF0008C529 /* ConfigurationPanels.h */,
-				551BF4E02641FBFF0008C529 /* CpuPanel.cpp */,
-				551BF4D72641FBFF0008C529 /* DirPickerPanel.cpp */,
-				551BF4E32641FBFF0008C529 /* GameFixesPanel.cpp */,
-				551BF4E42641FBFF0008C529 /* GSWindowPanel.cpp */,
-				551BF4D82641FBFF0008C529 /* LogOptionsPanels.cpp */,
-				551BF4DD2641FBFF0008C529 /* LogOptionsPanels.h */,
-				551BF4DE2641FBFF0008C529 /* MemoryCardListPanel.cpp */,
-				551BF4E52641FBFF0008C529 /* MemoryCardListView.cpp */,
-				551BF4DC2641FBFF0008C529 /* MemoryCardPanels.h */,
-				551BF4DB2641FBFF0008C529 /* MiscPanelStuff.cpp */,
-				551BF4DA2641FBFF0008C529 /* PathsPanel.cpp */,
-				551BF4E62641FBFF0008C529 /* SpeedhacksPanel.cpp */,
-				551BF4E12641FBFF0008C529 /* VideoPanel.cpp */,
-			);
-			path = Panels;
-			sourceTree = "<group>";
-		};
-		551BF5032641FBFF0008C529 /* Debugger */ = {
-			isa = PBXGroup;
-			children = (
-				551BF5042641FBFF0008C529 /* BreakpointWindow.h */,
-				551BF5052641FBFF0008C529 /* DebugEvents.h */,
-				551BF5062641FBFF0008C529 /* CtrlRegisterList.h */,
-				551BF5072641FBFF0008C529 /* CtrlRegisterList.cpp */,
-				551BF5082641FBFF0008C529 /* DebuggerLists.cpp */,
-				551BF5092641FBFF0008C529 /* CtrlDisassemblyView.h */,
-				551BF50A2641FBFF0008C529 /* CtrlMemView.h */,
-				551BF50B2641FBFF0008C529 /* CtrlDisassemblyView.cpp */,
-				551BF50C2641FBFF0008C529 /* BreakpointWindow.cpp */,
-				551BF50D2641FBFF0008C529 /* CtrlMemView.cpp */,
-				551BF50E2641FBFF0008C529 /* DisassemblyDialog.h */,
-				551BF50F2641FBFF0008C529 /* DebugEvents.cpp */,
-				551BF5102641FBFF0008C529 /* DisassemblyDialog.cpp */,
-				551BF5112641FBFF0008C529 /* DebuggerLists.h */,
-			);
-			path = Debugger;
-			sourceTree = "<group>";
-		};
-		551BF5122641FBFF0008C529 /* Dialogs */ = {
-			isa = PBXGroup;
-			children = (
-				551BF5132641FBFF0008C529 /* ConfigurationDialog.h */,
-				551BF5142641FBFF0008C529 /* AboutBoxDialog.cpp */,
-				551BF5152641FBFF0008C529 /* FirstTimeWizard.cpp */,
-				551BF5162641FBFF0008C529 /* LogOptionsDialog.h */,
-				551BF5172641FBFF0008C529 /* PickUserModeDialog.cpp */,
-				551BF5182641FBFF0008C529 /* GSDumpDialog.cpp */,
-				551BF5192641FBFF0008C529 /* BaseConfigurationDialog.cpp */,
-				551BF51A2641FBFF0008C529 /* ConvertMemoryCardDialog.cpp */,
-				551BF51B2641FBFF0008C529 /* ImportSettingsDialog.cpp */,
-				551BF51C2641FBFF0008C529 /* ModalPopups.h */,
-				551BF51D2641FBFF0008C529 /* SysConfigDialog.cpp */,
-				551BF51E2641FBFF0008C529 /* AssertionDialog.cpp */,
-				551BF51F2641FBFF0008C529 /* ConfirmationDialogs.cpp */,
-				551BF5202641FBFF0008C529 /* McdConfigDialog.cpp */,
-				551BF5212641FBFF0008C529 /* CreateMemoryCardDialog.cpp */,
-				551BF5232641FBFF0008C529 /* LogOptionsDialog.cpp */,
-				551BF5242641FBFF0008C529 /* BaseConfigurationDialog.inl */,
-			);
-			path = Dialogs;
-			sourceTree = "<group>";
-		};
 		551BF59126420F3B0008C529 /* include */ = {
 			isa = PBXGroup;
 			children = (
@@ -8811,49 +8478,8 @@
 				551BF6E526424D020008C529 /* PadData.cpp */,
 				551BF6DF26424D020008C529 /* PadData.h */,
 				551BF6E126424D020008C529 /* Utilities */,
-				551BF6C126424D020008C529 /* VirtualPad */,
 			);
 			path = Recording;
-			sourceTree = "<group>";
-		};
-		551BF6C126424D020008C529 /* VirtualPad */ = {
-			isa = PBXGroup;
-			children = (
-				551BF6C526424D020008C529 /* img */,
-				551BF6DC26424D020008C529 /* VirtualPad.cpp */,
-				551BF6C226424D020008C529 /* VirtualPad.h */,
-				551BF6DB26424D020008C529 /* VirtualPadData.cpp */,
-				551BF6DD26424D020008C529 /* VirtualPadData.h */,
-				551BF6C426424D020008C529 /* VirtualPadResources.cpp */,
-				551BF6C326424D020008C529 /* VirtualPadResources.h */,
-			);
-			path = VirtualPad;
-			sourceTree = "<group>";
-		};
-		551BF6C526424D020008C529 /* img */ = {
-			isa = PBXGroup;
-			children = (
-				551BF6C626424D020008C529 /* controllerFull.png */,
-				551BF6C726424D020008C529 /* upPressed.png */,
-				551BF6C826424D020008C529 /* l2Pressed.png */,
-				551BF6C926424D020008C529 /* downPressed.png */,
-				551BF6CA26424D020008C529 /* r3Pressed.png */,
-				551BF6CC26424D020008C529 /* startPressed.png */,
-				551BF6CD26424D020008C529 /* r1Pressed.png */,
-				551BF6CE26424D020008C529 /* controllerHalf.png */,
-				551BF6CF26424D020008C529 /* crossPressed.png */,
-				551BF6D026424D020008C529 /* leftPressed.png */,
-				551BF6D126424D020008C529 /* squarePressed.png */,
-				551BF6D226424D020008C529 /* l3Pressed.png */,
-				551BF6D326424D020008C529 /* r2Pressed.png */,
-				551BF6D526424D020008C529 /* selectPressed.png */,
-				551BF6D626424D020008C529 /* circlePressed.png */,
-				551BF6D726424D020008C529 /* l1Pressed.png */,
-				551BF6D826424D020008C529 /* trianglePressed.png */,
-				551BF6D926424D020008C529 /* rightPressed.png */,
-				551BF6DA26424D020008C529 /* controllerThreeQuarters.png */,
-			);
-			path = img;
 			sourceTree = "<group>";
 		};
 		551BF6E126424D020008C529 /* Utilities */ = {
@@ -9321,7 +8947,6 @@
 				551BF56E26420E710008C529 /* Vif1_Dma.cpp in Sources */,
 				551BF5B8264210860008C529 /* COP2.cpp in Sources */,
 				551AA4A827935E9100658151 /* NetLib.cpp in Sources */,
-				551AA15D2792AB1800658151 /* GSSetting.cpp in Sources */,
 				551AA1782792B66400658151 /* DNS_Logger.cpp in Sources */,
 				551AA12F2792AB1700658151 /* GSRendererHW.cpp in Sources */,
 				551AA3CE2792BD5300658151 /* interlace.metal in Sources */,
@@ -9378,7 +9003,6 @@
 				551BF694264242510008C529 /* Cache.cpp in Sources */,
 				551BF58826420E9A0008C529 /* R5900OpcodeTables.cpp in Sources */,
 				551BF6AF264244640008C529 /* Reverb.cpp in Sources */,
-				551BF6B926424A010008C529 /* AppCoreThread.cpp in Sources */,
 				551BF5C6264211540008C529 /* format.cc in Sources */,
 				551BF61F264214530008C529 /* iMisc.cpp in Sources */,
 				551BF6272642167A0008C529 /* FileUtils.cpp in Sources */,
@@ -9432,7 +9056,6 @@
 				551AA4B72793625B00658151 /* Misc.cpp in Sources */,
 				551BF68F264241F10008C529 /* MipsAssemblerTables.cpp in Sources */,
 				551AA4172792C81900658151 /* PerformanceMetrics.cpp in Sources */,
-				551AA15C2792AB1800658151 /* GSwxDialog.cpp in Sources */,
 				551BF643264218380008C529 /* iR5900Arit.cpp in Sources */,
 				551AA13F2792AB1700658151 /* GSRenderer.cpp in Sources */,
 				551BF620264214530008C529 /* iCOP0.cpp in Sources */,
@@ -9452,19 +9075,15 @@
 				551BF5CB264212070008C529 /* Idct.cpp in Sources */,
 				551BF56C26420E710008C529 /* Vif_Transfer.cpp in Sources */,
 				551AA13E2792AB1700658151 /* GSVertexList.cpp in Sources */,
-				551BF6BA26424A9A0008C529 /* Dialogs.cpp in Sources */,
 				551BF5DA264212270008C529 /* Memory.cpp in Sources */,
 				551BF637264216F50008C529 /* BlockdumpFileReader.cpp in Sources */,
 				551BF57926420E720008C529 /* Vif0_Dma.cpp in Sources */,
 				551BF56826420E3B0008C529 /* newVif_Unpack.cpp in Sources */,
-				551BF67726421A320008C529 /* ExecutorThread.cpp in Sources */,
 				551BF5CD264212070008C529 /* Mpeg.cpp in Sources */,
 				551AA4AB27935E9100658151 /* DHCP_Packet.cpp in Sources */,
 				551BF6A8264244480008C529 /* Dma.cpp in Sources */,
 				551BF62F264216F50008C529 /* CDVDisoReader.cpp in Sources */,
 				551BF5AE26420FA50008C529 /* IopCounters.cpp in Sources */,
-				551BF622264215690008C529 /* ConfigDebug.cpp in Sources */,
-				551AA4E927937B3000658151 /* CfgHelpers.cpp in Sources */,
 				551BF684264241570008C529 /* IsoFS.cpp in Sources */,
 				551BF67D264240660008C529 /* HddCreate.cpp in Sources */,
 				551BF6422642181C0008C529 /* iR5900-32.cpp in Sources */,
@@ -9533,7 +9152,6 @@
 				551BF644264218380008C529 /* iR5900Jump.cpp in Sources */,
 				551BF56A26420E710008C529 /* Vif_Unpack.cpp in Sources */,
 				551AA1482792AB1800658151 /* GLState.cpp in Sources */,
-				551BF6EA26424D030008C529 /* VirtualPadResources.cpp in Sources */,
 				551BF62D264216F50008C529 /* OutputIsoFile.cpp in Sources */,
 				551BF645264218380008C529 /* iR5900Branch.cpp in Sources */,
 				551BF6A4264244280008C529 /* Wavedump_wav.cpp in Sources */,

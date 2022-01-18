@@ -28,7 +28,7 @@
 #include "../pcsx2/pcsx2/PrecompiledHeader.h"
 //#include "../pcsx2/pcsx2/Plugins.h"
 #include "../pcsx2/pcsx2/GS.h"
-#include "../pcsx2/pcsx2/gui/AppConfig.h"
+//#include "../pcsx2/pcsx2/gui/AppConfig.h"
 #include "../pcsx2/pcsx2/gui/AppAccelerators.h"
 #include "../pcsx2/pcsx2/gui/ConsoleLogger.h"
 #include "../pcsx2/pcsx2/gui/App.h"
