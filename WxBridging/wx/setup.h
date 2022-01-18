@@ -1,4 +1,4 @@
-/* lib/wx/include/osx_cocoa-unicode-3.1/wx/setup.h.  Generated from setup.h.in by configure.  */
+/* lib/wx/include/base-unicode-3.1/wx/setup.h.  Generated from setup.h.in by configure.  */
 /* This define (__WX_SETUP_H__) is used both to ensure setup.h is included
  * only once and to indicate that we are building using configure. */
 #ifndef __WX_SETUP_H__
@@ -145,7 +145,7 @@
 /* --- start common options --- */
 
 #ifndef wxUSE_GUI
-    #define wxUSE_GUI 1
+	#define wxUSE_GUI            0
 #endif
 
 
@@ -165,7 +165,7 @@
 
 #define wxUSE_STACKWALKER 1
 
-#define wxUSE_DEBUGREPORT 1
+#define wxUSE_DEBUGREPORT 0
 
 
 
@@ -180,7 +180,7 @@
 
 
 #ifndef wxUSE_UNICODE
-    #define wxUSE_UNICODE 1
+	#define wxUSE_UNICODE 1
 #endif
 
 
@@ -190,11 +190,11 @@
 
 #define wxUSE_LOG 1
 
-#define wxUSE_LOGWINDOW 1
+#define wxUSE_LOGWINDOW 0
 
-#define wxUSE_LOGGUI 1
+#define wxUSE_LOGGUI 0
 
-#define wxUSE_LOG_DIALOG 1
+#define wxUSE_LOG_DIALOG 0
 
 #define wxUSE_CMDLINE_PARSER 1
 
@@ -207,13 +207,13 @@
 #define wxUSE_COMPILER_TLS 1
 
 
-#define wxUSE_STL 0
+#define wxUSE_STL 1
 
 #define wxUSE_STD_DEFAULT  0
 
 #define wxUSE_STD_CONTAINERS_COMPATIBLY 1
 
-#define wxUSE_STD_CONTAINERS 0
+#define wxUSE_STD_CONTAINERS 1
 
 #define wxUSE_STD_IOSTREAM 1
 
@@ -226,14 +226,14 @@
 
 #define wxUSE_BASE64 1
 
-#define wxUSE_CONSOLE_EVENTLOOP 1
+#define wxUSE_CONSOLE_EVENTLOOP 0
 
 #define wxUSE_FILE 1
 #define wxUSE_FFILE 1
 
 #define wxUSE_FSVOLUME 1
 
-#define wxUSE_SECRETSTORE 1
+#define wxUSE_SECRETSTORE   0
 
 #define wxUSE_STDPATHS 1
 
@@ -257,13 +257,13 @@
 
 #define wxUSE_CONFIG_NATIVE 1
 
-#define wxUSE_DIALUP_MANAGER   0
+#define wxUSE_DIALUP_MANAGER 1
 
 #define wxUSE_DYNLIB_CLASS 1
 
 #define wxUSE_DYNAMIC_LOADER 1
 
-#define wxUSE_SOCKETS 1
+#define wxUSE_SOCKETS       0
 
 #define wxUSE_IPV6          0
 
@@ -273,7 +273,7 @@
 
 #define wxUSE_FS_ARCHIVE 1
 
-#define wxUSE_FS_INET 1
+#define wxUSE_FS_INET       0
 
 #define wxUSE_ARCHIVE_STREAMS 1
 
@@ -287,31 +287,31 @@
 
 #define wxUSE_APPLE_IEEE 1
 
-#define wxUSE_JOYSTICK 1
+#define wxUSE_JOYSTICK            0
 
-#define wxUSE_FONTENUM 1
+#define wxUSE_FONTENUM 0
 
-#define wxUSE_FONTMAP 1
+#define wxUSE_FONTMAP 0
 
-#define wxUSE_MIMETYPE 1
+#define wxUSE_MIMETYPE 0
 
-#define wxUSE_WEBREQUEST 1
+#define wxUSE_WEBREQUEST 0
 
 #ifdef __APPLE__
-#define wxUSE_WEBREQUEST_URLSESSION 1
+#define wxUSE_WEBREQUEST_URLSESSION 0
 #else
-#define wxUSE_WEBREQUEST_URLSESSION 1
+#define wxUSE_WEBREQUEST_URLSESSION 0
 #endif
 
-#define wxUSE_WEBREQUEST_CURL 1
+#define wxUSE_WEBREQUEST_CURL 0
 
-#define wxUSE_PROTOCOL 1
+#define wxUSE_PROTOCOL 0
 
-#define wxUSE_PROTOCOL_FILE 1
-#define wxUSE_PROTOCOL_FTP 1
-#define wxUSE_PROTOCOL_HTTP 1
+#define wxUSE_PROTOCOL_FILE 0
+#define wxUSE_PROTOCOL_FTP 0
+#define wxUSE_PROTOCOL_HTTP 0
 
-#define wxUSE_URL 1
+#define wxUSE_URL 0
 
 #define wxUSE_URL_NATIVE 0
 
@@ -325,21 +325,21 @@
 
 #define wxUSE_SOUND 1
 
-#define wxUSE_MEDIACTRL 1
+#define wxUSE_MEDIACTRL     0
 
-#define wxUSE_XRC 1
+#define wxUSE_XRC       0
 
 #define wxUSE_XML 1
 
-#define wxUSE_AUI 1
+#define wxUSE_AUI       0
 
-#define wxUSE_RIBBON 1
+#define wxUSE_RIBBON    0
 
-#define wxUSE_PROPGRID 1
+#define wxUSE_PROPGRID  0
 
-#define wxUSE_STC 1
+#define wxUSE_STC 0
 
-#define wxUSE_WEBVIEW 1
+#define wxUSE_WEBVIEW 0
 
 #ifdef __WXMSW__
 #define wxUSE_WEBVIEW_IE 0
@@ -350,9 +350,9 @@
 #define wxUSE_WEBVIEW_EDGE 0
 
 #if (defined(__WXGTK__) && !defined(__WXGTK3__)) || defined(__WXOSX__)
-#define wxUSE_WEBVIEW_WEBKIT 1
+#define wxUSE_WEBVIEW_WEBKIT 0
 #else
-#define wxUSE_WEBVIEW_WEBKIT 1
+#define wxUSE_WEBVIEW_WEBKIT 0
 #endif
 
 #if defined(__WXGTK3__)
@@ -363,140 +363,140 @@
 
 
 #if defined(_MSC_VER) || \
-    (defined(__MINGW32__) && (__GNUC__ > 4 || __GNUC_MINOR__ >= 8))
-#define wxUSE_GRAPHICS_CONTEXT 1
+	(defined(__MINGW32__) && (__GNUC__ > 4 || __GNUC_MINOR__ >= 8))
+#define wxUSE_GRAPHICS_CONTEXT 0
 #else
-#define wxUSE_GRAPHICS_CONTEXT 1
+#define wxUSE_GRAPHICS_CONTEXT 0
 #endif
 
 #define wxUSE_CAIRO 0
 
 
 
-#define wxUSE_CONTROLS 1
+#define wxUSE_CONTROLS     0
 
-#define wxUSE_MARKUP 1
+#define wxUSE_MARKUP       0
 
-#define wxUSE_POPUPWIN 1
+#define wxUSE_POPUPWIN     0
 
-#define wxUSE_TIPWINDOW 1
+#define wxUSE_TIPWINDOW    0
 
-#define wxUSE_ACTIVITYINDICATOR 1
-#define wxUSE_ANIMATIONCTRL 1
-#define wxUSE_BANNERWINDOW 1
-#define wxUSE_BUTTON 1
-#define wxUSE_BMPBUTTON 1
-#define wxUSE_CALENDARCTRL 1
-#define wxUSE_CHECKBOX 1
-#define wxUSE_CHECKLISTBOX 1
-#define wxUSE_CHOICE 1
-#define wxUSE_COLLPANE 1
-#define wxUSE_COLOURPICKERCTRL 1
-#define wxUSE_COMBOBOX 1
-#define wxUSE_COMMANDLINKBUTTON 1
-#define wxUSE_DATAVIEWCTRL 1
-#define wxUSE_DATEPICKCTRL 1
-#define wxUSE_DIRPICKERCTRL 1
-#define wxUSE_EDITABLELISTBOX 1
-#define wxUSE_FILECTRL 1
-#define wxUSE_FILEPICKERCTRL 1
-#define wxUSE_FONTPICKERCTRL 1
-#define wxUSE_GAUGE 1
-#define wxUSE_HEADERCTRL 1
-#define wxUSE_HYPERLINKCTRL 1
-#define wxUSE_LISTBOX 1
-#define wxUSE_LISTCTRL 1
-#define wxUSE_RADIOBOX 1
-#define wxUSE_RADIOBTN 1
-#define wxUSE_RICHMSGDLG 1
-#define wxUSE_SCROLLBAR 1
-#define wxUSE_SEARCHCTRL 1
-#define wxUSE_SLIDER 1
-#define wxUSE_SPINBTN 1
-#define wxUSE_SPINCTRL 1
-#define wxUSE_STATBOX 1
-#define wxUSE_STATLINE 1
-#define wxUSE_STATTEXT 1
-#define wxUSE_STATBMP 1
-#define wxUSE_TEXTCTRL 1
-#define wxUSE_TIMEPICKCTRL 1
-#define wxUSE_TOGGLEBTN 1
-#define wxUSE_TREECTRL 1
-#define wxUSE_TREELISTCTRL 1
+#define wxUSE_ACTIVITYINDICATOR 0
+#define wxUSE_ANIMATIONCTRL 0
+#define wxUSE_BANNERWINDOW  0
+#define wxUSE_BUTTON        0
+#define wxUSE_BMPBUTTON     0
+#define wxUSE_CALENDARCTRL  0
+#define wxUSE_CHECKBOX      0
+#define wxUSE_CHECKLISTBOX  0
+#define wxUSE_CHOICE        0
+#define wxUSE_COLLPANE      0
+#define wxUSE_COLOURPICKERCTRL 0
+#define wxUSE_COMBOBOX      0
+#define wxUSE_COMMANDLINKBUTTON 0
+#define wxUSE_DATAVIEWCTRL  0
+#define wxUSE_DATEPICKCTRL  0
+#define wxUSE_DIRPICKERCTRL 0
+#define wxUSE_EDITABLELISTBOX 0
+#define wxUSE_FILECTRL      0
+#define wxUSE_FILEPICKERCTRL 0
+#define wxUSE_FONTPICKERCTRL 0
+#define wxUSE_GAUGE         0
+#define wxUSE_HEADERCTRL    0
+#define wxUSE_HYPERLINKCTRL 0
+#define wxUSE_LISTBOX       0
+#define wxUSE_LISTCTRL      0
+#define wxUSE_RADIOBOX      0
+#define wxUSE_RADIOBTN      0
+#define wxUSE_RICHMSGDLG    0
+#define wxUSE_SCROLLBAR     0
+#define wxUSE_SEARCHCTRL    0
+#define wxUSE_SLIDER        0
+#define wxUSE_SPINBTN       0
+#define wxUSE_SPINCTRL      0
+#define wxUSE_STATBOX       0
+#define wxUSE_STATLINE      0
+#define wxUSE_STATTEXT      0
+#define wxUSE_STATBMP       0
+#define wxUSE_TEXTCTRL      0
+#define wxUSE_TIMEPICKCTRL  0
+#define wxUSE_TOGGLEBTN     0
+#define wxUSE_TREECTRL      0
+#define wxUSE_TREELISTCTRL  0
 
-#define wxUSE_NATIVE_DATAVIEWCTRL 1
+#define wxUSE_NATIVE_DATAVIEWCTRL 0
 
-#define wxUSE_STATUSBAR 1
+#define wxUSE_STATUSBAR    0
 
-#define wxUSE_NATIVE_STATUSBAR 1
+#define wxUSE_NATIVE_STATUSBAR        0
 
-#define wxUSE_TOOLBAR 1
-#define wxUSE_TOOLBAR_NATIVE 1
+#define wxUSE_TOOLBAR 0
+#define wxUSE_TOOLBAR_NATIVE 0
 
-#define wxUSE_NOTEBOOK 1
+#define wxUSE_NOTEBOOK 0
 
-#define wxUSE_LISTBOOK 1
+#define wxUSE_LISTBOOK 0
 
-#define wxUSE_CHOICEBOOK 1
+#define wxUSE_CHOICEBOOK 0
 
-#define wxUSE_TREEBOOK 1
+#define wxUSE_TREEBOOK 0
 
-#define wxUSE_TOOLBOOK 1
+#define wxUSE_TOOLBOOK 0
 
-#define wxUSE_TASKBARICON 1
+#define wxUSE_TASKBARICON 0
 
-#define wxUSE_GRID 1
+#define wxUSE_GRID         0
 
-#define wxUSE_MINIFRAME 1
+#define wxUSE_MINIFRAME 0
 
-#define wxUSE_COMBOCTRL 1
+#define wxUSE_COMBOCTRL 0
 
-#define wxUSE_ODCOMBOBOX 1
+#define wxUSE_ODCOMBOBOX 0
 
-#define wxUSE_BITMAPCOMBOBOX 1
+#define wxUSE_BITMAPCOMBOBOX 0
 
-#define wxUSE_REARRANGECTRL 1
+#define wxUSE_REARRANGECTRL 0
 
-#define wxUSE_ADDREMOVECTRL 1
+#define wxUSE_ADDREMOVECTRL 0
 
 
-#define wxUSE_ACCEL 1
+#define wxUSE_ACCEL 0
 
-#define wxUSE_ARTPROVIDER_STD 1
+#define wxUSE_ARTPROVIDER_STD 0
 
-#define wxUSE_ARTPROVIDER_TANGO 1
+#define wxUSE_ARTPROVIDER_TANGO 0
 
-#define wxUSE_HOTKEY 1
+#define wxUSE_HOTKEY 0
 
-#define wxUSE_CARET 1
+#define wxUSE_CARET         0
 
-#define wxUSE_DISPLAY 1
+#define wxUSE_DISPLAY       0
 
 #define wxUSE_GEOMETRY 1
 
-#define wxUSE_IMAGLIST 1
+#define wxUSE_IMAGLIST      0
 
-#define wxUSE_INFOBAR 1
+#define wxUSE_INFOBAR       0
 
-#define wxUSE_MENUS 1
+#define wxUSE_MENUS         0
 
-#define wxUSE_MENUBAR 1
+#define wxUSE_MENUBAR       0
 
-#define wxUSE_NOTIFICATION_MESSAGE 1
+#define wxUSE_NOTIFICATION_MESSAGE 0
 
-#define wxUSE_PREFERENCES_EDITOR 1
+#define wxUSE_PREFERENCES_EDITOR 0
 
-#define wxUSE_PRIVATE_FONTS 1
+#define wxUSE_PRIVATE_FONTS 0
 
-#define wxUSE_RICHTOOLTIP 1
+#define wxUSE_RICHTOOLTIP 0
 
-#define wxUSE_SASH 1
+#define wxUSE_SASH          0
 
-#define wxUSE_SPLITTER 1
+#define wxUSE_SPLITTER      0
 
-#define wxUSE_TOOLTIPS 1
+#define wxUSE_TOOLTIPS      0
 
-#define wxUSE_VALIDATORS 1
+#define wxUSE_VALIDATORS 0
 
 #ifdef __WXMSW__
 #define wxUSE_AUTOID_MANAGEMENT 0
@@ -507,71 +507,71 @@
 
 #define wxUSE_COMMON_DIALOGS 0
 
-#define wxUSE_BUSYINFO 1
+#define wxUSE_BUSYINFO      0
 
-#define wxUSE_CHOICEDLG 1
+#define wxUSE_CHOICEDLG     0
 
-#define wxUSE_COLOURDLG 1
+#define wxUSE_COLOURDLG     0
 
-#define wxUSE_DIRDLG 1
+#define wxUSE_DIRDLG 0
 
 
-#define wxUSE_FILEDLG 1
+#define wxUSE_FILEDLG       0
 
-#define wxUSE_FINDREPLDLG 1
+#define wxUSE_FINDREPLDLG       0
 
-#define wxUSE_FONTDLG 1
+#define wxUSE_FONTDLG       0
 
-#define wxUSE_MSGDLG 1
+#define wxUSE_MSGDLG        0
 
-#define wxUSE_PROGRESSDLG 1
+#define wxUSE_PROGRESSDLG 0
 
-#define wxUSE_NATIVE_PROGRESSDLG 1
+#define wxUSE_NATIVE_PROGRESSDLG 0
 
-#define wxUSE_STARTUP_TIPS 1
+#define wxUSE_STARTUP_TIPS 0
 
-#define wxUSE_TEXTDLG 1
+#define wxUSE_TEXTDLG 0
 
-#define wxUSE_NUMBERDLG 1
+#define wxUSE_NUMBERDLG 0
 
-#define wxUSE_CREDENTIALDLG 1
+#define wxUSE_CREDENTIALDLG 0
 
-#define wxUSE_SPLASH 1
+#define wxUSE_SPLASH 0
 
-#define wxUSE_WIZARDDLG 1
+#define wxUSE_WIZARDDLG 0
 
-#define wxUSE_ABOUTDLG 1
+#define wxUSE_ABOUTDLG 0
 
 #define wxUSE_FILE_HISTORY 1
 
 
-#define wxUSE_METAFILE 1
+#define wxUSE_METAFILE              0
 #define wxUSE_ENH_METAFILE          0
 #define wxUSE_WIN_METAFILES_ALWAYS  0
 
 
-#define wxUSE_MDI 1
+#define wxUSE_MDI 0
 
-#define wxUSE_DOC_VIEW_ARCHITECTURE 1
+#define wxUSE_DOC_VIEW_ARCHITECTURE 0
 
-#define wxUSE_MDI_ARCHITECTURE 1
+#define wxUSE_MDI_ARCHITECTURE    0
 
-#define wxUSE_PRINTING_ARCHITECTURE 1
+#define wxUSE_PRINTING_ARCHITECTURE  0
 
-#define wxUSE_HTML 1
+#define wxUSE_HTML          0
 
-#define wxUSE_GLCANVAS 1
+#define wxUSE_GLCANVAS       0
 
 #define wxUSE_GLCANVAS_EGL   0
 
-#define wxUSE_RICHTEXT 1
+#define wxUSE_RICHTEXT       0
 
 
-#define wxUSE_CLIPBOARD 1
+#define wxUSE_CLIPBOARD     0
 
 #define wxUSE_DATAOBJ 1
 
-#define wxUSE_DRAG_AND_DROP 1
+#define wxUSE_DRAG_AND_DROP 0
 
 #ifdef __WXMSW__
 #define wxUSE_ACCESSIBILITY 0
@@ -582,41 +582,41 @@
 
 #define wxUSE_SNGLINST_CHECKER 1
 
-#define wxUSE_DRAGIMAGE 1
+#define wxUSE_DRAGIMAGE 0
 
-#define wxUSE_IPC 1
+#define wxUSE_IPC         0
 
-#define wxUSE_HELP 1
+#define wxUSE_HELP        0
 
 
 #define wxUSE_MS_HTML_HELP 0
 
 
-#define wxUSE_WXHTML_HELP 1
+#define wxUSE_WXHTML_HELP 0
 
-#define wxUSE_CONSTRAINTS 1
-
-
-#define wxUSE_SPLINES 1
+#define wxUSE_CONSTRAINTS 0
 
 
-#define wxUSE_MOUSEWHEEL 1
+#define wxUSE_SPLINES     0
 
 
-#define wxUSE_UIACTIONSIMULATOR 1
+#define wxUSE_MOUSEWHEEL        0
 
 
-#define wxUSE_POSTSCRIPT 1
+#define wxUSE_UIACTIONSIMULATOR 0
+
+
+#define wxUSE_POSTSCRIPT  0
 
 #define wxUSE_AFM_FOR_POSTSCRIPT 1
 
-#define wxUSE_SVG 1
+#define wxUSE_SVG 0
 
-#define wxUSE_DC_TRANSFORM_MATRIX 1
+#define wxUSE_DC_TRANSFORM_MATRIX 0
 
 
 
-#define wxUSE_IMAGE 1
+#define wxUSE_IMAGE         0
 
 #define wxUSE_LIBPNG 1
 
@@ -624,21 +624,21 @@
 
 #define wxUSE_LIBTIFF 1
 
-#define wxUSE_TGA 1
+#define wxUSE_TGA           0
 
-#define wxUSE_GIF 1
+#define wxUSE_GIF           0
 
-#define wxUSE_PNM 1
+#define wxUSE_PNM           0
 
-#define wxUSE_PCX 1
+#define wxUSE_PCX           0
 
-#define wxUSE_IFF 1
+#define wxUSE_IFF           0
 
-#define wxUSE_XPM 1
+#define wxUSE_XPM           0
 
-#define wxUSE_ICO_CUR 1
+#define wxUSE_ICO_CUR       0
 
-#define wxUSE_PALETTE 1
+#define wxUSE_PALETTE       0
 
 
 #define wxUSE_ALL_THEMES    0
@@ -687,9 +687,9 @@
 #define wxUSE_GRAPHICS_GDIPLUS wxUSE_GRAPHICS_CONTEXT
 
 #if defined(_MSC_VER) && _MSC_VER >= 1600
-    #define wxUSE_GRAPHICS_DIRECT2D wxUSE_GRAPHICS_CONTEXT
+	#define wxUSE_GRAPHICS_DIRECT2D wxUSE_GRAPHICS_CONTEXT
 #else
-    #define wxUSE_GRAPHICS_DIRECT2D 0
+	#define wxUSE_GRAPHICS_DIRECT2D 0
 #endif
 
 #define wxUSE_WEBREQUEST_WINHTTP 0
@@ -702,9 +702,9 @@
 #define wxUSE_ACTIVEX 0
 
 #if defined(_MSC_VER) && _MSC_VER >= 1700 && !defined(_USING_V110_SDK71_)
-    #define wxUSE_WINRT 0
+	#define wxUSE_WINRT 0
 #else
-    #define wxUSE_WINRT 0
+	#define wxUSE_WINRT 0
 #endif
 
 #define wxUSE_DC_CACHEING 0
@@ -715,13 +715,13 @@
 
 #define wxUSE_REGKEY 0
 
-#define wxUSE_RICHEDIT 1
+#define wxUSE_RICHEDIT  0
 
-#define wxUSE_RICHEDIT2 1
+#define wxUSE_RICHEDIT2 0
 
 #define wxUSE_OWNER_DRAWN 0
 
-#define wxUSE_TASKBARICON_BALLOONS 1
+#define wxUSE_TASKBARICON_BALLOONS 0
 
 #define wxUSE_TASKBARBUTTON 0
 
@@ -740,9 +740,9 @@
 
 
 #if defined(__VISUALC__) || defined(__MINGW64_TOOLCHAIN__)
-    #define wxUSE_DBGHELP 0
+	#define wxUSE_DBGHELP 0
 #else
-    #define wxUSE_DBGHELP 0
+	#define wxUSE_DBGHELP 0
 #endif
 
 #define wxUSE_CRASHREPORT 0
@@ -891,7 +891,7 @@
 /*
  * Use OpenGL
  */
-#define wxUSE_OPENGL 1
+#define wxUSE_OPENGL 0
 
 /*
  * Use MS HTML Help via libmspack (Unix)
@@ -929,10 +929,10 @@
 #define WX_TIMEZONE timezone
 
 /* The type of 3rd argument to getsockname() - usually size_t or int */
-#define WX_SOCKLEN_T socklen_t
+/* #undef WX_SOCKLEN_T */
 
 /* The type of 5th argument to getsockopt() - usually size_t or int */
-#define SOCKOPTLEN_T socklen_t
+/* #undef SOCKOPTLEN_T */
 
 /* The type of statvfs(2) argument */
 #define WX_STATFS_T struct statfs
@@ -1018,7 +1018,7 @@
 /* #undef HAVE_STATVFS */
 
 /* Define if you have strtoull() and strtoll() */
-/* #undef HAVE_STRTOULL */
+#define HAVE_STRTOULL 1
 
 /* Define if you have all functions to set thread priority */
 #define HAVE_THREAD_PRIORITY_FUNCTIONS 1
@@ -1047,25 +1047,25 @@
 #define HAVE_USLEEP 1
 
 /* Define if you have wcscasecmp() function  */
-/* #undef HAVE_WCSCASECMP */
+#define HAVE_WCSCASECMP 1
 
 /* Define if you have wcsncasecmp() function  */
-/* #undef HAVE_WCSNCASECMP */
+#define HAVE_WCSNCASECMP 1
 
 /* Define if you have wcslen function  */
 #define HAVE_WCSLEN 1
 
 /* Define if you have wcsdup function  */
-/* #undef HAVE_WCSDUP */
+#define HAVE_WCSDUP 1
 
 /* Define if you have wcsftime() function  */
 #define HAVE_WCSFTIME 1
 
 /* Define if you have strnlen() function */
-/* #undef HAVE_STRNLEN */
+#define HAVE_STRNLEN 1
 
 /* Define if you have wcsnlen() function */
-/* #undef HAVE_WCSNLEN */
+#define HAVE_WCSNLEN 1
 
 /* Define if you have wcstoull() and wcstoll() */
 /* #undef HAVE_WCSTOULL */
@@ -1179,7 +1179,7 @@
 #define HAVE_UNSETENV 1
 
 /* Define if you have the <X11/XKBlib.h> header file.  */
-#define HAVE_X11_XKBLIB_H 1
+/* #undef HAVE_X11_XKBLIB_H */
 
 /* Define if you have the <X11/extensions/xf86vmode.h> header file.  */
 /* #undef HAVE_X11_EXTENSIONS_XF86VMODE_H */
@@ -1206,7 +1206,7 @@
 #define HAVE_ICONV 1
 
 /* Define as "const" if the declaration of iconv() needs const.  */
-#define ICONV_CONST 
+#define ICONV_CONST
 
 /* Define if you have the <langinfo.h> header file.  */
 #define HAVE_LANGINFO_H 1
