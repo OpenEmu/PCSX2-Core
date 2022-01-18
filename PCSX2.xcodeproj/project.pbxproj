@@ -10076,11 +10076,15 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				CODE_SIGN_STYLE = Automatic;
 				EXECUTABLE_PREFIX = lib;
+				GCC_INPUT_FILETYPE = sourcecode.cpp.objcpp;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = WxBridging/wx/wxprec.h;
 				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
 					"__WXOSX_COCOA__=1",
 					"WXBUILDING=1",
-					"$(inherited)",
 					"wxUSE_GUI=0",
+					"WX_PRECOMP=1",
 				);
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/WxBridging\"";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -10095,11 +10099,15 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				CODE_SIGN_STYLE = Automatic;
 				EXECUTABLE_PREFIX = lib;
+				GCC_INPUT_FILETYPE = sourcecode.cpp.objcpp;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = WxBridging/wx/wxprec.h;
 				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
 					"__WXOSX_COCOA__=1",
 					"WXBUILDING=1",
-					"$(inherited)",
 					"wxUSE_GUI=0",
+					"WX_PRECOMP=1",
 				);
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/WxBridging\"";
 				PRODUCT_NAME = "$(TARGET_NAME)";

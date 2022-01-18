@@ -257,7 +257,7 @@
 
 #define wxUSE_CONFIG_NATIVE 1
 
-#define wxUSE_DIALUP_MANAGER 1
+#define wxUSE_DIALUP_MANAGER 0
 
 #define wxUSE_DYNLIB_CLASS 1
 
