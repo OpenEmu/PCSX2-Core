@@ -22,47 +22,19 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include <stdio.h>
+#ifndef VMManager_hpp
+#define VMManager_hpp
 
-#include "PrecompiledHeader.h"
-#include "GS/Renderers/Common/GSOsdManager.h"
+#include <string>
 
-GSOsdManager::GSOsdManager()
-	: m_atlas_h(0)
-	, m_atlas_w(0)
-	, m_max_width(0)
-	, m_onscreen_messages(0)
-	, m_texture_dirty(true)
-{
+namespace VMManager {
+	namespace Internal {
+		bool IsExecutionInterrupted();
+		std::string GetElfOverride();
+		void GameStartingOnCPUThread();
+		void VSyncOnCPUThread();
+	}
+	void Reset();
 }
 
-GSOsdManager::~GSOsdManager()
-{
-}
-
-size_t GSOsdManager::Size()
-{
-	return 0;
-}
-
-void GSOsdManager::Monitor(const char* key, const char* value)
-{
-}
-
-size_t GSOsdManager::GeneratePrimitives(GSVertexPT1* dst, size_t count)
-{
-	return count;
-}
-
-void GSOsdManager::upload_texture_atlas(GSTexture* t)
-{
-}
-
-GSVector2i GSOsdManager::get_texture_font_size()
-{
-	return GSVector2i(m_atlas_w, m_atlas_h);
-}
-
-void GSOsdManager::Log(const char* utf8)
-{
-}
+#endif /* VMManager_hpp */
