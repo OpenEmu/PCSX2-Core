@@ -26,6 +26,7 @@
 #include "PAD/Linux/Global.h"
 #include "SPU2/Linux/Dialogs.h"
 #include "Config.h"
+#include "SoundTouch.h"
 
 int AutoDMAPlayRate[2] = {0, 0};
 
@@ -75,3 +76,14 @@ u32 SdlOutputAPI = 0;
 int numSpeakers = 0;
 int dplLevel = 0;
 bool temp_debug_state;
+
+static int SequenceLenMS = 30;
+static int SeekWindowMS = 20;
+static int OverlapMS = 10;
+
+void SoundtouchCfg::ApplySettings(soundtouch::SoundTouch& sndtouch)
+{
+	sndtouch.setSetting(SETTING_SEQUENCE_MS, SequenceLenMS);
+	sndtouch.setSetting(SETTING_SEEKWINDOW_MS, SeekWindowMS);
+	sndtouch.setSetting(SETTING_OVERLAP_MS, OverlapMS);
+}

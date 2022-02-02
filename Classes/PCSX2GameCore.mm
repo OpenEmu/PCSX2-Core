@@ -28,6 +28,9 @@
 #include "../pcsx2/pcsx2/PrecompiledHeader.h"
 //#include "../pcsx2/pcsx2/Plugins.h"
 #include "../pcsx2/pcsx2/GS.h"
+#include "../pcsx2/pcsx2/Host.h"
+#include "../pcsx2/pcsx2/HostDisplay.h"
+#include "../pcsx2/pcsx2/VMManager.h"
 //#include "../pcsx2/pcsx2/gui/AppConfig.h"
 #include "../pcsx2/pcsx2/SPU2/Global.h"
 #include "../pcsx2/pcsx2/SPU2/SndOut.h"
@@ -44,14 +47,6 @@ namespace GSDump
 }
 
 static __weak PCSX2GameCore *_current;
-//__aligned16 AppCorePlugins CorePlugins;
-//
-//SysCorePlugins& GetCorePlugins()
-//{
-//	return CorePlugins;
-//}
-//
-//wxString AppConfig::FullpathToBios() const				{ return Path::Combine( Folders.Bios, BaseFilenames.Bios ); }
 
 @implementation PCSX2GameCore
 
@@ -138,6 +133,179 @@ static __weak PCSX2GameCore *_current;
 }
 
 @end
+
+alignas(16) static SysMtgsThread s_mtgs_thread;
+
+SysMtgsThread& GetMTGS()
+{
+	return s_mtgs_thread;
+}
+
+#pragma mark - Host Namespace
+
+std::optional<std::vector<u8>> Host::ReadResourceFile(const char* filename)
+{
+	GET_CURRENT_OR_RETURN({});
+	return {};
+}
+
+std::optional<std::string> Host::ReadResourceFileToString(const char* filename)
+{
+	return {};
+}
+
+void Host::AddOSDMessage(std::string message, float duration)
+{
+	
+}
+
+void Host::AddKeyedOSDMessage(std::string key, std::string message, float duration)
+{
+	
+}
+
+void Host::AddFormattedOSDMessage(float duration, const char* format, ...)
+{
+	
+}
+
+void Host::AddKeyedFormattedOSDMessage(std::string key, float duration, const char* format, ...)
+{
+	
+}
+
+void Host::RemoveKeyedOSDMessage(std::string key)
+{
+	
+}
+
+void Host::ClearOSDMessages()
+{
+	
+}
+
+
+void Host::ReportErrorAsync(const std::string_view& title, const std::string_view& message)
+{
+	
+}
+
+#pragma mark Host Thread
+void Host::OnVMStarting()
+{
+	
+}
+
+void Host::OnVMStarted()
+{
+	
+}
+
+void Host::OnVMDestroyed()
+{
+	
+}
+
+void Host::OnVMPaused()
+{
+	
+}
+
+void Host::OnVMResumed()
+{
+	
+}
+
+void Host::OnSaveStateLoading(const std::string_view& filename)
+{
+	
+}
+
+void Host::OnSaveStateLoaded(const std::string_view& filename, bool was_successful)
+{
+	
+}
+
+void Host::OnSaveStateSaved(const std::string_view& filename)
+{
+	
+}
+
+void Host::OnGameChanged(const std::string& disc_path, const std::string& game_serial, const std::string& game_name, u32 game_crc)
+{
+	
+}
+
+void Host::PumpMessagesOnCPUThread()
+{
+	
+}
+
+void Host::InvalidateSaveStateCache()
+{
+	
+}
+
+void Host::RequestResizeHostDisplay(s32 width, s32 height)
+{
+	
+}
+
+void Host::RunOnCPUThread(std::function<void()> function, bool block)
+{
+	
+}
+
+#pragma mark Host Display
+
+HostDisplay* Host::AcquireHostDisplay(HostDisplay::RenderAPI api)
+{
+	return nil;
+}
+
+void Host::ReleaseHostDisplay()
+{
+	
+}
+
+HostDisplay* Host::GetHostDisplay()
+{
+	return nil;
+}
+
+/// Returns false if the window was completely occluded. If frame_skip is set, the frame won't be
+/// displayed, but the GPU command queue will still be flushed.
+bool Host::BeginPresentFrame(bool frame_skip)
+{
+	return false;
+}
+
+void Host::EndPresentFrame()
+{
+	
+}
+
+void Host::ResizeHostDisplay(u32 new_window_width, u32 new_window_height, float new_window_scale)
+{
+	
+}
+
+void Host::UpdateHostDisplay()
+{
+	
+}
+
+
+#pragma mark -
+
+void DspUpdate()
+{
+}
+
+s32 DspLoadLibrary(wchar_t* fileName, int modnum)
+{
+	return 0;
+}
 
 //Hijack the SDL plug-in
 struct SDLAudioMod : public SndOutModule
