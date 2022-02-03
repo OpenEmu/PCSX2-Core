@@ -31,6 +31,7 @@
 #include "../pcsx2/pcsx2/Host.h"
 #include "../pcsx2/pcsx2/HostDisplay.h"
 #include "../pcsx2/pcsx2/VMManager.h"
+#include "../pcsx2/pcsx2/Frontend/InputManager.h"
 //#include "../pcsx2/pcsx2/gui/AppConfig.h"
 #include "../pcsx2/pcsx2/SPU2/Global.h"
 #include "../pcsx2/pcsx2/SPU2/SndOut.h"
@@ -145,13 +146,33 @@ SysMtgsThread& GetMTGS()
 
 std::optional<std::vector<u8>> Host::ReadResourceFile(const char* filename)
 {
-	GET_CURRENT_OR_RETURN({});
-	return {};
+	NSURL *aURL = [[NSBundle bundleForClass:[PCSX2GameCore class]] URLForResource:@(filename) withExtension:nil];
+	if (!aURL) {
+		return std::nullopt;
+	}
+	NSData *data = [NSData dataWithContentsOfURL:aURL];
+	if (!data) {
+		return std::nullopt;
+	}
+	auto retVal = std::vector<u8>(data.length);
+	[data getBytes:retVal.data() length:retVal.size()];
+	return retVal;
 }
 
 std::optional<std::string> Host::ReadResourceFileToString(const char* filename)
 {
-	return {};
+	NSURL *aURL = [[NSBundle bundleForClass:[PCSX2GameCore class]] URLForResource:@(filename) withExtension:nil];
+	if (!aURL) {
+		return std::nullopt;
+	}
+	NSData *data = [NSData dataWithContentsOfURL:aURL];
+	if (!data) {
+		return std::nullopt;
+	}
+	std::string ret;
+	ret.resize(data.length);
+	[data getBytes:ret.data() length:ret.size()];
+	return ret;
 }
 
 void Host::AddOSDMessage(std::string message, float duration)
@@ -298,15 +319,6 @@ void Host::UpdateHostDisplay()
 
 #pragma mark -
 
-void DspUpdate()
-{
-}
-
-s32 DspLoadLibrary(wchar_t* fileName, int modnum)
-{
-	return 0;
-}
-
 //Hijack the SDL plug-in
 struct SDLAudioMod : public SndOutModule
 {
@@ -410,6 +422,26 @@ wxString pxGetAppName()
 {
 	return wxString("OpenEmu");
 }
+
+const IConsoleWriter* PatchesCon = &ConsoleWriter_Null;
+
+void LoadAllPatchesAndStuff(const Pcsx2Config& cfg)
+{
+	// TODO: implement
+}
+
+std::optional<u32> InputManager::ConvertHostKeyboardStringToCode(const std::string_view& str)
+{
+	return std::nullopt;
+}
+
+std::optional<std::string> InputManager::ConvertHostKeyboardCodeToString(u32 code)
+{
+	return std::nullopt;
+}
+
+BEGIN_HOTKEY_LIST(g_host_hotkeys)
+END_HOTKEY_LIST()
 
 #pragma mark - Pcsx2App stubs
 
