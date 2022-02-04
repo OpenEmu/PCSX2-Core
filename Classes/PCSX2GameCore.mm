@@ -205,13 +205,13 @@ void Host::ClearOSDMessages()
 	
 }
 
-
 void Host::ReportErrorAsync(const std::string_view& title, const std::string_view& message)
 {
 	
 }
 
 #pragma mark Host Thread
+
 void Host::OnVMStarting()
 {
 	
@@ -319,80 +319,6 @@ void Host::UpdateHostDisplay()
 
 #pragma mark -
 
-//Hijack the SDL plug-in
-struct SDLAudioMod : public SndOutModule
-{
-	static SDLAudioMod mod;
-	std::string m_api;
-
-	bool Init()
-	{
-		return true;
-	}
-
-	const wchar_t* GetIdent() const { return L"OEAudio"; }
-	const wchar_t* GetLongName() const { return L"OpenEmu Audio"; }
-
-	void Close()
-	{
-	}
-
-	~SDLAudioMod() { Close(); }
-
-	s32 Test() const { return 0; }
-	int GetEmptySampleCount() { return 0; }
-
-	void Configure(uptr parent) {}
-
-	void ReadSettings()
-	{
-	}
-
-	void WriteSettings() const
-	{
-	};
-
-	void SetApiSettings(wxString api)
-	{
-	}
-
-	void SetPaused(bool paused)
-	{
-	}
-
-private:
-//	SDL_AudioSpec spec;
-
-	SDLAudioMod()
-		: m_api("pulseaudio")
-	{
-		// Number of samples must be a multiple of packet size.
-	}
-};
-
-SDLAudioMod SDLAudioMod::mod;
-
-SndOutModule* const SDLOut = &SDLAudioMod::mod;
-
-wxDirName GetProgramDataDir()
-{
-	GET_CURRENT_OR_RETURN(wxDirName(""));
-	return wxDirName([NSBundle bundleForClass:[current class]].resourceURL.fileSystemRepresentation);
-}
-
-void UI_UpdateSysControls()
-{
-}
-
-void UI_EnableSysActions()
-{
-}
-
-void StateCopy_LoadFromSlot(uint slot, bool isFromBackup)
-{
-	// do nothing
-}
-
 class Pcsx2StandardPaths : public wxStandardPaths
 {
 public:
@@ -414,15 +340,6 @@ public:
 	}
 };
 
-void OSDlog(ConsoleColors color, bool console, const std::string& str)
-{
-}
-
-wxString pxGetAppName()
-{
-	return wxString("OpenEmu");
-}
-
 const IConsoleWriter* PatchesCon = &ConsoleWriter_Null;
 
 void LoadAllPatchesAndStuff(const Pcsx2Config& cfg)
@@ -442,21 +359,3 @@ std::optional<std::string> InputManager::ConvertHostKeyboardCodeToString(u32 cod
 
 BEGIN_HOTKEY_LIST(g_host_hotkeys)
 END_HOTKEY_LIST()
-
-#pragma mark - Pcsx2App stubs
-
-// Safe to remove these lines when this is handled properly.
-#ifdef __WXMAC__
-// Great joy....
-#undef EBP
-#undef ESP
-#undef EDI
-#undef ESI
-#undef EDX
-#undef EAX
-#undef EBX
-#undef ECX
-#include <wx/osx/private.h>		// needed to implement the app!
-#endif
-
-WindowInfo g_gs_window_info;

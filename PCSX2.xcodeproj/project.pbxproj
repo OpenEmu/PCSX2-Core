@@ -3272,6 +3272,7 @@
 		5580652E27AB507C008CD5D2 /* DEV9Config.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DEV9Config.cpp; sourceTree = "<group>"; };
 		5580653127AB50CC008CD5D2 /* OpenGLHostDisplay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenGLHostDisplay.h; sourceTree = "<group>"; };
 		5580653327AB5126008CD5D2 /* OpenGLHostDisplayOverride.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpenGLHostDisplayOverride.cpp; sourceTree = "<group>"; };
+		5580653527AB5369008CD5D2 /* PCSX2Exports.exp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.exports; path = PCSX2Exports.exp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -3748,6 +3749,7 @@
 				5517E8C3263D4598000219EC /* OEPS2SystemResponderClient.h */,
 				5517E8C5263D45F4000219EC /* PCSX2GameCore.h */,
 				5517E8C6263D45F4000219EC /* PCSX2GameCore.mm */,
+				5580653527AB5369008CD5D2 /* PCSX2Exports.exp */,
 				551BF5B626420FFC0008C529 /* svnrev.h */,
 				551BF5ED264212D60008C529 /* soundtouch_config.h */,
 			);
@@ -9107,6 +9109,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				EXPORTED_SYMBOLS_FILE = Classes/PCSX2Exports.exp;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = pcsx2/pcsx2/PrecompiledHeader.h;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -9167,6 +9170,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;
+				EXPORTED_SYMBOLS_FILE = Classes/PCSX2Exports.exp;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = pcsx2/pcsx2/PrecompiledHeader.h;
 				GCC_PREPROCESSOR_DEFINITIONS = (
