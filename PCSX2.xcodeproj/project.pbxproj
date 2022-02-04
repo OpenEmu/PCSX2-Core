@@ -629,6 +629,19 @@
 		5580652D27AB504C008CD5D2 /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 5580652C27AB504C008CD5D2 /* libxml2.tbd */; };
 		5580652F27AB507C008CD5D2 /* DEV9Config.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5580652E27AB507C008CD5D2 /* DEV9Config.cpp */; };
 		5580653427AB5126008CD5D2 /* OpenGLHostDisplayOverride.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5580653327AB5126008CD5D2 /* OpenGLHostDisplayOverride.cpp */; };
+		5580662E27AD3A51008CD5D2 /* cheats_ws.zip in Resources */ = {isa = PBXBuildFile; fileRef = 558065B327AD3A31008CD5D2 /* cheats_ws.zip */; };
+		5580662F27AD3A5D008CD5D2 /* GameIndex.yaml in Resources */ = {isa = PBXBuildFile; fileRef = 558065D127AD3A31008CD5D2 /* GameIndex.yaml */; };
+		5580663127AD3ADB008CD5D2 /* convert.glsl in Copy OpenGL Shaders */ = {isa = PBXBuildFile; fileRef = 558065C427AD3A31008CD5D2 /* convert.glsl */; };
+		5580663227AD3ADE008CD5D2 /* tfx_vgs.glsl in Copy OpenGL Shaders */ = {isa = PBXBuildFile; fileRef = 558065C527AD3A31008CD5D2 /* tfx_vgs.glsl */; };
+		5580663327AD3AE1008CD5D2 /* interlace.glsl in Copy OpenGL Shaders */ = {isa = PBXBuildFile; fileRef = 558065C727AD3A31008CD5D2 /* interlace.glsl */; };
+		5580663427AD3AE6008CD5D2 /* merge.glsl in Copy OpenGL Shaders */ = {isa = PBXBuildFile; fileRef = 558065C827AD3A31008CD5D2 /* merge.glsl */; };
+		5580663527AD3AEC008CD5D2 /* common_header.glsl in Copy OpenGL Shaders */ = {isa = PBXBuildFile; fileRef = 558065C927AD3A31008CD5D2 /* common_header.glsl */; };
+		5580663627AD3AEF008CD5D2 /* shadeboost.glsl in Copy OpenGL Shaders */ = {isa = PBXBuildFile; fileRef = 558065CA27AD3A31008CD5D2 /* shadeboost.glsl */; };
+		5580663827AD3B38008CD5D2 /* convert.glsl in Copy Vulkan Shaders */ = {isa = PBXBuildFile; fileRef = 558065B927AD3A31008CD5D2 /* convert.glsl */; };
+		5580663927AD3B3A008CD5D2 /* interlace.glsl in Copy Vulkan Shaders */ = {isa = PBXBuildFile; fileRef = 558065BB27AD3A31008CD5D2 /* interlace.glsl */; };
+		5580663A27AD3B3D008CD5D2 /* merge.glsl in Copy Vulkan Shaders */ = {isa = PBXBuildFile; fileRef = 558065BC27AD3A31008CD5D2 /* merge.glsl */; };
+		5580663B27AD3B3F008CD5D2 /* tfx.glsl in Copy Vulkan Shaders */ = {isa = PBXBuildFile; fileRef = 558065BA27AD3A31008CD5D2 /* tfx.glsl */; };
+		5580663D27AD3B78008CD5D2 /* fxaa.fx in Copy Common Shaders */ = {isa = PBXBuildFile; fileRef = 558065B727AD3A31008CD5D2 /* fxaa.fx */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -737,6 +750,47 @@
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 1;
+		};
+		5580663027AD3AAD008CD5D2 /* Copy OpenGL Shaders */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = shaders/opengl;
+			dstSubfolderSpec = 7;
+			files = (
+				5580663127AD3ADB008CD5D2 /* convert.glsl in Copy OpenGL Shaders */,
+				5580663227AD3ADE008CD5D2 /* tfx_vgs.glsl in Copy OpenGL Shaders */,
+				5580663327AD3AE1008CD5D2 /* interlace.glsl in Copy OpenGL Shaders */,
+				5580663427AD3AE6008CD5D2 /* merge.glsl in Copy OpenGL Shaders */,
+				5580663627AD3AEF008CD5D2 /* shadeboost.glsl in Copy OpenGL Shaders */,
+				5580663527AD3AEC008CD5D2 /* common_header.glsl in Copy OpenGL Shaders */,
+			);
+			name = "Copy OpenGL Shaders";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5580663727AD3B24008CD5D2 /* Copy Vulkan Shaders */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = shaders/vulkan;
+			dstSubfolderSpec = 7;
+			files = (
+				5580663827AD3B38008CD5D2 /* convert.glsl in Copy Vulkan Shaders */,
+				5580663B27AD3B3F008CD5D2 /* tfx.glsl in Copy Vulkan Shaders */,
+				5580663927AD3B3A008CD5D2 /* interlace.glsl in Copy Vulkan Shaders */,
+				5580663A27AD3B3D008CD5D2 /* merge.glsl in Copy Vulkan Shaders */,
+			);
+			name = "Copy Vulkan Shaders";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5580663C27AD3B5A008CD5D2 /* Copy Common Shaders */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = shaders/common;
+			dstSubfolderSpec = 7;
+			files = (
+				5580663D27AD3B78008CD5D2 /* fxaa.fx in Copy Common Shaders */,
+			);
+			name = "Copy Common Shaders";
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
@@ -3273,6 +3327,89 @@
 		5580653127AB50CC008CD5D2 /* OpenGLHostDisplay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenGLHostDisplay.h; sourceTree = "<group>"; };
 		5580653327AB5126008CD5D2 /* OpenGLHostDisplayOverride.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpenGLHostDisplayOverride.cpp; sourceTree = "<group>"; };
 		5580653527AB5369008CD5D2 /* PCSX2Exports.exp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.exports; path = PCSX2Exports.exp; sourceTree = "<group>"; };
+		558065B327AD3A31008CD5D2 /* cheats_ws.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = cheats_ws.zip; sourceTree = "<group>"; };
+		558065B427AD3A31008CD5D2 /* game_controller_db.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = game_controller_db.txt; sourceTree = "<group>"; };
+		558065B727AD3A31008CD5D2 /* fxaa.fx */ = {isa = PBXFileReference; explicitFileType = sourcecode.glsl; path = fxaa.fx; sourceTree = "<group>"; };
+		558065B927AD3A31008CD5D2 /* convert.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = convert.glsl; sourceTree = "<group>"; };
+		558065BA27AD3A31008CD5D2 /* tfx.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = tfx.glsl; sourceTree = "<group>"; };
+		558065BB27AD3A31008CD5D2 /* interlace.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = interlace.glsl; sourceTree = "<group>"; };
+		558065BC27AD3A31008CD5D2 /* merge.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = merge.glsl; sourceTree = "<group>"; };
+		558065C427AD3A31008CD5D2 /* convert.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = convert.glsl; sourceTree = "<group>"; };
+		558065C527AD3A31008CD5D2 /* tfx_vgs.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = tfx_vgs.glsl; sourceTree = "<group>"; };
+		558065C627AD3A31008CD5D2 /* tfx_fs.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = tfx_fs.glsl; sourceTree = "<group>"; };
+		558065C727AD3A31008CD5D2 /* interlace.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = interlace.glsl; sourceTree = "<group>"; };
+		558065C827AD3A31008CD5D2 /* merge.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = merge.glsl; sourceTree = "<group>"; };
+		558065C927AD3A31008CD5D2 /* common_header.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = common_header.glsl; sourceTree = "<group>"; };
+		558065CA27AD3A31008CD5D2 /* shadeboost.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = shadeboost.glsl; sourceTree = "<group>"; };
+		558065CB27AD3A31008CD5D2 /* cover-placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cover-placeholder.png"; sourceTree = "<group>"; };
+		558065CD27AD3A31008CD5D2 /* fa-solid-900.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "fa-solid-900.ttf"; sourceTree = "<group>"; };
+		558065CE27AD3A31008CD5D2 /* RobotoMono-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "RobotoMono-Medium.ttf"; sourceTree = "<group>"; };
+		558065CF27AD3A31008CD5D2 /* Roboto-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Regular.ttf"; sourceTree = "<group>"; };
+		558065D027AD3A31008CD5D2 /* Roboto-Regular-copyright */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Roboto-Regular-copyright"; sourceTree = "<group>"; };
+		558065D127AD3A31008CD5D2 /* GameIndex.yaml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = GameIndex.yaml; sourceTree = "<group>"; };
+		558065D327AD3A31008CD5D2 /* debugger.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = debugger.txt; sourceTree = "<group>"; };
+		558065D427AD3A31008CD5D2 /* GPL.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = GPL.html; sourceTree = "<group>"; };
+		558065D527AD3A31008CD5D2 /* PCSX2_FAQ.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = PCSX2_FAQ.pdf; sourceTree = "<group>"; };
+		558065D627AD3A31008CD5D2 /* Configuration_Guide.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = Configuration_Guide.pdf; sourceTree = "<group>"; };
+		558065D727AD3A31008CD5D2 /* Debugger.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = Debugger.pdf; sourceTree = "<group>"; };
+		558065D827AD3A31008CD5D2 /* PCSX2.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = PCSX2.1; sourceTree = "<group>"; };
+		558065D927AD3A31008CD5D2 /* GameIndex.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = GameIndex.pdf; sourceTree = "<group>"; };
+		558065DC27AD3A31008CD5D2 /* pcsx2_Iconized.mo */ = {isa = PBXFileReference; lastKnownFileType = file; path = pcsx2_Iconized.mo; sourceTree = "<group>"; };
+		558065DD27AD3A31008CD5D2 /* pcsx2_Main.mo */ = {isa = PBXFileReference; lastKnownFileType = file; path = pcsx2_Main.mo; sourceTree = "<group>"; };
+		558065DF27AD3A31008CD5D2 /* pcsx2_Iconized.mo */ = {isa = PBXFileReference; lastKnownFileType = file; path = pcsx2_Iconized.mo; sourceTree = "<group>"; };
+		558065E027AD3A31008CD5D2 /* pcsx2_Main.mo */ = {isa = PBXFileReference; lastKnownFileType = file; path = pcsx2_Main.mo; sourceTree = "<group>"; };
+		558065E227AD3A31008CD5D2 /* pcsx2_Iconized.mo */ = {isa = PBXFileReference; lastKnownFileType = file; path = pcsx2_Iconized.mo; sourceTree = "<group>"; };
+		558065E327AD3A31008CD5D2 /* pcsx2_Main.mo */ = {isa = PBXFileReference; lastKnownFileType = file; path = pcsx2_Main.mo; sourceTree = "<group>"; };
+		558065E527AD3A31008CD5D2 /* pcsx2_Iconized.mo */ = {isa = PBXFileReference; lastKnownFileType = file; path = pcsx2_Iconized.mo; sourceTree = "<group>"; };
+		558065E627AD3A31008CD5D2 /* pcsx2_Main.mo */ = {isa = PBXFileReference; lastKnownFileType = file; path = pcsx2_Main.mo; sourceTree = "<group>"; };
+		558065E827AD3A31008CD5D2 /* pcsx2_Iconized.mo */ = {isa = PBXFileReference; lastKnownFileType = file; path = pcsx2_Iconized.mo; sourceTree = "<group>"; };
+		558065E927AD3A31008CD5D2 /* pcsx2_Main.mo */ = {isa = PBXFileReference; lastKnownFileType = file; path = pcsx2_Main.mo; sourceTree = "<group>"; };
+		558065EB27AD3A31008CD5D2 /* pcsx2_Iconized.mo */ = {isa = PBXFileReference; lastKnownFileType = file; path = pcsx2_Iconized.mo; sourceTree = "<group>"; };
+		558065EC27AD3A31008CD5D2 /* pcsx2_Main.mo */ = {isa = PBXFileReference; lastKnownFileType = file; path = pcsx2_Main.mo; sourceTree = "<group>"; };
+		558065EE27AD3A31008CD5D2 /* pcsx2_Iconized.mo */ = {isa = PBXFileReference; lastKnownFileType = file; path = pcsx2_Iconized.mo; sourceTree = "<group>"; };
+		558065EF27AD3A31008CD5D2 /* pcsx2_Main.mo */ = {isa = PBXFileReference; lastKnownFileType = file; path = pcsx2_Main.mo; sourceTree = "<group>"; };
+		558065F127AD3A31008CD5D2 /* pcsx2_Iconized.mo */ = {isa = PBXFileReference; lastKnownFileType = file; path = pcsx2_Iconized.mo; sourceTree = "<group>"; };
+		558065F227AD3A31008CD5D2 /* pcsx2_Main.mo */ = {isa = PBXFileReference; lastKnownFileType = file; path = pcsx2_Main.mo; sourceTree = "<group>"; };
+		558065F427AD3A31008CD5D2 /* pcsx2_Iconized.mo */ = {isa = PBXFileReference; lastKnownFileType = file; path = pcsx2_Iconized.mo; sourceTree = "<group>"; };
+		558065F527AD3A31008CD5D2 /* pcsx2_Main.mo */ = {isa = PBXFileReference; lastKnownFileType = file; path = pcsx2_Main.mo; sourceTree = "<group>"; };
+		558065F727AD3A31008CD5D2 /* pcsx2_Iconized.mo */ = {isa = PBXFileReference; lastKnownFileType = file; path = pcsx2_Iconized.mo; sourceTree = "<group>"; };
+		558065F827AD3A31008CD5D2 /* pcsx2_Main.mo */ = {isa = PBXFileReference; lastKnownFileType = file; path = pcsx2_Main.mo; sourceTree = "<group>"; };
+		558065FA27AD3A31008CD5D2 /* pcsx2_Iconized.mo */ = {isa = PBXFileReference; lastKnownFileType = file; path = pcsx2_Iconized.mo; sourceTree = "<group>"; };
+		558065FB27AD3A31008CD5D2 /* pcsx2_Main.mo */ = {isa = PBXFileReference; lastKnownFileType = file; path = pcsx2_Main.mo; sourceTree = "<group>"; };
+		558065FD27AD3A31008CD5D2 /* pcsx2_Iconized.mo */ = {isa = PBXFileReference; lastKnownFileType = file; path = pcsx2_Iconized.mo; sourceTree = "<group>"; };
+		558065FE27AD3A31008CD5D2 /* pcsx2_Main.mo */ = {isa = PBXFileReference; lastKnownFileType = file; path = pcsx2_Main.mo; sourceTree = "<group>"; };
+		5580660027AD3A31008CD5D2 /* pcsx2_Iconized.mo */ = {isa = PBXFileReference; lastKnownFileType = file; path = pcsx2_Iconized.mo; sourceTree = "<group>"; };
+		5580660127AD3A31008CD5D2 /* pcsx2_Main.mo */ = {isa = PBXFileReference; lastKnownFileType = file; path = pcsx2_Main.mo; sourceTree = "<group>"; };
+		5580660327AD3A31008CD5D2 /* pcsx2_Iconized.mo */ = {isa = PBXFileReference; lastKnownFileType = file; path = pcsx2_Iconized.mo; sourceTree = "<group>"; };
+		5580660427AD3A31008CD5D2 /* pcsx2_Main.mo */ = {isa = PBXFileReference; lastKnownFileType = file; path = pcsx2_Main.mo; sourceTree = "<group>"; };
+		5580660627AD3A31008CD5D2 /* pcsx2_Iconized.mo */ = {isa = PBXFileReference; lastKnownFileType = file; path = pcsx2_Iconized.mo; sourceTree = "<group>"; };
+		5580660727AD3A31008CD5D2 /* pcsx2_Main.mo */ = {isa = PBXFileReference; lastKnownFileType = file; path = pcsx2_Main.mo; sourceTree = "<group>"; };
+		5580660927AD3A31008CD5D2 /* pcsx2_Iconized.mo */ = {isa = PBXFileReference; lastKnownFileType = file; path = pcsx2_Iconized.mo; sourceTree = "<group>"; };
+		5580660A27AD3A31008CD5D2 /* pcsx2_Main.mo */ = {isa = PBXFileReference; lastKnownFileType = file; path = pcsx2_Main.mo; sourceTree = "<group>"; };
+		5580660C27AD3A31008CD5D2 /* pcsx2_Iconized.mo */ = {isa = PBXFileReference; lastKnownFileType = file; path = pcsx2_Iconized.mo; sourceTree = "<group>"; };
+		5580660D27AD3A31008CD5D2 /* pcsx2_Main.mo */ = {isa = PBXFileReference; lastKnownFileType = file; path = pcsx2_Main.mo; sourceTree = "<group>"; };
+		5580660F27AD3A31008CD5D2 /* pcsx2_Iconized.mo */ = {isa = PBXFileReference; lastKnownFileType = file; path = pcsx2_Iconized.mo; sourceTree = "<group>"; };
+		5580661027AD3A31008CD5D2 /* pcsx2_Main.mo */ = {isa = PBXFileReference; lastKnownFileType = file; path = pcsx2_Main.mo; sourceTree = "<group>"; };
+		5580661227AD3A31008CD5D2 /* pcsx2_Iconized.mo */ = {isa = PBXFileReference; lastKnownFileType = file; path = pcsx2_Iconized.mo; sourceTree = "<group>"; };
+		5580661327AD3A31008CD5D2 /* pcsx2_Main.mo */ = {isa = PBXFileReference; lastKnownFileType = file; path = pcsx2_Main.mo; sourceTree = "<group>"; };
+		5580661527AD3A31008CD5D2 /* pcsx2_Iconized.mo */ = {isa = PBXFileReference; lastKnownFileType = file; path = pcsx2_Iconized.mo; sourceTree = "<group>"; };
+		5580661627AD3A31008CD5D2 /* pcsx2_Main.mo */ = {isa = PBXFileReference; lastKnownFileType = file; path = pcsx2_Main.mo; sourceTree = "<group>"; };
+		5580661827AD3A31008CD5D2 /* pcsx2_Iconized.mo */ = {isa = PBXFileReference; lastKnownFileType = file; path = pcsx2_Iconized.mo; sourceTree = "<group>"; };
+		5580661927AD3A31008CD5D2 /* pcsx2_Main.mo */ = {isa = PBXFileReference; lastKnownFileType = file; path = pcsx2_Main.mo; sourceTree = "<group>"; };
+		5580661B27AD3A31008CD5D2 /* pcsx2_Iconized.mo */ = {isa = PBXFileReference; lastKnownFileType = file; path = pcsx2_Iconized.mo; sourceTree = "<group>"; };
+		5580661C27AD3A31008CD5D2 /* pcsx2_Main.mo */ = {isa = PBXFileReference; lastKnownFileType = file; path = pcsx2_Main.mo; sourceTree = "<group>"; };
+		5580661E27AD3A31008CD5D2 /* pcsx2_Iconized.mo */ = {isa = PBXFileReference; lastKnownFileType = file; path = pcsx2_Iconized.mo; sourceTree = "<group>"; };
+		5580661F27AD3A31008CD5D2 /* pcsx2_Main.mo */ = {isa = PBXFileReference; lastKnownFileType = file; path = pcsx2_Main.mo; sourceTree = "<group>"; };
+		5580662127AD3A31008CD5D2 /* pcsx2_Iconized.mo */ = {isa = PBXFileReference; lastKnownFileType = file; path = pcsx2_Iconized.mo; sourceTree = "<group>"; };
+		5580662227AD3A31008CD5D2 /* pcsx2_Main.mo */ = {isa = PBXFileReference; lastKnownFileType = file; path = pcsx2_Main.mo; sourceTree = "<group>"; };
+		5580662427AD3A31008CD5D2 /* pcsx2_Iconized.mo */ = {isa = PBXFileReference; lastKnownFileType = file; path = pcsx2_Iconized.mo; sourceTree = "<group>"; };
+		5580662527AD3A31008CD5D2 /* pcsx2_Main.mo */ = {isa = PBXFileReference; lastKnownFileType = file; path = pcsx2_Main.mo; sourceTree = "<group>"; };
+		5580662727AD3A31008CD5D2 /* pcsx2_Iconized.mo */ = {isa = PBXFileReference; lastKnownFileType = file; path = pcsx2_Iconized.mo; sourceTree = "<group>"; };
+		5580662827AD3A31008CD5D2 /* pcsx2_Main.mo */ = {isa = PBXFileReference; lastKnownFileType = file; path = pcsx2_Main.mo; sourceTree = "<group>"; };
+		5580662A27AD3A31008CD5D2 /* GS_FX_Settings.ini */ = {isa = PBXFileReference; lastKnownFileType = text; path = GS_FX_Settings.ini; sourceTree = "<group>"; };
+		5580662B27AD3A31008CD5D2 /* GS.fx */ = {isa = PBXFileReference; lastKnownFileType = text; path = GS.fx; sourceTree = "<group>"; };
+		5580662C27AD3A31008CD5D2 /* PCSX2_keys.ini.default */ = {isa = PBXFileReference; lastKnownFileType = text; path = PCSX2_keys.ini.default; sourceTree = "<group>"; };
+		5580662D27AD3A31008CD5D2 /* portable.ini */ = {isa = PBXFileReference; lastKnownFileType = text; path = portable.ini; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -3786,6 +3923,7 @@
 		5517E8C8263D46D3000219EC /* pcsx2 */ = {
 			isa = PBXGroup;
 			children = (
+				558065B127AD3A31008CD5D2 /* bin */,
 				551BF71026424EC60008C529 /* tools */,
 				5517E8D0263D4831000219EC /* 3rdparty */,
 				5517FA02263D48AD000219EC /* common */,
@@ -7813,6 +7951,376 @@
 			path = Linux;
 			sourceTree = "<group>";
 		};
+		558065B127AD3A31008CD5D2 /* bin */ = {
+			isa = PBXGroup;
+			children = (
+				558065D227AD3A31008CD5D2 /* docs */,
+				558065DA27AD3A31008CD5D2 /* Langs */,
+				5580662C27AD3A31008CD5D2 /* PCSX2_keys.ini.default */,
+				5580662D27AD3A31008CD5D2 /* portable.ini */,
+				558065B227AD3A31008CD5D2 /* resources */,
+				5580662927AD3A31008CD5D2 /* shaders */,
+			);
+			path = bin;
+			sourceTree = "<group>";
+		};
+		558065B227AD3A31008CD5D2 /* resources */ = {
+			isa = PBXGroup;
+			children = (
+				558065B327AD3A31008CD5D2 /* cheats_ws.zip */,
+				558065CB27AD3A31008CD5D2 /* cover-placeholder.png */,
+				558065CC27AD3A31008CD5D2 /* fonts */,
+				558065B427AD3A31008CD5D2 /* game_controller_db.txt */,
+				558065D127AD3A31008CD5D2 /* GameIndex.yaml */,
+				558065B527AD3A31008CD5D2 /* shaders */,
+			);
+			path = resources;
+			sourceTree = "<group>";
+		};
+		558065B527AD3A31008CD5D2 /* shaders */ = {
+			isa = PBXGroup;
+			children = (
+				558065B627AD3A31008CD5D2 /* common */,
+				558065B827AD3A31008CD5D2 /* vulkan */,
+				558065C327AD3A31008CD5D2 /* opengl */,
+			);
+			path = shaders;
+			sourceTree = "<group>";
+		};
+		558065B627AD3A31008CD5D2 /* common */ = {
+			isa = PBXGroup;
+			children = (
+				558065B727AD3A31008CD5D2 /* fxaa.fx */,
+			);
+			path = common;
+			sourceTree = "<group>";
+		};
+		558065B827AD3A31008CD5D2 /* vulkan */ = {
+			isa = PBXGroup;
+			children = (
+				558065B927AD3A31008CD5D2 /* convert.glsl */,
+				558065BB27AD3A31008CD5D2 /* interlace.glsl */,
+				558065BC27AD3A31008CD5D2 /* merge.glsl */,
+				558065BA27AD3A31008CD5D2 /* tfx.glsl */,
+			);
+			path = vulkan;
+			sourceTree = "<group>";
+		};
+		558065C327AD3A31008CD5D2 /* opengl */ = {
+			isa = PBXGroup;
+			children = (
+				558065C927AD3A31008CD5D2 /* common_header.glsl */,
+				558065C427AD3A31008CD5D2 /* convert.glsl */,
+				558065C727AD3A31008CD5D2 /* interlace.glsl */,
+				558065C827AD3A31008CD5D2 /* merge.glsl */,
+				558065CA27AD3A31008CD5D2 /* shadeboost.glsl */,
+				558065C627AD3A31008CD5D2 /* tfx_fs.glsl */,
+				558065C527AD3A31008CD5D2 /* tfx_vgs.glsl */,
+			);
+			path = opengl;
+			sourceTree = "<group>";
+		};
+		558065CC27AD3A31008CD5D2 /* fonts */ = {
+			isa = PBXGroup;
+			children = (
+				558065CD27AD3A31008CD5D2 /* fa-solid-900.ttf */,
+				558065CE27AD3A31008CD5D2 /* RobotoMono-Medium.ttf */,
+				558065CF27AD3A31008CD5D2 /* Roboto-Regular.ttf */,
+				558065D027AD3A31008CD5D2 /* Roboto-Regular-copyright */,
+			);
+			path = fonts;
+			sourceTree = "<group>";
+		};
+		558065D227AD3A31008CD5D2 /* docs */ = {
+			isa = PBXGroup;
+			children = (
+				558065D327AD3A31008CD5D2 /* debugger.txt */,
+				558065D427AD3A31008CD5D2 /* GPL.html */,
+				558065D527AD3A31008CD5D2 /* PCSX2_FAQ.pdf */,
+				558065D627AD3A31008CD5D2 /* Configuration_Guide.pdf */,
+				558065D727AD3A31008CD5D2 /* Debugger.pdf */,
+				558065D827AD3A31008CD5D2 /* PCSX2.1 */,
+				558065D927AD3A31008CD5D2 /* GameIndex.pdf */,
+			);
+			path = docs;
+			sourceTree = "<group>";
+		};
+		558065DA27AD3A31008CD5D2 /* Langs */ = {
+			isa = PBXGroup;
+			children = (
+				558065DB27AD3A31008CD5D2 /* fi_FI */,
+				558065DE27AD3A31008CD5D2 /* sv_SE */,
+				558065E127AD3A31008CD5D2 /* th_TH */,
+				558065E427AD3A31008CD5D2 /* id_ID */,
+				558065E727AD3A31008CD5D2 /* pt_BR */,
+				558065EA27AD3A31008CD5D2 /* ko_KR */,
+				558065ED27AD3A31008CD5D2 /* it_IT */,
+				558065F027AD3A31008CD5D2 /* zh_TW */,
+				558065F327AD3A31008CD5D2 /* nb_NO */,
+				558065F627AD3A31008CD5D2 /* hr_HR */,
+				558065F927AD3A31008CD5D2 /* cs_CZ */,
+				558065FC27AD3A31008CD5D2 /* ms_MY */,
+				558065FF27AD3A31008CD5D2 /* ja_JP */,
+				5580660227AD3A31008CD5D2 /* zh_CN */,
+				5580660527AD3A31008CD5D2 /* nl_NL */,
+				5580660827AD3A31008CD5D2 /* hu_HU */,
+				5580660B27AD3A31008CD5D2 /* ar_SA */,
+				5580660E27AD3A31008CD5D2 /* ca_ES */,
+				5580661127AD3A31008CD5D2 /* ru_RU */,
+				5580661427AD3A31008CD5D2 /* es_ES */,
+				5580661727AD3A31008CD5D2 /* da_DK */,
+				5580661A27AD3A31008CD5D2 /* pl_PL */,
+				5580661D27AD3A31008CD5D2 /* fr_FR */,
+				5580662027AD3A31008CD5D2 /* de_DE */,
+				5580662327AD3A31008CD5D2 /* lt_LT */,
+				5580662627AD3A31008CD5D2 /* tr_TR */,
+			);
+			path = Langs;
+			sourceTree = "<group>";
+		};
+		558065DB27AD3A31008CD5D2 /* fi_FI */ = {
+			isa = PBXGroup;
+			children = (
+				558065DC27AD3A31008CD5D2 /* pcsx2_Iconized.mo */,
+				558065DD27AD3A31008CD5D2 /* pcsx2_Main.mo */,
+			);
+			path = fi_FI;
+			sourceTree = "<group>";
+		};
+		558065DE27AD3A31008CD5D2 /* sv_SE */ = {
+			isa = PBXGroup;
+			children = (
+				558065DF27AD3A31008CD5D2 /* pcsx2_Iconized.mo */,
+				558065E027AD3A31008CD5D2 /* pcsx2_Main.mo */,
+			);
+			path = sv_SE;
+			sourceTree = "<group>";
+		};
+		558065E127AD3A31008CD5D2 /* th_TH */ = {
+			isa = PBXGroup;
+			children = (
+				558065E227AD3A31008CD5D2 /* pcsx2_Iconized.mo */,
+				558065E327AD3A31008CD5D2 /* pcsx2_Main.mo */,
+			);
+			path = th_TH;
+			sourceTree = "<group>";
+		};
+		558065E427AD3A31008CD5D2 /* id_ID */ = {
+			isa = PBXGroup;
+			children = (
+				558065E527AD3A31008CD5D2 /* pcsx2_Iconized.mo */,
+				558065E627AD3A31008CD5D2 /* pcsx2_Main.mo */,
+			);
+			path = id_ID;
+			sourceTree = "<group>";
+		};
+		558065E727AD3A31008CD5D2 /* pt_BR */ = {
+			isa = PBXGroup;
+			children = (
+				558065E827AD3A31008CD5D2 /* pcsx2_Iconized.mo */,
+				558065E927AD3A31008CD5D2 /* pcsx2_Main.mo */,
+			);
+			path = pt_BR;
+			sourceTree = "<group>";
+		};
+		558065EA27AD3A31008CD5D2 /* ko_KR */ = {
+			isa = PBXGroup;
+			children = (
+				558065EB27AD3A31008CD5D2 /* pcsx2_Iconized.mo */,
+				558065EC27AD3A31008CD5D2 /* pcsx2_Main.mo */,
+			);
+			path = ko_KR;
+			sourceTree = "<group>";
+		};
+		558065ED27AD3A31008CD5D2 /* it_IT */ = {
+			isa = PBXGroup;
+			children = (
+				558065EE27AD3A31008CD5D2 /* pcsx2_Iconized.mo */,
+				558065EF27AD3A31008CD5D2 /* pcsx2_Main.mo */,
+			);
+			path = it_IT;
+			sourceTree = "<group>";
+		};
+		558065F027AD3A31008CD5D2 /* zh_TW */ = {
+			isa = PBXGroup;
+			children = (
+				558065F127AD3A31008CD5D2 /* pcsx2_Iconized.mo */,
+				558065F227AD3A31008CD5D2 /* pcsx2_Main.mo */,
+			);
+			path = zh_TW;
+			sourceTree = "<group>";
+		};
+		558065F327AD3A31008CD5D2 /* nb_NO */ = {
+			isa = PBXGroup;
+			children = (
+				558065F427AD3A31008CD5D2 /* pcsx2_Iconized.mo */,
+				558065F527AD3A31008CD5D2 /* pcsx2_Main.mo */,
+			);
+			path = nb_NO;
+			sourceTree = "<group>";
+		};
+		558065F627AD3A31008CD5D2 /* hr_HR */ = {
+			isa = PBXGroup;
+			children = (
+				558065F727AD3A31008CD5D2 /* pcsx2_Iconized.mo */,
+				558065F827AD3A31008CD5D2 /* pcsx2_Main.mo */,
+			);
+			path = hr_HR;
+			sourceTree = "<group>";
+		};
+		558065F927AD3A31008CD5D2 /* cs_CZ */ = {
+			isa = PBXGroup;
+			children = (
+				558065FA27AD3A31008CD5D2 /* pcsx2_Iconized.mo */,
+				558065FB27AD3A31008CD5D2 /* pcsx2_Main.mo */,
+			);
+			path = cs_CZ;
+			sourceTree = "<group>";
+		};
+		558065FC27AD3A31008CD5D2 /* ms_MY */ = {
+			isa = PBXGroup;
+			children = (
+				558065FD27AD3A31008CD5D2 /* pcsx2_Iconized.mo */,
+				558065FE27AD3A31008CD5D2 /* pcsx2_Main.mo */,
+			);
+			path = ms_MY;
+			sourceTree = "<group>";
+		};
+		558065FF27AD3A31008CD5D2 /* ja_JP */ = {
+			isa = PBXGroup;
+			children = (
+				5580660027AD3A31008CD5D2 /* pcsx2_Iconized.mo */,
+				5580660127AD3A31008CD5D2 /* pcsx2_Main.mo */,
+			);
+			path = ja_JP;
+			sourceTree = "<group>";
+		};
+		5580660227AD3A31008CD5D2 /* zh_CN */ = {
+			isa = PBXGroup;
+			children = (
+				5580660327AD3A31008CD5D2 /* pcsx2_Iconized.mo */,
+				5580660427AD3A31008CD5D2 /* pcsx2_Main.mo */,
+			);
+			path = zh_CN;
+			sourceTree = "<group>";
+		};
+		5580660527AD3A31008CD5D2 /* nl_NL */ = {
+			isa = PBXGroup;
+			children = (
+				5580660627AD3A31008CD5D2 /* pcsx2_Iconized.mo */,
+				5580660727AD3A31008CD5D2 /* pcsx2_Main.mo */,
+			);
+			path = nl_NL;
+			sourceTree = "<group>";
+		};
+		5580660827AD3A31008CD5D2 /* hu_HU */ = {
+			isa = PBXGroup;
+			children = (
+				5580660927AD3A31008CD5D2 /* pcsx2_Iconized.mo */,
+				5580660A27AD3A31008CD5D2 /* pcsx2_Main.mo */,
+			);
+			path = hu_HU;
+			sourceTree = "<group>";
+		};
+		5580660B27AD3A31008CD5D2 /* ar_SA */ = {
+			isa = PBXGroup;
+			children = (
+				5580660C27AD3A31008CD5D2 /* pcsx2_Iconized.mo */,
+				5580660D27AD3A31008CD5D2 /* pcsx2_Main.mo */,
+			);
+			path = ar_SA;
+			sourceTree = "<group>";
+		};
+		5580660E27AD3A31008CD5D2 /* ca_ES */ = {
+			isa = PBXGroup;
+			children = (
+				5580660F27AD3A31008CD5D2 /* pcsx2_Iconized.mo */,
+				5580661027AD3A31008CD5D2 /* pcsx2_Main.mo */,
+			);
+			path = ca_ES;
+			sourceTree = "<group>";
+		};
+		5580661127AD3A31008CD5D2 /* ru_RU */ = {
+			isa = PBXGroup;
+			children = (
+				5580661227AD3A31008CD5D2 /* pcsx2_Iconized.mo */,
+				5580661327AD3A31008CD5D2 /* pcsx2_Main.mo */,
+			);
+			path = ru_RU;
+			sourceTree = "<group>";
+		};
+		5580661427AD3A31008CD5D2 /* es_ES */ = {
+			isa = PBXGroup;
+			children = (
+				5580661527AD3A31008CD5D2 /* pcsx2_Iconized.mo */,
+				5580661627AD3A31008CD5D2 /* pcsx2_Main.mo */,
+			);
+			path = es_ES;
+			sourceTree = "<group>";
+		};
+		5580661727AD3A31008CD5D2 /* da_DK */ = {
+			isa = PBXGroup;
+			children = (
+				5580661827AD3A31008CD5D2 /* pcsx2_Iconized.mo */,
+				5580661927AD3A31008CD5D2 /* pcsx2_Main.mo */,
+			);
+			path = da_DK;
+			sourceTree = "<group>";
+		};
+		5580661A27AD3A31008CD5D2 /* pl_PL */ = {
+			isa = PBXGroup;
+			children = (
+				5580661B27AD3A31008CD5D2 /* pcsx2_Iconized.mo */,
+				5580661C27AD3A31008CD5D2 /* pcsx2_Main.mo */,
+			);
+			path = pl_PL;
+			sourceTree = "<group>";
+		};
+		5580661D27AD3A31008CD5D2 /* fr_FR */ = {
+			isa = PBXGroup;
+			children = (
+				5580661E27AD3A31008CD5D2 /* pcsx2_Iconized.mo */,
+				5580661F27AD3A31008CD5D2 /* pcsx2_Main.mo */,
+			);
+			path = fr_FR;
+			sourceTree = "<group>";
+		};
+		5580662027AD3A31008CD5D2 /* de_DE */ = {
+			isa = PBXGroup;
+			children = (
+				5580662127AD3A31008CD5D2 /* pcsx2_Iconized.mo */,
+				5580662227AD3A31008CD5D2 /* pcsx2_Main.mo */,
+			);
+			path = de_DE;
+			sourceTree = "<group>";
+		};
+		5580662327AD3A31008CD5D2 /* lt_LT */ = {
+			isa = PBXGroup;
+			children = (
+				5580662427AD3A31008CD5D2 /* pcsx2_Iconized.mo */,
+				5580662527AD3A31008CD5D2 /* pcsx2_Main.mo */,
+			);
+			path = lt_LT;
+			sourceTree = "<group>";
+		};
+		5580662627AD3A31008CD5D2 /* tr_TR */ = {
+			isa = PBXGroup;
+			children = (
+				5580662727AD3A31008CD5D2 /* pcsx2_Iconized.mo */,
+				5580662827AD3A31008CD5D2 /* pcsx2_Main.mo */,
+			);
+			path = tr_TR;
+			sourceTree = "<group>";
+		};
+		5580662927AD3A31008CD5D2 /* shaders */ = {
+			isa = PBXGroup;
+			children = (
+				5580662A27AD3A31008CD5D2 /* GS_FX_Settings.ini */,
+				5580662B27AD3A31008CD5D2 /* GS.fx */,
+			);
+			path = shaders;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -7924,6 +8432,9 @@
 				5517E8B1263D4213000219EC /* Frameworks */,
 				5517E8B2263D4213000219EC /* Resources */,
 				5517E8C2263D4361000219EC /* Embed Frameworks */,
+				5580663027AD3AAD008CD5D2 /* Copy OpenGL Shaders */,
+				5580663727AD3B24008CD5D2 /* Copy Vulkan Shaders */,
+				5580663C27AD3B5A008CD5D2 /* Copy Common Shaders */,
 			);
 			buildRules = (
 			);
@@ -8236,6 +8747,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				550E0D462640C702008A1E48 /* PCSX2.icns in Resources */,
+				5580662F27AD3A5D008CD5D2 /* GameIndex.yaml in Resources */,
+				5580662E27AD3A51008CD5D2 /* cheats_ws.zip in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

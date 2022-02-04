@@ -133,6 +133,17 @@ static __weak PCSX2GameCore *_current;
 	
 }
 
+#pragma mark - Discs
+
+- (NSUInteger)discCount
+{
+	return 1;
+}
+
+- (void)setDisc:(NSUInteger)discNumber
+{
+}
+
 @end
 
 alignas(16) static SysMtgsThread s_mtgs_thread;
@@ -318,27 +329,6 @@ void Host::UpdateHostDisplay()
 
 
 #pragma mark -
-
-class Pcsx2StandardPaths : public wxStandardPaths
-{
-public:
-	virtual wxString GetExecutablePath() const
-	{
-		const char* system = [NSBundle bundleForClass:[PCSX2GameCore class]].resourceURL.fileSystemRepresentation;
-		return system;
-	}
-	wxString GetResourcesDir() const
-	{
-		const char* system = [NSBundle bundleForClass:[PCSX2GameCore class]].resourceURL.fileSystemRepresentation;
-		return system;
-	}
-	wxString GetUserLocalDataDir() const
-	{
-		PCSX2GameCore *current = _current;
-		const char* savedir = current.batterySavesDirectoryPath.fileSystemRepresentation;
-		return Path::Combine(savedir, "pcsx2");
-	}
-};
 
 const IConsoleWriter* PatchesCon = &ConsoleWriter_Null;
 
