@@ -3192,7 +3192,6 @@
 		556FBB27279E0E76007B4F88 /* VMManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VMManager.h; sourceTree = "<group>"; };
 		556FBB28279E0E76007B4F88 /* VMManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VMManager.cpp; sourceTree = "<group>"; };
 		556FBB2C279E1067007B4F88 /* InputManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputManager.h; sourceTree = "<group>"; };
-		556FBB30279E1067007B4F88 /* OpenGLHostDisplay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenGLHostDisplay.h; sourceTree = "<group>"; };
 		556FBB31279E1067007B4F88 /* GameList.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameList.cpp; sourceTree = "<group>"; };
 		556FBB35279E1067007B4F88 /* INISettingsInterface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = INISettingsInterface.cpp; sourceTree = "<group>"; };
 		556FBB36279E1067007B4F88 /* InputManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InputManager.cpp; sourceTree = "<group>"; };
@@ -7692,7 +7691,6 @@
 				556FBB38279E1067007B4F88 /* LayeredSettingsInterface.h */,
 				556FBB40279E1067007B4F88 /* OpenGLHostDisplay.cpp */,
 				5580653127AB50CC008CD5D2 /* OpenGLHostDisplay.h */,
-				556FBB30279E1067007B4F88 /* OpenGLHostDisplay.h */,
 			);
 			path = Frontend;
 			sourceTree = "<group>";

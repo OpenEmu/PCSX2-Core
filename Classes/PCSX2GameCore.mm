@@ -26,19 +26,16 @@
 
 #define BOOL PCSX2BOOL
 #include "../pcsx2/pcsx2/PrecompiledHeader.h"
-//#include "../pcsx2/pcsx2/Plugins.h"
 #include "../pcsx2/pcsx2/GS.h"
 #include "../pcsx2/pcsx2/Host.h"
 #include "../pcsx2/pcsx2/HostDisplay.h"
 #include "../pcsx2/pcsx2/VMManager.h"
 #include "../pcsx2/pcsx2/Frontend/InputManager.h"
-//#include "../pcsx2/pcsx2/gui/AppConfig.h"
+#include "../pcsx2/pcsx2/CDVD/CDVDaccess.h"
 #include "../pcsx2/pcsx2/SPU2/Global.h"
 #include "../pcsx2/pcsx2/SPU2/SndOut.h"
 #include "MTVU.h"
 #undef BOOL
-
-#include <wx/stdpaths.h>
 
 bool renderswitch = false;
 
@@ -47,9 +44,19 @@ namespace GSDump
 	bool isRunning = false;
 }
 
+alignas(16) static SysMtgsThread s_mtgs_thread;
 static __weak PCSX2GameCore *_current;
 
-@implementation PCSX2GameCore
+@implementation PCSX2GameCore {
+	
+}
+
+- (instancetype)init
+{
+	if (self = [super init]) {
+	}
+	return self;
+}
 
 - (oneway void)didMovePS2JoystickDirection:(OEPS2Button)button withValue:(CGFloat)value forPlayer:(NSUInteger)player
 {
@@ -67,29 +74,45 @@ static __weak PCSX2GameCore *_current;
 
 - (BOOL)loadFileAtPath:(NSString *)path error:(NSError **)error
 {
-	if (error) {
+	bool success = VMManager::ChangeDisc(path.fileSystemRepresentation);
+	if (!success && error) {
 		*error = [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotLoadROMError userInfo:nil];
 	}
-	return NO;
+	return success;
 }
 
 - (void)loadStateFromFileAtPath:(NSString *)fileName completionHandler:(void (^)(BOOL, NSError *))block
 {
-	block(NO, [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotLoadROMError userInfo:nil]);
+	block(NO, [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreDoesNotSupportSaveStatesError userInfo:nil]);
 }
 
 - (void)saveStateToFileAtPath:(NSString *)fileName completionHandler:(void (^)(BOOL, NSError *))block
 {
-	block(NO, [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotLoadROMError userInfo:nil]);
+	block(NO, [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreDoesNotSupportSaveStatesError userInfo:nil]);
 }
 
 - (void)resetEmulation
 {
-	
+	VMManager::Reset();
+}
+
+- (void)startEmulation
+{
+	[super startEmulation];
+	VMBootParameters params;
+	params.source = "";
+	params.save_state = "";
+	params.source_type = CDVD_SourceType::NoDisc ;
+	params.elf_override = "";
+	params.fast_boot = true;
+	params.fullscreen = false;
+	params.batch_mode = std::nullopt;
+	VMManager::Initialize(params);
 }
 
 - (void)stopEmulation
 {
+	VMManager::Shutdown();
 	[super stopEmulation];
 }
 
@@ -146,8 +169,6 @@ static __weak PCSX2GameCore *_current;
 
 @end
 
-alignas(16) static SysMtgsThread s_mtgs_thread;
-
 SysMtgsThread& GetMTGS()
 {
 	return s_mtgs_thread;
@@ -157,11 +178,26 @@ SysMtgsThread& GetMTGS()
 
 std::optional<std::vector<u8>> Host::ReadResourceFile(const char* filename)
 {
-	NSURL *aURL = [[NSBundle bundleForClass:[PCSX2GameCore class]] URLForResource:@(filename) withExtension:nil];
+	NSString *nsFile = @(filename);
+	NSString *baseName = nsFile.lastPathComponent.stringByDeletingPathExtension;
+	NSString *upperName = nsFile.stringByDeletingLastPathComponent;
+	NSString *baseExt = nsFile.pathExtension;
+	if (baseExt.length == 0) {
+		baseExt = nil;
+	}
+	if (upperName.length == 0 || [upperName isEqualToString:@"/"]) {
+		upperName = nil;
+	}
+	NSURL *aURL;
+	if (upperName) {
+		[[NSBundle bundleForClass:[PCSX2GameCore class]] URLForResource:baseName withExtension:baseExt subdirectory:upperName];
+	} else {
+		aURL = [[NSBundle bundleForClass:[PCSX2GameCore class]] URLForResource:baseName withExtension:baseExt];
+	}
 	if (!aURL) {
 		return std::nullopt;
 	}
-	NSData *data = [NSData dataWithContentsOfURL:aURL];
+	NSData *data = [[NSData alloc] initWithContentsOfURL:aURL];
 	if (!data) {
 		return std::nullopt;
 	}
@@ -172,11 +208,26 @@ std::optional<std::vector<u8>> Host::ReadResourceFile(const char* filename)
 
 std::optional<std::string> Host::ReadResourceFileToString(const char* filename)
 {
-	NSURL *aURL = [[NSBundle bundleForClass:[PCSX2GameCore class]] URLForResource:@(filename) withExtension:nil];
+	NSString *nsFile = @(filename);
+	NSString *baseName = nsFile.lastPathComponent.stringByDeletingPathExtension;
+	NSString *upperName = nsFile.stringByDeletingLastPathComponent;
+	NSString *baseExt = nsFile.pathExtension;
+	if (baseExt.length == 0) {
+		baseExt = nil;
+	}
+	if (upperName.length == 0 || [upperName isEqualToString:@"/"]) {
+		upperName = nil;
+	}
+	NSURL *aURL;
+	if (upperName) {
+		[[NSBundle bundleForClass:[PCSX2GameCore class]] URLForResource:baseName withExtension:baseExt subdirectory:upperName];
+	} else {
+		aURL = [[NSBundle bundleForClass:[PCSX2GameCore class]] URLForResource:baseName withExtension:baseExt];
+	}
 	if (!aURL) {
 		return std::nullopt;
 	}
-	NSData *data = [NSData dataWithContentsOfURL:aURL];
+	NSData *data = [[NSData alloc] initWithContentsOfURL:aURL];
 	if (!data) {
 		return std::nullopt;
 	}
@@ -270,7 +321,7 @@ void Host::OnGameChanged(const std::string& disc_path, const std::string& game_s
 
 void Host::PumpMessagesOnCPUThread()
 {
-	
+	GET_CURRENT_OR_RETURN();
 }
 
 void Host::InvalidateSaveStateCache()
@@ -305,8 +356,6 @@ HostDisplay* Host::GetHostDisplay()
 	return nil;
 }
 
-/// Returns false if the window was completely occluded. If frame_skip is set, the frame won't be
-/// displayed, but the GPU command queue will still be flushed.
 bool Host::BeginPresentFrame(bool frame_skip)
 {
 	return false;
