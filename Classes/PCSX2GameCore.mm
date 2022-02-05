@@ -54,6 +54,7 @@ static __weak PCSX2GameCore *_current;
 - (instancetype)init
 {
 	if (self = [super init]) {
+		VMManager::InitializeMemory();
 	}
 	return self;
 }
@@ -121,6 +122,11 @@ static __weak PCSX2GameCore *_current;
 	return (OEIntSize){ 4, 3 };
 }
 
+- (NSTimeInterval)frameInterval
+{
+	return 60;
+}
+
 - (BOOL)tryToResizeVideoTo:(OEIntSize)size
 {
 	return YES;
@@ -153,7 +159,7 @@ static __weak PCSX2GameCore *_current;
 
 - (void)executeFrame
 {
-	
+	VMManager::Execute();
 }
 
 #pragma mark - Discs
@@ -276,46 +282,55 @@ void Host::ReportErrorAsync(const std::string_view& title, const std::string_vie
 
 void Host::OnVMStarting()
 {
+	GET_CURRENT_OR_RETURN();
 	
 }
 
 void Host::OnVMStarted()
 {
+	GET_CURRENT_OR_RETURN();
 	
 }
 
 void Host::OnVMDestroyed()
 {
+	GET_CURRENT_OR_RETURN();
 	
 }
 
 void Host::OnVMPaused()
 {
+	GET_CURRENT_OR_RETURN();
 	
 }
 
 void Host::OnVMResumed()
 {
+	GET_CURRENT_OR_RETURN();
 	
 }
 
 void Host::OnSaveStateLoading(const std::string_view& filename)
 {
+	GET_CURRENT_OR_RETURN();
 	
 }
 
 void Host::OnSaveStateLoaded(const std::string_view& filename, bool was_successful)
 {
+	GET_CURRENT_OR_RETURN();
 	
 }
 
 void Host::OnSaveStateSaved(const std::string_view& filename)
 {
+	GET_CURRENT_OR_RETURN();
 	
 }
 
 void Host::OnGameChanged(const std::string& disc_path, const std::string& game_serial, const std::string& game_name, u32 game_crc)
 {
+	GET_CURRENT_OR_RETURN();
 	
 }
 
@@ -331,6 +346,7 @@ void Host::InvalidateSaveStateCache()
 
 void Host::RequestResizeHostDisplay(s32 width, s32 height)
 {
+	GET_CURRENT_OR_RETURN();
 	
 }
 
@@ -343,36 +359,46 @@ void Host::RunOnCPUThread(std::function<void()> function, bool block)
 
 HostDisplay* Host::AcquireHostDisplay(HostDisplay::RenderAPI api)
 {
+	GET_CURRENT_OR_RETURN(nil);
+	
 	return nil;
 }
 
 void Host::ReleaseHostDisplay()
 {
+	GET_CURRENT_OR_RETURN();
 	
 }
 
 HostDisplay* Host::GetHostDisplay()
 {
+	GET_CURRENT_OR_RETURN(nil);
+	
 	return nil;
 }
 
 bool Host::BeginPresentFrame(bool frame_skip)
 {
+	GET_CURRENT_OR_RETURN(false);
+	
 	return false;
 }
 
 void Host::EndPresentFrame()
 {
+	GET_CURRENT_OR_RETURN();
 	
 }
 
 void Host::ResizeHostDisplay(u32 new_window_width, u32 new_window_height, float new_window_scale)
 {
+	GET_CURRENT_OR_RETURN();
 	
 }
 
 void Host::UpdateHostDisplay()
 {
+	GET_CURRENT_OR_RETURN();
 	
 }
 
@@ -383,6 +409,7 @@ const IConsoleWriter* PatchesCon = &ConsoleWriter_Null;
 
 void LoadAllPatchesAndStuff(const Pcsx2Config& cfg)
 {
+	GET_CURRENT_OR_RETURN();
 	// TODO: implement
 }
 
