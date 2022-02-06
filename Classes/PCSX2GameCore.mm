@@ -135,6 +135,7 @@ static __weak PCSX2GameCore *_current;
 	params.fullscreen = false;
 	params.batch_mode = std::nullopt;
 	VMManager::Initialize(params);
+//	Cpu = &recCpu;
 }
 
 - (void)stopEmulation
