@@ -104,6 +104,7 @@ static __weak PCSX2GameCore *_current;
 	EmuFolders::MemoryCards = path.fileSystemRepresentation;
 	EmuFolders::Bios = self.biosDirectoryPath.fileSystemRepresentation;
 	EmuFolders::AppRoot = [[NSBundle bundleForClass:[self class]] resourceURL].fileSystemRepresentation;
+	EmuFolders::DataRoot = self.supportDirectoryPath.fileSystemRepresentation;
 	
 	EmuConfig.Mcd[0].Enabled = true;
 	EmuConfig.Mcd[0].Type = MemoryCardType::Folder;
@@ -112,6 +113,9 @@ static __weak PCSX2GameCore *_current;
 	EmuConfig.Mcd[1].Enabled = true;
 	EmuConfig.Mcd[1].Type = MemoryCardType::Folder;
 	EmuConfig.Mcd[1].Filename = "Memory folder 2";
+	
+	//TODO: select based on loaded game's region.
+	EmuConfig.BaseFilenames.Bios = "scph39001.bin";
 }
 
 - (void)resetEmulation
