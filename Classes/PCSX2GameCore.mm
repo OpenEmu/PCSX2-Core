@@ -84,12 +84,34 @@ static __weak PCSX2GameCore *_current;
 
 - (void)loadStateFromFileAtPath:(NSString *)fileName completionHandler:(void (^)(BOOL, NSError *))block
 {
-	block(NO, [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreDoesNotSupportSaveStatesError userInfo:nil]);
+	bool success = VMManager::LoadState(fileName.fileSystemRepresentation);
+	block(success, success ? nil : [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotLoadStateError userInfo:nil]);
 }
 
 - (void)saveStateToFileAtPath:(NSString *)fileName completionHandler:(void (^)(BOOL, NSError *))block
 {
-	block(NO, [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreDoesNotSupportSaveStatesError userInfo:nil]);
+	bool success = VMManager::SaveState(fileName.fileSystemRepresentation);
+	block(success, success ? nil : [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotSaveStateError userInfo:nil]);
+}
+
+- (void)setupEmulation
+{
+	NSString *path = self.batterySavesDirectoryPath;
+	if (![[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:NULL]) {
+		[[NSFileManager defaultManager] createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:NULL];
+	}
+
+	EmuFolders::MemoryCards = path.fileSystemRepresentation;
+	EmuFolders::Bios = self.biosDirectoryPath.fileSystemRepresentation;
+	EmuFolders::AppRoot = [[NSBundle bundleForClass:[self class]] resourceURL].fileSystemRepresentation;
+	
+	EmuConfig.Mcd[0].Enabled = true;
+	EmuConfig.Mcd[0].Type = MemoryCardType::Folder;
+	EmuConfig.Mcd[0].Filename = "Memory folder 1";
+
+	EmuConfig.Mcd[1].Enabled = true;
+	EmuConfig.Mcd[1].Type = MemoryCardType::Folder;
+	EmuConfig.Mcd[1].Filename = "Memory folder 2";
 }
 
 - (void)resetEmulation
@@ -103,7 +125,7 @@ static __weak PCSX2GameCore *_current;
 	VMBootParameters params;
 	params.source = "";
 	params.save_state = "";
-	params.source_type = CDVD_SourceType::NoDisc ;
+	params.source_type = CDVD_SourceType::NoDisc;
 	params.elf_override = "";
 	params.fast_boot = true;
 	params.fullscreen = false;
@@ -184,6 +206,7 @@ SysMtgsThread& GetMTGS()
 
 std::optional<std::vector<u8>> Host::ReadResourceFile(const char* filename)
 {
+	@autoreleasepool {
 	NSString *nsFile = @(filename);
 	NSString *baseName = nsFile.lastPathComponent.stringByDeletingPathExtension;
 	NSString *upperName = nsFile.stringByDeletingLastPathComponent;
@@ -196,7 +219,7 @@ std::optional<std::vector<u8>> Host::ReadResourceFile(const char* filename)
 	}
 	NSURL *aURL;
 	if (upperName) {
-		[[NSBundle bundleForClass:[PCSX2GameCore class]] URLForResource:baseName withExtension:baseExt subdirectory:upperName];
+		aURL = [[NSBundle bundleForClass:[PCSX2GameCore class]] URLForResource:baseName withExtension:baseExt subdirectory:upperName];
 	} else {
 		aURL = [[NSBundle bundleForClass:[PCSX2GameCore class]] URLForResource:baseName withExtension:baseExt];
 	}
@@ -210,10 +233,12 @@ std::optional<std::vector<u8>> Host::ReadResourceFile(const char* filename)
 	auto retVal = std::vector<u8>(data.length);
 	[data getBytes:retVal.data() length:retVal.size()];
 	return retVal;
+	}
 }
 
 std::optional<std::string> Host::ReadResourceFileToString(const char* filename)
 {
+	@autoreleasepool {
 	NSString *nsFile = @(filename);
 	NSString *baseName = nsFile.lastPathComponent.stringByDeletingPathExtension;
 	NSString *upperName = nsFile.stringByDeletingLastPathComponent;
@@ -226,7 +251,7 @@ std::optional<std::string> Host::ReadResourceFileToString(const char* filename)
 	}
 	NSURL *aURL;
 	if (upperName) {
-		[[NSBundle bundleForClass:[PCSX2GameCore class]] URLForResource:baseName withExtension:baseExt subdirectory:upperName];
+		aURL = [[NSBundle bundleForClass:[PCSX2GameCore class]] URLForResource:baseName withExtension:baseExt subdirectory:upperName];
 	} else {
 		aURL = [[NSBundle bundleForClass:[PCSX2GameCore class]] URLForResource:baseName withExtension:baseExt];
 	}
@@ -241,6 +266,7 @@ std::optional<std::string> Host::ReadResourceFileToString(const char* filename)
 	ret.resize(data.length);
 	[data getBytes:ret.data() length:ret.size()];
 	return ret;
+	}
 }
 
 void Host::AddOSDMessage(std::string message, float duration)
@@ -359,7 +385,7 @@ void Host::RunOnCPUThread(std::function<void()> function, bool block)
 
 HostDisplay* Host::AcquireHostDisplay(HostDisplay::RenderAPI api)
 {
-	GET_CURRENT_OR_RETURN(nil);
+	GET_CURRENT_OR_RETURN(nullptr);
 	
 	return nil;
 }
@@ -372,7 +398,7 @@ void Host::ReleaseHostDisplay()
 
 HostDisplay* Host::GetHostDisplay()
 {
-	GET_CURRENT_OR_RETURN(nil);
+	GET_CURRENT_OR_RETURN(nullptr);
 	
 	return nil;
 }
