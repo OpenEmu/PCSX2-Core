@@ -34,6 +34,7 @@
 #include "../pcsx2/pcsx2/CDVD/CDVDaccess.h"
 #include "../pcsx2/pcsx2/SPU2/Global.h"
 #include "../pcsx2/pcsx2/SPU2/SndOut.h"
+#include "../pcsx2/pcsx2/R3000A.h"
 #include "MTVU.h"
 #undef BOOL
 
@@ -85,13 +86,13 @@ static __weak PCSX2GameCore *_current;
 - (void)loadStateFromFileAtPath:(NSString *)fileName completionHandler:(void (^)(BOOL, NSError *))block
 {
 	bool success = VMManager::LoadState(fileName.fileSystemRepresentation);
-	block(success, success ? nil : [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotLoadStateError userInfo:nil]);
+	block(success, success ? nil : [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotLoadStateError userInfo:@{NSFilePathErrorKey: fileName}]);
 }
 
 - (void)saveStateToFileAtPath:(NSString *)fileName completionHandler:(void (^)(BOOL, NSError *))block
 {
 	bool success = VMManager::SaveState(fileName.fileSystemRepresentation);
-	block(success, success ? nil : [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotSaveStateError userInfo:nil]);
+	block(success, success ? nil : [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotSaveStateError userInfo:@{NSFilePathErrorKey: fileName}]);
 }
 
 - (void)setupEmulation
@@ -135,7 +136,10 @@ static __weak PCSX2GameCore *_current;
 	params.fullscreen = false;
 	params.batch_mode = std::nullopt;
 	VMManager::Initialize(params);
-//	Cpu = &recCpu;
+	EmuConfig.Cpu.Recompiler.EnableEE = true;
+	EmuConfig.Cpu.Recompiler.EnableIOP = true;
+	EmuConfig.Cpu.Recompiler.EnableVU0 = true;
+	GetCpuProviders().ApplyConfig();
 }
 
 - (void)stopEmulation

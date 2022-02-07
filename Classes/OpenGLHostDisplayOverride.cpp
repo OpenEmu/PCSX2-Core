@@ -191,20 +191,6 @@ bool OpenGLHostDisplay::HasRenderSurface() const
 	return m_window_info.type != WindowInfo::Type::Surfaceless;
 }
 
-bool OpenGLHostDisplay::CreateRenderDevice(const WindowInfo& wi, std::string_view adapter_name, bool threaded_presentation, bool debug_device)
-{
-	m_gl_context = GL::Context::Create(wi);
-	if (!m_gl_context)
-	{
-		Console.Error("Failed to create any GL context");
-		m_gl_context.reset();
-		return false;
-	}
-
-	m_window_info = m_gl_context->GetWindowInfo();
-	return true;
-}
-
 bool OpenGLHostDisplay::InitializeRenderDevice(std::string_view shader_cache_directory, bool debug_device)
 {
 	// Start with vsync off.
