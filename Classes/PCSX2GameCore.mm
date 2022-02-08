@@ -31,6 +31,7 @@
 #include "../pcsx2/pcsx2/HostDisplay.h"
 #include "../pcsx2/pcsx2/VMManager.h"
 #include "../pcsx2/pcsx2/Frontend/InputManager.h"
+#include "../pcsx2/pcsx2/Frontend/OpenGLHostDisplay.h"
 #include "../pcsx2/pcsx2/CDVD/CDVDaccess.h"
 #include "../pcsx2/pcsx2/SPU2/Global.h"
 #include "../pcsx2/pcsx2/SPU2/SndOut.h"
@@ -48,8 +49,13 @@ namespace GSDump
 alignas(16) static SysMtgsThread s_mtgs_thread;
 static __weak PCSX2GameCore *_current;
 
+@interface PCSX2GameCore ()
+
+@end
+
 @implementation PCSX2GameCore {
-	
+	@package
+	HostDisplay *hostDisplay;
 }
 
 - (instancetype)init
@@ -106,6 +112,16 @@ static __weak PCSX2GameCore *_current;
 	EmuFolders::Bios = self.biosDirectoryPath.fileSystemRepresentation;
 	EmuFolders::AppRoot = [[NSBundle bundleForClass:[self class]] resourceURL].fileSystemRepresentation;
 	EmuFolders::DataRoot = self.supportDirectoryPath.fileSystemRepresentation;
+	EmuFolders::Settings = [self.supportDirectoryPath stringByAppendingString:@"ini"].fileSystemRepresentation;
+	EmuFolders::Resources = [[NSBundle bundleForClass:[self class]] resourceURL].fileSystemRepresentation;
+	EmuFolders::Cache = [self.supportDirectoryPath stringByAppendingString:@"Cache"].fileSystemRepresentation;
+	EmuFolders::Snapshots = [self.supportDirectoryPath stringByAppendingString:@"snaps"].fileSystemRepresentation;
+	EmuFolders::Savestates = [self.supportDirectoryPath stringByAppendingString:@"sstates"].fileSystemRepresentation;
+	EmuFolders::Logs = [self.supportDirectoryPath stringByAppendingString:@"Logs"].fileSystemRepresentation;
+	EmuFolders::Cheats = [self.supportDirectoryPath stringByAppendingString:@"Cheats"].fileSystemRepresentation;
+	EmuFolders::CheatsWS = [self.supportDirectoryPath stringByAppendingString:@"cheats_ws"].fileSystemRepresentation;
+	EmuFolders::Covers = [self.supportDirectoryPath stringByAppendingString:@"Covers"].fileSystemRepresentation;
+	EmuFolders::GameSettings = [self.supportDirectoryPath stringByAppendingString:@"gamesettings"].fileSystemRepresentation;
 	
 	EmuConfig.Mcd[0].Enabled = true;
 	EmuConfig.Mcd[0].Type = MemoryCardType::Folder;
@@ -115,8 +131,11 @@ static __weak PCSX2GameCore *_current;
 	EmuConfig.Mcd[1].Type = MemoryCardType::Folder;
 	EmuConfig.Mcd[1].Filename = "Memory folder 2";
 	
-	//TODO: select based on loaded game's region.
+	// TODO: select based on loaded game's region?
 	EmuConfig.BaseFilenames.Bios = "scph39001.bin";
+	
+	wxModule::RegisterModules();
+	wxModule::InitializeModules();
 }
 
 - (void)resetEmulation
@@ -395,8 +414,10 @@ void Host::RunOnCPUThread(std::function<void()> function, bool block)
 HostDisplay* Host::AcquireHostDisplay(HostDisplay::RenderAPI api)
 {
 	GET_CURRENT_OR_RETURN(nullptr);
+	HostDisplay *disp = new OpenGLHostDisplay();
+	current->hostDisplay = disp;
 	
-	return nil;
+	return disp;
 }
 
 void Host::ReleaseHostDisplay()
@@ -409,7 +430,7 @@ HostDisplay* Host::GetHostDisplay()
 {
 	GET_CURRENT_OR_RETURN(nullptr);
 	
-	return nil;
+	return current->hostDisplay;
 }
 
 bool Host::BeginPresentFrame(bool frame_skip)
