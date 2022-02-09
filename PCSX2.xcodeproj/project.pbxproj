@@ -1826,9 +1826,6 @@
 		5517FC4E263D49BC000219EC /* evdev.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = evdev.h; sourceTree = "<group>"; };
 		5517FC4F263D49BC000219EC /* evdev-gtk.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "evdev-gtk.cpp"; sourceTree = "<group>"; };
 		5517FC50263D49BC000219EC /* evdev.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = evdev.cpp; sourceTree = "<group>"; };
-		5517FC52263D49BC000219EC /* joydev-gtk.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "joydev-gtk.cpp"; sourceTree = "<group>"; };
-		5517FC53263D49BC000219EC /* joydev.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = joydev.cpp; sourceTree = "<group>"; };
-		5517FC54263D49BC000219EC /* joydev.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = joydev.h; sourceTree = "<group>"; };
 		5517FC55263D49BC000219EC /* api_init_win32_pad.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = api_init_win32_pad.cpp; sourceTree = "<group>"; };
 		5517FC56263D49BC000219EC /* usb-pad-ff.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "usb-pad-ff.cpp"; sourceTree = "<group>"; };
 		5517FC58263D49BC000219EC /* usb-pad-dx.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "usb-pad-dx.h"; sourceTree = "<group>"; };
@@ -1861,9 +1858,6 @@
 		5517FC7C263D49BC000219EC /* jo_mpeg.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = jo_mpeg.h; sourceTree = "<group>"; };
 		5517FC7D263D49BC000219EC /* usb-eyetoy-webcam.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "usb-eyetoy-webcam.h"; sourceTree = "<group>"; };
 		5517FC7E263D49BC000219EC /* ov519.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ov519.h; sourceTree = "<group>"; };
-		5517FC80263D49BC000219EC /* jpgd.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = jpgd.h; sourceTree = "<group>"; };
-		5517FC81263D49BC000219EC /* jpgd_idct.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = jpgd_idct.h; sourceTree = "<group>"; };
-		5517FC82263D49BC000219EC /* jpgd.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = jpgd.cpp; sourceTree = "<group>"; };
 		5517FC83263D49BC000219EC /* api_init_linux.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = api_init_linux.cpp; sourceTree = "<group>"; };
 		5517FC84263D49BC000219EC /* usb-eyetoy-webcam.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "usb-eyetoy-webcam.cpp"; sourceTree = "<group>"; };
 		5517FC85263D49BC000219EC /* cam-windows.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "cam-windows.cpp"; sourceTree = "<group>"; };
@@ -3227,7 +3221,6 @@
 		558063B527AB4A67008CD5D2 /* ConfigDebug.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConfigDebug.cpp; sourceTree = "<group>"; };
 		558063BB27AB4B6C008CD5D2 /* SndOut_Cubeb.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SndOut_Cubeb.cpp; sourceTree = "<group>"; };
 		558063C027AB4B9E008CD5D2 /* cubeb-test.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "cubeb-test.cpp"; sourceTree = "<group>"; };
-		558063C127AB4B9E008CD5D2 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		558063C227AB4B9E008CD5D2 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		558063C427AB4B9E008CD5D2 /* test_sanity.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_sanity.cpp; sourceTree = "<group>"; };
 		558063C527AB4B9E008CD5D2 /* test_duplex.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_duplex.cpp; sourceTree = "<group>"; };
@@ -3247,22 +3240,6 @@
 		558063D327AB4B9E008CD5D2 /* test_audio.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_audio.cpp; sourceTree = "<group>"; };
 		558063D427AB4B9E008CD5D2 /* test_device_changed_callback.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_device_changed_callback.cpp; sourceTree = "<group>"; };
 		558063D527AB4B9E008CD5D2 /* test_record.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_record.cpp; sourceTree = "<group>"; };
-		558063D827AB4B9E008CD5D2 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
-		558063D927AB4B9E008CD5D2 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
-		558063DB27AB4B9E008CD5D2 /* sanitize-helpers.cmake */ = {isa = PBXFileReference; lastKnownFileType = text; path = "sanitize-helpers.cmake"; sourceTree = "<group>"; };
-		558063DC27AB4B9E008CD5D2 /* FindMSan.cmake */ = {isa = PBXFileReference; lastKnownFileType = text; path = FindMSan.cmake; sourceTree = "<group>"; };
-		558063DD27AB4B9E008CD5D2 /* asan-wrapper */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "asan-wrapper"; sourceTree = "<group>"; };
-		558063DE27AB4B9E008CD5D2 /* FindUBSan.cmake */ = {isa = PBXFileReference; lastKnownFileType = text; path = FindUBSan.cmake; sourceTree = "<group>"; };
-		558063DF27AB4B9E008CD5D2 /* FindSanitizers.cmake */ = {isa = PBXFileReference; lastKnownFileType = text; path = FindSanitizers.cmake; sourceTree = "<group>"; };
-		558063E027AB4B9E008CD5D2 /* FindTSan.cmake */ = {isa = PBXFileReference; lastKnownFileType = text; path = FindTSan.cmake; sourceTree = "<group>"; };
-		558063E127AB4B9E008CD5D2 /* FindASan.cmake */ = {isa = PBXFileReference; lastKnownFileType = text; path = FindASan.cmake; sourceTree = "<group>"; };
-		558063E327AB4B9E008CD5D2 /* asan_test.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = asan_test.cpp; sourceTree = "<group>"; };
-		558063E427AB4B9E008CD5D2 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
-		558063E527AB4B9E008CD5D2 /* shortest.ext.test.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = shortest.ext.test.cpp; sourceTree = "<group>"; };
-		558063E627AB4B9E008CD5D2 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		558063E727AB4B9E008CD5D2 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
-		558063E827AB4B9E008CD5D2 /* toolchain-cross-mingw.cmake */ = {isa = PBXFileReference; lastKnownFileType = text; path = "toolchain-cross-mingw.cmake"; sourceTree = "<group>"; };
-		558063EA27AB4B9E008CD5D2 /* oss_is_v4.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = oss_is_v4.c; sourceTree = "<group>"; };
 		558063EB27AB4B9E008CD5D2 /* AUTHORS */ = {isa = PBXFileReference; lastKnownFileType = text; path = AUTHORS; sourceTree = "<group>"; };
 		558063EE27AB4B9E008CD5D2 /* cubeb.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = cubeb.h; sourceTree = "<group>"; };
 		558063EF27AB4B9E008CD5D2 /* INSTALL.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = INSTALL.md; sourceTree = "<group>"; };
@@ -5734,15 +5711,15 @@
 		5517FC07263D49BC000219EC /* shared */ = {
 			isa = PBXGroup;
 			children = (
-				5517FC08263D49BC000219EC /* rawinput_usb.cpp */,
-				5517FC09263D49BC000219EC /* shared_usb.cpp */,
-				5517FC0A263D49BC000219EC /* rawinput_usb.h */,
-				5517FC0B263D49BC000219EC /* hidapi.h */,
 				5517FC0C263D49BC000219EC /* hidapi.cpp */,
-				5517FC0D263D49BC000219EC /* ringbuffer.cpp */,
+				5517FC0B263D49BC000219EC /* hidapi.h */,
 				5517FC0E263D49BC000219EC /* inifile_usb.cpp */,
-				5517FC0F263D49BC000219EC /* ringbuffer.h */,
 				5517FC10263D49BC000219EC /* inifile_usb.h */,
+				5517FC08263D49BC000219EC /* rawinput_usb.cpp */,
+				5517FC0A263D49BC000219EC /* rawinput_usb.h */,
+				5517FC0D263D49BC000219EC /* ringbuffer.cpp */,
+				5517FC0F263D49BC000219EC /* ringbuffer.h */,
+				5517FC09263D49BC000219EC /* shared_usb.cpp */,
 				5517FC11263D49BC000219EC /* shared_usb.h */,
 			);
 			path = shared;
@@ -5786,10 +5763,10 @@
 		5517FC21263D49BC000219EC /* usb-msd */ = {
 			isa = PBXGroup;
 			children = (
-				5517FC22263D49BC000219EC /* usb-msd.h */,
-				5517FC23263D49BC000219EC /* usb-msd.cpp */,
 				5517FC24263D49BC000219EC /* usb-msd-gtk.cpp */,
 				5517FC25263D49BC000219EC /* usb-msd-win32.cpp */,
+				5517FC23263D49BC000219EC /* usb-msd.cpp */,
+				5517FC22263D49BC000219EC /* usb-msd.h */,
 			);
 			path = "usb-msd";
 			sourceTree = "<group>";
@@ -5813,21 +5790,21 @@
 		5517FC36263D49BC000219EC /* usb-mic */ = {
 			isa = PBXGroup;
 			children = (
-				5517FC37263D49BC000219EC /* usb-mic-singstar.cpp */,
-				5517FC38263D49BC000219EC /* api_init_win32_mic.cpp */,
-				5517FC39263D49BC000219EC /* audiodeviceproxy.h */,
-				5517FC3A263D49BC000219EC /* audiodev-pulse.cpp */,
-				5517FC3B263D49BC000219EC /* audiodev.h */,
-				5517FC3C263D49BC000219EC /* audiodev-wasapi.h */,
-				5517FC3D263D49BC000219EC /* audio.h */,
-				5517FC3E263D49BC000219EC /* audiodev-pulse.h */,
-				5517FC3F263D49BC000219EC /* usb-headset.cpp */,
-				5517FC40263D49BC000219EC /* usb-mic-singstar.h */,
-				5517FC41263D49BC000219EC /* usb-mic-logitech.cpp */,
-				5517FC42263D49BC000219EC /* audiodev-wasapi.cpp */,
-				5517FC43263D49BC000219EC /* audiodev-noop.h */,
 				5517FC44263D49BC000219EC /* api_init_linux.cpp */,
+				5517FC38263D49BC000219EC /* api_init_win32_mic.cpp */,
+				5517FC3D263D49BC000219EC /* audio.h */,
+				5517FC43263D49BC000219EC /* audiodev-noop.h */,
+				5517FC3A263D49BC000219EC /* audiodev-pulse.cpp */,
+				5517FC3E263D49BC000219EC /* audiodev-pulse.h */,
+				5517FC42263D49BC000219EC /* audiodev-wasapi.cpp */,
+				5517FC3C263D49BC000219EC /* audiodev-wasapi.h */,
+				5517FC3B263D49BC000219EC /* audiodev.h */,
+				5517FC39263D49BC000219EC /* audiodeviceproxy.h */,
+				5517FC3F263D49BC000219EC /* usb-headset.cpp */,
 				5517FC45263D49BC000219EC /* usb-headset.h */,
+				5517FC41263D49BC000219EC /* usb-mic-logitech.cpp */,
+				5517FC37263D49BC000219EC /* usb-mic-singstar.cpp */,
+				5517FC40263D49BC000219EC /* usb-mic-singstar.h */,
 			);
 			path = "usb-mic";
 			sourceTree = "<group>";
@@ -5840,7 +5817,6 @@
 				5517FC5F263D49BC000219EC /* bitjuggling.cpp */,
 				5517FC57263D49BC000219EC /* dx */,
 				5517FC49263D49BC000219EC /* evdev */,
-				5517FC51263D49BC000219EC /* joydev */,
 				5517FC61263D49BC000219EC /* lg */,
 				5517FC48263D49BC000219EC /* padproxy.h */,
 				5517FC66263D49BC000219EC /* raw */,
@@ -5855,37 +5831,27 @@
 		5517FC49263D49BC000219EC /* evdev */ = {
 			isa = PBXGroup;
 			children = (
-				5517FC4A263D49BC000219EC /* shared-gtk.cpp */,
-				5517FC4B263D49BC000219EC /* shared.h */,
 				5517FC4C263D49BC000219EC /* evdev-ff.cpp */,
 				5517FC4D263D49BC000219EC /* evdev-ff.h */,
-				5517FC4E263D49BC000219EC /* evdev.h */,
 				5517FC4F263D49BC000219EC /* evdev-gtk.cpp */,
 				5517FC50263D49BC000219EC /* evdev.cpp */,
+				5517FC4E263D49BC000219EC /* evdev.h */,
+				5517FC4A263D49BC000219EC /* shared-gtk.cpp */,
+				5517FC4B263D49BC000219EC /* shared.h */,
 			);
 			path = evdev;
-			sourceTree = "<group>";
-		};
-		5517FC51263D49BC000219EC /* joydev */ = {
-			isa = PBXGroup;
-			children = (
-				5517FC52263D49BC000219EC /* joydev-gtk.cpp */,
-				5517FC53263D49BC000219EC /* joydev.cpp */,
-				5517FC54263D49BC000219EC /* joydev.h */,
-			);
-			path = joydev;
 			sourceTree = "<group>";
 		};
 		5517FC57263D49BC000219EC /* dx */ = {
 			isa = PBXGroup;
 			children = (
-				5517FC58263D49BC000219EC /* usb-pad-dx.h */,
-				5517FC59263D49BC000219EC /* dinput.cpp */,
-				5517FC5A263D49BC000219EC /* versionproxy.rc */,
-				5517FC5B263D49BC000219EC /* usb-pad-dx.cpp */,
 				5517FC5C263D49BC000219EC /* dinput-config.cpp */,
+				5517FC59263D49BC000219EC /* dinput.cpp */,
 				5517FC5D263D49BC000219EC /* dx.h */,
+				5517FC5B263D49BC000219EC /* usb-pad-dx.cpp */,
+				5517FC58263D49BC000219EC /* usb-pad-dx.h */,
 				5517FC5E263D49BC000219EC /* versionproxy.h */,
+				5517FC5A263D49BC000219EC /* versionproxy.rc */,
 			);
 			path = dx;
 			sourceTree = "<group>";
@@ -5893,8 +5859,8 @@
 		5517FC61263D49BC000219EC /* lg */ = {
 			isa = PBXGroup;
 			children = (
-				5517FC62263D49BC000219EC /* lg_ff.h */,
 				5517FC63263D49BC000219EC /* lg_ff.cpp */,
+				5517FC62263D49BC000219EC /* lg_ff.h */,
 			);
 			path = lg;
 			sourceTree = "<group>";
@@ -5902,11 +5868,11 @@
 		5517FC66263D49BC000219EC /* raw */ = {
 			isa = PBXGroup;
 			children = (
-				5517FC67263D49BC000219EC /* raw-config.cpp */,
-				5517FC68263D49BC000219EC /* usb-pad-raw.h */,
-				5517FC69263D49BC000219EC /* usb-pad-raw.cpp */,
-				5517FC6A263D49BC000219EC /* raw-config.rc */,
 				5517FC6B263D49BC000219EC /* raw-config-res.h */,
+				5517FC67263D49BC000219EC /* raw-config.cpp */,
+				5517FC6A263D49BC000219EC /* raw-config.rc */,
+				5517FC69263D49BC000219EC /* usb-pad-raw.cpp */,
+				5517FC68263D49BC000219EC /* usb-pad-raw.h */,
 			);
 			path = raw;
 			sourceTree = "<group>";
@@ -5914,32 +5880,21 @@
 		5517FC75263D49BC000219EC /* usb-eyetoy */ = {
 			isa = PBXGroup;
 			children = (
+				5517FC83263D49BC000219EC /* api_init_linux.cpp */,
 				5517FC76263D49BC000219EC /* api_init_win32_eyetoy.cpp */,
-				5517FC77263D49BC000219EC /* jo_mpeg.cpp */,
-				5517FC78263D49BC000219EC /* videodeviceproxy.h */,
 				5517FC79263D49BC000219EC /* cam-linux.cpp */,
 				5517FC7A263D49BC000219EC /* cam-linux.h */,
-				5517FC7B263D49BC000219EC /* videodev.h */,
-				5517FC7C263D49BC000219EC /* jo_mpeg.h */,
-				5517FC7D263D49BC000219EC /* usb-eyetoy-webcam.h */,
-				5517FC7E263D49BC000219EC /* ov519.h */,
-				5517FC7F263D49BC000219EC /* jpgd */,
-				5517FC83263D49BC000219EC /* api_init_linux.cpp */,
-				5517FC84263D49BC000219EC /* usb-eyetoy-webcam.cpp */,
 				5517FC85263D49BC000219EC /* cam-windows.cpp */,
 				5517FC86263D49BC000219EC /* cam-windows.h */,
+				5517FC77263D49BC000219EC /* jo_mpeg.cpp */,
+				5517FC7C263D49BC000219EC /* jo_mpeg.h */,
+				5517FC7E263D49BC000219EC /* ov519.h */,
+				5517FC84263D49BC000219EC /* usb-eyetoy-webcam.cpp */,
+				5517FC7D263D49BC000219EC /* usb-eyetoy-webcam.h */,
+				5517FC7B263D49BC000219EC /* videodev.h */,
+				5517FC78263D49BC000219EC /* videodeviceproxy.h */,
 			);
 			path = "usb-eyetoy";
-			sourceTree = "<group>";
-		};
-		5517FC7F263D49BC000219EC /* jpgd */ = {
-			isa = PBXGroup;
-			children = (
-				5517FC80263D49BC000219EC /* jpgd.h */,
-				5517FC81263D49BC000219EC /* jpgd_idct.h */,
-				5517FC82263D49BC000219EC /* jpgd.cpp */,
-			);
-			path = jpgd;
 			sourceTree = "<group>";
 		};
 		5517FC89263D49BC000219EC /* CDVD */ = {
@@ -7736,8 +7691,6 @@
 			isa = PBXGroup;
 			children = (
 				558063EB27AB4B9E008CD5D2 /* AUTHORS */,
-				558063D627AB4B9E008CD5D2 /* cmake */,
-				558063C127AB4B9E008CD5D2 /* CMakeLists.txt */,
 				558063F027AB4B9E008CD5D2 /* docs */,
 				558063EC27AB4B9E008CD5D2 /* include */,
 				558063EF27AB4B9E008CD5D2 /* INSTALL.md */,
@@ -7782,61 +7735,6 @@
 				558063D527AB4B9E008CD5D2 /* test_record.cpp */,
 			);
 			path = test;
-			sourceTree = "<group>";
-		};
-		558063D627AB4B9E008CD5D2 /* cmake */ = {
-			isa = PBXGroup;
-			children = (
-				558063D727AB4B9E008CD5D2 /* sanitizers-cmake */,
-				558063E827AB4B9E008CD5D2 /* toolchain-cross-mingw.cmake */,
-				558063E927AB4B9E008CD5D2 /* compile_tests */,
-			);
-			path = cmake;
-			sourceTree = "<group>";
-		};
-		558063D727AB4B9E008CD5D2 /* sanitizers-cmake */ = {
-			isa = PBXGroup;
-			children = (
-				558063D827AB4B9E008CD5D2 /* CMakeLists.txt */,
-				558063D927AB4B9E008CD5D2 /* LICENSE */,
-				558063DA27AB4B9E008CD5D2 /* cmake */,
-				558063E227AB4B9E008CD5D2 /* tests */,
-				558063E627AB4B9E008CD5D2 /* README.md */,
-				558063E727AB4B9E008CD5D2 /* .gitignore */,
-			);
-			path = "sanitizers-cmake";
-			sourceTree = "<group>";
-		};
-		558063DA27AB4B9E008CD5D2 /* cmake */ = {
-			isa = PBXGroup;
-			children = (
-				558063DB27AB4B9E008CD5D2 /* sanitize-helpers.cmake */,
-				558063DC27AB4B9E008CD5D2 /* FindMSan.cmake */,
-				558063DD27AB4B9E008CD5D2 /* asan-wrapper */,
-				558063DE27AB4B9E008CD5D2 /* FindUBSan.cmake */,
-				558063DF27AB4B9E008CD5D2 /* FindSanitizers.cmake */,
-				558063E027AB4B9E008CD5D2 /* FindTSan.cmake */,
-				558063E127AB4B9E008CD5D2 /* FindASan.cmake */,
-			);
-			path = cmake;
-			sourceTree = "<group>";
-		};
-		558063E227AB4B9E008CD5D2 /* tests */ = {
-			isa = PBXGroup;
-			children = (
-				558063E327AB4B9E008CD5D2 /* asan_test.cpp */,
-				558063E427AB4B9E008CD5D2 /* CMakeLists.txt */,
-				558063E527AB4B9E008CD5D2 /* shortest.ext.test.cpp */,
-			);
-			path = tests;
-			sourceTree = "<group>";
-		};
-		558063E927AB4B9E008CD5D2 /* compile_tests */ = {
-			isa = PBXGroup;
-			children = (
-				558063EA27AB4B9E008CD5D2 /* oss_is_v4.c */,
-			);
-			path = compile_tests;
 			sourceTree = "<group>";
 		};
 		558063EC27AB4B9E008CD5D2 /* include */ = {
@@ -10232,6 +10130,10 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				EXECUTABLE_PREFIX = lib;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"USE_AUDIOUNIT=1",
+					"$(inherited)",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				STRIP_INSTALLED_PRODUCT = NO;
@@ -10245,6 +10147,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				EXECUTABLE_PREFIX = lib;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"USE_AUDIOUNIT=1",
+					"$(inherited)",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				STRIP_INSTALLED_PRODUCT = NO;
