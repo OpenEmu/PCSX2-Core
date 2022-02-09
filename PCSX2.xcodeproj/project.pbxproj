@@ -10130,13 +10130,11 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				EXECUTABLE_PREFIX = lib;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"USE_AUDIOUNIT=1",
-					"$(inherited)",
-				);
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				STRIP_INSTALLED_PRODUCT = NO;
+				SYSTEM_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/pcsx2/3rdparty/cubeb/cubeb/subprojects\"";
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/pcsx2/3rdparty/cubeb/cubeb/include\"";
 			};
 			name = Debug;
@@ -10147,13 +10145,11 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				EXECUTABLE_PREFIX = lib;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"USE_AUDIOUNIT=1",
-					"$(inherited)",
-				);
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				STRIP_INSTALLED_PRODUCT = NO;
+				SYSTEM_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/pcsx2/3rdparty/cubeb/cubeb/subprojects\"";
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/pcsx2/3rdparty/cubeb/cubeb/include\"";
 			};
 			name = Release;
