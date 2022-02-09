@@ -642,6 +642,12 @@
 		5580663A27AD3B3D008CD5D2 /* merge.glsl in Copy Vulkan Shaders */ = {isa = PBXBuildFile; fileRef = 558065BC27AD3A31008CD5D2 /* merge.glsl */; };
 		5580663B27AD3B3F008CD5D2 /* tfx.glsl in Copy Vulkan Shaders */ = {isa = PBXBuildFile; fileRef = 558065BA27AD3A31008CD5D2 /* tfx.glsl */; };
 		5580663D27AD3B78008CD5D2 /* fxaa.fx in Copy Common Shaders */ = {isa = PBXBuildFile; fileRef = 558065B727AD3A31008CD5D2 /* fxaa.fx */; };
+		5591D80627B4675A0073E97D /* cubeb_resampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 558064D527AB4B9E008CD5D2 /* cubeb_resampler.cpp */; };
+		5591D80827B468810073E97D /* resample.c in Sources */ = {isa = PBXBuildFile; fileRef = 558064BF27AB4B9E008CD5D2 /* resample.c */; };
+		5591D80A27B468F70073E97D /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5591D80927B468F70073E97D /* AudioUnit.framework */; };
+		5591D80C27B469200073E97D /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5591D80B27B469200073E97D /* CoreAudio.framework */; };
+		5591D80D27B4693D0073E97D /* cubeb_utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 558064CA27AB4B9E008CD5D2 /* cubeb_utils.cpp */; };
+		5591D80E27B469600073E97D /* cubeb_osx_run_loop.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 558064C627AB4B9E008CD5D2 /* cubeb_osx_run_loop.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -3386,6 +3392,8 @@
 		5580662B27AD3A31008CD5D2 /* GS.fx */ = {isa = PBXFileReference; lastKnownFileType = text; path = GS.fx; sourceTree = "<group>"; };
 		5580662C27AD3A31008CD5D2 /* PCSX2_keys.ini.default */ = {isa = PBXFileReference; lastKnownFileType = text; path = PCSX2_keys.ini.default; sourceTree = "<group>"; };
 		5580662D27AD3A31008CD5D2 /* portable.ini */ = {isa = PBXFileReference; lastKnownFileType = text; path = portable.ini; sourceTree = "<group>"; };
+		5591D80927B468F70073E97D /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
+		5591D80B27B469200073E97D /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -3393,6 +3401,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5591D80C27B469200073E97D /* CoreAudio.framework in Frameworks */,
+				5591D80A27B468F70073E97D /* AudioUnit.framework in Frameworks */,
 				5580652D27AB504C008CD5D2 /* libxml2.tbd in Frameworks */,
 				5580652427AB4CD7008CD5D2 /* libcubeb-pcsx2.a in Frameworks */,
 				551AA4E12793741F00658151 /* libglad-pcsx2.a in Frameworks */,
@@ -3881,6 +3891,8 @@
 		5517E8BE263D4361000219EC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5591D80B27B469200073E97D /* CoreAudio.framework */,
+				5591D80927B468F70073E97D /* AudioUnit.framework */,
 				5580652C27AB504C008CD5D2 /* libxml2.tbd */,
 				551AA16F2792B1A100658151 /* Metal.framework */,
 				551BF696264242A80008C529 /* QuartzCore.framework */,
@@ -9318,11 +9330,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5591D80E27B469600073E97D /* cubeb_osx_run_loop.cpp in Sources */,
 				5580652027AB4C93008CD5D2 /* cubeb_strings.c in Sources */,
+				5591D80D27B4693D0073E97D /* cubeb_utils.cpp in Sources */,
 				5580651E27AB4C23008CD5D2 /* cubeb.c in Sources */,
+				5591D80827B468810073E97D /* resample.c in Sources */,
 				5580652527AB4DAF008CD5D2 /* cubeb_log.cpp in Sources */,
 				5580652127AB4CBA008CD5D2 /* cubeb_audiounit.cpp in Sources */,
 				5580651F27AB4C85008CD5D2 /* cubeb_mixer.cpp in Sources */,
+				5591D80627B4675A0073E97D /* cubeb_resampler.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10130,11 +10146,21 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				EXECUTABLE_PREFIX = lib;
-				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"USE_AUDIOUNIT=1",
+					"$(inherited)",
+					OUTSIDE_SPEEX,
+					"RANDOM_PREFIX=oepsx2",
+					"EXPORT=\"\"",
+					FLOATING_POINT,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				STRIP_INSTALLED_PRODUCT = NO;
-				SYSTEM_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/pcsx2/3rdparty/cubeb/cubeb/subprojects\"";
+				SYSTEM_HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/pcsx2/3rdparty/cubeb/cubeb/subprojects\"",
+					"\"$(SRCROOT)/pcsx2/3rdparty/cubeb/cubeb/include\"",
+				);
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/pcsx2/3rdparty/cubeb/cubeb/include\"";
 			};
 			name = Debug;
@@ -10145,11 +10171,21 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				EXECUTABLE_PREFIX = lib;
-				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"USE_AUDIOUNIT=1",
+					"$(inherited)",
+					OUTSIDE_SPEEX,
+					"RANDOM_PREFIX=oepsx2",
+					"EXPORT=\"\"",
+					FLOATING_POINT,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				STRIP_INSTALLED_PRODUCT = NO;
-				SYSTEM_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/pcsx2/3rdparty/cubeb/cubeb/subprojects\"";
+				SYSTEM_HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/pcsx2/3rdparty/cubeb/cubeb/subprojects\"",
+					"\"$(SRCROOT)/pcsx2/3rdparty/cubeb/cubeb/include\"",
+				);
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/pcsx2/3rdparty/cubeb/cubeb/include\"";
 			};
 			name = Release;
