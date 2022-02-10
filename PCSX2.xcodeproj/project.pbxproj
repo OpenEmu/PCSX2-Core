@@ -7784,14 +7784,14 @@
 		558064BA27AB4B9E008CD5D2 /* speex */ = {
 			isa = PBXGroup;
 			children = (
-				558064BB27AB4B9E008CD5D2 /* speex_config_types.h */,
-				558064BC27AB4B9E008CD5D2 /* stack_alloc.h */,
-				558064BD27AB4B9E008CD5D2 /* speex_resampler.h */,
+				558064C227AB4B9E008CD5D2 /* arch.h */,
 				558064BE27AB4B9E008CD5D2 /* fixed_generic.h */,
-				558064BF27AB4B9E008CD5D2 /* resample.c */,
 				558064C027AB4B9E008CD5D2 /* resample_neon.h */,
 				558064C127AB4B9E008CD5D2 /* resample_sse.h */,
-				558064C227AB4B9E008CD5D2 /* arch.h */,
+				558064BF27AB4B9E008CD5D2 /* resample.c */,
+				558064BB27AB4B9E008CD5D2 /* speex_config_types.h */,
+				558064BD27AB4B9E008CD5D2 /* speex_resampler.h */,
+				558064BC27AB4B9E008CD5D2 /* stack_alloc.h */,
 			);
 			path = speex;
 			sourceTree = "<group>";
@@ -10171,10 +10171,12 @@
 				);
 				"GCC_PREPROCESSOR_DEFINITIONS[arch=x86_64]" = (
 					_USE_SSE,
+					_USE_SSE2,
 					"$(inherited)",
 				);
 				"GCC_PREPROCESSOR_DEFINITIONS[arch=x86_64h]" = (
 					_USE_SSE,
+					_USE_SSE2,
 					"$(inherited)",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -10212,10 +10214,12 @@
 				);
 				"GCC_PREPROCESSOR_DEFINITIONS[arch=x86_64]" = (
 					_USE_SSE,
+					_USE_SSE2,
 					"$(inherited)",
 				);
 				"GCC_PREPROCESSOR_DEFINITIONS[arch=x86_64h]" = (
 					_USE_SSE,
+					_USE_SSE2,
 					"$(inherited)",
 				);
 				LLVM_LTO = YES_THIN;
