@@ -9610,6 +9610,7 @@
 				);
 				INFOPLIST_FILE = Resources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				LLVM_LTO = YES_THIN;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.openemu.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -9827,6 +9828,7 @@
 					"\"$(SRCROOT)/WxBridging\"",
 					"\"$(SRCROOT)/pcsx2/common/include/x86emitter\"",
 				);
+				LLVM_LTO = YES_THIN;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				STRIP_INSTALLED_PRODUCT = NO;
@@ -9879,6 +9881,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				EXECUTABLE_PREFIX = lib;
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				LLVM_LTO = YES_THIN;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				STRIP_INSTALLED_PRODUCT = NO;
@@ -9928,6 +9931,7 @@
 					"WX_PRECOMP=1",
 				);
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/WxBridging\"";
+				LLVM_LTO = YES_THIN;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				STRIP_INSTALLED_PRODUCT = NO;
@@ -10006,6 +10010,7 @@
 					"\"$(SRCROOT)/pcsx2/\"",
 					"\"$(SRCROOT)/pcsx2/3rdparty/include\"",
 				);
+				LLVM_LTO = YES_THIN;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				STRIP_INSTALLED_PRODUCT = NO;
@@ -10033,6 +10038,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				EXECUTABLE_PREFIX = lib;
+				LLVM_LTO = YES_THIN;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				STRIP_INSTALLED_PRODUCT = NO;
@@ -10135,6 +10141,7 @@
 					"\"$(SRCROOT)/WxBridging\"",
 					"\"$(SRCROOT)/pcsx2/common/include/x86emitter\"",
 				);
+				LLVM_LTO = YES_THIN;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				STRIP_INSTALLED_PRODUCT = NO;
@@ -10153,6 +10160,22 @@
 					"RANDOM_PREFIX=oepsx2",
 					"EXPORT=\"\"",
 					FLOATING_POINT,
+				);
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=arm64]" = (
+					_USE_NEON,
+					"$(inherited)",
+				);
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=arm64e]" = (
+					_USE_NEON,
+					"$(inherited)",
+				);
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=x86_64]" = (
+					_USE_SSE,
+					"$(inherited)",
+				);
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=x86_64h]" = (
+					_USE_SSE,
+					"$(inherited)",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -10179,6 +10202,23 @@
 					"EXPORT=\"\"",
 					FLOATING_POINT,
 				);
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=arm64]" = (
+					_USE_NEON,
+					"$(inherited)",
+				);
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=arm64e]" = (
+					_USE_NEON,
+					"$(inherited)",
+				);
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=x86_64]" = (
+					_USE_SSE,
+					"$(inherited)",
+				);
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=x86_64h]" = (
+					_USE_SSE,
+					"$(inherited)",
+				);
+				LLVM_LTO = YES_THIN;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				STRIP_INSTALLED_PRODUCT = NO;
