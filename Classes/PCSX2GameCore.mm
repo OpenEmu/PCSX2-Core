@@ -146,11 +146,11 @@ PCSX2GameCore *_current;
 	
 	EmuConfig.Mcd[0].Enabled = true;
 	EmuConfig.Mcd[0].Type = MemoryCardType::Folder;
-	EmuConfig.Mcd[0].Filename = "Memory folder 1";
+	EmuConfig.Mcd[0].Filename = "Memory folder 1.ps2";
 
 	EmuConfig.Mcd[1].Enabled = true;
 	EmuConfig.Mcd[1].Type = MemoryCardType::Folder;
-	EmuConfig.Mcd[1].Filename = "Memory folder 2";
+	EmuConfig.Mcd[1].Filename = "Memory folder 2.ps2";
 	
 	// TODO: select based on loaded game's region?
 	EmuConfig.BaseFilenames.Bios = "scph39001.bin";
@@ -317,17 +317,17 @@ PCSX2GameCore *_current;
 #pragma mark Input
 - (oneway void)didMovePS2JoystickDirection:(OEPS2Button)button withValue:(CGFloat)value forPlayer:(NSUInteger)player
 {
-	g_key_status.Set(player-=1, ps2keymap[button].ps2key , value);
+	g_key_status.Set(player - 1, ps2keymap[button].ps2key , value);
 }
 
 - (oneway void)didPushPS2Button:(OEPS2Button)button forPlayer:(NSUInteger)player
 {
-	g_key_status.Set(player-=1, ps2keymap[button].ps2key , 1.0f);
+	g_key_status.Set(player - 1, ps2keymap[button].ps2key , 1.0f);
 	
 }
 
 - (oneway void)didReleasePS2Button:(OEPS2Button)button forPlayer:(NSUInteger)player {
-	g_key_status.Set(player-=1, ps2keymap[button].ps2key, 0.0f);
+	g_key_status.Set(player - 1, ps2keymap[button].ps2key, 0.0f);
 }
 
 #pragma mark - Discs
@@ -554,7 +554,7 @@ HostDisplay* Host::GetHostDisplay()
 {
 	GET_CURRENT_OR_RETURN(nullptr);
 	
-	current.renderDelegate.willRenderFrameOnAlternateThread;
+	[current.renderDelegate willRenderFrameOnAlternateThread];
 	return current->hostDisplay.get();
 }
 
