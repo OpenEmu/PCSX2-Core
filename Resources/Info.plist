@@ -28,6 +28,8 @@
 	<dict>
 		<key>openemu.system.ps2</key>
 		<dict>
+			<key>OEGameCoreSaveStatesNotSupported</key>
+			<true/>
 			<key>OEGameCoreHasGlitches</key>
 			<true/>
 			<key>OEGameCoreSupportsCheatCode</key>
