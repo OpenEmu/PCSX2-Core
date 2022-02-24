@@ -23,21 +23,35 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import "PCSX2GameCore.h"
+#import <OpenEmuBase/OETimingUtils.h>
+#import <OpenEmuBase/OERingBuffer.h>
+#include "Audio/OESndOut.h"
+#include "Input/keymap.h"
 
 #define BOOL PCSX2BOOL
-#include "../pcsx2/pcsx2/PrecompiledHeader.h"
-#include "../pcsx2/pcsx2/GS.h"
-#include "../pcsx2/pcsx2/Host.h"
-#include "../pcsx2/pcsx2/HostDisplay.h"
-#include "../pcsx2/pcsx2/VMManager.h"
-#include "../pcsx2/pcsx2/Frontend/InputManager.h"
-#include "../pcsx2/pcsx2/Frontend/OpenGLHostDisplay.h"
-#include "../pcsx2/pcsx2/CDVD/CDVDaccess.h"
-#include "../pcsx2/pcsx2/SPU2/Global.h"
-#include "../pcsx2/pcsx2/SPU2/SndOut.h"
-#include "../pcsx2/pcsx2/R3000A.h"
+#include "PrecompiledHeader.h"
+#include "GS.h"
+#include "HostSettings.h"
+#include "HostDisplay.h"
+#include "VMManager.h"
+#include "AppConfig.h"
+#include "Frontend/InputManager.h"
+#include "Frontend/INISettingsInterface.h"
+#include "Frontend/OpenGLHostDisplay.h"
+#include "common/SettingsWrapper.h"
+#include "CDVD/CDVDaccess.h"
+#include "SPU2/Global.h"
+#include "SPU2/SndOut.h"
+#include "PAD/Host/KeyStatus.h"
+#include "R3000A.h"
 #include "MTVU.h"
 #undef BOOL
+
+#include <OpenGL/gl3.h>
+#include <OpenGL/gl3ext.h>
+
+std::unique_ptr<AppConfig> g_Conf;
+static bool ExitRequested = false;
 
 bool renderswitch = false;
 
@@ -47,7 +61,7 @@ namespace GSDump
 }
 
 alignas(16) static SysMtgsThread s_mtgs_thread;
-static __weak PCSX2GameCore *_current;
+PCSX2GameCore *_current;
 
 @interface PCSX2GameCore ()
 
@@ -55,54 +69,60 @@ static __weak PCSX2GameCore *_current;
 
 @implementation PCSX2GameCore {
 	@package
-	HostDisplay *hostDisplay;
+	bool hasInitialized;
+	NSString* gamePath;
+	std::unique_ptr<INISettingsInterface> s_base_settings_interface;
+	std::unique_ptr<HostDisplay> hostDisplay;
+	
+	VMBootParameters params;
 }
 
 - (instancetype)init
 {
 	if (self = [super init]) {
+		_current = self;
 		VMManager::InitializeMemory();
 	}
 	return self;
 }
 
-- (oneway void)didMovePS2JoystickDirection:(OEPS2Button)button withValue:(CGFloat)value forPlayer:(NSUInteger)player
-{
-	
-}
-
-- (oneway void)didPushPS2Button:(OEPS2Button)button forPlayer:(NSUInteger)player
-{
-	
-}
-
-- (oneway void)didReleasePS2Button:(OEPS2Button)button forPlayer:(NSUInteger)player {
-	
-}
-
 - (BOOL)loadFileAtPath:(NSString *)path error:(NSError **)error
-{
-	bool success = VMManager::ChangeDisc(path.fileSystemRepresentation);
-	if (!success && error) {
-		*error = [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotLoadROMError userInfo:nil];
-	}
-	return success;
+{    gamePath = path;
+	return true;
 }
 
 - (void)loadStateFromFileAtPath:(NSString *)fileName completionHandler:(void (^)(BOOL, NSError *))block
 {
-	bool success = VMManager::LoadState(fileName.fileSystemRepresentation);
-	block(success, success ? nil : [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotLoadStateError userInfo:@{NSFilePathErrorKey: fileName}]);
+	bool success = true; //VMManager::LoadState(fileName.fileSystemRepresentation);
+	//block(success, success ? nil : [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotLoadStateError userInfo:@{NSFilePathErrorKey: fileName}]);
+	block(success, nil);
 }
 
 - (void)saveStateToFileAtPath:(NSString *)fileName completionHandler:(void (^)(BOOL, NSError *))block
 {
-	bool success = VMManager::SaveState(fileName.fileSystemRepresentation);
-	block(success, success ? nil : [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotSaveStateError userInfo:@{NSFilePathErrorKey: fileName}]);
+	Console.Error("SaveState Requested");
+	bool success = true ; //VMManager::SaveState(fileName.fileSystemRepresentation);
+	//block(success, success ? nil : [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotSaveStateError userInfo:@{NSFilePathErrorKey: fileName}]);
+	block(success, nil);
 }
 
 - (void)setupEmulation
 {
+	const std::string pcsx2ini(Path::CombineStdString([self.supportDirectoryPath stringByAppendingString:@"/inis"].fileSystemRepresentation, "PCSX2.ini"));
+	s_base_settings_interface = std::make_unique<INISettingsInterface>(std::move(pcsx2ini));
+	Host::Internal::SetBaseSettingsLayer(s_base_settings_interface.get());
+	
+	//EmuConfig = Pcsx2Config();
+	EmuFolders::SetDefaults();
+
+	SettingsInterface& si = *s_base_settings_interface.get();
+	si.SetUIntValue("UI", "SettingsVersion", 1);
+
+	{
+		SettingsSaveWrapper wrapper(si);
+		EmuConfig.LoadSave(wrapper);
+	}
+
 	NSString *path = self.batterySavesDirectoryPath;
 	if (![[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:NULL]) {
 		[[NSFileManager defaultManager] createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:NULL];
@@ -112,16 +132,17 @@ static __weak PCSX2GameCore *_current;
 	EmuFolders::Bios = self.biosDirectoryPath.fileSystemRepresentation;
 	EmuFolders::AppRoot = [[NSBundle bundleForClass:[self class]] resourceURL].fileSystemRepresentation;
 	EmuFolders::DataRoot = self.supportDirectoryPath.fileSystemRepresentation;
-	EmuFolders::Settings = [self.supportDirectoryPath stringByAppendingString:@"ini"].fileSystemRepresentation;
+	EmuFolders::Settings = [self.supportDirectoryPath stringByAppendingString:@"/inis"].fileSystemRepresentation;
 	EmuFolders::Resources = [[NSBundle bundleForClass:[self class]] resourceURL].fileSystemRepresentation;
-	EmuFolders::Cache = [self.supportDirectoryPath stringByAppendingString:@"Cache"].fileSystemRepresentation;
-	EmuFolders::Snapshots = [self.supportDirectoryPath stringByAppendingString:@"snaps"].fileSystemRepresentation;
-	EmuFolders::Savestates = [self.supportDirectoryPath stringByAppendingString:@"sstates"].fileSystemRepresentation;
-	EmuFolders::Logs = [self.supportDirectoryPath stringByAppendingString:@"Logs"].fileSystemRepresentation;
-	EmuFolders::Cheats = [self.supportDirectoryPath stringByAppendingString:@"Cheats"].fileSystemRepresentation;
-	EmuFolders::CheatsWS = [self.supportDirectoryPath stringByAppendingString:@"cheats_ws"].fileSystemRepresentation;
-	EmuFolders::Covers = [self.supportDirectoryPath stringByAppendingString:@"Covers"].fileSystemRepresentation;
-	EmuFolders::GameSettings = [self.supportDirectoryPath stringByAppendingString:@"gamesettings"].fileSystemRepresentation;
+	EmuFolders::Cache = [self.supportDirectoryPath stringByAppendingString:@"/Cache"].fileSystemRepresentation;
+	EmuFolders::Snapshots = [self.supportDirectoryPath stringByAppendingString:@"/snaps"].fileSystemRepresentation;
+	EmuFolders::Savestates = [self.supportDirectoryPath stringByAppendingString:@"/sstates"].fileSystemRepresentation;
+	EmuFolders::Logs = [self.supportDirectoryPath stringByAppendingString:@"/Logs"].fileSystemRepresentation;
+	EmuFolders::Cheats = [self.supportDirectoryPath stringByAppendingString:@"/Cheats"].fileSystemRepresentation;
+	EmuFolders::CheatsWS = [self.supportDirectoryPath stringByAppendingString:@"/cheats_ws"].fileSystemRepresentation;
+	EmuFolders::Covers = [self.supportDirectoryPath stringByAppendingString:@"/Covers"].fileSystemRepresentation;
+	EmuFolders::GameSettings = [self.supportDirectoryPath stringByAppendingString:@"/gamesettings"].fileSystemRepresentation;
+	EmuFolders::EnsureFoldersExist();
 	
 	EmuConfig.Mcd[0].Enabled = true;
 	EmuConfig.Mcd[0].Type = MemoryCardType::Folder;
@@ -134,39 +155,114 @@ static __weak PCSX2GameCore *_current;
 	// TODO: select based on loaded game's region?
 	EmuConfig.BaseFilenames.Bios = "scph39001.bin";
 	
+#ifdef DEBUG
+	si.SetBoolValue("EmuCore/CPU/Recompiler", "EnableEE", false);
+#else
+	si.SetBoolValue("EmuCore/CPU/Recompiler", "EnableEE", true);
+#endif
+	si.SetBoolValue("EmuCore/CPU/Recompiler", "EnableEECache", false);
+	si.SetBoolValue("EmuCore/CPU/Recompiler", "EnableIOP", true);
+	si.SetBoolValue("EmuCore/CPU/Recompiler", "EnableVU0", true);
+	si.SetBoolValue("EmuCore/CPU/Recompiler", "EnableVU1", true);
+	si.SetStringValue("EmuCore/SPU2", "OutputModule", "NullOut");
+	si.SetBoolValue("", "EnableGameFixes", true);
+	si.SetBoolValue("EmuCore", "EnablePatches", true);
+	si.SetBoolValue("EmuCore", "EnableCheats", false);
+	si.SetBoolValue("EmuCore", "EnablePerGameSettings", true);
+	si.SetBoolValue("EmuCore", "HostFs", false);
+	si.SetBoolValue("EmuCore/Speedhacks", "vuFlagHack", true);
+	si.SetBoolValue("EmuCore/Speedhacks", "IntcStat", true);
+	si.SetBoolValue("EmuCore/Speedhacks", "WaitLoop", true);
+	si.SetIntValue("EmuCore/GS", "FramesToDraw", 1);
+	si.SetIntValue("EmuCore/GS", "upscale_multiplier", 2);
+	si.SetBoolValue("EmuCore/GS", "FrameLimitEnable", true);
+	si.SetBoolValue("EmuCore/GS", "SyncToHostRefreshRate",false);
+	si.SetBoolValue("EmuCore/GS", "UserHacks", true);
+	si.SetBoolValue("EmuCore/GS", "UserHacks_WildHack", true);
+	
 	wxModule::RegisterModules();
 	wxModule::InitializeModules();
 }
 
 - (void)resetEmulation
 {
-	VMManager::Reset();
+	VMManager::SetState(VMState::Stopping);
 }
 
+- (void)setPauseEmulation:(BOOL)pauseEmulation
+{
+	if (pauseEmulation)
+		VMManager::SetState(VMState::Paused);
+	else
+		VMManager::SetState(VMState::Running);
+}
 - (void)startEmulation
 {
 	[super startEmulation];
-	VMBootParameters params;
-	params.source = "";
+	
+	[self.renderDelegate willRenderFrameOnAlternateThread];
+	[self.renderDelegate suspendFPSLimiting];
+	
+	params.source = gamePath.fileSystemRepresentation;
 	params.save_state = "";
-	params.source_type = CDVD_SourceType::NoDisc;
+	params.source_type = CDVD_SourceType::Iso;
 	params.elf_override = "";
 	params.fast_boot = true;
 	params.fullscreen = false;
 	params.batch_mode = std::nullopt;
-	VMManager::Initialize(params);
-	EmuConfig.Cpu.Recompiler.EnableEE = true;
-	EmuConfig.Cpu.Recompiler.EnableIOP = true;
-	EmuConfig.Cpu.Recompiler.EnableVU0 = true;
-	GetCpuProviders().ApplyConfig();
+   
+	if(!hasInitialized){
+	hostDisplay = HostDisplay::CreateDisplayForAPI(OpenGLHostDisplay::RenderAPI::OpenGL);
+	WindowInfo wi;
+		wi.type = WindowInfo::Type::MacOS;
+		wi.surface_width = 640 ;
+		wi.surface_height = 448 ;
+	hostDisplay->CreateRenderDevice(wi,
+			Host::GetStringSettingValue("EmuCore/GS", "Adapter", ""),
+			Host::GetBoolSettingValue("EmuCore/GS", "ThreadedPresentation", false),
+			Host::GetBoolSettingValue("EmuCore/GS", "UseDebugDevice", false));
+		
+		
+		if(VMManager::Initialize(params)){
+			hasInitialized = true;
+				VMManager::SetState(VMState::Running);
+				[NSThread detachNewThreadSelector:@selector(runVMThread) toTarget:self withObject:nil];
+		}
+	}
+}
+
+- (void)runVMThread
+{
+	OESetThreadRealtime(1. / 50, .007, .03); // guessed from bsnes
+		
+	while(!ExitRequested)
+	{
+		if(VMManager::HasValidVM()){
+				VMManager::Execute();
+		}else{
+			if(VMManager::GetState() == VMState::Stopping)
+				VMManager::Reset();
+		}
+	}
 }
 
 - (void)stopEmulation
 {
+	ExitRequested = true;
+	VMManager::SetState(VMState::Stopping);
 	VMManager::Shutdown();
 	[super stopEmulation];
 }
 
+- (void)executeFrame
+{
+	//Console.Error("UpScale Multiplier: %d", GSConfig.UpscaleMultiplier);
+//	if(VMManager::HasValidVM()){
+//		VMManager::Execute();
+//	}
+}
+
+#pragma mark Video
 - (OEIntSize)aspectSize
 {
 	return (OEIntSize){ 4, 3 };
@@ -187,6 +283,22 @@ static __weak PCSX2GameCore *_current;
 	return OEGameCoreRenderingOpenGL3Video;
 }
 
+- (BOOL)hasAlternateRenderingThread
+{
+	return YES;
+}
+
+- (BOOL)needsDoubleBufferedFBO
+{
+	return NO;
+}
+
+- (OEIntSize)bufferSize
+{
+	return (OEIntSize){ 640 , 448  };
+}
+
+#pragma mark Audio
 - (NSUInteger)channelCount
 {
 	return 2;
@@ -199,17 +311,23 @@ static __weak PCSX2GameCore *_current;
 
 - (double)audioSampleRate
 {
-	return 44100;
+	return 48000;
 }
 
-- (OEIntSize)bufferSize
+#pragma mark Input
+- (oneway void)didMovePS2JoystickDirection:(OEPS2Button)button withValue:(CGFloat)value forPlayer:(NSUInteger)player
 {
-	return (OEIntSize){ 640, 480 };
+	g_key_status.Set(player-=1, ps2keymap[button].ps2key , value);
 }
 
-- (void)executeFrame
+- (oneway void)didPushPS2Button:(OEPS2Button)button forPlayer:(NSUInteger)player
 {
-	VMManager::Execute();
+	g_key_status.Set(player-=1, ps2keymap[button].ps2key , 1.0f);
+	
+}
+
+- (oneway void)didReleasePS2Button:(OEPS2Button)button forPlayer:(NSUInteger)player {
+	g_key_status.Set(player-=1, ps2keymap[button].ps2key, 0.0f);
 }
 
 #pragma mark - Discs
@@ -297,6 +415,14 @@ std::optional<std::string> Host::ReadResourceFileToString(const char* filename)
 	}
 }
 
+void Host::WriteToSoundBuffer(s16 Left, s16 Right)
+{
+	GET_CURRENT_OR_RETURN();
+	
+	[[_current audioBufferAtIndex:0] write:(&Left) maxLength:sizeof(s16)];
+	[[_current audioBufferAtIndex:0] write:(&Right) maxLength:sizeof(s16)];
+}
+
 void Host::AddOSDMessage(std::string message, float duration)
 {
 	
@@ -329,7 +455,7 @@ void Host::ClearOSDMessages()
 
 void Host::ReportErrorAsync(const std::string_view& title, const std::string_view& message)
 {
-	
+	//Console.Error("Reported Error: '%s':'%s'", title, message);
 }
 
 #pragma mark Host Thread
@@ -414,10 +540,8 @@ void Host::RunOnCPUThread(std::function<void()> function, bool block)
 HostDisplay* Host::AcquireHostDisplay(HostDisplay::RenderAPI api)
 {
 	GET_CURRENT_OR_RETURN(nullptr);
-	HostDisplay *disp = new OpenGLHostDisplay();
-	current->hostDisplay = disp;
-	
-	return disp;
+
+	return current->hostDisplay.get();
 }
 
 void Host::ReleaseHostDisplay()
@@ -430,20 +554,22 @@ HostDisplay* Host::GetHostDisplay()
 {
 	GET_CURRENT_OR_RETURN(nullptr);
 	
-	return current->hostDisplay;
+	current.renderDelegate.willRenderFrameOnAlternateThread;
+	return current->hostDisplay.get();
 }
 
 bool Host::BeginPresentFrame(bool frame_skip)
 {
 	GET_CURRENT_OR_RETURN(false);
 	
-	return false;
+	return current->hostDisplay.get()->BeginPresent(frame_skip);
 }
 
 void Host::EndPresentFrame()
 {
 	GET_CURRENT_OR_RETURN();
 	
+	current->hostDisplay.get()->EndPresent();
 }
 
 void Host::ResizeHostDisplay(u32 new_window_width, u32 new_window_height, float new_window_scale)
