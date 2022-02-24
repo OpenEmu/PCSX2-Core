@@ -553,6 +553,7 @@
 		551BF6BD26424BAA0008C529 /* ThreadedFileReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551BF6BC26424BAA0008C529 /* ThreadedFileReader.cpp */; };
 		551BF6E926424D030008C529 /* InputRecording.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551BF6C026424D020008C529 /* InputRecording.cpp */; };
 		551BF71826424ED50008C529 /* bin2cpp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551BF71626424EC60008C529 /* bin2cpp.cpp */; };
+		55300EA927C747670049E2CC /* GSMTLDeviceInfo.mm in Sources */ = {isa = PBXBuildFile; fileRef = 55300EA827C747670049E2CC /* GSMTLDeviceInfo.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		553CF8382640D2F8003A437C /* jmp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FA79263D48AE000219EC /* jmp.cpp */; };
 		553CF8392640D2F8003A437C /* x86emitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FA78263D48AE000219EC /* x86emitter.cpp */; };
 		553CF83A2640D2F8003A437C /* legacy_sse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FA6F263D48AE000219EC /* legacy_sse.cpp */; };
@@ -653,7 +654,6 @@
 		DD0302C927C549730006ABDC /* StateManagement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5580639727AB3261008CD5D2 /* StateManagement.cpp */; };
 		DD03FFD827B721F20006ABDC /* GSTextureMTL.mm in Sources */ = {isa = PBXBuildFile; fileRef = DD03FFB927B70F0C0006ABDC /* GSTextureMTL.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		DD03FFD927B721FC0006ABDC /* MTLDrawableFetcher.mm in Sources */ = {isa = PBXBuildFile; fileRef = DD03FFB327B70F0C0006ABDC /* MTLDrawableFetcher.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		DD03FFDA27B7229E0006ABDC /* GSMTLDeviceInfo.mm in Sources */ = {isa = PBXBuildFile; fileRef = DD03FFB827B70F0C0006ABDC /* GSMTLDeviceInfo.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -2822,6 +2822,8 @@
 		551BF6E726424D020008C529 /* NewRecordingFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewRecordingFrame.h; sourceTree = "<group>"; };
 		551BF70926424E7D0008C529 /* bin2cpp */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = bin2cpp; sourceTree = BUILT_PRODUCTS_DIR; };
 		551BF71626424EC60008C529 /* bin2cpp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = bin2cpp.cpp; sourceTree = "<group>"; };
+		55300EA527C744E70049E2CC /* MRCHelpers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MRCHelpers.h; sourceTree = "<group>"; };
+		55300EA827C747670049E2CC /* GSMTLDeviceInfo.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GSMTLDeviceInfo.mm; sourceTree = "<group>"; };
 		553CF8172640CCCD003A437C /* libemitter_PCSX2.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libemitter_PCSX2.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		5564D3FD279A063B00EECDEC /* colour.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = colour.h; sourceTree = "<group>"; };
 		5564D439279A07D200EECDEC /* 0.2.1.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = 0.2.1.md; sourceTree = "<group>"; };
@@ -4732,6 +4734,7 @@
 				5517FA33263D48AD000219EC /* MemcpyFast.h */,
 				5517FA28263D48AD000219EC /* MemsetFast.inl */,
 				551AA4B62793625B00658151 /* Misc.cpp */,
+				55300EA527C744E70049E2CC /* MRCHelpers.h */,
 				5517FA27263D48AD000219EC /* mt_queue.h */,
 				5517FA81263D48AE000219EC /* Mutex.cpp */,
 				5517FA39263D48AD000219EC /* PageFaultSource.h */,
@@ -7536,6 +7539,7 @@
 		DD0302B827C491160006ABDC /* Video */ = {
 			isa = PBXGroup;
 			children = (
+				55300EA827C747670049E2CC /* GSMTLDeviceInfo.mm */,
 				DD0302B927C491160006ABDC /* OpenGLHostDisplayOverride.cpp */,
 				DD0302BA27C491160006ABDC /* GSDeviceMTL.mm */,
 				DD0302BB27C491160006ABDC /* MetalHostDisplay.mm */,
@@ -8122,7 +8126,6 @@
 				551BF58826420E9A0008C529 /* R5900OpcodeTables.cpp in Sources */,
 				551BF6AF264244640008C529 /* Reverb.cpp in Sources */,
 				551BF5C6264211540008C529 /* format.cc in Sources */,
-				DD03FFDA27B7229E0006ABDC /* GSMTLDeviceInfo.mm in Sources */,
 				551BF61F264214530008C529 /* iMisc.cpp in Sources */,
 				551BF6272642167A0008C529 /* FileUtils.cpp in Sources */,
 				551AA1282792AB1700658151 /* GSDrawScanline.cpp in Sources */,
@@ -8217,6 +8220,7 @@
 				551BF69A264243310008C529 /* DriveUtility.cpp in Sources */,
 				551BF6AD2642445C0008C529 /* RegLog.cpp in Sources */,
 				551BF678264240560008C529 /* net.cpp in Sources */,
+				55300EA927C747670049E2CC /* GSMTLDeviceInfo.mm in Sources */,
 				551BF61C264214530008C529 /* ir5900tables.cpp in Sources */,
 				551AA48B27935DF400658151 /* GSRendererNull.cpp in Sources */,
 				551BF5C4264210AB0008C529 /* Gif_Logger.cpp in Sources */,
