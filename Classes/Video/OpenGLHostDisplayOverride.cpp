@@ -13,17 +13,15 @@
  *  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// This is the same as pcsx2/pcsx2/Frontend/OpenGLHostDisplay.cpp,
-// except the imgui code has been ripped out.
-
 #include "PrecompiledHeader.h"
 
-#include "../pcsx2/pcsx2/Frontend/OpenGLHostDisplay.h"
+#include "OpenGLHostDisplay.h"
 #include "common/Assertions.h"
 #include "common/Console.h"
 #include "common/ScopedGuard.h"
 #include "common/StringUtil.h"
 #include "common/GL/Program.h"
+
 #include <array>
 #include <tuple>
 
@@ -43,7 +41,7 @@ public:
 	u32 GetHeight() const override { return m_height; }
 
 	GLuint GetGLID() const { return m_texture; }
-
+	
 private:
 	GLuint m_texture;
 	u32 m_width;
@@ -136,9 +134,10 @@ void OpenGLHostDisplay::UpdateTexture(HostDisplayTexture* texture, u32 x, u32 y,
 
 void OpenGLHostDisplay::SetVSync(VsyncMode mode)
 {
+	Console.Error("Vsync setting");
 	if (m_gl_context->GetWindowInfo().type == WindowInfo::Type::Surfaceless)
 		return;
-
+	Console.Error("Setting Vsync");
 	// Window framebuffer has to be bound to call SetSwapInterval.
 	GLint current_fbo = 0;
 	glGetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &current_fbo);
@@ -188,10 +187,10 @@ bool OpenGLHostDisplay::HasRenderDevice() const
 
 bool OpenGLHostDisplay::HasRenderSurface() const
 {
-	return m_window_info.type != WindowInfo::Type::Surfaceless;
+	return (m_window_info.type != WindowInfo::Type::Surfaceless);
 }
 
-bool OpenGLHostDisplay::CreateRenderDevice(const WindowInfo& wi, std::string_view adapter_name, VsyncMode vsync, bool threaded_presentation, bool debug_device)
+bool OpenGLHostDisplay::CreateRenderDevice(const WindowInfo& wi, std::string_view adapter_name, bool threaded_presentation, bool debug_device)
 {
 	m_gl_context = GL::Context::Create(wi);
 	if (!m_gl_context)
@@ -202,7 +201,6 @@ bool OpenGLHostDisplay::CreateRenderDevice(const WindowInfo& wi, std::string_vie
 	}
 
 	m_window_info = m_gl_context->GetWindowInfo();
-	m_vsync_mode = vsync;
 	return true;
 }
 
@@ -335,7 +333,8 @@ void OpenGLHostDisplay::DestroyImGuiContext()
 
 bool OpenGLHostDisplay::UpdateImGuiFontTexture()
 {
-	return true;
+	
+	return nullptr;
 }
 
 bool OpenGLHostDisplay::BeginPresent(bool frame_skip)
@@ -344,13 +343,12 @@ bool OpenGLHostDisplay::BeginPresent(bool frame_skip)
 	{
 		return false;
 	}
-
+	
 	glDisable(GL_SCISSOR_TEST);
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 1);
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 	glViewport(0, 0, m_window_info.surface_width, m_window_info.surface_height);
-
 	return true;
 }
 
@@ -366,4 +364,3 @@ void OpenGLHostDisplay::EndPresent()
 
 	m_gl_context->SwapBuffers();
 }
-
