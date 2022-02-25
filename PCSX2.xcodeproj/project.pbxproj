@@ -597,7 +597,6 @@
 		5564D772279A0EB000EECDEC /* error.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5564D6DC279A0A0500EECDEC /* error.cpp */; };
 		5564D779279A12FB00EECDEC /* SaveState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FDFA263D49BC000219EC /* SaveState.cpp */; };
 		556FBB29279E0EAB007B4F88 /* VMManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 556FBB28279E0E76007B4F88 /* VMManager.cpp */; };
-		556FBB45279E1067007B4F88 /* GameList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 556FBB31279E1067007B4F88 /* GameList.cpp */; };
 		556FBB47279E1067007B4F88 /* INISettingsInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 556FBB35279E1067007B4F88 /* INISettingsInterface.cpp */; };
 		556FBB48279E1067007B4F88 /* InputManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 556FBB36279E1067007B4F88 /* InputManager.cpp */; };
 		556FBB49279E1067007B4F88 /* LayeredSettingsInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 556FBB39279E1067007B4F88 /* LayeredSettingsInterface.cpp */; };
@@ -8041,7 +8040,6 @@
 				551AA4CF27936D7400658151 /* StreamBuffer.cpp in Sources */,
 				551BF619264214530008C529 /* iFPUd.cpp in Sources */,
 				551BF5C7264211540008C529 /* os.cc in Sources */,
-				556FBB45279E1067007B4F88 /* GameList.cpp in Sources */,
 				551BF59026420E9A0008C529 /* SPR.cpp in Sources */,
 				551BF57F26420E9A0008C529 /* Sif0.cpp in Sources */,
 				551BF62C264216F50008C529 /* GzippedFileReader.cpp in Sources */,
