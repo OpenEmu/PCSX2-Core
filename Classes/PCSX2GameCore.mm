@@ -75,6 +75,11 @@ PCSX2GameCore *_current;
 	std::unique_ptr<HostDisplay> hostDisplay;
 	
 	VMBootParameters params;
+	
+	//Multi-disc booting.
+	NSUInteger _maxDiscs;
+	NSMutableArray<NSString*> *_allCueSheetFiles;
+	NSString *basePath;
 }
 
 - (instancetype)init
@@ -82,16 +87,58 @@ PCSX2GameCore *_current;
 	if (self = [super init]) {
 		_current = self;
 		VMManager::InitializeMemory();
+		_maxDiscs = 0;
 	}
 	return self;
+}
+
+static NSString *binCueFix(NSString *path)
+{
+	if ([[path pathExtension] caseInsensitiveCompare:@"cue"] == NSOrderedSame) {
+		// Assume the bin file is the same as the cue.
+		return [[path stringByDeletingPathExtension] stringByAppendingPathExtension:@"bin"];
+	}
+	return path;
 }
 
 - (BOOL)loadFileAtPath:(NSString *)path error:(NSError **)error
 {
 	// PCSX2 can't handle cue files... but can read bin files
 	if ([[path pathExtension] caseInsensitiveCompare:@"cue"] == NSOrderedSame) {
-		// Assume the bin file is the same as the cue.
+		// Assume the bin file is the same name as the cue.
 		gamePath = [[path stringByDeletingPathExtension] stringByAppendingPathExtension:@"bin"];
+	} else if([path.pathExtension.lowercaseString isEqualToString:@"m3u"]) {
+		basePath = path.stringByDeletingLastPathComponent;
+		NSString *m3uString = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
+		NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@".*\\.cue|.*\\.ccd|.*\\.iso" options:NSRegularExpressionCaseInsensitive error:nil];
+		NSUInteger numberOfMatches = [regex numberOfMatchesInString:m3uString options:0 range:NSMakeRange(0, m3uString.length)];
+		
+		NSLog(@"[PCSX2] Loaded m3u containing %lu cue sheets or ccd", numberOfMatches);
+		
+		_maxDiscs = numberOfMatches;
+		
+		// Keep track of cue sheets for use with SBI files
+		[regex enumerateMatchesInString:m3uString options:0 range:NSMakeRange(0, m3uString.length) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+			NSRange range = result.range;
+			NSString *match = [m3uString substringWithRange:range];
+			
+			if([match containsString:@".cue"] || [match containsString:@".iso"]) {
+				[_allCueSheetFiles addObject:[m3uString substringWithRange:range]];
+			}
+		}];
+		
+		if (_allCueSheetFiles.count <= 0) {
+			if (error) {
+				*error = [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotLoadROMError userInfo:@{NSFilePathErrorKey: path}];
+			}
+			
+			return false;
+		} else {
+			NSString *ToPassBack = [[basePath stringByAppendingPathComponent:_allCueSheetFiles.firstObject] stringByStandardizingPath];
+			ToPassBack = binCueFix(ToPassBack);
+			
+			gamePath = ToPassBack;
+		}
 	} else {
 		gamePath = [path copy];
 	}
@@ -100,6 +147,7 @@ PCSX2GameCore *_current;
 
 - (void)loadStateFromFileAtPath:(NSString *)fileName completionHandler:(void (^)(BOOL, NSError *))block
 {
+	// FIXME: fix save states.
 	bool success = true; //VMManager::LoadState(fileName.fileSystemRepresentation);
 	//block(success, success ? nil : [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotLoadStateError userInfo:@{NSFilePathErrorKey: fileName}]);
 	block(success, nil);
@@ -107,6 +155,7 @@ PCSX2GameCore *_current;
 
 - (void)saveStateToFileAtPath:(NSString *)fileName completionHandler:(void (^)(BOOL, NSError *))block
 {
+	// FIXME: fix save states.
 	Console.Error("SaveState Requested");
 	bool success = true ; //VMManager::SaveState(fileName.fileSystemRepresentation);
 	//block(success, success ? nil : [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotSaveStateError userInfo:@{NSFilePathErrorKey: fileName}]);
@@ -291,7 +340,7 @@ PCSX2GameCore *_current;
 
 - (OEGameCoreRendering)gameCoreRendering
 {
-	//TODO: return OEGameCoreRenderingMetal1Video;
+	//FIXME: return OEGameCoreRenderingMetal1Video;
 	return OEGameCoreRenderingOpenGL3Video;
 }
 
@@ -346,11 +395,17 @@ PCSX2GameCore *_current;
 
 - (NSUInteger)discCount
 {
-	return 1;
+	return _maxDiscs ? _maxDiscs : 1;
 }
 
 - (void)setDisc:(NSUInteger)discNumber
 {
+	NSString *ToPassBack = [basePath stringByAppendingPathComponent:_allCueSheetFiles[discNumber - 1]];
+	ToPassBack = [binCueFix(ToPassBack) stringByStandardizingPath];
+	
+	gamePath = ToPassBack;
+
+	VMManager::ChangeDisc(gamePath.fileSystemRepresentation);
 }
 
 @end
@@ -431,8 +486,8 @@ void Host::WriteToSoundBuffer(s16 Left, s16 Right)
 {
 	GET_CURRENT_OR_RETURN();
 	
-	[[_current audioBufferAtIndex:0] write:(&Left) maxLength:sizeof(s16)];
-	[[_current audioBufferAtIndex:0] write:(&Right) maxLength:sizeof(s16)];
+	[[current audioBufferAtIndex:0] write:(&Left) maxLength:sizeof(s16)];
+	[[current audioBufferAtIndex:0] write:(&Right) maxLength:sizeof(s16)];
 }
 
 void Host::AddOSDMessage(std::string message, float duration)
