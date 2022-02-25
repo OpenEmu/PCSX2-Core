@@ -108,7 +108,7 @@ PCSX2GameCore *_current;
 
 - (void)setupEmulation
 {
-	const std::string pcsx2ini(Path::CombineStdString([self.supportDirectoryPath stringByAppendingString:@"/inis"].fileSystemRepresentation, "PCSX2.ini"));
+	const std::string pcsx2ini(Path::CombineStdString([self.supportDirectoryPath stringByAppendingPathComponent:@"/inis"].fileSystemRepresentation, "PCSX2.ini"));
 	s_base_settings_interface = std::make_unique<INISettingsInterface>(std::move(pcsx2ini));
 	Host::Internal::SetBaseSettingsLayer(s_base_settings_interface.get());
 	
@@ -132,16 +132,16 @@ PCSX2GameCore *_current;
 	EmuFolders::Bios = self.biosDirectoryPath.fileSystemRepresentation;
 	EmuFolders::AppRoot = [[NSBundle bundleForClass:[self class]] resourceURL].fileSystemRepresentation;
 	EmuFolders::DataRoot = self.supportDirectoryPath.fileSystemRepresentation;
-	EmuFolders::Settings = [self.supportDirectoryPath stringByAppendingString:@"/inis"].fileSystemRepresentation;
+	EmuFolders::Settings = [self.supportDirectoryPath stringByAppendingPathComponent:@"/inis"].fileSystemRepresentation;
 	EmuFolders::Resources = [[NSBundle bundleForClass:[self class]] resourceURL].fileSystemRepresentation;
-	EmuFolders::Cache = [self.supportDirectoryPath stringByAppendingString:@"/Cache"].fileSystemRepresentation;
-	EmuFolders::Snapshots = [self.supportDirectoryPath stringByAppendingString:@"/snaps"].fileSystemRepresentation;
-	EmuFolders::Savestates = [self.supportDirectoryPath stringByAppendingString:@"/sstates"].fileSystemRepresentation;
-	EmuFolders::Logs = [self.supportDirectoryPath stringByAppendingString:@"/Logs"].fileSystemRepresentation;
-	EmuFolders::Cheats = [self.supportDirectoryPath stringByAppendingString:@"/Cheats"].fileSystemRepresentation;
-	EmuFolders::CheatsWS = [self.supportDirectoryPath stringByAppendingString:@"/cheats_ws"].fileSystemRepresentation;
-	EmuFolders::Covers = [self.supportDirectoryPath stringByAppendingString:@"/Covers"].fileSystemRepresentation;
-	EmuFolders::GameSettings = [self.supportDirectoryPath stringByAppendingString:@"/gamesettings"].fileSystemRepresentation;
+	EmuFolders::Cache = [self.supportDirectoryPath stringByAppendingPathComponent:@"/Cache"].fileSystemRepresentation;
+	EmuFolders::Snapshots = [self.supportDirectoryPath stringByAppendingPathComponent:@"/snaps"].fileSystemRepresentation;
+	EmuFolders::Savestates = [self.supportDirectoryPath stringByAppendingPathComponent:@"/sstates"].fileSystemRepresentation;
+	EmuFolders::Logs = [self.supportDirectoryPath stringByAppendingPathComponent:@"/Logs"].fileSystemRepresentation;
+	EmuFolders::Cheats = [self.supportDirectoryPath stringByAppendingPathComponent:@"/Cheats"].fileSystemRepresentation;
+	EmuFolders::CheatsWS = [self.supportDirectoryPath stringByAppendingPathComponent:@"/cheats_ws"].fileSystemRepresentation;
+	EmuFolders::Covers = [self.supportDirectoryPath stringByAppendingPathComponent:@"/Covers"].fileSystemRepresentation;
+	EmuFolders::GameSettings = [self.supportDirectoryPath stringByAppendingPathComponent:@"/gamesettings"].fileSystemRepresentation;
 	EmuFolders::EnsureFoldersExist();
 	
 	EmuConfig.Mcd[0].Enabled = true;
@@ -219,6 +219,7 @@ PCSX2GameCore *_current;
 		wi.surface_height = 448 ;
 	hostDisplay->CreateRenderDevice(wi,
 			Host::GetStringSettingValue("EmuCore/GS", "Adapter", ""),
+			VsyncMode::Adaptive,
 			Host::GetBoolSettingValue("EmuCore/GS", "ThreadedPresentation", false),
 			Host::GetBoolSettingValue("EmuCore/GS", "UseDebugDevice", false));
 		

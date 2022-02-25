@@ -97,7 +97,7 @@ void MetalHostDisplay::DetachSurfaceOnMainThread()
 	m_view = nullptr;
 }
 
-bool MetalHostDisplay::CreateRenderDevice(const WindowInfo& wi, std::string_view adapter_name, bool threaded_presentation, bool debug_device)
+bool MetalHostDisplay::CreateRenderDevice(const WindowInfo& wi, std::string_view adapter_name, VsyncMode vsync, bool threaded_presentation, bool debug_device)
 { @autoreleasepool {
 	m_window_info = wi;
 	pxAssertRel(!m_dev.dev, "Device already created!");
@@ -142,6 +142,7 @@ bool MetalHostDisplay::CreateRenderDevice(const WindowInfo& wi, std::string_view
 			[m_layer setDevice:m_dev.dev];
 			AttachSurfaceOnMainThread();
 		});
+		SetVSync(vsync);
 		m_drawable_fetcher.Start(m_layer);
 		return true;
 	}
@@ -359,6 +360,7 @@ void MetalHostDisplay::EndPresent()
 void MetalHostDisplay::SetVSync(VsyncMode mode)
 {
 	[m_layer setDisplaySyncEnabled:mode != VsyncMode::Off];
+	m_vsync_mode = mode;
 }
 
 bool MetalHostDisplay::CreateImGuiContext()

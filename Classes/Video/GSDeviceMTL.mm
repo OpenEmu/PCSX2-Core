@@ -544,7 +544,8 @@ MRCOwned<id<MTLFunction>> GSDeviceMTL::LoadShader(NSString* name)
 	if (unlikely(err))
 	{
 		NSString* msg = [NSString stringWithFormat:@"Failed to load shader %@: %@", name, [err localizedDescription]];
-		throw std::runtime_error([msg UTF8String]);
+		Console.Error("%s", [msg UTF8String]);
+		throw GSRecoverableError();
 	}
 	return fn;
 }
@@ -556,8 +557,12 @@ MRCOwned<id<MTLRenderPipelineState>> GSDeviceMTL::MakePipeline(MTLRenderPipeline
 	[desc setFragmentFunction:fragment];
 	NSError* err;
 	MRCOwned<id<MTLRenderPipelineState>> res = MRCTransfer([m_dev.dev newRenderPipelineStateWithDescriptor:desc error:&err]);
-	if (err)
-		throw std::runtime_error([[err localizedDescription] UTF8String]);
+	if (unlikely(err))
+	{
+		NSString* msg = [NSString stringWithFormat:@"Failed to create pipeline %@: %@", name, [err localizedDescription]];
+		Console.Error("%s", [msg UTF8String]);
+		throw GSRecoverableError();
+	}
 	return res;
 }
 
@@ -598,7 +603,7 @@ bool GSDeviceMTL::Create(HostDisplay* display)
 	m_features.texture_barrier = true;
 	m_features.point_expand = true;
 	m_features.prefer_new_textures = true;
-	m_features.prefer_rt_read = m_dev.features.framebuffer_fetch;
+	m_features.one_barrier_is_full = m_dev.features.framebuffer_fetch;
 
 	try
 	{
@@ -609,6 +614,7 @@ bool GSDeviceMTL::Create(HostDisplay* display)
 		u8 upscale = std::max(1, theApp.GetConfigI("upscale_multiplier"));
 		vector_uchar2 upscale2 = vector2(upscale, upscale);
 		[m_fn_constants setConstantValue:&upscale2 type:MTLDataTypeUChar2 atIndex:GSMTLConstantIndex_SCALING_FACTOR];
+		setFnConstantB(m_fn_constants, m_dev.features.framebuffer_fetch, GSMTLConstantIndex_FRAMEBUFFER_FETCH);
 
 		m_hw_vertex = MRCTransfer([MTLVertexDescriptor new]);
 		[[[m_hw_vertex layouts] objectAtIndexedSubscript:GSMTLBufferIndexHWVertices] setStride:sizeof(GSVertex)];
@@ -862,9 +868,8 @@ bool GSDeviceMTL::Create(HostDisplay* display)
 
 		
 	}
-	catch (std::exception& e)
+	catch (GSRecoverableError&)
 	{
-		Console.Error("Metal: Failed to init: %s", e.what());
 		return false;
 	}
 	return true;
@@ -1126,10 +1131,8 @@ void GSDeviceMTL::MRESetHWPipelineState(GSHWDrawConfig::VSSelector vssel, GSHWDr
 	id<MTLFunction> vs = m_hw_vs[vssel_mtl.key];
 
 	id<MTLFunction> ps;
-	// Note: Stupid Intel bugs reproducible on UHD 630 (but not on Iris Pro 5200)
-	// Stupid Intel bug #1: Outputting to Src1 makes depth randomly not write
-	// Lazy Partial Solution: Only output to Src1 if you actually need it (still broken if Src1 is actually needed but much better than "every game broken yay")
-	// Test GSdump: https://cdn.discordapp.com/attachments/923492653788692480/940228784114790531/gs_20220207135128.gs.xz (Valkyrie Profile)
+	// Stupid Intel bug #1: Outputting to Src1 without using it makes depth randomly not write (see https://github.com/tellowkrinkle/MetalBugReproduction/releases/tag/BrokenDepthWrite)
+	// Solution: Only output to Src1 if you actually need it
 	bool dual_source_blend = !primid_tracking_init && (isDualSourceBlend(b.src) || isDualSourceBlend(b.dst));
 	// Stupid Intel bug #2: *Not* outputting to Src1 makes discard stop working
 	// Solution: Output to src1 for destination alpha
@@ -1172,7 +1175,7 @@ void GSDeviceMTL::MRESetHWPipelineState(GSHWDrawConfig::VSSelector vssel, GSHWDr
 		setFnConstantI(m_fn_constants, pssel.clr_hw,             GSMTLConstantIndex_PS_CLR_HW);
 		setFnConstantB(m_fn_constants, pssel.hdr,                GSMTLConstantIndex_PS_HDR);
 		setFnConstantB(m_fn_constants, pssel.colclip,            GSMTLConstantIndex_PS_COLCLIP);
-		setFnConstantB(m_fn_constants, pssel.alpha_clamp,        GSMTLConstantIndex_PS_ALPHA_CLAMP);
+		setFnConstantB(m_fn_constants, pssel.blend_mix,          GSMTLConstantIndex_PS_BLEND_MIX);
 		setFnConstantB(m_fn_constants, pssel.pabe,               GSMTLConstantIndex_PS_PABE);
 		setFnConstantI(m_fn_constants, pssel.channel,            GSMTLConstantIndex_PS_CHANNEL);
 		setFnConstantI(m_fn_constants, pssel.dither,             GSMTLConstantIndex_PS_DITHER);
@@ -1187,7 +1190,7 @@ void GSDeviceMTL::MRESetHWPipelineState(GSHWDrawConfig::VSSelector vssel, GSHWDr
 		setFnConstantB(m_fn_constants, pssel.invalid_tex0,       GSMTLConstantIndex_PS_INVALID_TEX0);
 		setFnConstantI(m_fn_constants, pssel.scanmsk,            GSMTLConstantIndex_PS_SCANMSK);
 		setFnConstantB(m_fn_constants, dual_source_blend,        GSMTLConstantIndex_PS_DUAL_SOURCE_BLEND);
-		auto newps = LoadShader(m_dev.features.framebuffer_fetch ? @"ps_main_fbfetch" : @"ps_main");
+		auto newps = LoadShader(@"ps_main");
 		ps = newps;
 		m_hw_ps.insert(std::make_pair(pskey, std::move(newps)));
 	}
@@ -1615,9 +1618,16 @@ void GSDeviceMTL::SendHWDraw(GSHWDrawConfig& config, id<MTLRenderCommandEncoder>
 	}
 }
 
+// tbh I'm not a fan of the current debug groups
+// not much useful information and makes things harder to find
+// good to turn on if you're debugging tc stuff though
+#ifndef MTL_ENABLE_DEBUG
+	#define MTL_ENABLE_DEBUG 0
+#endif
+
 void GSDeviceMTL::PushDebugGroup(const char* fmt, ...)
 {
-#if defined(_DEBUG)
+#if MTL_ENABLE_DEBUG
 	va_list va;
 	va_start(va, fmt);
 	MRCOwned<NSString*> nsfmt = MRCTransfer([[NSString alloc] initWithUTF8String:fmt]);
@@ -1628,14 +1638,14 @@ void GSDeviceMTL::PushDebugGroup(const char* fmt, ...)
 
 void GSDeviceMTL::PopDebugGroup()
 {
-#if defined(_DEBUG)
+#if MTL_ENABLE_DEBUG
 	m_debug_entries.emplace_back(DebugEntry::Pop, nullptr);
 #endif
 }
 
 void GSDeviceMTL::InsertDebugMessage(DebugMessageCategory category, const char* fmt, ...)
 {
-#if defined(_DEBUG)
+#if MTL_ENABLE_DEBUG
 	va_list va;
 	va_start(va, fmt);
 	MRCOwned<NSString*> nsfmt = MRCTransfer([[NSString alloc] initWithUTF8String:fmt]);
@@ -1665,7 +1675,7 @@ void GSDeviceMTL::ProcessDebugEntry(id<MTLCommandEncoder> enc, const DebugEntry&
 
 void GSDeviceMTL::FlushDebugEntries(id<MTLCommandEncoder> enc)
 {
-#if defined(_DEBUG)
+#if MTL_ENABLE_DEBUG
 	if (!m_debug_entries.empty())
 	{
 		for (const DebugEntry& entry : m_debug_entries)
@@ -1679,7 +1689,7 @@ void GSDeviceMTL::FlushDebugEntries(id<MTLCommandEncoder> enc)
 
 void GSDeviceMTL::EndDebugGroup(id<MTLCommandEncoder> enc)
 {
-#if defined(_DEBUG)
+#if MTL_ENABLE_DEBUG
 	if (!m_debug_entries.empty() && m_debug_group_level)
 	{
 		auto begin = m_debug_entries.begin();
