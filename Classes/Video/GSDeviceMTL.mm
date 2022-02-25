@@ -283,8 +283,8 @@ void GSDeviceMTL::BeginRenderPass(NSString* name, GSTexture* color, MTLLoadActio
 	              || depth   != m_current_render.depth_target
 	              || stencil != m_current_render.stencil_target;
 	GSVector4 color_clear;
-	float depth_clear;
-	int stencil_clear;
+	float depth_clear=0;
+	int stencil_clear=0;
 	bool needs_color_clear = false;
 	bool needs_depth_clear = false;
 	bool needs_stencil_clear = false;
@@ -1552,7 +1552,7 @@ void GSDeviceMTL::SendHWDraw(GSHWDrawConfig& config, id<MTLRenderCommandEncoder>
 
 	if (config.drawlist)
 	{
-		[enc pushDebugGroup:[NSString stringWithFormat:@"Full barrier split draw (%d sprites in %d groups)", config.nindices / config.indices_per_prim, config.drawlist->size()]];
+		[enc pushDebugGroup:[NSString stringWithFormat:@"Full barrier split draw (%d sprites in %lu groups)", config.nindices / config.indices_per_prim, config.drawlist->size()]];
 #if defined(_DEBUG)
 		// Check how draw call is split.
 		std::map<size_t, size_t> frequency;

@@ -486,8 +486,8 @@ void Host::WriteToSoundBuffer(s16 Left, s16 Right)
 {
 	GET_CURRENT_OR_RETURN();
 	
-	[[current audioBufferAtIndex:0] write:(&Left) maxLength:sizeof(s16)];
-	[[current audioBufferAtIndex:0] write:(&Right) maxLength:sizeof(s16)];
+	s16 stereo[] = {Left, Right};
+	[[current audioBufferAtIndex:0] write:stereo maxLength:sizeof(stereo)];
 }
 
 void Host::AddOSDMessage(std::string message, float duration)
