@@ -1,0 +1,3 @@
+[submodule "pcsx2"]
+	path = pcsx2
+	url = https://github.com/tellowkrinkle/pcsx2.git
