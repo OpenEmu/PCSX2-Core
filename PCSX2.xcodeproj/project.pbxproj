@@ -554,6 +554,8 @@
 		551BF6E926424D030008C529 /* InputRecording.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551BF6C026424D020008C529 /* InputRecording.cpp */; };
 		551BF71826424ED50008C529 /* bin2cpp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551BF71626424EC60008C529 /* bin2cpp.cpp */; };
 		55300EA927C747670049E2CC /* GSMTLDeviceInfo.mm in Sources */ = {isa = PBXBuildFile; fileRef = 55300EA827C747670049E2CC /* GSMTLDeviceInfo.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		55300EAD27C9A28B0049E2CC /* GSTextureReplacements.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55300EAB27C9A2830049E2CC /* GSTextureReplacements.cpp */; };
+		55300EAE27C9A28B0049E2CC /* GSTextureReplacementLoaders.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55300EAC27C9A2830049E2CC /* GSTextureReplacementLoaders.cpp */; };
 		553CF8382640D2F8003A437C /* jmp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FA79263D48AE000219EC /* jmp.cpp */; };
 		553CF8392640D2F8003A437C /* x86emitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FA78263D48AE000219EC /* x86emitter.cpp */; };
 		553CF83A2640D2F8003A437C /* legacy_sse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FA6F263D48AE000219EC /* legacy_sse.cpp */; };
@@ -1943,7 +1945,6 @@
 		551AA0AB2792AB1700658151 /* GSRendererNew.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSRendererNew.h; sourceTree = "<group>"; };
 		551AA0AC2792AB1700658151 /* GSVertexHW.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSVertexHW.h; sourceTree = "<group>"; };
 		551AA0BC2792AB1700658151 /* GSVertexList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSVertexList.h; sourceTree = "<group>"; };
-		551AA0BD2792AB1700658151 /* GSOsdManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSOsdManager.h; sourceTree = "<group>"; };
 		551AA0BE2792AB1700658151 /* GSDevice.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GSDevice.cpp; sourceTree = "<group>"; };
 		551AA0BF2792AB1700658151 /* GSVertexTrace.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GSVertexTrace.cpp; sourceTree = "<group>"; };
 		551AA0C02792AB1700658151 /* GSFastList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSFastList.h; sourceTree = "<group>"; };
@@ -1953,7 +1954,6 @@
 		551AA0C42792AB1700658151 /* GSVertex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSVertex.h; sourceTree = "<group>"; };
 		551AA0C52792AB1700658151 /* GSVertexTrace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSVertexTrace.h; sourceTree = "<group>"; };
 		551AA0C62792AB1700658151 /* GSDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSDevice.h; sourceTree = "<group>"; };
-		551AA0C72792AB1700658151 /* GSOsdManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GSOsdManager.cpp; sourceTree = "<group>"; };
 		551AA0C82792AB1700658151 /* GSTexture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GSTexture.cpp; sourceTree = "<group>"; };
 		551AA0C92792AB1700658151 /* GSVertexList.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GSVertexList.cpp; sourceTree = "<group>"; };
 		551AA0CA2792AB1700658151 /* GSTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSTexture.h; sourceTree = "<group>"; };
@@ -2823,6 +2823,9 @@
 		551BF71626424EC60008C529 /* bin2cpp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = bin2cpp.cpp; sourceTree = "<group>"; };
 		55300EA527C744E70049E2CC /* MRCHelpers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MRCHelpers.h; sourceTree = "<group>"; };
 		55300EA827C747670049E2CC /* GSMTLDeviceInfo.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GSMTLDeviceInfo.mm; sourceTree = "<group>"; };
+		55300EAA27C9A2830049E2CC /* GSTextureReplacements.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GSTextureReplacements.h; sourceTree = "<group>"; };
+		55300EAB27C9A2830049E2CC /* GSTextureReplacements.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GSTextureReplacements.cpp; sourceTree = "<group>"; };
+		55300EAC27C9A2830049E2CC /* GSTextureReplacementLoaders.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GSTextureReplacementLoaders.cpp; sourceTree = "<group>"; };
 		553CF8172640CCCD003A437C /* libemitter_PCSX2.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libemitter_PCSX2.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		5564D3FD279A063B00EECDEC /* colour.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = colour.h; sourceTree = "<group>"; };
 		5564D439279A07D200EECDEC /* 0.2.1.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = 0.2.1.md; sourceTree = "<group>"; };
@@ -5778,6 +5781,9 @@
 				551AA0AB2792AB1700658151 /* GSRendererNew.h */,
 				551AA0A52792AB1700658151 /* GSTextureCache.cpp */,
 				551AA0A62792AB1700658151 /* GSTextureCache.h */,
+				55300EAC27C9A2830049E2CC /* GSTextureReplacementLoaders.cpp */,
+				55300EAB27C9A2830049E2CC /* GSTextureReplacements.cpp */,
+				55300EAA27C9A2830049E2CC /* GSTextureReplacements.h */,
 				551AA0AC2792AB1700658151 /* GSVertexHW.h */,
 			);
 			path = HW;
@@ -5793,8 +5799,6 @@
 				551AA0C02792AB1700658151 /* GSFastList.h */,
 				551AA0C22792AB1700658151 /* GSFunctionMap.cpp */,
 				551AA0CB2792AB1700658151 /* GSFunctionMap.h */,
-				551AA0C72792AB1700658151 /* GSOsdManager.cpp */,
-				551AA0BD2792AB1700658151 /* GSOsdManager.h */,
 				551AA0CC2792AB1700658151 /* GSRenderer.cpp */,
 				551AA0C12792AB1700658151 /* GSRenderer.h */,
 				551AA0C82792AB1700658151 /* GSTexture.cpp */,
@@ -8150,6 +8154,7 @@
 				551BF58426420E9A0008C529 /* R3000AInterpreter.cpp in Sources */,
 				551BF5C9264212070008C529 /* IPUdma.cpp in Sources */,
 				551AA1262792AB1700658151 /* GSTextureSW.cpp in Sources */,
+				55300EAE27C9A28B0049E2CC /* GSTextureReplacementLoaders.cpp in Sources */,
 				551BF5B526420FA50008C529 /* HwRead.cpp in Sources */,
 				551BF5BB2642109D0008C529 /* Dump.cpp in Sources */,
 				551BF646264218380008C529 /* iR5900AritImm.cpp in Sources */,
@@ -8291,6 +8296,7 @@
 				551BF645264218380008C529 /* iR5900Branch.cpp in Sources */,
 				551BF6A4264244280008C529 /* Wavedump_wav.cpp in Sources */,
 				551BF69F264243C20008C529 /* ATA_CmdExecuteDeviceDiag.cpp in Sources */,
+				55300EAD27C9A28B0049E2CC /* GSTextureReplacements.cpp in Sources */,
 				558063AA27AB3E0B008CD5D2 /* WindowInfo.cpp in Sources */,
 				556FBB4D279E1067007B4F88 /* InputSource.cpp in Sources */,
 				551BF621264214530008C529 /* iR3000Atables.cpp in Sources */,

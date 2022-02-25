@@ -283,8 +283,8 @@ void GSDeviceMTL::BeginRenderPass(NSString* name, GSTexture* color, MTLLoadActio
 	              || depth   != m_current_render.depth_target
 	              || stencil != m_current_render.stencil_target;
 	GSVector4 color_clear;
-	float depth_clear=0;
-	int stencil_clear=0;
+	float depth_clear;
+	int stencil_clear;
 	bool needs_color_clear = false;
 	bool needs_depth_clear = false;
 	bool needs_stencil_clear = false;
@@ -370,6 +370,10 @@ static constexpr MTLPixelFormat ConvertPixelFormat(GSTexture::Format format)
 		case GSTexture::Format::FloatColor:   return MTLPixelFormatRGBA32Float;
 		case GSTexture::Format::DepthStencil: return MTLPixelFormatDepth32Float_Stencil8;
 		case GSTexture::Format::Invalid:      return MTLPixelFormatInvalid;
+		case GSTexture::Format::BC1:          return MTLPixelFormatBC1_RGBA;
+		case GSTexture::Format::BC2:          return MTLPixelFormatBC2_RGBA;
+		case GSTexture::Format::BC3:          return MTLPixelFormatBC3_RGBA;
+		case GSTexture::Format::BC7:          return MTLPixelFormatBC7_RGBAUnorm;
 	}
 }
 
@@ -866,7 +870,6 @@ bool GSDeviceMTL::Create(HostDisplay* display)
 			m_merge_pipeline[i] = MakePipeline(pdesc, vs_convert, LoadShader(name), name);
 		}
 
-		
 	}
 	catch (GSRecoverableError&)
 	{
@@ -904,7 +907,7 @@ bool GSDeviceMTL::DownloadTexture(GSTexture* src, const GSVector4i& rect, GSText
 	ASSERT(src);
 	EndRenderPass();
 	GSTextureMTL* msrc = static_cast<GSTextureMTL*>(src);
-	out_map.pitch = msrc->PxToBytes(rect.width());
+	out_map.pitch = msrc->GetCompressedBytesPerBlock() * rect.width();
 	size_t size = out_map.pitch * rect.height();
 	if ([m_texture_download_buf length] < size)
 		m_texture_download_buf = MRCTransfer([m_dev.dev newBufferWithLength:size options:MTLResourceStorageModeShared]);

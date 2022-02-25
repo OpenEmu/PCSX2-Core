@@ -50,7 +50,6 @@
 #include <OpenGL/gl3.h>
 #include <OpenGL/gl3ext.h>
 
-std::unique_ptr<AppConfig> g_Conf;
 static bool ExitRequested = false;
 
 bool renderswitch = false;
