@@ -87,7 +87,14 @@ PCSX2GameCore *_current;
 }
 
 - (BOOL)loadFileAtPath:(NSString *)path error:(NSError **)error
-{    gamePath = path;
+{
+	// PCSX2 can't handle cue files... but can read bin files
+	if ([[path pathExtension] caseInsensitiveCompare:@"cue"] == NSOrderedSame) {
+		// Assume the bin file is the same as the cue.
+		gamePath = [[path stringByDeletingPathExtension] stringByAppendingPathExtension:@"bin"];
+	} else {
+		gamePath = [path copy];
+	}
 	return true;
 }
 
@@ -191,11 +198,14 @@ PCSX2GameCore *_current;
 
 - (void)setPauseEmulation:(BOOL)pauseEmulation
 {
-	if (pauseEmulation)
+	if (pauseEmulation) {
 		VMManager::SetState(VMState::Paused);
-	else
+	} else {
 		VMManager::SetState(VMState::Running);
+	}
+	[super setPauseEmulation:pauseEmulation];
 }
+
 - (void)startEmulation
 {
 	[super startEmulation];
@@ -281,6 +291,7 @@ PCSX2GameCore *_current;
 
 - (OEGameCoreRendering)gameCoreRendering
 {
+	//TODO: return OEGameCoreRenderingMetal1Video;
 	return OEGameCoreRenderingOpenGL3Video;
 }
 
@@ -318,17 +329,17 @@ PCSX2GameCore *_current;
 #pragma mark Input
 - (oneway void)didMovePS2JoystickDirection:(OEPS2Button)button withValue:(CGFloat)value forPlayer:(NSUInteger)player
 {
-	g_key_status.Set(player - 1, ps2keymap[button].ps2key , value);
+	g_key_status.Set(u32(player - 1), ps2keymap[button].ps2key , value);
 }
 
 - (oneway void)didPushPS2Button:(OEPS2Button)button forPlayer:(NSUInteger)player
 {
-	g_key_status.Set(player - 1, ps2keymap[button].ps2key , 1.0f);
+	g_key_status.Set(u32(player - 1), ps2keymap[button].ps2key , 1.0f);
 	
 }
 
 - (oneway void)didReleasePS2Button:(OEPS2Button)button forPlayer:(NSUInteger)player {
-	g_key_status.Set(player - 1, ps2keymap[button].ps2key, 0.0f);
+	g_key_status.Set(u32(player - 1), ps2keymap[button].ps2key, 0.0f);
 }
 
 #pragma mark - Discs
