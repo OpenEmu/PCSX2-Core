@@ -79,6 +79,8 @@ PCSX2GameCore *_current;
 	NSUInteger _maxDiscs;
 	NSMutableArray<NSString*> *_allCueSheetFiles;
 	NSString *basePath;
+	// Display modes.
+	NSMutableDictionary <NSString *, id> *_displayModes;
 }
 
 - (instancetype)init
@@ -405,6 +407,94 @@ static NSString *binCueFix(NSString *path)
 	gamePath = ToPassBack;
 
 	VMManager::ChangeDisc(gamePath.fileSystemRepresentation);
+}
+
+#pragma mark - Display Options
+
+static NSString * const OEPSCSX2InternalResolution = @"OEPSCSX2InternalResolution";
+static NSString * const OEPSCSX2BlendingAccuracy = @"OEPSCSX2BlendingAccuracy";
+
+- (NSDictionary<NSString *,id> *)displayModeInfo
+{
+	return [_displayModes copy];
+}
+
+- (void)setDisplayModeInfo:(NSDictionary<NSString *, id> *)displayModeInfo
+{
+	const struct {
+		NSString *const key;
+		Class valueClass;
+		id defaultValue;
+	} defaultValues[] = {
+		{ OEPSCSX2InternalResolution,	[NSNumber class], @1  },
+		{ OEPSCSX2BlendingAccuracy,		[NSNumber class], @1  },
+	};
+	/* validate the defaults to avoid crashes caused by users playing
+	 * around where they shouldn't */
+	_displayModes = [[NSMutableDictionary alloc] init];
+	const int n = sizeof(defaultValues)/sizeof(defaultValues[0]);
+	for (int i=0; i<n; i++) {
+		id thisPref = displayModeInfo[defaultValues[i].key];
+		if ([thisPref isKindOfClass:defaultValues[i].valueClass]) {
+			_displayModes[defaultValues[i].key] = thisPref;
+		} else {
+			_displayModes[defaultValues[i].key] = defaultValues[i].defaultValue;
+		}
+	}
+
+}
+
+- (NSArray <NSDictionary <NSString *, id> *> *)displayModes
+{
+#define OptionWithValue(n, k, v) \
+@{ \
+	OEGameCoreDisplayModeNameKey : n, \
+	OEGameCoreDisplayModePrefKeyNameKey : k, \
+	OEGameCoreDisplayModeStateKey : @([_displayModes[k] isEqual:@(v)]), \
+	OEGameCoreDisplayModePrefValueNameKey : @(v) }
+#define OptionToggleable(n, k) \
+	OEDisplayMode_OptionToggleableWithState(n, k, _displayModes[k])
+
+	return @[
+		OEDisplayMode_Submenu(@"Internal Resolution",
+							  @[OptionWithValue(@"1x (default)", OEPSCSX2InternalResolution, 1),
+								OptionWithValue(@"2x (~720p)", OEPSCSX2InternalResolution, 2),
+								OptionWithValue(@"3x (~1080p)", OEPSCSX2InternalResolution, 3),
+								OptionWithValue(@"4x (~1440p 2k)", OEPSCSX2InternalResolution, 4),
+								OptionWithValue(@"5x (~1620p)", OEPSCSX2InternalResolution, 5),
+								OptionWithValue(@"6x (~2160p 4k)", OEPSCSX2InternalResolution, 6),
+								OptionWithValue(@"7x (~2520p)", OEPSCSX2InternalResolution, 7),
+								OptionWithValue(@"8x (~2880p)", OEPSCSX2InternalResolution, 8)]),
+		OEDisplayMode_Submenu(@"Blending Accuracy",
+							  @[OptionWithValue(@"Minimum (Fastest)", OEPSCSX2BlendingAccuracy, 0),
+								OptionWithValue(@"Basic (Recommended)", OEPSCSX2BlendingAccuracy, 1),
+								OptionWithValue(@"Medium", OEPSCSX2BlendingAccuracy, 2),
+								OptionWithValue(@"High", OEPSCSX2BlendingAccuracy, 3),
+								OptionWithValue(@"Full (Very Slow)", OEPSCSX2BlendingAccuracy, 4),
+								OptionWithValue(@"Ultra (Ultra Slow, or M1)", OEPSCSX2BlendingAccuracy, 5)]),
+	];
+	
+#undef OptionWithValue
+#undef OptionToggleable
+}
+
+- (void)changeDisplayWithMode:(NSString *)displayMode
+{
+	NSString *key;
+	id currentVal;
+	OEDisplayModeListGetPrefKeyValueFromModeName(self.displayModes, displayMode, &key, &currentVal);
+	if (key == nil) {
+		return;
+	}
+	_displayModes[key] = currentVal;
+
+	if ([key isEqualToString:OEPSCSX2InternalResolution]) {
+		EmuConfig.GS.UpscaleMultiplier = [currentVal intValue];
+	} else if ([key isEqualToString:OEPSCSX2InternalResolution]) {
+		EmuConfig.GS.AccurateBlendingUnit = AccBlendLevel([currentVal intValue]);
+	}
+	
+	GetMTGS().ApplySettings();
 }
 
 @end
