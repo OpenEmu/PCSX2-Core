@@ -489,12 +489,12 @@ static NSString * const OEPSCSX2BlendingAccuracy = @"OEPSCSX2BlendingAccuracy";
 	_displayModes[key] = currentVal;
 
 	if ([key isEqualToString:OEPSCSX2InternalResolution]) {
-		EmuConfig.GS.UpscaleMultiplier = [currentVal intValue];
+		s_base_settings_interface->SetIntValue("EmuCore/GS", "upscale_multiplier", [currentVal intValue]);
 	} else if ([key isEqualToString:OEPSCSX2InternalResolution]) {
-		EmuConfig.GS.AccurateBlendingUnit = AccBlendLevel([currentVal intValue]);
+		s_base_settings_interface->SetIntValue("EmuCore/GS", "accurate_blending_unit", [currentVal intValue]);
 	}
 	
-	GetMTGS().ApplySettings();
+	VMManager::ApplySettings();
 }
 
 @end
