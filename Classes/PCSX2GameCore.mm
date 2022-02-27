@@ -217,8 +217,8 @@ static NSString *binCueFix(NSString *path)
 	si.SetBoolValue("EmuCore/Speedhacks", "vuFlagHack", true);
 	si.SetBoolValue("EmuCore/Speedhacks", "IntcStat", true);
 	si.SetBoolValue("EmuCore/Speedhacks", "WaitLoop", true);
-	si.SetIntValue("EmuCore/GS", "FramesToDraw", 1);
-	si.SetIntValue("EmuCore/GS", "upscale_multiplier", 2);
+	si.SetIntValue("EmuCore/GS", "FramesToDraw", 2);
+	si.SetIntValue("EmuCore/GS", "upscale_multiplier", 1);
 	si.SetBoolValue("EmuCore/GS", "FrameLimitEnable", true);
 	si.SetBoolValue("EmuCore/GS", "SyncToHostRefreshRate",false);
 	si.SetBoolValue("EmuCore/GS", "UserHacks", true);
