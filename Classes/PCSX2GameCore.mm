@@ -70,6 +70,7 @@ PCSX2GameCore *_current;
 	@package
 	bool hasInitialized;
 	NSString* gamePath;
+	NSString* stateToLoad;
 	std::unique_ptr<INISettingsInterface> s_base_settings_interface;
 	std::unique_ptr<HostDisplay> hostDisplay;
 	
@@ -146,30 +147,13 @@ static NSString *binCueFix(NSString *path)
 	return true;
 }
 
-- (void)loadStateFromFileAtPath:(NSString *)fileName completionHandler:(void (^)(BOOL, NSError *))block
-{
-	// FIXME: fix save states.
-	bool success = true; //VMManager::LoadState(fileName.fileSystemRepresentation);
-	//block(success, success ? nil : [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotLoadStateError userInfo:@{NSFilePathErrorKey: fileName}]);
-	block(success, nil);
-}
-
-- (void)saveStateToFileAtPath:(NSString *)fileName completionHandler:(void (^)(BOOL, NSError *))block
-{
-	// FIXME: fix save states.
-	Console.Error("SaveState Requested");
-	bool success = true ; //VMManager::SaveState(fileName.fileSystemRepresentation);
-	//block(success, success ? nil : [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotSaveStateError userInfo:@{NSFilePathErrorKey: fileName}]);
-	block(success, nil);
-}
-
 - (void)setupEmulation
 {
 	const std::string pcsx2ini(Path::CombineStdString([self.supportDirectoryPath stringByAppendingPathComponent:@"/inis"].fileSystemRepresentation, "PCSX2.ini"));
 	s_base_settings_interface = std::make_unique<INISettingsInterface>(std::move(pcsx2ini));
 	Host::Internal::SetBaseSettingsLayer(s_base_settings_interface.get());
 	
-	//EmuConfig = Pcsx2Config();
+	EmuConfig = Pcsx2Config();
 	EmuFolders::SetDefaults();
 
 	SettingsInterface& si = *s_base_settings_interface.get();
@@ -272,21 +256,23 @@ static NSString *binCueFix(NSString *path)
 	params.batch_mode = std::nullopt;
    
 	if(!hasInitialized){
-	hostDisplay = HostDisplay::CreateDisplayForAPI(OpenGLHostDisplay::RenderAPI::OpenGL);
-	WindowInfo wi;
-		wi.type = WindowInfo::Type::MacOS;
-		wi.surface_width = 640 ;
-		wi.surface_height = 448 ;
-	hostDisplay->CreateRenderDevice(wi,
-			Host::GetStringSettingValue("EmuCore/GS", "Adapter", ""),
-			VsyncMode::Adaptive,
-			Host::GetBoolSettingValue("EmuCore/GS", "ThreadedPresentation", false),
-			Host::GetBoolSettingValue("EmuCore/GS", "UseDebugDevice", false));
-		
+		hostDisplay = HostDisplay::CreateDisplayForAPI(OpenGLHostDisplay::RenderAPI::OpenGL);
+		WindowInfo wi;
+			wi.type = WindowInfo::Type::MacOS;
+			wi.surface_width = 640 ;
+			wi.surface_height = 448 ;
+		hostDisplay->CreateRenderDevice(wi,
+				Host::GetStringSettingValue("EmuCore/GS", "Adapter", ""),
+				VsyncMode::Adaptive,
+				Host::GetBoolSettingValue("EmuCore/GS", "ThreadedPresentation", false),
+				Host::GetBoolSettingValue("EmuCore/GS", "UseDebugDevice", false));
+			
 		
 		if(VMManager::Initialize(params)){
-			hasInitialized = true;
+				hasInitialized = true;
 				VMManager::SetState(VMState::Running);
+				if ([stateToLoad length] > 0)
+					VMManager::LoadState(stateToLoad.fileSystemRepresentation);
 				[NSThread detachNewThreadSelector:@selector(runVMThread) toTarget:self withObject:nil];
 		}
 	}
@@ -317,10 +303,7 @@ static NSString *binCueFix(NSString *path)
 
 - (void)executeFrame
 {
-	//Console.Error("UpScale Multiplier: %d", GSConfig.UpscaleMultiplier);
-//	if(VMManager::HasValidVM()){
-//		VMManager::Execute();
-//	}
+	
 }
 
 #pragma mark Video
@@ -390,6 +373,29 @@ static NSString *binCueFix(NSString *path)
 
 - (oneway void)didReleasePS2Button:(OEPS2Button)button forPlayer:(NSUInteger)player {
 	g_key_status.Set(u32(player - 1), ps2keymap[button].ps2key, 0.0f);
+}
+
+
+#pragma mark Save States
+- (void)loadStateFromFileAtPath:(NSString *)fileName completionHandler:(void (^)(BOOL, NSError *))block
+{
+	if (!VMManager::HasValidVM()){
+		stateToLoad = fileName;
+		return;
+	}
+			
+	bool success = VMManager::LoadState(fileName.fileSystemRepresentation);
+	block(success, success ? nil : [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotLoadStateError userInfo:@{NSLocalizedDescriptionKey : @"PCSX2 Could not load the current state.",NSFilePathErrorKey: fileName}]);
+}
+
+- (void)saveStateToFileAtPath:(NSString *)fileName completionHandler:(void (^)(BOOL, NSError *))block
+{
+	if (!VMManager::HasValidVM())
+		return;
+	bool success = 	VMManager::SaveState(fileName.fileSystemRepresentation);
+	
+	block(success, success ? nil : [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotSaveStateError userInfo:@{NSLocalizedDescriptionKey : @"PCSX2 Could not save the current state.",NSFilePathErrorKey: fileName}]);
+	
 }
 
 #pragma mark - Discs
