@@ -269,11 +269,12 @@ static NSString *binCueFix(NSString *path)
 			
 		
 		if(VMManager::Initialize(params)){
-				hasInitialized = true;
-				VMManager::SetState(VMState::Running);
-				if ([stateToLoad length] > 0)
-					VMManager::LoadState(stateToLoad.fileSystemRepresentation);
-				[NSThread detachNewThreadSelector:@selector(runVMThread) toTarget:self withObject:nil];
+			hasInitialized = true;
+			VMManager::SetState(VMState::Running);
+			if ([stateToLoad length] > 0)
+				VMManager::LoadState(stateToLoad.fileSystemRepresentation);
+			stateToLoad = @"";
+			[NSThread detachNewThreadSelector:@selector(runVMThread) toTarget:self withObject:nil];
 		}
 	}
 }
@@ -284,7 +285,7 @@ static NSString *binCueFix(NSString *path)
 		
 	while(!ExitRequested)
 	{
-		if(VMManager::HasValidVM()){
+		if(VMManager::HasValidVM() && stateToLoad.length == 0){
 				VMManager::Execute();
 		}else{
 			if(VMManager::GetState() == VMState::Stopping)
@@ -379,12 +380,13 @@ static NSString *binCueFix(NSString *path)
 #pragma mark Save States
 - (void)loadStateFromFileAtPath:(NSString *)fileName completionHandler:(void (^)(BOOL, NSError *))block
 {
+	stateToLoad = fileName;
 	if (!VMManager::HasValidVM()){
-		stateToLoad = fileName;
 		return;
 	}
 			
 	bool success = VMManager::LoadState(fileName.fileSystemRepresentation);
+	stateToLoad = @"";
 	block(success, success ? nil : [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotLoadStateError userInfo:@{NSLocalizedDescriptionKey : @"PCSX2 Could not load the current state.",NSFilePathErrorKey: fileName}]);
 }
 
