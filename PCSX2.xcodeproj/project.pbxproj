@@ -597,7 +597,6 @@
 		5564D76D279A0CEA00EECDEC /* Program.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5564D76B279A0CEA00EECDEC /* Program.cpp */; };
 		5564D771279A0D1500EECDEC /* MD5Digest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5564D770279A0D1500EECDEC /* MD5Digest.cpp */; };
 		5564D772279A0EB000EECDEC /* error.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5564D6DC279A0A0500EECDEC /* error.cpp */; };
-		5564D779279A12FB00EECDEC /* SaveState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FDFA263D49BC000219EC /* SaveState.cpp */; };
 		556FBB29279E0EAB007B4F88 /* VMManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 556FBB28279E0E76007B4F88 /* VMManager.cpp */; };
 		556FBB47279E1067007B4F88 /* INISettingsInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 556FBB35279E1067007B4F88 /* INISettingsInterface.cpp */; };
 		556FBB48279E1067007B4F88 /* InputManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 556FBB36279E1067007B4F88 /* InputManager.cpp */; };
@@ -655,6 +654,7 @@
 		DD0302C927C549730006ABDC /* StateManagement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5580639727AB3261008CD5D2 /* StateManagement.cpp */; };
 		DD03FFD827B721F20006ABDC /* GSTextureMTL.mm in Sources */ = {isa = PBXBuildFile; fileRef = DD03FFB927B70F0C0006ABDC /* GSTextureMTL.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		DD03FFD927B721FC0006ABDC /* MTLDrawableFetcher.mm in Sources */ = {isa = PBXBuildFile; fileRef = DD03FFB327B70F0C0006ABDC /* MTLDrawableFetcher.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		DD1134E927CBCE8F00C2E60B /* SaveState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD1134E827CBCE8900C2E60B /* SaveState.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -3210,6 +3210,7 @@
 		DD03FFCE27B719E40006ABDC /* AppConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppConfig.h; path = gui/AppConfig.h; sourceTree = "<group>"; };
 		DD03FFD227B720610006ABDC /* MetalHostDisplay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MetalHostDisplay.h; path = Frontend/MetalHostDisplay.h; sourceTree = "<group>"; };
 		DD03FFD327B720610006ABDC /* MetalHostDisplay.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MetalHostDisplay.mm; path = Frontend/MetalHostDisplay.mm; sourceTree = "<group>"; };
+		DD1134E827CBCE8900C2E60B /* SaveState.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SaveState.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -3684,6 +3685,7 @@
 		5517E8B6263D4213000219EC /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				DD1134E727CBCE8900C2E60B /* SaveState */,
 				DD0302B827C491160006ABDC /* Video */,
 				DD0302B327C491020006ABDC /* Audio */,
 				DD0302B627C491020006ABDC /* Input */,
@@ -7573,6 +7575,14 @@
 			path = Metal;
 			sourceTree = "<group>";
 		};
+		DD1134E727CBCE8900C2E60B /* SaveState */ = {
+			isa = PBXGroup;
+			children = (
+				DD1134E827CBCE8900C2E60B /* SaveState.cpp */,
+			);
+			path = SaveState;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -8245,7 +8255,6 @@
 				551BF57426420E720008C529 /* VU0microInterp.cpp in Sources */,
 				551BF57226420E720008C529 /* VUmicro.cpp in Sources */,
 				551BF6B8264249D00008C529 /* Patch.cpp in Sources */,
-				5564D779279A12FB00EECDEC /* SaveState.cpp in Sources */,
 				551AA4AE27935E9100658151 /* DNS_Packet.cpp in Sources */,
 				551BF58726420E9A0008C529 /* pgif.cpp in Sources */,
 				551BF6A5264244340008C529 /* WavFile.cpp in Sources */,
@@ -8282,6 +8291,7 @@
 				551BF6A92642444F0008C529 /* DplIIdecoder.cpp in Sources */,
 				551BF5AF26420FA50008C529 /* IopDma.cpp in Sources */,
 				551AA1232792AB1700658151 /* GSRendererSW.cpp in Sources */,
+				DD1134E927CBCE8F00C2E60B /* SaveState.cpp in Sources */,
 				5580652F27AB507C008CD5D2 /* DEV9Config.cpp in Sources */,
 				551BF69E264243BC0008C529 /* ATA_SCE.cpp in Sources */,
 				551BF58F26420E9A0008C529 /* R5900.cpp in Sources */,

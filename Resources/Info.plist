@@ -30,8 +30,6 @@
 		<dict>
 			<key>OEGameCoreHasGlitches</key>
 			<true/>
-			<key>OEGameCoreSaveStatesNotSupported</key>
-			<true/>
 			<key>OEGameCoreSupportsCheatCode</key>
 			<false/>
 			<key>OEGameCoreSupportsMultipleDiscs</key>
