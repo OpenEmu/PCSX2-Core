@@ -589,114 +589,84 @@ void Host::WriteToSoundBuffer(s16 Left, s16 Right)
 
 void Host::AddOSDMessage(std::string message, float duration)
 {
-	
 }
 
 void Host::AddKeyedOSDMessage(std::string key, std::string message, float duration)
 {
-	
 }
 
 void Host::AddFormattedOSDMessage(float duration, const char* format, ...)
 {
-	
 }
 
 void Host::AddKeyedFormattedOSDMessage(std::string key, float duration, const char* format, ...)
 {
-	
 }
 
 void Host::RemoveKeyedOSDMessage(std::string key)
 {
-	
 }
 
 void Host::ClearOSDMessages()
 {
-	
 }
 
 void Host::ReportErrorAsync(const std::string_view& title, const std::string_view& message)
 {
-	//Console.Error("Reported Error: '%s':'%s'", title, message);
 }
 
 #pragma mark Host Thread
 
 void Host::OnVMStarting()
 {
-	GET_CURRENT_OR_RETURN();
-	
 }
 
 void Host::OnVMStarted()
 {
-	GET_CURRENT_OR_RETURN();
-	
 }
 
 void Host::OnVMDestroyed()
 {
-	GET_CURRENT_OR_RETURN();
-	
 }
 
 void Host::OnVMPaused()
 {
-	GET_CURRENT_OR_RETURN();
-	
 }
 
 void Host::OnVMResumed()
 {
-	GET_CURRENT_OR_RETURN();
-	
 }
 
 void Host::OnSaveStateLoading(const std::string_view& filename)
 {
-	GET_CURRENT_OR_RETURN();
-	
 }
 
 void Host::OnSaveStateLoaded(const std::string_view& filename, bool was_successful)
 {
-	GET_CURRENT_OR_RETURN();
-	
 }
 
 void Host::OnSaveStateSaved(const std::string_view& filename)
 {
-	GET_CURRENT_OR_RETURN();
-	
 }
 
 void Host::OnGameChanged(const std::string& disc_path, const std::string& game_serial, const std::string& game_name, u32 game_crc)
 {
-	GET_CURRENT_OR_RETURN();
-	
 }
 
 void Host::PumpMessagesOnCPUThread()
 {
-	GET_CURRENT_OR_RETURN();
 }
 
 void Host::InvalidateSaveStateCache()
 {
-	
 }
 
 void Host::RequestResizeHostDisplay(s32 width, s32 height)
 {
-	GET_CURRENT_OR_RETURN();
-	
 }
 
 void Host::RunOnCPUThread(std::function<void()> function, bool block)
 {
-	
 }
 
 #pragma mark Host Display
@@ -710,8 +680,6 @@ HostDisplay* Host::AcquireHostDisplay(HostDisplay::RenderAPI api)
 
 void Host::ReleaseHostDisplay()
 {
-	GET_CURRENT_OR_RETURN();
-	
 }
 
 HostDisplay* Host::GetHostDisplay()
@@ -738,16 +706,11 @@ void Host::EndPresentFrame()
 
 void Host::ResizeHostDisplay(u32 new_window_width, u32 new_window_height, float new_window_scale)
 {
-	GET_CURRENT_OR_RETURN();
-	
 }
 
 void Host::UpdateHostDisplay()
 {
-	GET_CURRENT_OR_RETURN();
-	
 }
-
 
 #pragma mark -
 
