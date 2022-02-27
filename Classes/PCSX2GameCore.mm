@@ -51,8 +51,11 @@
 #include <OpenGL/gl3ext.h>
 
 static bool ExitRequested = false;
+static bool LoadingSaveState = false;
+static bool isExecuting = false;
 
 bool renderswitch = false;
+
 
 namespace GSDump
 {
@@ -214,8 +217,8 @@ static NSString *binCueFix(NSString *path)
 	si.SetBoolValue("EmuCore/Speedhacks", "vuFlagHack", true);
 	si.SetBoolValue("EmuCore/Speedhacks", "IntcStat", true);
 	si.SetBoolValue("EmuCore/Speedhacks", "WaitLoop", true);
-	si.SetIntValue("EmuCore/GS", "FramesToDraw", 1);
-	si.SetIntValue("EmuCore/GS", "upscale_multiplier", 2);
+	si.SetIntValue("EmuCore/GS", "FramesToDraw", 2);
+	si.SetIntValue("EmuCore/GS", "upscale_multiplier", 1);
 	si.SetBoolValue("EmuCore/GS", "FrameLimitEnable", true);
 	si.SetBoolValue("EmuCore/GS", "SyncToHostRefreshRate",false);
 	si.SetBoolValue("EmuCore/GS", "UserHacks", true);
@@ -273,7 +276,7 @@ static NSString *binCueFix(NSString *path)
 			VMManager::SetState(VMState::Running);
 			if ([stateToLoad length] > 0)
 				VMManager::LoadState(stateToLoad.fileSystemRepresentation);
-			stateToLoad = @"";
+
 			[NSThread detachNewThreadSelector:@selector(runVMThread) toTarget:self withObject:nil];
 		}
 	}
@@ -285,11 +288,25 @@ static NSString *binCueFix(NSString *path)
 		
 	while(!ExitRequested)
 	{
-		if(VMManager::HasValidVM() && stateToLoad.length == 0){
-				VMManager::Execute();
-		}else{
-			if(VMManager::GetState() == VMState::Stopping)
+		switch (VMManager::GetState())
+		{
+			case VMState::Initializing:
+				continue;
+
+			case VMState::Paused:
+				continue;
+
+			case VMState::Running:
+				if (!LoadingSaveState) {
+					isExecuting = true;
+					VMManager::Execute();
+					isExecuting = false;
+				}
+				continue;
+
+			case VMState::Stopping:
 				VMManager::Reset();
+				continue;;
 		}
 	}
 }
@@ -380,13 +397,18 @@ static NSString *binCueFix(NSString *path)
 #pragma mark Save States
 - (void)loadStateFromFileAtPath:(NSString *)fileName completionHandler:(void (^)(BOOL, NSError *))block
 {
-	stateToLoad = fileName;
 	if (!VMManager::HasValidVM()){
+		stateToLoad = fileName;
 		return;
 	}
-			
+	
+	LoadingSaveState = true;
+	while(isExecuting)
+		usleep(50);
+	
 	bool success = VMManager::LoadState(fileName.fileSystemRepresentation);
-	stateToLoad = @"";
+	LoadingSaveState = false;
+
 	block(success, success ? nil : [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotLoadStateError userInfo:@{NSLocalizedDescriptionKey : @"PCSX2 Could not load the current state.",NSFilePathErrorKey: fileName}]);
 }
 
