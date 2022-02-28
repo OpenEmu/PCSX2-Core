@@ -704,9 +704,10 @@ HostDisplay* Host::AcquireHostDisplay(HostDisplay::RenderAPI api)
 void Host::ReleaseHostDisplay()
 {
 	GET_CURRENT_OR_RETURN();
-
-	current->hostDisplay->DestroyRenderDevice();
-	current->hostDisplay.reset();
+	if(current->hostDisplay.get()){
+		current->hostDisplay->DestroyRenderDevice();
+		current->hostDisplay.reset();
+	}
 }
 
 HostDisplay* Host::GetHostDisplay()
