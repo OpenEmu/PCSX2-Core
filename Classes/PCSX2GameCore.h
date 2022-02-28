@@ -28,6 +28,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+OE_EXPORTED_CLASS
 @interface PCSX2GameCore : OEGameCore <OEPS2SystemResponderClient>
 
 @end
