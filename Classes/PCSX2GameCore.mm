@@ -56,6 +56,8 @@ static bool isExecuting = false;
 
 bool renderswitch = false;
 
+static NSString * const OEPSCSX2InternalResolution = @"OEPSCSX2InternalResolution";
+static NSString * const OEPSCSX2BlendingAccuracy = @"OEPSCSX2BlendingAccuracy";
 
 namespace GSDump
 {
@@ -93,6 +95,9 @@ PCSX2GameCore *_current;
 		_current = self;
 		VMManager::InitializeMemory();
 		_maxDiscs = 0;
+		_displayModes = [[NSMutableDictionary alloc] initWithDictionary:
+						 @{OEPSCSX2InternalResolution: @1,
+						   OEPSCSX2BlendingAccuracy: @1}];
 	}
 	return self;
 }
@@ -139,8 +144,8 @@ static NSString *binCueFix(NSString *path)
 			
 			return false;
 		} else {
-			NSString *ToPassBack = [[basePath stringByAppendingPathComponent:_allCueSheetFiles.firstObject] stringByStandardizingPath];
-			ToPassBack = binCueFix(ToPassBack);
+			NSString *ToPassBack = [basePath stringByAppendingPathComponent:_allCueSheetFiles.firstObject];
+			ToPassBack = [binCueFix(ToPassBack) stringByStandardizingPath];
 			
 			gamePath = ToPassBack;
 		}
@@ -152,7 +157,7 @@ static NSString *binCueFix(NSString *path)
 
 - (void)setupEmulation
 {
-	const std::string pcsx2ini(Path::CombineStdString([self.supportDirectoryPath stringByAppendingPathComponent:@"/inis"].fileSystemRepresentation, "PCSX2.ini"));
+	const std::string pcsx2ini(Path::CombineStdString([self.supportDirectoryPath stringByAppendingPathComponent:@"inis"].fileSystemRepresentation, "PCSX2.ini"));
 	s_base_settings_interface = std::make_unique<INISettingsInterface>(std::move(pcsx2ini));
 	Host::Internal::SetBaseSettingsLayer(s_base_settings_interface.get());
 	
@@ -176,16 +181,16 @@ static NSString *binCueFix(NSString *path)
 	EmuFolders::Bios = self.biosDirectoryPath.fileSystemRepresentation;
 	EmuFolders::AppRoot = [[NSBundle bundleForClass:[self class]] resourceURL].fileSystemRepresentation;
 	EmuFolders::DataRoot = self.supportDirectoryPath.fileSystemRepresentation;
-	EmuFolders::Settings = [self.supportDirectoryPath stringByAppendingPathComponent:@"/inis"].fileSystemRepresentation;
+	EmuFolders::Settings = [self.supportDirectoryPath stringByAppendingPathComponent:@"inis"].fileSystemRepresentation;
 	EmuFolders::Resources = [[NSBundle bundleForClass:[self class]] resourceURL].fileSystemRepresentation;
-	EmuFolders::Cache = [self.supportDirectoryPath stringByAppendingPathComponent:@"/Cache"].fileSystemRepresentation;
-	EmuFolders::Snapshots = [self.supportDirectoryPath stringByAppendingPathComponent:@"/snaps"].fileSystemRepresentation;
-	EmuFolders::Savestates = [self.supportDirectoryPath stringByAppendingPathComponent:@"/sstates"].fileSystemRepresentation;
-	EmuFolders::Logs = [self.supportDirectoryPath stringByAppendingPathComponent:@"/Logs"].fileSystemRepresentation;
-	EmuFolders::Cheats = [self.supportDirectoryPath stringByAppendingPathComponent:@"/Cheats"].fileSystemRepresentation;
-	EmuFolders::CheatsWS = [self.supportDirectoryPath stringByAppendingPathComponent:@"/cheats_ws"].fileSystemRepresentation;
-	EmuFolders::Covers = [self.supportDirectoryPath stringByAppendingPathComponent:@"/Covers"].fileSystemRepresentation;
-	EmuFolders::GameSettings = [self.supportDirectoryPath stringByAppendingPathComponent:@"/gamesettings"].fileSystemRepresentation;
+	EmuFolders::Cache = [self.supportDirectoryPath stringByAppendingPathComponent:@"Cache"].fileSystemRepresentation;
+	EmuFolders::Snapshots = [self.supportDirectoryPath stringByAppendingPathComponent:@"snaps"].fileSystemRepresentation;
+	EmuFolders::Savestates = [self.supportDirectoryPath stringByAppendingPathComponent:@"sstates"].fileSystemRepresentation;
+	EmuFolders::Logs = [self.supportDirectoryPath stringByAppendingPathComponent:@"Logs"].fileSystemRepresentation;
+	EmuFolders::Cheats = [self.supportDirectoryPath stringByAppendingPathComponent:@"Cheats"].fileSystemRepresentation;
+	EmuFolders::CheatsWS = [self.supportDirectoryPath stringByAppendingPathComponent:@"cheats_ws"].fileSystemRepresentation;
+	EmuFolders::Covers = [self.supportDirectoryPath stringByAppendingPathComponent:@"Covers"].fileSystemRepresentation;
+	EmuFolders::GameSettings = [self.supportDirectoryPath stringByAppendingPathComponent:@"gamesettings"].fileSystemRepresentation;
 	EmuFolders::EnsureFoldersExist();
 	
 	EmuConfig.Mcd[0].Enabled = true;
@@ -441,9 +446,6 @@ static NSString *binCueFix(NSString *path)
 
 #pragma mark - Display Options
 
-static NSString * const OEPSCSX2InternalResolution = @"OEPSCSX2InternalResolution";
-static NSString * const OEPSCSX2BlendingAccuracy = @"OEPSCSX2BlendingAccuracy";
-
 - (NSDictionary<NSString *,id> *)displayModeInfo
 {
 	return [_displayModes copy];
@@ -471,7 +473,6 @@ static NSString * const OEPSCSX2BlendingAccuracy = @"OEPSCSX2BlendingAccuracy";
 			_displayModes[defaultValues[i].key] = defaultValues[i].defaultValue;
 		}
 	}
-
 }
 
 - (NSArray <NSDictionary <NSString *, id> *> *)displayModes
@@ -702,6 +703,10 @@ HostDisplay* Host::AcquireHostDisplay(HostDisplay::RenderAPI api)
 
 void Host::ReleaseHostDisplay()
 {
+	GET_CURRENT_OR_RETURN();
+
+	current->hostDisplay->DestroyRenderDevice();
+	current->hostDisplay.reset();
 }
 
 HostDisplay* Host::GetHostDisplay()
