@@ -8914,6 +8914,7 @@
 					"GIT_TAG=\"\\\"Oh dear...\\\"\"",
 					DISABLE_RECORDING,
 					SPU2X_CUBEB,
+					GL_SILENCE_DEPRECATION,
 				);
 				INFOPLIST_FILE = Resources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
@@ -8984,6 +8985,7 @@
 					"GIT_TAG=\"\\\"Oh dear...\\\"\"",
 					DISABLE_RECORDING,
 					SPU2X_CUBEB,
+					GL_SILENCE_DEPRECATION,
 				);
 				INFOPLIST_FILE = Resources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
@@ -9069,6 +9071,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				EXECUTABLE_PREFIX = lib;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/pcsx2/3rdparty/libchdr/libchdr/include\"";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -9080,6 +9083,7 @@
 		5517FE5B263E124E000219EC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				CODE_SIGN_STYLE = Automatic;
 				EXECUTABLE_PREFIX = lib;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -9109,6 +9113,7 @@
 		5517FE5C263E124E000219EC /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				EXECUTABLE_PREFIX = lib;
@@ -9124,6 +9129,7 @@
 					HAVE_CHECK_CRC64,
 					HAVE_CHECK_CRC32,
 				);
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				STRIP_INSTALLED_PRODUCT = NO;
@@ -9265,6 +9271,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				EXECUTABLE_PREFIX = lib;
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				LLVM_LTO = YES_THIN;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -9314,6 +9321,7 @@
 					"wxUSE_GUI=0",
 					"WX_PRECOMP=1",
 				);
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/WxBridging\"";
 				LLVM_LTO = YES_THIN;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -9325,6 +9333,7 @@
 		551BF48F2641F9470008C529 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_WARN_COMMA = NO;
 				CODE_SIGN_STYLE = Automatic;
 				EXECUTABLE_PREFIX = lib;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -9336,9 +9345,11 @@
 		551BF4902641F9470008C529 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_WARN_COMMA = NO;
 				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				EXECUTABLE_PREFIX = lib;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				STRIP_INSTALLED_PRODUCT = NO;
@@ -9422,6 +9433,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				EXECUTABLE_PREFIX = lib;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				LLVM_LTO = YES_THIN;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -9535,6 +9547,7 @@
 		5580651B27AB4BBE008CD5D2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				CODE_SIGN_STYLE = Automatic;
 				EXECUTABLE_PREFIX = lib;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -9544,14 +9557,6 @@
 					"RANDOM_PREFIX=oepsx2",
 					"EXPORT=\"\"",
 					FLOATING_POINT,
-				);
-				"GCC_PREPROCESSOR_DEFINITIONS[arch=arm64]" = (
-					_USE_NEON,
-					"$(inherited)",
-				);
-				"GCC_PREPROCESSOR_DEFINITIONS[arch=arm64e]" = (
-					_USE_NEON,
-					"$(inherited)",
 				);
 				"GCC_PREPROCESSOR_DEFINITIONS[arch=x86_64]" = (
 					_USE_SSE,
@@ -9577,6 +9582,7 @@
 		5580651C27AB4BBE008CD5D2 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				EXECUTABLE_PREFIX = lib;
@@ -9588,14 +9594,6 @@
 					"EXPORT=\"\"",
 					FLOATING_POINT,
 				);
-				"GCC_PREPROCESSOR_DEFINITIONS[arch=arm64]" = (
-					_USE_NEON,
-					"$(inherited)",
-				);
-				"GCC_PREPROCESSOR_DEFINITIONS[arch=arm64e]" = (
-					_USE_NEON,
-					"$(inherited)",
-				);
 				"GCC_PREPROCESSOR_DEFINITIONS[arch=x86_64]" = (
 					_USE_SSE,
 					_USE_SSE2,
@@ -9606,6 +9604,7 @@
 					_USE_SSE2,
 					"$(inherited)",
 				);
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
 				LLVM_LTO = YES_THIN;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

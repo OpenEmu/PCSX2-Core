@@ -25,9 +25,9 @@
 #ifndef soundtouch_config_h
 #define soundtouch_config_h
 
-#ifdef __x86_64__
-#define SOUNDTOUCH_ALLOW_SSE
-#define SOUNDTOUCH_ALLOW_X86_OPTIMIZATIONS
-#endif
+//#ifdef __x86_64__
+//#define SOUNDTOUCH_ALLOW_SSE
+//#define SOUNDTOUCH_ALLOW_X86_OPTIMIZATIONS
+//#endif
 
 #endif /* soundtouch_config_h */
