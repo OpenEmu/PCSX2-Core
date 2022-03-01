@@ -744,12 +744,6 @@ void Host::UpdateHostDisplay()
 
 const IConsoleWriter* PatchesCon = &ConsoleWriter_Null;
 
-void LoadAllPatchesAndStuff(const Pcsx2Config& cfg)
-{
-	GET_CURRENT_OR_RETURN();
-	// TODO: implement
-}
-
 std::optional<u32> InputManager::ConvertHostKeyboardStringToCode(const std::string_view& str)
 {
 	return std::nullopt;

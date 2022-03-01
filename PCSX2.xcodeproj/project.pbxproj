@@ -568,6 +568,7 @@
 		553CF8422640D2F8003A437C /* simd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FA6E263D48AE000219EC /* simd.cpp */; };
 		553CF8432640D2F8003A437C /* legacy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FA6D263D48AE000219EC /* legacy.cpp */; };
 		553CF8462640D30F003A437C /* libemitter_PCSX2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 553CF8172640CCCD003A437C /* libemitter_PCSX2.a */; };
+		5541B76F27CECF3200AE70C2 /* OEPatching.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5541B76E27CECF3200AE70C2 /* OEPatching.cpp */; };
 		5564D643279A07D300EECDEC /* ryml.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 5564D57D279A07D300EECDEC /* ryml.hpp */; };
 		5564D644279A07D300EECDEC /* ryml_std.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 5564D57F279A07D300EECDEC /* ryml_std.hpp */; };
 		5564D645279A07D300EECDEC /* common.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5564D582279A07D300EECDEC /* common.cpp */; };
@@ -2827,6 +2828,7 @@
 		55300EAB27C9A2830049E2CC /* GSTextureReplacements.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GSTextureReplacements.cpp; sourceTree = "<group>"; };
 		55300EAC27C9A2830049E2CC /* GSTextureReplacementLoaders.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GSTextureReplacementLoaders.cpp; sourceTree = "<group>"; };
 		553CF8172640CCCD003A437C /* libemitter_PCSX2.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libemitter_PCSX2.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		5541B76E27CECF3200AE70C2 /* OEPatching.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OEPatching.cpp; sourceTree = "<group>"; };
 		5564D3FD279A063B00EECDEC /* colour.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = colour.h; sourceTree = "<group>"; };
 		5564D439279A07D200EECDEC /* 0.2.1.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = 0.2.1.md; sourceTree = "<group>"; };
 		5564D43A279A07D200EECDEC /* 0.2.0.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = 0.2.0.md; sourceTree = "<group>"; };
@@ -3695,6 +3697,7 @@
 				5580653527AB5369008CD5D2 /* PCSX2Exports.exp */,
 				551BF5B626420FFC0008C529 /* svnrev.h */,
 				551BF5ED264212D60008C529 /* soundtouch_config.h */,
+				5541B76E27CECF3200AE70C2 /* OEPatching.cpp */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -8094,6 +8097,7 @@
 				551BF5B426420FA50008C529 /* Interpreter.cpp in Sources */,
 				551AA1312792AB1700658151 /* GSRendererNew.cpp in Sources */,
 				551AA4A927935E9100658151 /* EthernetFrame.cpp in Sources */,
+				5541B76F27CECF3200AE70C2 /* OEPatching.cpp in Sources */,
 				551BF688264241E10008C529 /* DisassemblyManager.cpp in Sources */,
 				551AA12E2792AB1700658151 /* GSTextureCache.cpp in Sources */,
 				551BF57726420E720008C529 /* VUops.cpp in Sources */,
