@@ -45,6 +45,7 @@
 #include "PAD/Host/KeyStatus.h"
 #include "R3000A.h"
 #include "MTVU.h"
+#include "Elfheader.h"
 #undef BOOL
 
 #include <OpenGL/gl3.h>
@@ -76,6 +77,10 @@ PCSX2GameCore *_current;
 	bool hasInitialized;
 	NSString* gamePath;
 	NSString* stateToLoad;
+	NSString* DiscID;
+	NSString* DiscRegion;
+	NSString* DiscSubRegion;
+	
 	std::unique_ptr<INISettingsInterface> s_base_settings_interface;
 	std::unique_ptr<HostDisplay> hostDisplay;
 	
@@ -152,6 +157,21 @@ static NSString *binCueFix(NSString *path)
 	} else {
 		gamePath = [path copy];
 	}
+	
+	//Lets get the Disc ID with some Magic out of PCSX2 CDVD :)
+	VMManager::ChangeDisc(path.fileSystemRepresentation);
+	wxString DiscName;
+	GetPS2ElfName(DiscName);
+	
+	wxString fname = DiscName.AfterLast('\\').BeforeFirst('_');
+	wxString fname2 = DiscName.AfterLast('_').BeforeFirst('.');
+	wxString fname3 = DiscName.AfterLast('.').BeforeFirst(';');
+	DiscName = fname + "-" + fname2 + fname3;
+	
+	DiscID = [NSString stringWithCString:DiscName.char_str() encoding:NSASCIIStringEncoding];
+	DiscRegion = [[NSString stringWithCString:fname.char_str() encoding:NSASCIIStringEncoding] substringWithRange:NSMakeRange(2,1)];
+	DiscSubRegion = [[NSString stringWithCString:fname.char_str() encoding:NSASCIIStringEncoding] substringWithRange:NSMakeRange(3,1)];
+	
 	return true;
 }
 
@@ -201,8 +221,23 @@ static NSString *binCueFix(NSString *path)
 	EmuConfig.Mcd[1].Type = MemoryCardType::Folder;
 	EmuConfig.Mcd[1].Filename = "Memory folder 2.ps2";
 	
-	// TODO: select based on loaded game's region?
-	EmuConfig.BaseFilenames.Bios = "scph39001.bin";
+	if ( [DiscRegion isEqualToString:@"U"]){
+		// NTSC-US
+		EmuConfig.BaseFilenames.Bios = "scph39001.bin";
+	} else if ( [DiscRegion isEqualToString:@"E"]){
+		// Pal Europe
+		EmuConfig.BaseFilenames.Bios = "scph70004.bin";
+	}  else {
+		//It's one of the many Asia Pacfic NTCS-J Regions
+		// look at Region/sub region to figure out further
+		if ( [DiscSubRegion isEqualToString:@"J"]){
+			//It's Japan
+			EmuConfig.BaseFilenames.Bios = "scph10000.bin";
+		} else{
+			// Default to the US Bios for now
+			EmuConfig.BaseFilenames.Bios = "scph39001.bin";
+		}
+	}
 	
 #ifdef DEBUG
 	si.SetBoolValue("EmuCore/CPU/Recompiler", "EnableEE", false);
@@ -295,6 +330,9 @@ static NSString *binCueFix(NSString *path)
 	{
 		switch (VMManager::GetState())
 		{
+			case VMState::Shutdown:
+				continue;
+				
 			case VMState::Initializing:
 				continue;
 
