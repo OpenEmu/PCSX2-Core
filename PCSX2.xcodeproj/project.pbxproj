@@ -603,6 +603,10 @@
 		556FBB48279E1067007B4F88 /* InputManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 556FBB36279E1067007B4F88 /* InputManager.cpp */; };
 		556FBB49279E1067007B4F88 /* LayeredSettingsInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 556FBB39279E1067007B4F88 /* LayeredSettingsInterface.cpp */; };
 		556FBB4D279E1067007B4F88 /* InputSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 556FBB3F279E1067007B4F88 /* InputSource.cpp */; };
+		557D49CE27D00BE7006C2C69 /* interlace.metal in Sources */ = {isa = PBXBuildFile; fileRef = DD03FFB627B70F0C0006ABDC /* interlace.metal */; };
+		557D49CF27D00BE7006C2C69 /* tfx.metal in Sources */ = {isa = PBXBuildFile; fileRef = DD03FFBD27B70F0C0006ABDC /* tfx.metal */; };
+		557D49D027D00BE7006C2C69 /* merge.metal in Sources */ = {isa = PBXBuildFile; fileRef = DD03FFB727B70F0C0006ABDC /* merge.metal */; };
+		557D49D127D00BE7006C2C69 /* convert.metal in Sources */ = {isa = PBXBuildFile; fileRef = DD03FFC127B70F0C0006ABDC /* convert.metal */; };
 		5580639A27AB3262008CD5D2 /* KeyStatus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5580639627AB3261008CD5D2 /* KeyStatus.cpp */; };
 		558063A027AB346B008CD5D2 /* HostDisplay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5580639E27AB346B008CD5D2 /* HostDisplay.cpp */; };
 		558063A127AB346B008CD5D2 /* Host.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5580639F27AB346B008CD5D2 /* Host.cpp */; };
@@ -3210,8 +3214,8 @@
 		DD03FFC027B70F0C0006ABDC /* MTLDrawableFetcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTLDrawableFetcher.h; sourceTree = "<group>"; };
 		DD03FFC127B70F0C0006ABDC /* convert.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = convert.metal; sourceTree = "<group>"; };
 		DD03FFCE27B719E40006ABDC /* AppConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppConfig.h; path = gui/AppConfig.h; sourceTree = "<group>"; };
-		DD03FFD227B720610006ABDC /* MetalHostDisplay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MetalHostDisplay.h; path = Frontend/MetalHostDisplay.h; sourceTree = "<group>"; };
-		DD03FFD327B720610006ABDC /* MetalHostDisplay.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MetalHostDisplay.mm; path = Frontend/MetalHostDisplay.mm; sourceTree = "<group>"; };
+		DD03FFD227B720610006ABDC /* MetalHostDisplay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MetalHostDisplay.h; sourceTree = "<group>"; };
+		DD03FFD327B720610006ABDC /* MetalHostDisplay.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MetalHostDisplay.mm; sourceTree = "<group>"; };
 		DD1134E827CBCE8900C2E60B /* SaveState.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SaveState.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -4863,8 +4867,6 @@
 		5517FAA7263D49BB000219EC /* pcsx2 */ = {
 			isa = PBXGroup;
 			children = (
-				DD03FFD227B720610006ABDC /* MetalHostDisplay.h */,
-				DD03FFD327B720610006ABDC /* MetalHostDisplay.mm */,
 				DD03FFCE27B719E40006ABDC /* AppConfig.h */,
 				5517FDEF263D49BC000219EC /* AsyncFileReader.h */,
 				5517FCBC263D49BC000219EC /* Cache.cpp */,
@@ -7183,6 +7185,8 @@
 				556FBB37279E1067007B4F88 /* InputSource.h */,
 				556FBB39279E1067007B4F88 /* LayeredSettingsInterface.cpp */,
 				556FBB38279E1067007B4F88 /* LayeredSettingsInterface.h */,
+				DD03FFD227B720610006ABDC /* MetalHostDisplay.h */,
+				DD03FFD327B720610006ABDC /* MetalHostDisplay.mm */,
 				556FBB40279E1067007B4F88 /* OpenGLHostDisplay.cpp */,
 				5580653127AB50CC008CD5D2 /* OpenGLHostDisplay.h */,
 			);
@@ -7559,21 +7563,21 @@
 		DD03FFB227B70F0C0006ABDC /* Metal */ = {
 			isa = PBXGroup;
 			children = (
-				DD03FFB327B70F0C0006ABDC /* MTLDrawableFetcher.mm */,
+				DD03FFC127B70F0C0006ABDC /* convert.metal */,
+				DD03FFBF27B70F0C0006ABDC /* GSDeviceMTL.h */,
+				DD03FFBA27B70F0C0006ABDC /* GSDeviceMTL.mm */,
 				DD03FFB427B70F0C0006ABDC /* GSMetalCPPAccessible.h */,
 				DD03FFB527B70F0C0006ABDC /* GSMTLDeviceInfo.h */,
+				DD03FFB827B70F0C0006ABDC /* GSMTLDeviceInfo.mm */,
+				DD03FFBB27B70F0C0006ABDC /* GSMTLShaderCommon.h */,
+				DD03FFBE27B70F0C0006ABDC /* GSMTLSharedHeader.h */,
+				DD03FFBC27B70F0C0006ABDC /* GSTextureMTL.h */,
+				DD03FFB927B70F0C0006ABDC /* GSTextureMTL.mm */,
 				DD03FFB627B70F0C0006ABDC /* interlace.metal */,
 				DD03FFB727B70F0C0006ABDC /* merge.metal */,
-				DD03FFB827B70F0C0006ABDC /* GSMTLDeviceInfo.mm */,
-				DD03FFB927B70F0C0006ABDC /* GSTextureMTL.mm */,
-				DD03FFBA27B70F0C0006ABDC /* GSDeviceMTL.mm */,
-				DD03FFBB27B70F0C0006ABDC /* GSMTLShaderCommon.h */,
-				DD03FFBC27B70F0C0006ABDC /* GSTextureMTL.h */,
-				DD03FFBD27B70F0C0006ABDC /* tfx.metal */,
-				DD03FFBE27B70F0C0006ABDC /* GSMTLSharedHeader.h */,
-				DD03FFBF27B70F0C0006ABDC /* GSDeviceMTL.h */,
 				DD03FFC027B70F0C0006ABDC /* MTLDrawableFetcher.h */,
-				DD03FFC127B70F0C0006ABDC /* convert.metal */,
+				DD03FFB327B70F0C0006ABDC /* MTLDrawableFetcher.mm */,
+				DD03FFBD27B70F0C0006ABDC /* tfx.metal */,
 			);
 			path = Metal;
 			sourceTree = "<group>";
@@ -8178,6 +8182,7 @@
 				551AA4AD27935E9100658151 /* DNS_Classes.cpp in Sources */,
 				551BF6A2264244050008C529 /* spu2freeze.cpp in Sources */,
 				551AA4E72793789300658151 /* GSSetupPrimCodeGenerator.cpp in Sources */,
+				557D49D127D00BE7006C2C69 /* convert.metal in Sources */,
 				551BF68A264241E80008C529 /* DisVU0Micro.cpp in Sources */,
 				558063B627AB4A67008CD5D2 /* CfgHelpers.cpp in Sources */,
 				551AA4D227936D7500658151 /* Context.cpp in Sources */,
@@ -8221,6 +8226,7 @@
 				551BF57926420E720008C529 /* Vif0_Dma.cpp in Sources */,
 				DD0302BD27C491160006ABDC /* OpenGLHostDisplayOverride.cpp in Sources */,
 				551BF56826420E3B0008C529 /* newVif_Unpack.cpp in Sources */,
+				557D49D027D00BE7006C2C69 /* merge.metal in Sources */,
 				551BF5CD264212070008C529 /* Mpeg.cpp in Sources */,
 				551AA4AB27935E9100658151 /* DHCP_Packet.cpp in Sources */,
 				DD0302B127C435760006ABDC /* SndOut_Cubeb.cpp in Sources */,
@@ -8273,6 +8279,7 @@
 				558063B927AB4A67008CD5D2 /* Config.cpp in Sources */,
 				551BF6BD26424BAA0008C529 /* ThreadedFileReader.cpp in Sources */,
 				551BF687264241DB0008C529 /* Breakpoints.cpp in Sources */,
+				557D49CF27D00BE7006C2C69 /* tfx.metal in Sources */,
 				551BF56B26420E710008C529 /* VUmicroMem.cpp in Sources */,
 				551BF58C26420E9A0008C529 /* PsxBios.cpp in Sources */,
 				551BF632264216F50008C529 /* ChunksCache.cpp in Sources */,
@@ -8306,6 +8313,7 @@
 				551BF644264218380008C529 /* iR5900Jump.cpp in Sources */,
 				551BF56A26420E710008C529 /* Vif_Unpack.cpp in Sources */,
 				551AA1482792AB1800658151 /* GLState.cpp in Sources */,
+				557D49CE27D00BE7006C2C69 /* interlace.metal in Sources */,
 				551BF62D264216F50008C529 /* OutputIsoFile.cpp in Sources */,
 				551BF645264218380008C529 /* iR5900Branch.cpp in Sources */,
 				551BF6A4264244280008C529 /* Wavedump_wav.cpp in Sources */,
@@ -8905,9 +8913,6 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = pcsx2/pcsx2/PrecompiledHeader.h;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					_M_X86,
-					__M_X86_64,
-					_M_X86_64,
 					"$(inherited)",
 					"__WXOSX_COCOA__=1",
 					"GIT_TAGGED_COMMIT=1",
@@ -8915,6 +8920,19 @@
 					DISABLE_RECORDING,
 					SPU2X_CUBEB,
 					GL_SILENCE_DEPRECATION,
+				);
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=x86_64]" = (
+					_M_X86,
+					__M_X86_64,
+					_M_X86_64,
+					"$(inherited)",
+				);
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=x86_64h]" = (
+					_M_X86,
+					__M_X86_64,
+					_M_X86_64,
+					"_M_SSE=0x501",
+					"$(inherited)",
 				);
 				INFOPLIST_FILE = Resources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
@@ -8976,9 +8994,6 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = pcsx2/pcsx2/PrecompiledHeader.h;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					_M_X86,
-					__M_X86_64,
-					_M_X86_64,
 					"$(inherited)",
 					"__WXOSX_COCOA__=1",
 					"GIT_TAGGED_COMMIT=1",
@@ -8986,6 +9001,19 @@
 					DISABLE_RECORDING,
 					SPU2X_CUBEB,
 					GL_SILENCE_DEPRECATION,
+				);
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=x86_64]" = (
+					_M_X86,
+					__M_X86_64,
+					_M_X86_64,
+					"$(inherited)",
+				);
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=x86_64h]" = (
+					_M_X86,
+					__M_X86_64,
+					_M_X86_64,
+					"_M_SSE=0x501",
+					"$(inherited)",
 				);
 				INFOPLIST_FILE = Resources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
