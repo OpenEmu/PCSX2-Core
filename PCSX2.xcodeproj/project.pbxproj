@@ -8931,7 +8931,6 @@
 					_M_X86,
 					__M_X86_64,
 					_M_X86_64,
-					"_M_SSE=0x501",
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = Resources/Info.plist;
@@ -9012,7 +9011,6 @@
 					_M_X86,
 					__M_X86_64,
 					_M_X86_64,
-					"_M_SSE=0x501",
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = Resources/Info.plist;
