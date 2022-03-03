@@ -144,7 +144,7 @@ static Threading::Mutex mtx__ApplySettings;
 /// Oh, and updates curGameKey. I think that's it.
 /// It doesn't require that the emulation is paused, and console writes/title should
 /// be thread safe, but it's best if things don't move around much while it runs.
-/// TODO: Trim this down so only OpenEmu patches are loaded.
+/// TODO: Trim this down so only OpenEmu-needed patches are loaded.
 static void _ApplySettings(const Pcsx2Config& src, Pcsx2Config& fixup)
 {
 	Threading::ScopedLock lock(mtx__ApplySettings);
