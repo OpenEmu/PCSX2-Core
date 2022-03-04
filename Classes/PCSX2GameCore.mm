@@ -53,7 +53,7 @@
 #include <OpenGL/gl3ext.h>
 
 static bool ExitRequested = false;
-static bool LoadingSaveState = false;
+static bool WaitRequested = false;
 static bool isExecuting = false;
 
 bool renderswitch = false;
@@ -342,7 +342,7 @@ static NSString *binCueFix(NSString *path)
 				continue;
 
 			case VMState::Running:
-				if (!LoadingSaveState) {
+				if (!WaitRequested) {
 					isExecuting = true;
 					VMManager::Execute();
 					isExecuting = false;
@@ -447,12 +447,12 @@ static NSString *binCueFix(NSString *path)
 		return;
 	}
 	
-	LoadingSaveState = true;
+	WaitRequested = true;
 	while(isExecuting)
 		usleep(50);
 	
 	bool success = VMManager::LoadState(fileName.fileSystemRepresentation);
-	LoadingSaveState = false;
+	WaitRequested = false;
 
 	block(success, success ? nil : [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotLoadStateError userInfo:@{NSLocalizedDescriptionKey : @"PCSX2 Could not load the current state.",NSFilePathErrorKey: fileName}]);
 }
