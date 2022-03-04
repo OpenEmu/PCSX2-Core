@@ -27,6 +27,7 @@
 #import <OpenEmuBase/OERingBuffer.h>
 #include "Audio/OESndOut.h"
 #include "Input/keymap.h"
+#include "OEUpscalePatches.h"
 
 #define BOOL PCSX2BOOL
 #include "PrecompiledHeader.h"
@@ -67,15 +68,6 @@ namespace GSDump
 
 alignas(16) static SysMtgsThread s_mtgs_thread;
 PCSX2GameCore *_current;
-
-NSDictionary<NSString *, NSNumber *> *wildArmsGames =
-@{
-	@"SCAJ-20123" : @1,	@"SCAJ-30002" : @1,	@"SCPS-15023" : @1,	@"SCPS-15024" : @1,	@"SCPS-15091" : @1,
-	@"SCPS-15092" : @1,	@"SCPS-15118" : @1,	@"SCPS-17002" : @1,	@"SCPS-19205" : @1,	@"SCPS-19251" : @1,
-	@"SCPS-19253" : @1,	@"SCPS-19313" : @1,	@"SCPS-19322" : @1,	@"SCPS-19323" : @1,	@"SCPS-55006" : @1,
-	@"SCUS-97203" : @1,	@"SCUS-97224" : @1,	@"SLES-51307" : @1,	@"SLES-54239" : @1,	@"SLES-54972" : @1,
-	@"SLUS-20937" : @1,	@"SLUS-21292" : @1,	@"SLUS-21615" : @1,
-};
 
 @interface PCSX2GameCore ()
 
@@ -271,9 +263,9 @@ static NSString *binCueFix(NSString *path)
 	si.SetBoolValue("EmuCore/GS", "FrameLimitEnable", true);
 	si.SetBoolValue("EmuCore/GS", "SyncToHostRefreshRate",false);
 	si.SetBoolValue("EmuCore/GS", "UserHacks", true);
-	if(wildArmsGames[self->DiscID])
-		si.SetBoolValue("EmuCore/GS", "UserHacks_WildHack", true);
 	
+	[self ApplyUpscalePatches];
+
 	wxModule::RegisterModules();
 	wxModule::InitializeModules();
 }
@@ -574,6 +566,17 @@ static NSString *binCueFix(NSString *path)
 	}
 	
 	VMManager::ApplySettings();
+}
+
+- (void) ApplyUpscalePatches
+{
+	if([wildArmsGames containsObject:DiscID])
+		s_base_settings_interface->SetBoolValue("EmuCore/GS", "UserHacks_WildHack", true);
+	
+	if([alignSpriteGames containsObject:DiscID]  && s_base_settings_interface->GetIntValue("EmuCore/GS", "upscale_multiplier") > 1)
+		s_base_settings_interface->SetBoolValue("EmuCore/GS", "UserHacks_AlignSpriteX", true);
+	else
+		s_base_settings_interface->SetBoolValue("EmuCore/GS", "UserHacks_AlignSpriteX", false);
 }
 
 @end

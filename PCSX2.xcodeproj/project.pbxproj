@@ -3213,6 +3213,7 @@
 		DD03FFD227B720610006ABDC /* MetalHostDisplay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MetalHostDisplay.h; path = Frontend/MetalHostDisplay.h; sourceTree = "<group>"; };
 		DD03FFD327B720610006ABDC /* MetalHostDisplay.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MetalHostDisplay.mm; path = Frontend/MetalHostDisplay.mm; sourceTree = "<group>"; };
 		DD1134E827CBCE8900C2E60B /* SaveState.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SaveState.cpp; sourceTree = "<group>"; };
+		DD1134EA27D28B0600C2E60B /* OEUpscalePatches.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OEUpscalePatches.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -3698,6 +3699,7 @@
 				551BF5B626420FFC0008C529 /* svnrev.h */,
 				551BF5ED264212D60008C529 /* soundtouch_config.h */,
 				5541B76E27CECF3200AE70C2 /* OEPatching.cpp */,
+				DD1134EA27D28B0600C2E60B /* OEUpscalePatches.h */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
