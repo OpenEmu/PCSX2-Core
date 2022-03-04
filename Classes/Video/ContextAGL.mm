@@ -89,6 +89,8 @@ namespace GL
 
 	bool ContextAGL::ChangeSurface(const WindowInfo& new_wi)
 	{
+		m_wi.surface_width = new_wi.surface_width;
+		m_wi.surface_height = new_wi.surface_height;
 		return true;
 	}
 

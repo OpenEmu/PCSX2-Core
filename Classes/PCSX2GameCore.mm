@@ -53,7 +53,7 @@
 #include <OpenGL/gl3ext.h>
 
 static bool ExitRequested = false;
-static bool LoadingSaveState = false;
+static bool WaitRequested = false;
 static bool isExecuting = false;
 
 bool renderswitch = false;
@@ -93,6 +93,7 @@ PCSX2GameCore *_current;
 	NSString *basePath;
 	// Display modes.
 	NSMutableDictionary <NSString *, id> *_displayModes;
+	OEIntRect screenRect;
 }
 
 - (instancetype)init
@@ -104,6 +105,7 @@ PCSX2GameCore *_current;
 		_displayModes = [[NSMutableDictionary alloc] initWithDictionary:
 						 @{OEPSCSX2InternalResolution: @1,
 						   OEPSCSX2BlendingAccuracy: @1}];
+		screenRect = OEIntRectMake(0, 0, 640 * 8, 448 * 8);
 	}
 	return self;
 }
@@ -304,8 +306,8 @@ static NSString *binCueFix(NSString *path)
 		hostDisplay = HostDisplay::CreateDisplayForAPI(OpenGLHostDisplay::RenderAPI::OpenGL);
 		WindowInfo wi;
 			wi.type = WindowInfo::Type::MacOS;
-			wi.surface_width = 640 ;
-			wi.surface_height = 448 ;
+			wi.surface_width = screenRect.size.width ;
+			wi.surface_height = screenRect.size.height ;
 		hostDisplay->CreateRenderDevice(wi,
 				Host::GetStringSettingValue("EmuCore/GS", "Adapter", ""),
 				VsyncMode::Adaptive,
@@ -342,7 +344,7 @@ static NSString *binCueFix(NSString *path)
 				continue;
 
 			case VMState::Running:
-				if (!LoadingSaveState) {
+				if (!WaitRequested) {
 					isExecuting = true;
 					VMManager::Execute();
 					isExecuting = false;
@@ -401,10 +403,16 @@ static NSString *binCueFix(NSString *path)
 	return NO;
 }
 
+- (OEIntRect)screenRect
+{
+	return screenRect;
+}
+
 - (OEIntSize)bufferSize
 {
-	return (OEIntSize){ 640 , 448  };
+	return OEIntSizeMake(screenRect.size.width, screenRect.size.height);
 }
+
 
 #pragma mark Audio
 - (NSUInteger)channelCount
@@ -447,12 +455,12 @@ static NSString *binCueFix(NSString *path)
 		return;
 	}
 	
-	LoadingSaveState = true;
+	WaitRequested = true;
 	while(isExecuting)
 		usleep(50);
 	
 	bool success = VMManager::LoadState(fileName.fileSystemRepresentation);
-	LoadingSaveState = false;
+	WaitRequested = false;
 
 	block(success, success ? nil : [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotLoadStateError userInfo:@{NSLocalizedDescriptionKey : @"PCSX2 Could not load the current state.",NSFilePathErrorKey: fileName}]);
 }
@@ -561,6 +569,8 @@ static NSString *binCueFix(NSString *path)
 
 	if ([key isEqualToString:OEPSCSX2InternalResolution]) {
 		s_base_settings_interface->SetIntValue("EmuCore/GS", "upscale_multiplier", [currentVal intValue]);
+		VMManager::RequestDisplaySize([currentVal floatValue]);
+		[self ApplyUpscalePatches];
 	} else if ([key isEqualToString:OEPSCSX2InternalResolution]) {
 		s_base_settings_interface->SetIntValue("EmuCore/GS", "accurate_blending_unit", [currentVal intValue]);
 	}
@@ -748,7 +758,8 @@ void Host::RunOnCPUThread(std::function<void()> function, bool block)
 HostDisplay* Host::AcquireHostDisplay(HostDisplay::RenderAPI api)
 {
 	GET_CURRENT_OR_RETURN(nullptr);
-
+	
+	[current.renderDelegate willRenderFrameOnAlternateThread];
 	return current->hostDisplay.get();
 }
 
@@ -765,7 +776,6 @@ HostDisplay* Host::GetHostDisplay()
 {
 	GET_CURRENT_OR_RETURN(nullptr);
 	
-	[current.renderDelegate willRenderFrameOnAlternateThread];
 	return current->hostDisplay.get();
 }
 
@@ -785,6 +795,18 @@ void Host::EndPresentFrame()
 
 void Host::ResizeHostDisplay(u32 new_window_width, u32 new_window_height, float new_window_scale)
 {
+	
+	//Once We have METAL,  we may be able to scale the frontend canvas
+	
+//	GET_CURRENT_OR_RETURN();
+//
+//	WindowInfo wi;
+//		wi.type = WindowInfo::Type::MacOS;
+//		wi.surface_width = new_window_width;
+//		wi.surface_height = new_window_height;
+//	current->hostDisplay.get()->ChangeRenderWindow(wi);
+//	current->screenRect = OEIntRectMake(0, 0 , new_window_width, new_window_height);
+	 
 }
 
 void Host::UpdateHostDisplay()
