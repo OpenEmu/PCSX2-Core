@@ -758,7 +758,8 @@ void Host::RunOnCPUThread(std::function<void()> function, bool block)
 HostDisplay* Host::AcquireHostDisplay(HostDisplay::RenderAPI api)
 {
 	GET_CURRENT_OR_RETURN(nullptr);
-
+	
+	[current.renderDelegate willRenderFrameOnAlternateThread];
 	return current->hostDisplay.get();
 }
 
@@ -775,7 +776,6 @@ HostDisplay* Host::GetHostDisplay()
 {
 	GET_CURRENT_OR_RETURN(nullptr);
 	
-	[current.renderDelegate willRenderFrameOnAlternateThread];
 	return current->hostDisplay.get();
 }
 
