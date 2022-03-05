@@ -283,8 +283,8 @@ void GSDeviceMTL::BeginRenderPass(NSString* name, GSTexture* color, MTLLoadActio
 	              || depth   != m_current_render.depth_target
 	              || stencil != m_current_render.stencil_target;
 	GSVector4 color_clear;
-	float depth_clear;
-	int stencil_clear;
+	float depth_clear = 0;
+	int stencil_clear = 0;
 	bool needs_color_clear = false;
 	bool needs_depth_clear = false;
 	bool needs_stencil_clear = false;
@@ -460,21 +460,19 @@ void GSDeviceMTL::DoMerge(GSTexture* sTex[3], GSVector4* sRect, GSTexture* dTex,
 
 	if (sTex[0])
 	{
-		if (PMODE.AMOD == 1)
-		{
-			// TODO: OpenGL says keep the alpha from the 2nd output but then sets something that gets overwritten by every StretchRect call...
-		}
+		int idx = (PMODE.AMOD << 1) | PMODE.MMOD;
+		id<MTLRenderPipelineState> pipeline = m_merge_pipeline[idx];
 
 		// 1st output is enabled. It must be blended
 		if (PMODE.MMOD == 1)
 		{
 			// Blend with a constant alpha
-			DoStretchRect(sTex[0], sRect[0], dTex, dRect[0], m_merge_pipeline[1], true, LoadAction::Load, &cb_c, sizeof(cb_c));
+			DoStretchRect(sTex[0], sRect[0], dTex, dRect[0], pipeline, true, LoadAction::Load, &cb_c, sizeof(cb_c));
 		}
 		else
 		{
 			// Blend with 2 * input alpha
-			DoStretchRect(sTex[0], sRect[0], dTex, dRect[0], m_merge_pipeline[0], true, LoadAction::Load, nullptr, 0);
+			DoStretchRect(sTex[0], sRect[0], dTex, dRect[0], pipeline, true, LoadAction::Load, nullptr, 0);
 		}
 	}
 
@@ -501,12 +499,17 @@ void GSDeviceMTL::DoInterlace(GSTexture* sTex, GSTexture* dTex, int shader, bool
 
 void GSDeviceMTL::DoFXAA(GSTexture* sTex, GSTexture* dTex)
 {
-	// TODO: Implement
+	BeginRenderPass(@"FXAA", dTex, MTLLoadActionDontCare, nullptr, MTLLoadActionDontCare);
+	RenderCopy(sTex, m_fxaa_pipeline, GSVector4i(0, 0, dTex->GetSize().x, dTex->GetSize().y));
 }
 
 void GSDeviceMTL::DoShadeBoost(GSTexture* sTex, GSTexture* dTex)
 {
-	// TODO: Implement
+	BeginRenderPass(@"ShadeBoost", dTex, MTLLoadActionDontCare, nullptr, MTLLoadActionDontCare);
+	[m_current_render.encoder setFragmentBytes:&m_shadeboost_constants
+	                                    length:sizeof(m_shadeboost_constants)
+	                                   atIndex:GSMTLBufferIndexUniforms];
+	RenderCopy(sTex, m_shadeboost_pipeline, GSVector4i(0, 0, dTex->GetSize().x, dTex->GetSize().y));
 }
 
 void GSDeviceMTL::DoExternalFX(GSTexture* sTex, GSTexture* dTex)
@@ -608,6 +611,8 @@ bool GSDeviceMTL::Create(HostDisplay* display)
 	m_features.point_expand = true;
 	m_features.prefer_new_textures = true;
 	m_features.one_barrier_is_full = m_dev.features.framebuffer_fetch;
+
+	m_shadeboost_constants = simd::clamp<simd::float3>(simd_make_float3(theApp.GetConfigI("ShadeBoost_Contrast"), theApp.GetConfigI("ShadeBoost_Brightness"), theApp.GetConfigI("ShadeBoost_Saturation")), 0, 100) / 50;
 
 	try
 	{
@@ -766,6 +771,8 @@ bool GSDeviceMTL::Create(HostDisplay* display)
 		// FS Triangle Pipelines
 		pdesc.colorAttachments[0].pixelFormat = ConvertPixelFormat(GSTexture::Format::Color);
 		m_hdr_resolve_pipeline = MakePipeline(pdesc, fs_triangle, LoadShader(@"ps_mod256"), @"HDR Resolve");
+		m_fxaa_pipeline = MakePipeline(pdesc, fs_triangle, LoadShader(@"ps_fxaa"), @"fxaa");
+		m_shadeboost_pipeline = MakePipeline(pdesc, fs_triangle, LoadShader(@"ps_shadeboost"), @"shadeboost");
 		pdesc.colorAttachments[0].pixelFormat = ConvertPixelFormat(GSTexture::Format::FloatColor);
 		m_hdr_init_pipeline = MakePipeline(pdesc, fs_triangle, LoadShader(@"ps_copy_fs"), @"HDR Init");
 		pdesc.colorAttachments[0].pixelFormat = MTLPixelFormatInvalid;
@@ -859,16 +866,20 @@ bool GSDeviceMTL::Create(HostDisplay* display)
 			m_convert_pipeline_copy_mask[i] = MakePipeline(pdesc, vs_convert, ps_copy, name);
 		}
 
-		pdesc.colorAttachments[0].writeMask = MTLColorWriteMaskAll;
 		pdesc.colorAttachments[0].blendingEnabled = YES;
 		pdesc.colorAttachments[0].rgbBlendOperation = MTLBlendOperationAdd;
 		pdesc.colorAttachments[0].sourceRGBBlendFactor = MTLBlendFactorSourceAlpha;
 		pdesc.colorAttachments[0].destinationRGBBlendFactor = MTLBlendFactorOneMinusSourceAlpha;
 		for (size_t i = 0; i < std::size(m_merge_pipeline); i++)
 		{
-			NSString* name = [NSString stringWithFormat:@"ps_merge%zu", i];
-			m_merge_pipeline[i] = MakePipeline(pdesc, vs_convert, LoadShader(name), name);
+			bool mmod = i & 1;
+			bool amod = i & 2;
+			NSString* name = [NSString stringWithFormat:@"ps_merge%zu", mmod];
+			NSString* pipename = [NSString stringWithFormat:@"Merge%s%s", mmod ? " MMOD" : "", amod ? " AMOD" : ""];
+			pdesc.colorAttachments[0].writeMask = amod ? MTLColorWriteMaskRed | MTLColorWriteMaskGreen | MTLColorWriteMaskBlue : MTLColorWriteMaskAll;
+			m_merge_pipeline[i] = MakePipeline(pdesc, vs_convert, LoadShader(name), pipename);
 		}
+		pdesc.colorAttachments[0].writeMask = MTLColorWriteMaskAll;
 
 	}
 	catch (GSRecoverableError&)
@@ -1134,13 +1145,9 @@ void GSDeviceMTL::MRESetHWPipelineState(GSHWDrawConfig::VSSelector vssel, GSHWDr
 	id<MTLFunction> vs = m_hw_vs[vssel_mtl.key];
 
 	id<MTLFunction> ps;
-	// Stupid Intel bug #1: Outputting to Src1 without using it makes depth randomly not write (see https://github.com/tellowkrinkle/MetalBugReproduction/releases/tag/BrokenDepthWrite)
+	// Stupid Intel bug: Outputting to Src1 without using it makes depth randomly not write (see https://github.com/tellowkrinkle/MetalBugReproduction/releases/tag/BrokenDepthWrite)
 	// Solution: Only output to Src1 if you actually need it
 	bool dual_source_blend = !primid_tracking_init && (isDualSourceBlend(b.src) || isDualSourceBlend(b.dst));
-	// Stupid Intel bug #2: *Not* outputting to Src1 makes discard stop working
-	// Solution: Output to src1 for destination alpha
-	// Test GSdump: https://github.com/PCSX2/pcsx2/issues/4480
-	dual_source_blend |= pssel.date >= 5;
 	u64 pskey = pssel.key;
 	if (dual_source_blend)
 		pskey = ~pskey; // Didn't feel like finding another open bit
@@ -1555,7 +1562,7 @@ void GSDeviceMTL::SendHWDraw(GSHWDrawConfig& config, id<MTLRenderCommandEncoder>
 
 	if (config.drawlist)
 	{
-		[enc pushDebugGroup:[NSString stringWithFormat:@"Full barrier split draw (%d sprites in %lu groups)", config.nindices / config.indices_per_prim, config.drawlist->size()]];
+		[enc pushDebugGroup:[NSString stringWithFormat:@"Full barrier split draw (%d sprites in %d groups)", config.nindices / config.indices_per_prim, config.drawlist->size()]];
 #if defined(_DEBUG)
 		// Check how draw call is split.
 		std::map<size_t, size_t> frequency;

@@ -625,7 +625,6 @@
 		5580652427AB4CD7008CD5D2 /* libcubeb-pcsx2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5580651927AB4BBE008CD5D2 /* libcubeb-pcsx2.a */; };
 		5580652527AB4DAF008CD5D2 /* cubeb_log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 558064E727AB4B9E008CD5D2 /* cubeb_log.cpp */; };
 		5580652827AB4DE9008CD5D2 /* SettingsWrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5580652727AB4DE9008CD5D2 /* SettingsWrapper.cpp */; };
-		5580652B27AB5027008CD5D2 /* Config.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5580652A27AB5027008CD5D2 /* Config.cpp */; };
 		5580652D27AB504C008CD5D2 /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 5580652C27AB504C008CD5D2 /* libxml2.tbd */; };
 		5580652F27AB507C008CD5D2 /* DEV9Config.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5580652E27AB507C008CD5D2 /* DEV9Config.cpp */; };
 		5580662E27AD3A51008CD5D2 /* cheats_ws.zip in Resources */ = {isa = PBXBuildFile; fileRef = 558065B327AD3A31008CD5D2 /* cheats_ws.zip */; };
@@ -647,6 +646,7 @@
 		5591D80C27B469200073E97D /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5591D80B27B469200073E97D /* CoreAudio.framework */; };
 		5591D80D27B4693D0073E97D /* cubeb_utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 558064CA27AB4B9E008CD5D2 /* cubeb_utils.cpp */; };
 		5591D80E27B469600073E97D /* cubeb_osx_run_loop.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 558064C627AB4B9E008CD5D2 /* cubeb_osx_run_loop.cpp */; };
+		55DF028927D3273400B339A6 /* iR5900Analysis.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55DF028727D3273400B339A6 /* iR5900Analysis.cpp */; };
 		DD03001927BD695D0006ABDC /* tfx_fs.glsl in Copy OpenGL Shaders */ = {isa = PBXBuildFile; fileRef = 558065C627AD3A31008CD5D2 /* tfx_fs.glsl */; };
 		DD0302B127C435760006ABDC /* SndOut_Cubeb.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 558063BB27AB4B6C008CD5D2 /* SndOut_Cubeb.cpp */; };
 		DD0302B227C43CD50006ABDC /* SndOut.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FCD0263D49BC000219EC /* SndOut.cpp */; };
@@ -1466,7 +1466,6 @@
 		5517FAD2263D49BB000219EC /* smap.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = smap.cpp; sourceTree = "<group>"; };
 		5517FAD3263D49BB000219EC /* DEV9.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DEV9.h; sourceTree = "<group>"; };
 		5517FAD4263D49BB000219EC /* net.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = net.h; sourceTree = "<group>"; };
-		5517FAD5263D49BB000219EC /* Config.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Config.h; sourceTree = "<group>"; };
 		5517FAD6263D49BB000219EC /* DEV9.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DEV9.cpp; sourceTree = "<group>"; };
 		5517FAD7263D49BB000219EC /* net.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = net.cpp; sourceTree = "<group>"; };
 		5517FADC263D49BB000219EC /* smap.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = smap.h; sourceTree = "<group>"; };
@@ -3128,7 +3127,6 @@
 		5580651927AB4BBE008CD5D2 /* libcubeb-pcsx2.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libcubeb-pcsx2.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5580652627AB4DE9008CD5D2 /* SettingsWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsWrapper.h; sourceTree = "<group>"; };
 		5580652727AB4DE9008CD5D2 /* SettingsWrapper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SettingsWrapper.cpp; sourceTree = "<group>"; };
-		5580652A27AB5027008CD5D2 /* Config.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Config.cpp; sourceTree = "<group>"; };
 		5580652C27AB504C008CD5D2 /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
 		5580652E27AB507C008CD5D2 /* DEV9Config.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DEV9Config.cpp; sourceTree = "<group>"; };
 		5580653127AB50CC008CD5D2 /* OpenGLHostDisplay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenGLHostDisplay.h; sourceTree = "<group>"; };
@@ -3191,6 +3189,8 @@
 		5591D82727B5C12D0073E97D /* GSDeviceVK.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GSDeviceVK.cpp; sourceTree = "<group>"; };
 		5591D82827B5C12D0073E97D /* GSTextureVK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GSTextureVK.h; sourceTree = "<group>"; };
 		5591D82927B5C12D0073E97D /* GSDeviceVK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GSDeviceVK.h; sourceTree = "<group>"; };
+		55DF028727D3273400B339A6 /* iR5900Analysis.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = iR5900Analysis.cpp; sourceTree = "<group>"; };
+		55DF028827D3273400B339A6 /* iR5900Analysis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iR5900Analysis.h; sourceTree = "<group>"; };
 		DD0302B427C491020006ABDC /* OESndOut.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OESndOut.h; sourceTree = "<group>"; };
 		DD0302B527C491020006ABDC /* OESndOut.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OESndOut.cpp; sourceTree = "<group>"; };
 		DD0302B927C491160006ABDC /* OpenGLHostDisplayOverride.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpenGLHostDisplayOverride.cpp; sourceTree = "<group>"; };
@@ -5062,13 +5062,11 @@
 			isa = PBXGroup;
 			children = (
 				5517FAE8263D49BB000219EC /* ATA */,
-				5517FAD5263D49BB000219EC /* Config.h */,
 				5517FAD6263D49BB000219EC /* DEV9.cpp */,
 				5517FAD3263D49BB000219EC /* DEV9.h */,
 				5580652E27AB507C008CD5D2 /* DEV9Config.cpp */,
 				5517FADE263D49BB000219EC /* flash.cpp */,
 				551AA1712792B66400658151 /* InternalServers */,
-				5580652927AB5027008CD5D2 /* Linux */,
 				5517FAD7263D49BB000219EC /* net.cpp */,
 				5517FAD4263D49BB000219EC /* net.h */,
 				551AA48C27935E9100658151 /* PacketReader */,
@@ -5568,6 +5566,8 @@
 				5517FD08263D49BC000219EC /* iR3000A.h */,
 				5517FD42263D49BC000219EC /* iR3000Atables.cpp */,
 				5517FD27263D49BC000219EC /* iR5900.h */,
+				55DF028727D3273400B339A6 /* iR5900Analysis.cpp */,
+				55DF028827D3273400B339A6 /* iR5900Analysis.h */,
 				5517FD19263D49BC000219EC /* iR5900Arit.h */,
 				5517FD06263D49BC000219EC /* iR5900AritImm.h */,
 				5517FD3F263D49BC000219EC /* iR5900Branch.h */,
@@ -7384,14 +7384,6 @@
 			path = include;
 			sourceTree = "<group>";
 		};
-		5580652927AB5027008CD5D2 /* Linux */ = {
-			isa = PBXGroup;
-			children = (
-				5580652A27AB5027008CD5D2 /* Config.cpp */,
-			);
-			path = Linux;
-			sourceTree = "<group>";
-		};
 		558065B127AD3A31008CD5D2 /* bin */ = {
 			isa = PBXGroup;
 			children = (
@@ -8164,6 +8156,7 @@
 				551AA4B327935F9400658151 /* Timer.cpp in Sources */,
 				551BF57D26420E9A0008C529 /* ShiftJisToUnicode.cpp in Sources */,
 				551BF6A6264244400008C529 /* ADSR.cpp in Sources */,
+				55DF028927D3273400B339A6 /* iR5900Analysis.cpp in Sources */,
 				551BF6952642427A0008C529 /* USBNull.cpp in Sources */,
 				551BF699264242FE0008C529 /* spu2sys.cpp in Sources */,
 				551BF68D264241F10008C529 /* ExpressionParser.cpp in Sources */,
@@ -8236,7 +8229,6 @@
 				551BF6A8264244480008C529 /* Dma.cpp in Sources */,
 				551BF62F264216F50008C529 /* CDVDisoReader.cpp in Sources */,
 				551BF5AE26420FA50008C529 /* IopCounters.cpp in Sources */,
-				5580652B27AB5027008CD5D2 /* Config.cpp in Sources */,
 				551BF684264241570008C529 /* IsoFS.cpp in Sources */,
 				551BF67D264240660008C529 /* HddCreate.cpp in Sources */,
 				551BF6422642181C0008C529 /* iR5900-32.cpp in Sources */,
