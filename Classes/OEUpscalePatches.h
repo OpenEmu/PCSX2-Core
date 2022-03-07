@@ -25,16 +25,16 @@
 #ifndef OEUpscalePatches_h
 #define OEUpscalePatches_h
 
-//These Games require the Wild ARms Hack to display intro and text Correctly (Intro at all internal resolution, text above 1x internal resolution)
-NSSet *wildArmsGames = [NSSet setWithObjects:
+/// These games require the Wild ARms Hack to display intro and text correctly (intro at all internal resolution, text above 1x internal resolution)
+static NSSet *wildArmsGames = [NSSet setWithObjects:
 	@"SCAJ-20123",	@"SCAJ-30002",	@"SCPS-15023",	@"SCPS-15024",	@"SCPS-15091",
 	@"SCPS-15092",	@"SCPS-15118",	@"SCPS-17002",	@"SCPS-19205",	@"SCPS-19251",
 	@"SCPS-19253",	@"SCPS-19313",	@"SCPS-19322",	@"SCPS-19323",	@"SCPS-55006",
 	@"SCUS-97203",	@"SCUS-97224",	@"SLES-51307",	@"SLES-54239",	@"SLES-54972",
 	@"SLUS-20937",	@"SLUS-21292",	@"SLUS-21615",  nil ];
 
-//These Games require teh align sprites hack to remove vertiacl bars at internal resolutions above 1x
-NSSet *alignSpriteGames = [NSSet setWithObjects:
+/// These games require the align sprites hack to remove vertical bars at internal resolutions above 1x
+static NSSet *alignSpriteGames = [NSSet setWithObjects:
 	//Tekken
 	@"SCKA-20039",	@"SCAJ-20116" ,	@"SCAJ-20125",	@"SCAJ-20126",	@"SCAJ-20199",
 	@"SCED-50041",	@"SCES-50001",	@"SCES-50878",	@"SCES-53202",	@"SCKA-20049",
