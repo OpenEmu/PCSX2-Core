@@ -3218,6 +3218,7 @@
 		DD03FFD327B720610006ABDC /* MetalHostDisplay.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MetalHostDisplay.mm; sourceTree = "<group>"; };
 		DD1134E827CBCE8900C2E60B /* SaveState.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SaveState.cpp; sourceTree = "<group>"; };
 		DD1134EA27D28B0600C2E60B /* OEUpscalePatches.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OEUpscalePatches.h; sourceTree = "<group>"; };
+		DD5D197D27D708A900ED83D9 /* OEHostDisplay.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OEHostDisplay.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -7550,6 +7551,7 @@
 				DD0302BA27C491160006ABDC /* GSDeviceMTL.mm */,
 				DD0302BB27C491160006ABDC /* MetalHostDisplay.mm */,
 				DD0302BC27C491160006ABDC /* ContextAGL.mm */,
+				DD5D197D27D708A900ED83D9 /* OEHostDisplay.h */,
 			);
 			path = Video;
 			sourceTree = "<group>";
