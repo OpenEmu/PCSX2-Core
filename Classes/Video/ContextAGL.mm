@@ -106,17 +106,15 @@ namespace GL
 
 	bool ContextAGL::SwapBuffers()
 	{
-		//[_current.renderDelegate didRenderFrameOnAlternateThread];
-		
-		//[_current.renderDelegate didExecute];
+		[_current.renderDelegate didRenderFrameOnAlternateThread];
+
 		return true;
 	}
 
 	bool ContextAGL::MakeCurrent()
 	{
-		//[_current.renderDelegate willRenderFrameOnAlternateThread];
-		//[_current.renderDelegate willExecute];
-		//SwapBuffers();
+		[_current.renderDelegate willRenderFrameOnAlternateThread];
+
 		return true;
 	}
 
