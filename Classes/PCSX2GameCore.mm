@@ -25,6 +25,7 @@
 #import "PCSX2GameCore.h"
 #import <OpenEmuBase/OETimingUtils.h>
 #import <OpenEmuBase/OERingBuffer.h>
+#include "Video/OEHostDisplay.h"
 #include "Audio/OESndOut.h"
 #include "Input/keymap.h"
 #include "OEUpscalePatches.h"
@@ -791,6 +792,13 @@ void Host::EndPresentFrame()
 	GET_CURRENT_OR_RETURN();
 	
 	current->hostDisplay.get()->EndPresent();
+}
+
+int Host::PresentFrameBuffer()
+{
+	GET_CURRENT_OR_RETURN(0);
+	
+	return [[current.renderDelegate presentationFramebuffer] integerValue];
 }
 
 void Host::ResizeHostDisplay(u32 new_window_width, u32 new_window_height, float new_window_scale)

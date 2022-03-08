@@ -14,6 +14,7 @@
  */
 
 #include "PrecompiledHeader.h"
+#include "Video/OEHostDisplay.h"
 
 #include "OpenGLHostDisplay.h"
 #include "common/Assertions.h"
@@ -24,6 +25,8 @@
 
 #include <array>
 #include <tuple>
+
+static int OE_FBO = 0;
 
 class OpenGLHostDisplayTexture : public HostDisplayTexture
 {
@@ -198,6 +201,8 @@ bool OpenGLHostDisplay::CreateRenderDevice(const WindowInfo& wi, std::string_vie
 		m_gl_context.reset();
 		return false;
 	}
+	
+	OE_FBO = Host::PresentFrameBuffer();
 
 	m_window_info = m_gl_context->GetWindowInfo();
 	m_vsync_mode = vsync;
@@ -351,7 +356,7 @@ bool OpenGLHostDisplay::BeginPresent(bool frame_skip)
 	}
 	
 	glDisable(GL_SCISSOR_TEST);
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 1);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, OE_FBO);
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 	glViewport(0, 0, m_window_info.surface_width, m_window_info.surface_height);
