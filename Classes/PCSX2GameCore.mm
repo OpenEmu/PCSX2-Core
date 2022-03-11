@@ -225,19 +225,19 @@ static NSString *binCueFix(NSString *path)
 	EmuConfig.Mcd[1].Type = MemoryCardType::Folder;
 	EmuConfig.Mcd[1].Filename = "Memory folder 2.ps2";
 	
-	if ( [DiscRegion isEqualToString:@"U"]){
+	if ([DiscRegion isEqualToString:@"U"]) {
 		// NTSC-US
 		EmuConfig.BaseFilenames.Bios = "scph39001.bin";
-	} else if ( [DiscRegion isEqualToString:@"E"]){
+	} else if ([DiscRegion isEqualToString:@"E"]) {
 		// Pal Europe
 		EmuConfig.BaseFilenames.Bios = "scph70004.bin";
 	}  else {
 		//It's one of the many Asia Pacfic NTCS-J Regions
 		// look at Region/sub region to figure out further
-		if ( [DiscSubRegion isEqualToString:@"J"]){
+		if ([DiscSubRegion isEqualToString:@"J"]) {
 			//It's Japan
 			EmuConfig.BaseFilenames.Bios = "scph10000.bin";
-		} else{
+		} else {
 			// Default to the US Bios for now
 			EmuConfig.BaseFilenames.Bios = "scph39001.bin";
 		}
@@ -463,7 +463,7 @@ static NSString *binCueFix(NSString *path)
 	bool success = VMManager::LoadState(fileName.fileSystemRepresentation);
 	WaitRequested = false;
 
-	block(success, success ? nil : [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotLoadStateError userInfo:@{NSLocalizedDescriptionKey : @"PCSX2 Could not load the current state.",NSFilePathErrorKey: fileName}]);
+	block(success, success ? nil : [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotLoadStateError userInfo:@{NSLocalizedDescriptionKey: @"PCSX2 Could not load the current state.", NSFilePathErrorKey: fileName}]);
 }
 
 - (void)saveStateToFileAtPath:(NSString *)fileName completionHandler:(void (^)(BOOL, NSError *))block
@@ -472,7 +472,7 @@ static NSString *binCueFix(NSString *path)
 		return;
 	bool success = 	VMManager::SaveState(fileName.fileSystemRepresentation);
 	
-	block(success, success ? nil : [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotSaveStateError userInfo:@{NSLocalizedDescriptionKey : @"PCSX2 Could not save the current state.",NSFilePathErrorKey: fileName}]);
+	block(success, success ? nil : [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotSaveStateError userInfo:@{NSLocalizedDescriptionKey: @"PCSX2 Could not save the current state.", NSFilePathErrorKey: fileName}]);
 	
 }
 
