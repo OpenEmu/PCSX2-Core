@@ -344,8 +344,7 @@ void OpenGLHostDisplay::DestroyImGuiContext()
 
 bool OpenGLHostDisplay::UpdateImGuiFontTexture()
 {
-	
-	return nullptr;
+	return true;
 }
 
 bool OpenGLHostDisplay::BeginPresent(bool frame_skip)
