@@ -798,7 +798,7 @@ int Host::PresentFrameBuffer()
 {
 	GET_CURRENT_OR_RETURN(0);
 	
-	return [[current.renderDelegate presentationFramebuffer] integerValue];
+	return [[current.renderDelegate presentationFramebuffer] intValue];
 }
 
 void Host::ResizeHostDisplay(u32 new_window_width, u32 new_window_height, float new_window_scale)
