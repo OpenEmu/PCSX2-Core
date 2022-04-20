@@ -658,7 +658,6 @@
 		DD0302C327C5423F0006ABDC /* PAD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5580639827AB3261008CD5D2 /* PAD.cpp */; };
 		DD0302C927C549730006ABDC /* StateManagement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5580639727AB3261008CD5D2 /* StateManagement.cpp */; };
 		DD03FFD827B721F20006ABDC /* GSTextureMTL.mm in Sources */ = {isa = PBXBuildFile; fileRef = DD03FFB927B70F0C0006ABDC /* GSTextureMTL.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		DD03FFD927B721FC0006ABDC /* MTLDrawableFetcher.mm in Sources */ = {isa = PBXBuildFile; fileRef = DD03FFB327B70F0C0006ABDC /* MTLDrawableFetcher.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		DD1134E927CBCE8F00C2E60B /* SaveState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD1134E827CBCE8900C2E60B /* SaveState.cpp */; };
 /* End PBXBuildFile section */
 
@@ -3198,7 +3197,6 @@
 		DD0302BB27C491160006ABDC /* MetalHostDisplay.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MetalHostDisplay.mm; sourceTree = "<group>"; };
 		DD0302BC27C491160006ABDC /* ContextAGL.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ContextAGL.mm; sourceTree = "<group>"; };
 		DD0302C827C5494A0006ABDC /* keymap.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = keymap.h; sourceTree = "<group>"; };
-		DD03FFB327B70F0C0006ABDC /* MTLDrawableFetcher.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MTLDrawableFetcher.mm; sourceTree = "<group>"; };
 		DD03FFB427B70F0C0006ABDC /* GSMetalCPPAccessible.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSMetalCPPAccessible.h; sourceTree = "<group>"; };
 		DD03FFB527B70F0C0006ABDC /* GSMTLDeviceInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSMTLDeviceInfo.h; sourceTree = "<group>"; };
 		DD03FFB627B70F0C0006ABDC /* interlace.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = interlace.metal; sourceTree = "<group>"; };
@@ -3211,7 +3209,6 @@
 		DD03FFBD27B70F0C0006ABDC /* tfx.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = tfx.metal; sourceTree = "<group>"; };
 		DD03FFBE27B70F0C0006ABDC /* GSMTLSharedHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSMTLSharedHeader.h; sourceTree = "<group>"; };
 		DD03FFBF27B70F0C0006ABDC /* GSDeviceMTL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSDeviceMTL.h; sourceTree = "<group>"; };
-		DD03FFC027B70F0C0006ABDC /* MTLDrawableFetcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTLDrawableFetcher.h; sourceTree = "<group>"; };
 		DD03FFC127B70F0C0006ABDC /* convert.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = convert.metal; sourceTree = "<group>"; };
 		DD03FFCE27B719E40006ABDC /* AppConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppConfig.h; path = gui/AppConfig.h; sourceTree = "<group>"; };
 		DD03FFD227B720610006ABDC /* MetalHostDisplay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MetalHostDisplay.h; sourceTree = "<group>"; };
@@ -7571,8 +7568,6 @@
 				DD03FFB927B70F0C0006ABDC /* GSTextureMTL.mm */,
 				DD03FFB627B70F0C0006ABDC /* interlace.metal */,
 				DD03FFB727B70F0C0006ABDC /* merge.metal */,
-				DD03FFC027B70F0C0006ABDC /* MTLDrawableFetcher.h */,
-				DD03FFB327B70F0C0006ABDC /* MTLDrawableFetcher.mm */,
 				DD03FFBD27B70F0C0006ABDC /* tfx.metal */,
 			);
 			path = Metal;
@@ -8188,7 +8183,6 @@
 				551BF685264241BF0008C529 /* DisR3000A.cpp in Sources */,
 				551BF690264241F10008C529 /* MipsStackWalk.cpp in Sources */,
 				551BF6152642142F0008C529 /* microVU.cpp in Sources */,
-				DD03FFD927B721FC0006ABDC /* MTLDrawableFetcher.mm in Sources */,
 				551AA4E827937A4B00658151 /* GSDrawScanlineCodeGenerator.all.cpp in Sources */,
 				551BF5AA26420FA50008C529 /* Hw.cpp in Sources */,
 				551AA1792792B66400658151 /* DNS_Server.cpp in Sources */,
