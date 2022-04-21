@@ -647,6 +647,7 @@
 		5591D80D27B4693D0073E97D /* cubeb_utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 558064CA27AB4B9E008CD5D2 /* cubeb_utils.cpp */; };
 		5591D80E27B469600073E97D /* cubeb_osx_run_loop.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 558064C627AB4B9E008CD5D2 /* cubeb_osx_run_loop.cpp */; };
 		55DF028927D3273400B339A6 /* iR5900Analysis.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55DF028727D3273400B339A6 /* iR5900Analysis.cpp */; };
+		55F9D7E328120385005286B6 /* fxaa.metal in Sources */ = {isa = PBXBuildFile; fileRef = 55F9D7E228120385005286B6 /* fxaa.metal */; };
 		DD03001927BD695D0006ABDC /* tfx_fs.glsl in Copy OpenGL Shaders */ = {isa = PBXBuildFile; fileRef = 558065C627AD3A31008CD5D2 /* tfx_fs.glsl */; };
 		DD0302B127C435760006ABDC /* SndOut_Cubeb.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 558063BB27AB4B6C008CD5D2 /* SndOut_Cubeb.cpp */; };
 		DD0302B227C43CD50006ABDC /* SndOut.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FCD0263D49BC000219EC /* SndOut.cpp */; };
@@ -3190,6 +3191,7 @@
 		5591D82927B5C12D0073E97D /* GSDeviceVK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GSDeviceVK.h; sourceTree = "<group>"; };
 		55DF028727D3273400B339A6 /* iR5900Analysis.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = iR5900Analysis.cpp; sourceTree = "<group>"; };
 		55DF028827D3273400B339A6 /* iR5900Analysis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iR5900Analysis.h; sourceTree = "<group>"; };
+		55F9D7E228120385005286B6 /* fxaa.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = fxaa.metal; sourceTree = "<group>"; };
 		DD0302B427C491020006ABDC /* OESndOut.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OESndOut.h; sourceTree = "<group>"; };
 		DD0302B527C491020006ABDC /* OESndOut.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OESndOut.cpp; sourceTree = "<group>"; };
 		DD0302B927C491160006ABDC /* OpenGLHostDisplayOverride.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpenGLHostDisplayOverride.cpp; sourceTree = "<group>"; };
@@ -7556,6 +7558,7 @@
 		DD03FFB227B70F0C0006ABDC /* Metal */ = {
 			isa = PBXGroup;
 			children = (
+				55F9D7E228120385005286B6 /* fxaa.metal */,
 				DD03FFC127B70F0C0006ABDC /* convert.metal */,
 				DD03FFBF27B70F0C0006ABDC /* GSDeviceMTL.h */,
 				DD03FFBA27B70F0C0006ABDC /* GSDeviceMTL.mm */,
@@ -8144,6 +8147,7 @@
 				551BF64A264218380008C529 /* iR5900LoadStore.cpp in Sources */,
 				551BF5A926420FA50008C529 /* IopSio2.cpp in Sources */,
 				551BF5CA264212070008C529 /* IPUdither.cpp in Sources */,
+				55F9D7E328120385005286B6 /* fxaa.metal in Sources */,
 				551BF58326420E9A0008C529 /* IopHwRead.cpp in Sources */,
 				551BF5C3264210AB0008C529 /* Gif.cpp in Sources */,
 				556FBB47279E1067007B4F88 /* INISettingsInterface.cpp in Sources */,
