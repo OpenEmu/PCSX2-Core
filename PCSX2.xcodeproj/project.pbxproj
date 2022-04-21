@@ -7558,8 +7558,8 @@
 		DD03FFB227B70F0C0006ABDC /* Metal */ = {
 			isa = PBXGroup;
 			children = (
-				55F9D7E228120385005286B6 /* fxaa.metal */,
 				DD03FFC127B70F0C0006ABDC /* convert.metal */,
+				55F9D7E228120385005286B6 /* fxaa.metal */,
 				DD03FFBF27B70F0C0006ABDC /* GSDeviceMTL.h */,
 				DD03FFBA27B70F0C0006ABDC /* GSDeviceMTL.mm */,
 				DD03FFB427B70F0C0006ABDC /* GSMetalCPPAccessible.h */,
@@ -7698,6 +7698,7 @@
 				5580663027AD3AAD008CD5D2 /* Copy OpenGL Shaders */,
 				5580663727AD3B24008CD5D2 /* Copy Vulkan Shaders */,
 				5580663C27AD3B5A008CD5D2 /* Copy Common Shaders */,
+				55F9D7E12812016D005286B6 /* Build Specific Metal Libraries */,
 			);
 			buildRules = (
 			);
@@ -8034,6 +8035,41 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "mkdir -p \"$USER_LIBRARY_DIR/Application Support/OpenEmu/Cores\"\nrm -rf \"$USER_LIBRARY_DIR/Application Support/OpenEmu/Cores/$PROJECT_NAME.oecoreplugin\"\ncp -rf \"$BUILT_PRODUCTS_DIR/$PROJECT_NAME.oecoreplugin\"{,.dSYM} \"$USER_LIBRARY_DIR/Application Support/OpenEmu/Cores/\"\n";
+		};
+		55F9D7E12812016D005286B6 /* Build Specific Metal Libraries */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/pcsx2/pcsx2/GS/Renderers/Metal/fxaa.metal",
+				"$(SRCROOT)/pcsx2/pcsx2/GS/Renderers/Metal/convert.metal",
+				"$(SRCROOT)/pcsx2/pcsx2/GS/Renderers/Metal/interlace.metal",
+				"$(SRCROOT)/pcsx2/pcsx2/GS/Renderers/Metal/tfx.metal",
+				"$(SRCROOT)/pcsx2/pcsx2/GS/Renderers/Metal/merge.metal",
+			);
+			name = "Build Specific Metal Libraries";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(CONFIGURATION_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/Metal22.metallib",
+				"$(CONFIGURATION_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/Metal23.metallib",
+				"$(DERIVED_FILE_DIR)/Metal22/fxaa.air",
+				"$(DERIVED_FILE_DIR)/Metal22/convert.air",
+				"$(DERIVED_FILE_DIR)/Metal22/interlace.air",
+				"$(DERIVED_FILE_DIR)/Metal22/tfx.air",
+				"$(DERIVED_FILE_DIR)/Metal22/merge.air",
+				"$(DERIVED_FILE_DIR)/Metal23/fxaa.air",
+				"$(DERIVED_FILE_DIR)/Metal23/convert.air",
+				"$(DERIVED_FILE_DIR)/Metal23/interlace.air",
+				"$(DERIVED_FILE_DIR)/Metal23/tfx.air",
+				"$(DERIVED_FILE_DIR)/Metal23/merge.air",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "generateMetallib () {\nmkdir -p ${DERIVED_FILE_DIR}/$3/\nxcrun metal ${flags} -std=$1 -target $2 -o ${DERIVED_FILE_DIR}/$3/fxaa.air -c ${SRCROOT}/pcsx2/pcsx2/GS/Renderers/Metal/fxaa.metal\nxcrun metal ${flags} -std=$1 -target $2 -o ${DERIVED_FILE_DIR}/$3/convert.air -c ${SRCROOT}/pcsx2/pcsx2/GS/Renderers/Metal/convert.metal\nxcrun metal ${flags} -std=$1 -target $2 -o ${DERIVED_FILE_DIR}/$3/interlace.air -c ${SRCROOT}/pcsx2/pcsx2/GS/Renderers/Metal/interlace.metal\nxcrun metal ${flags} -std=$1 -target $2 -o ${DERIVED_FILE_DIR}/$3/tfx.air -c ${SRCROOT}/pcsx2/pcsx2/GS/Renderers/Metal/tfx.metal\nxcrun metal ${flags} -std=$1 -target $2 -o ${DERIVED_FILE_DIR}/$3/merge.air -c ${SRCROOT}/pcsx2/pcsx2/GS/Renderers/Metal/merge.metal\nxcrun metallib -o ${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/$3.metallib ${DERIVED_FILE_DIR}/$3/*.air\n}\n\ngenerateMetallib macos-metal2.2 air64-apple-macos10.15 Metal22\ngenerateMetallib macos-metal2.3 air64-apple-macos11.0  Metal23\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
