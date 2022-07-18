@@ -15,6 +15,7 @@
 
 #include "PrecompiledHeader.h"
 #include "SPU2/Global.h"
+#include "common/Assertions.h"
 
 #include "OESndOut.h"
 

@@ -14,7 +14,7 @@
  */
 
 #include "GSMTLDeviceInfo.h"
-
+#include "GS/GS.h"
 #include "common/Console.h"
 
 #ifdef __APPLE__
@@ -38,7 +38,7 @@ static MRCOwned<id<MTLLibrary>> loadMainLibrary(id<MTLDevice> dev)
 	if (@available(macOS 10.14, iOS 12.0, *))
 		if (id<MTLLibrary> lib = loadMainLibrary(dev, @"Metal21"))
 			return MRCTransfer(lib);
-	return MRCTransfer([dev newDefaultLibraryWithBundle:[NSBundle bundleForClass:[PCSX2GameCore class]] error:nullptr]);
+	return MRCTransfer([dev newDefaultLibrary]);
 }
 
 static GSMTLDevice::MetalVersion detectLibraryVersion(id<MTLLibrary> lib)
@@ -180,6 +180,17 @@ GSMTLDevice::GSMTLDevice(MRCOwned<id<MTLDevice>> dev)
 				break;
 		}
 	}
+
+	if (features.framebuffer_fetch && GSConfig.DisableFramebufferFetch)
+	{
+		Console.Warning("Framebuffer fetch was found but is disabled. This will reduce performance.");
+		features.framebuffer_fetch = false;
+	}
+
+	if (char* env = getenv("MTL_SLOW_COLOR_COMPRESSION"))
+		features.slow_color_compression = env[0] == '1' || env[0] == 'y' || env[0] == 'Y';
+	else
+		features.slow_color_compression = [[dev name] containsString:@"AMD"];
 
 	features.max_texsize = 8192;
 	if ([dev supportsFeatureSet:MTLFeatureSet_macOS_GPUFamily1_v1])

@@ -36,7 +36,7 @@
 #include "HostSettings.h"
 #include "HostDisplay.h"
 #include "VMManager.h"
-#include "AppConfig.h"
+//#include "AppConfig.h"
 #include "Frontend/InputManager.h"
 #include "Frontend/INISettingsInterface.h"
 #include "Frontend/OpenGLHostDisplay.h"
@@ -101,7 +101,7 @@ PCSX2GameCore *_current;
 {
 	if (self = [super init]) {
 		_current = self;
-		VMManager::InitializeMemory();
+		VMManager::Internal::InitializeMemory();
 		_maxDiscs = 0;
 		_displayModes = [[NSMutableDictionary alloc] initWithDictionary:
 						 @{OEPSCSX2InternalResolution: @1,
@@ -163,25 +163,26 @@ static NSString *binCueFix(NSString *path)
 	}
 	
 	//Lets get the Disc ID with some Magic out of PCSX2 CDVD :)
-	VMManager::ChangeDisc(path.fileSystemRepresentation);
-	wxString DiscName;
+	VMManager::ChangeDisc(CDVD_SourceType::Iso, path.fileSystemRepresentation);
+	std::string DiscName;
 	GetPS2ElfName(DiscName);
 	
-	wxString fname = DiscName.AfterLast('\\').BeforeFirst('_');
-	wxString fname2 = DiscName.AfterLast('_').BeforeFirst('.');
-	wxString fname3 = DiscName.AfterLast('.').BeforeFirst(';');
-	DiscName = fname + "-" + fname2 + fname3;
+	//TODO: update!
+//	std::string fname = DiscName.AfterLast('\\').BeforeFirst('_');
+//	std::string fname2 = DiscName.AfterLast('_').BeforeFirst('.');
+//	std::string fname3 = DiscName.AfterLast('.').BeforeFirst(';');
+//	DiscName = fname + "-" + fname2 + fname3;
 	
-	DiscID = [NSString stringWithCString:DiscName.char_str() encoding:NSASCIIStringEncoding];
-	DiscRegion = [[NSString stringWithCString:fname.char_str() encoding:NSASCIIStringEncoding] substringWithRange:NSMakeRange(2,1)];
-	DiscSubRegion = [[NSString stringWithCString:fname.char_str() encoding:NSASCIIStringEncoding] substringWithRange:NSMakeRange(3,1)];
+	DiscID = [NSString stringWithCString:DiscName.c_str() encoding:NSASCIIStringEncoding];
+//	DiscRegion = [[NSString stringWithCString:fname.c_str() encoding:NSASCIIStringEncoding] substringWithRange:NSMakeRange(2,1)];
+//	DiscSubRegion = [[NSString stringWithCString:fname.c_str() encoding:NSASCIIStringEncoding] substringWithRange:NSMakeRange(3,1)];
 	
 	return true;
 }
 
 - (void)setupEmulation
 {
-	const std::string pcsx2ini(Path::CombineStdString([self.supportDirectoryPath stringByAppendingPathComponent:@"inis"].fileSystemRepresentation, "PCSX2.ini"));
+	const std::string pcsx2ini([[self.supportDirectoryPath stringByAppendingPathComponent:@"inis"] stringByAppendingPathComponent:@"PCSX2.ini"].fileSystemRepresentation);
 	s_base_settings_interface = std::make_unique<INISettingsInterface>(std::move(pcsx2ini));
 	Host::Internal::SetBaseSettingsLayer(s_base_settings_interface.get());
 	
@@ -268,9 +269,6 @@ static NSString *binCueFix(NSString *path)
 	si.SetBoolValue("EmuCore/GS", "UserHacks", true);
 	
 	[self ApplyUpscalePatches];
-
-	wxModule::RegisterModules();
-	wxModule::InitializeModules();
 }
 
 - (void)resetEmulation
@@ -295,13 +293,12 @@ static NSString *binCueFix(NSString *path)
 	[self.renderDelegate willRenderFrameOnAlternateThread];
 	[self.renderDelegate suspendFPSLimiting];
 	
-	params.source = gamePath.fileSystemRepresentation;
+	params.filename = gamePath.fileSystemRepresentation;
 	params.save_state = "";
 	params.source_type = CDVD_SourceType::Iso;
 	params.elf_override = "";
 	params.fast_boot = true;
 	params.fullscreen = false;
-	params.batch_mode = std::nullopt;
    
 	if(!hasInitialized){
 		hostDisplay = HostDisplay::CreateDisplayForAPI(OpenGLHostDisplay::RenderAPI::OpenGL);
@@ -363,7 +360,7 @@ static NSString *binCueFix(NSString *path)
 {
 	ExitRequested = true;
 	VMManager::SetState(VMState::Stopping);
-	VMManager::Shutdown();
+	VMManager::Shutdown(true);
 	[super stopEmulation];
 }
 
@@ -490,7 +487,7 @@ static NSString *binCueFix(NSString *path)
 	
 	gamePath = ToPassBack;
 
-	VMManager::ChangeDisc(gamePath.fileSystemRepresentation);
+	VMManager::ChangeDisc(CDVD_SourceType::Iso, gamePath.fileSystemRepresentation);
 }
 
 #pragma mark - Display Options
@@ -768,7 +765,6 @@ void Host::ReleaseHostDisplay()
 {
 	GET_CURRENT_OR_RETURN();
 	if(current->hostDisplay.get()){
-		current->hostDisplay->DestroyRenderDevice();
 		current->hostDisplay.reset();
 	}
 }
@@ -815,6 +811,11 @@ void Host::ResizeHostDisplay(u32 new_window_width, u32 new_window_height, float 
 //	current->hostDisplay.get()->ChangeRenderWindow(wi);
 //	current->screenRect = OEIntRectMake(0, 0 , new_window_width, new_window_height);
 	 
+}
+
+void Host::CancelGameListRefresh()
+{
+	
 }
 
 void Host::UpdateHostDisplay()

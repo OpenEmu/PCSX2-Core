@@ -28,8 +28,8 @@
 #include "PrecompiledHeader.h"
 #include "GameDatabase.h"
 
-#include <wx/stdpaths.h>
-#include <wx/wfstream.h>
+#include <string>
+#include <sstream>
 #include "fmt/core.h"
 
 #include "common/FileSystem.h"
@@ -48,10 +48,10 @@
 
 
 namespace GameInfo {
-	static wxString gameName;
-	static wxString gameSerial;
-	static wxString gameCRC;
-	static wxString gameVersion;
+	static std::string gameName;
+	static std::string gameSerial;
+	static std::string gameCRC;
+	static std::string gameVersion;
 };
 
 /// Load Game Settings found in database
@@ -86,7 +86,7 @@ static int loadGameSettings(Pcsx2Config& dest, const GameDatabaseSchema::GameEnt
 	if (game.eeClampMode != GameDatabaseSchema::ClampMode::Undefined)
 	{
 		const int clampMode = enum_cast(game.eeClampMode);
-		PatchesCon->WriteLn(L"(GameDB) Changing EE/FPU clamp mode [mode=%d]", clampMode);
+		PatchesCon->WriteLn("(GameDB) Changing EE/FPU clamp mode [mode=%d]", clampMode);
 		dest.Cpu.Recompiler.fpuOverflow = (clampMode >= 1);
 		dest.Cpu.Recompiler.fpuExtraOverflow = (clampMode >= 2);
 		dest.Cpu.Recompiler.fpuFullMode = (clampMode >= 3);
@@ -129,14 +129,36 @@ static int loadGameSettings(Pcsx2Config& dest, const GameDatabaseSchema::GameEnt
 	return gf;
 }
 
-#define _UNKNOWN_GAME_KEY (L"_UNKNOWN_GAME_KEY")
+static std::string string_format(const std::string fmt, ...) {
+	int size = ((int)fmt.size()) * 2 + 50;   // Use a rubric appropriate for your code
+	std::string str;
+	va_list ap;
+	while (1) {     // Maximum two passes on a POSIX system...
+		str.resize(size);
+		va_start(ap, fmt);
+		int n = vsnprintf((char *)str.data(), size, fmt.c_str(), ap);
+		va_end(ap);
+		if (n > -1 && n < size) {  // Everything worked
+			str.resize(n);
+			return str;
+		}
+		if (n > -1)  // Needed size returned
+			size = n + 1;   // For null char
+		else
+			size *= 2;      // Guess at a larger size (OS specific)
+	}
+	return str;
+}
+
+
+#define _UNKNOWN_GAME_KEY ("_UNKNOWN_GAME_KEY")
 /// Used to track the current game serial/id, and used to disable verbose logging of
 /// applied patches if the game info hasn't changed.  (avoids spam when suspending/resuming
 /// or using TAB or other things), but gets verbose again when booting (even if the same game).
 /// File scope since it gets reset externally when rebooting
-static wxString curGameKey = _UNKNOWN_GAME_KEY;
+static std::string curGameKey = _UNKNOWN_GAME_KEY;
 
-static Threading::Mutex mtx__ApplySettings;
+static std::mutex mtx__ApplySettings;
 /// fixup = src + command line overrides + game overrides (according to elfCRC).
 ///
 /// While at it, also [re]loads the relevant patches (but doesn't apply them),
@@ -147,7 +169,7 @@ static Threading::Mutex mtx__ApplySettings;
 /// TODO: Trim this down so only OpenEmu-needed patches are loaded.
 static void _ApplySettings(const Pcsx2Config& src, Pcsx2Config& fixup)
 {
-	Threading::ScopedLock lock(mtx__ApplySettings);
+	std::scoped_lock lock(mtx__ApplySettings);
 	// 'fixup' is the EmuConfig we're going to upload to the emulator, which very well may
 	// differ from the user-configured EmuConfig settings.  So we make a copy here and then
 	// we apply the commandline overrides and database gamefixes, and then upload 'fixup'
@@ -166,13 +188,13 @@ static void _ApplySettings(const Pcsx2Config& src, Pcsx2Config& fixup)
 //	if (!g_Conf->EnableGameFixes)
 //		fixup.Gamefixes.DisableAll();
 
-	wxString gamePatch;
-	wxString gameFixes;
-	wxString gameCheats;
-	wxString gameWsHacks;
+	std::string gamePatch;
+	std::string gameFixes;
+	std::string gameCheats;
+	std::string gameWsHacks;
 
-	wxString gameCompat;
-	wxString gameMemCardFilter;
+	std::string gameCompat;
+	std::string gameMemCardFilter;
 
 	// The CRC can be known before the game actually starts (at the bios), so when
 	// we have the CRC but we're still at the bios and the settings are changed
@@ -180,14 +202,14 @@ static void _ApplySettings(const Pcsx2Config& src, Pcsx2Config& fixup)
 	// settings as if the game is already running (title, loadeding patches, etc).
 	bool ingame = (ElfCRC && (g_GameLoading || g_GameStarted));
 	if (ingame)
-		GameInfo::gameCRC.Printf(L"%8.8x", ElfCRC);
+		GameInfo::gameCRC = string_format("%8.8x", ElfCRC);
 	else
-		GameInfo::gameCRC = L""; // Needs to be reset when rebooting otherwise previously loaded patches may load
+		GameInfo::gameCRC = ""; // Needs to be reset when rebooting otherwise previously loaded patches may load
 
-	if (ingame && !DiscSerial.IsEmpty())
+	if (ingame && !DiscSerial.empty())
 		GameInfo::gameSerial = DiscSerial;
 
-	const wxString newGameKey(ingame ? SysGetDiscID() : SysGetBiosDiscID());
+	const std::string newGameKey(ingame ? SysGetDiscID() : SysGetBiosDiscID());
 //	const bool verbose(newGameKey != curGameKey && ingame);
 	//Console.WriteLn(L"------> patches verbose: %d   prev: '%s'   new: '%s'", (int)verbose, WX_STR(curGameKey), WX_STR(newGameKey));
 
@@ -195,21 +217,21 @@ static void _ApplySettings(const Pcsx2Config& src, Pcsx2Config& fixup)
 
 	ForgetLoadedPatches();
 
-	if (!curGameKey.IsEmpty()) {
-		auto game = GameDatabase::findGame(std::string(curGameKey.ToUTF8()));
+	if (!curGameKey.empty()) {
+		auto game = GameDatabase::findGame(std::string(curGameKey));
 		if (game) {
-			GameInfo::gameName = StringUtil::UTF8StringToWxString(StringUtil::StdStringFromFormat("%s (%s)", game->name.c_str(), game->region.c_str()));
-			gameCompat.Printf(" [Status = %s]", game->compatAsString());
-			gameMemCardFilter = StringUtil::UTF8StringToWxString(game->memcardFiltersAsString());
+			GameInfo::gameName =  string_format("%s (%s)", game->name.c_str(), game->region.c_str());
+			gameCompat = string_format(" [Status = %s]", game->compatAsString());
+			gameMemCardFilter = game->memcardFiltersAsString();
 
 			if (fixup.EnablePatches) {
-				if (int patches = LoadPatchesFromGamesDB(GameInfo::gameCRC.ToStdString(), *game))
+				if (int patches = LoadPatchesFromGamesDB(GameInfo::gameCRC, *game))
 				{
-					gamePatch.Printf(L" [%d Patches]", patches);
+					gamePatch += string_format(" [%d Patches]", patches);
 					PatchesCon->WriteLn(Color_Green, "(GameDB) Patches Loaded: %d", patches);
 				}
 				if (int fixes = loadGameSettings(fixup, *game))
-					gameFixes.Printf(L" [%d Fixes]", fixes);
+					gameFixes += string_format(" [%d Fixes]", fixes);
 			}
 		}
 		else
@@ -219,25 +241,25 @@ static void _ApplySettings(const Pcsx2Config& src, Pcsx2Config& fixup)
 		}
 	}
 
-	if (!gameMemCardFilter.IsEmpty())
+	if (!gameMemCardFilter.empty())
 		sioSetGameSerial(gameMemCardFilter);
 	else
 		sioSetGameSerial(curGameKey);
 
-	if (GameInfo::gameName.IsEmpty() && GameInfo::gameSerial.IsEmpty() && GameInfo::gameCRC.IsEmpty())
+	if (GameInfo::gameName.empty() && GameInfo::gameSerial.empty() && GameInfo::gameCRC.empty())
 	{
 		// if all these conditions are met, it should mean that we're currently running BIOS code.
 		// Chances are the BiosChecksum value is still zero or out of date, however -- because
 		// the BIos isn't loaded until after initial calls to ApplySettings.
 
-		GameInfo::gameName = L"Booting PS2 BIOS... ";
+		GameInfo::gameName = "Booting PS2 BIOS... ";
 	}
 
 	//Till the end of this function, entry CRC will be 00000000
 	if (!GameInfo::gameCRC.Length())
 	{
 		Console.WriteLn(Color_Gray, "Patches: No CRC found, using 00000000 instead.");
-		GameInfo::gameCRC = L"00000000";
+		GameInfo::gameCRC = "00000000";
 	}
 
 	// regular cheat patches
@@ -247,15 +269,15 @@ static void _ApplySettings(const Pcsx2Config& src, Pcsx2Config& fixup)
 	// wide screen patches
 	if (fixup.EnableWideScreenPatches)
 	{
-		if (int numberLoadedWideScreenPatches = LoadPatchesFromDir(GameInfo::gameCRC, EmuFolders::CheatsWS, L"Widescreen hacks"))
+		if (int numberLoadedWideScreenPatches = LoadPatchesFromDir(GameInfo::gameCRC, EmuFolders::CheatsWS, "Widescreen hacks"))
 		{
-			gameWsHacks.Printf(L" [%d widescreen hacks]", numberLoadedWideScreenPatches);
+			gameWsHacks.Printf(" [%d widescreen hacks]", numberLoadedWideScreenPatches);
 			Console.WriteLn(Color_Gray, "Found widescreen patches in the cheats_ws folder --> skipping cheats_ws.zip");
 		}
 		else
 		{
 			// No ws cheat files found at the cheats_ws folder, try the ws cheats zip file.
-			const wxString cheats_ws_archive(Path::Combine(EmuFolders::Resources, wxFileName(L"cheats_ws.zip")));
+			const std::string cheats_ws_archive(Path::Combine(EmuFolders::Resources, wxFileName(L"cheats_ws.zip")));
 			if (wxFile::Exists(cheats_ws_archive))
 			{
 				wxFFileInputStream* strm = new wxFFileInputStream(cheats_ws_archive);
