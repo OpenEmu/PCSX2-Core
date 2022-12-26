@@ -17,7 +17,6 @@
 #include "MetalHostDisplay.h"
 #include "GS/Renderers/Metal/GSMetalCPPAccessible.h"
 #include "GS/Renderers/Metal/GSDeviceMTL.h"
-#include <Carbon/Carbon.h>
 
 #ifdef __APPLE__
 
@@ -49,7 +48,7 @@ MetalHostDisplay::MetalHostDisplay()
 
 MetalHostDisplay::~MetalHostDisplay()
 {
-	MetalHostDisplay::DestroyRenderSurface();
+	MetalHostDisplay::DestroySurface();
 	m_queue = nullptr;
 	m_dev.Reset();
 }
@@ -72,16 +71,16 @@ static void OnMainThread(Fn&& fn)
 		dispatch_sync(dispatch_get_main_queue(), fn);
 }
 
-HostDisplay::RenderAPI MetalHostDisplay::GetRenderAPI() const
+RenderAPI MetalHostDisplay::GetRenderAPI() const
 {
 	return RenderAPI::Metal;
 }
 
-void* MetalHostDisplay::GetRenderDevice()  const { return const_cast<void*>(static_cast<const void*>(&m_dev)); }
-void* MetalHostDisplay::GetRenderContext() const { return (__bridge void*)m_queue; }
-void* MetalHostDisplay::GetRenderSurface() const { return (__bridge void*)m_layer; }
-bool MetalHostDisplay::HasRenderDevice()   const { return m_dev.IsOk(); }
-bool MetalHostDisplay::HasRenderSurface()  const { return static_cast<bool>(m_layer);}
+void* MetalHostDisplay::GetDevice()  const { return const_cast<void*>(static_cast<const void*>(&m_dev)); }
+void* MetalHostDisplay::GetContext() const { return (__bridge void*)m_queue; }
+void* MetalHostDisplay::GetSurface() const { return (__bridge void*)m_layer; }
+bool MetalHostDisplay::HasDevice()   const { return m_dev.IsOk(); }
+bool MetalHostDisplay::HasSurface()  const { return static_cast<bool>(m_layer);}
 
 void MetalHostDisplay::AttachSurfaceOnMainThread()
 {
@@ -103,12 +102,11 @@ void MetalHostDisplay::DetachSurfaceOnMainThread()
 	m_layer = nullptr;
 }
 
-bool MetalHostDisplay::CreateRenderDevice(const WindowInfo& wi, std::string_view adapter_name, VsyncMode vsync, bool threaded_presentation, bool debug_device)
+bool MetalHostDisplay::CreateDevice(const WindowInfo& wi, VsyncMode vsync)
 { @autoreleasepool {
 	m_window_info = wi;
 	pxAssertRel(!m_dev.dev, "Device already created!");
-	std::string null_terminated_adapter_name(adapter_name);
-	NSString* ns_adapter_name = [NSString stringWithUTF8String:null_terminated_adapter_name.c_str()];
+	NSString* ns_adapter_name = [NSString stringWithUTF8String:EmuConfig.GS.Adapter.c_str()];
 	auto devs = MRCTransfer(MTLCopyAllDevices());
 	for (id<MTLDevice> dev in devs.Get())
 	{
@@ -117,8 +115,8 @@ bool MetalHostDisplay::CreateRenderDevice(const WindowInfo& wi, std::string_view
 	}
 	if (!m_dev.dev)
 	{
-		if (!adapter_name.empty())
-			Console.Warning("Metal: Couldn't find adapter %s, using default", null_terminated_adapter_name.c_str());
+		if (!EmuConfig.GS.Adapter.empty())
+			Console.Warning("Metal: Couldn't find adapter %s, using default", EmuConfig.GS.Adapter.c_str());
 		m_dev = GSMTLDevice(MRCTransfer(MTLCreateSystemDefaultDevice()));
 		if (!m_dev.dev)
 			Host::ReportErrorAsync("No Metal Devices Available", "No Metal-supporting GPUs were found.  PCSX2 requires a Metal GPU (available on all macs from 2012 onwards).");
@@ -129,6 +127,13 @@ bool MetalHostDisplay::CreateRenderDevice(const WindowInfo& wi, std::string_view
 	[m_pass_desc colorAttachments][0].loadAction = MTLLoadActionClear;
 	[m_pass_desc colorAttachments][0].clearColor = MTLClearColorMake(0, 0, 0, 0);
 	[m_pass_desc colorAttachments][0].storeAction = MTLStoreActionStore;
+
+	if (char* env = getenv("MTL_USE_PRESENT_DRAWABLE"))
+		m_use_present_drawable = static_cast<UsePresentDrawable>(atoi(env));
+	else if (@available(macOS 13.0, *))
+		m_use_present_drawable = UsePresentDrawable::Always;
+	else // Before Ventura, presentDrawable acts like vsync is on when windowed
+		m_use_present_drawable = UsePresentDrawable::IfVsync;
 
 	m_capture_start_frame = 0;
 	if (char* env = getenv("MTL_CAPTURE"))
@@ -153,15 +158,15 @@ bool MetalHostDisplay::CreateRenderDevice(const WindowInfo& wi, std::string_view
 		return false;
 }}
 
-bool MetalHostDisplay::InitializeRenderDevice(std::string_view shader_cache_directory, bool debug_device)
+bool MetalHostDisplay::SetupDevice()
 {
 	return true;
 }
 
-bool MetalHostDisplay::MakeRenderContextCurrent() { return true; }
-bool MetalHostDisplay::DoneRenderContextCurrent() { return true; }
+bool MetalHostDisplay::MakeCurrent() { return true; }
+bool MetalHostDisplay::DoneCurrent() { return true; }
 
-void MetalHostDisplay::DestroyRenderSurface()
+void MetalHostDisplay::DestroySurface()
 {
 	if (!m_layer)
 		return;
@@ -169,7 +174,7 @@ void MetalHostDisplay::DestroyRenderSurface()
 	m_layer = nullptr;
 }
 
-bool MetalHostDisplay::ChangeRenderWindow(const WindowInfo& wi)
+bool MetalHostDisplay::ChangeWindow(const WindowInfo& wi)
 {
 	OnMainThread([this, &wi]
 	{
@@ -201,7 +206,7 @@ std::string MetalHostDisplay::GetDriverInfo() const
 	return desc;
 }}
 
-void MetalHostDisplay::ResizeRenderWindow(s32 new_window_width, s32 new_window_height, float new_window_scale)
+void MetalHostDisplay::ResizeWindow(s32 new_window_width, s32 new_window_height, float new_window_scale)
 {
 	m_window_info.surface_scale = new_window_scale;
 	if (m_window_info.surface_width == static_cast<u32>(new_window_width) && m_window_info.surface_height == static_cast<u32>(new_window_height))
@@ -218,9 +223,9 @@ std::unique_ptr<HostDisplayTexture> MetalHostDisplay::CreateTexture(u32 width, u
 { @autoreleasepool {
 	MTLTextureDescriptor* desc = [MTLTextureDescriptor
 		texture2DDescriptorWithPixelFormat:MTLPixelFormatRGBA8Unorm
-									 width:width
-									height:height
-								 mipmapped:false];
+		                             width:width
+		                            height:height
+		                         mipmapped:false];
 	[desc setUsage:MTLTextureUsageShaderRead];
 	[desc setStorageMode:MTLStorageModePrivate];
 	MRCOwned<id<MTLTexture>> tex = MRCTransfer([m_dev.dev newTextureWithDescriptor:desc]);
@@ -240,11 +245,11 @@ void MetalHostDisplay::UpdateTexture(id<MTLTexture> texture, u32 x, u32 y, u32 w
 	MRCOwned<id<MTLBuffer>> buf = MRCTransfer([m_dev.dev newBufferWithLength:bytes options:MTLResourceStorageModeShared | MTLResourceCPUCacheModeWriteCombined]);
 	memcpy([buf contents], data, bytes);
 	[enc copyFromBuffer:buf
-		   sourceOffset:0
+	       sourceOffset:0
 	  sourceBytesPerRow:data_stride
 	sourceBytesPerImage:bytes
-			 sourceSize:MTLSizeMake(width, height, 1)
-			  toTexture:texture
+	         sourceSize:MTLSizeMake(width, height, 1)
+	          toTexture:texture
 	   destinationSlice:0
 	   destinationLevel:0
 	  destinationOrigin:MTLOriginMake(0, 0, 0)];
@@ -289,14 +294,21 @@ void MetalHostDisplay::EndPresent()
 { @autoreleasepool {
 	GSDeviceMTL* dev = static_cast<GSDeviceMTL*>(g_gs_device.get());
 	pxAssertDev(dev && dev->m_current_render.encoder && dev->m_current_render_cmdbuf, "BeginPresent cmdbuf was destroyed");
-//	ImGui::Render();
-//	dev->RenderImGui(ImGui::GetDrawData());
 	dev->EndRenderPass();
 	if (m_current_drawable)
-		[dev->m_current_render_cmdbuf addScheduledHandler:[drawable = std::move(m_current_drawable)](id<MTLCommandBuffer>){
-			[drawable present];
-		}];
+	{
+		const bool use_present_drawable = m_use_present_drawable == UsePresentDrawable::Always ||
+			(m_use_present_drawable == UsePresentDrawable::IfVsync && m_vsync_mode != VsyncMode::Off);
+
+		if (use_present_drawable)
+			[dev->m_current_render_cmdbuf presentDrawable:m_current_drawable];
+		else
+			[dev->m_current_render_cmdbuf addScheduledHandler:[drawable = std::move(m_current_drawable)](id<MTLCommandBuffer>){
+				[drawable present];
+			}];
+	}
 	dev->FlushEncoders();
+	dev->FrameCompleted();
 	m_current_drawable = nullptr;
 	if (m_capture_start_frame)
 	{
@@ -312,7 +324,7 @@ void MetalHostDisplay::EndPresent()
 					[[MTLCaptureManager sharedCaptureManager] stopCapture];
 					Console.WriteLn("Metal Trace Capture to /tmp/PCSX2MTLCapture.gputrace finished");
 					[[NSWorkspace sharedWorkspace] selectFile:path
-									 inFileViewerRootedAtPath:@"/tmp/"];
+					                 inFileViewerRootedAtPath:@"/tmp/"];
 				}
 			}
 			else if (s_capture_next)
@@ -384,6 +396,49 @@ bool MetalHostDisplay::GetHostRefreshRate(float* refresh_rate)
 		}
 	});
 	return *refresh_rate != 0;
+}
+
+bool MetalHostDisplay::SetGPUTimingEnabled(bool enabled)
+{
+	if (enabled == m_gpu_timing_enabled)
+		return true;
+	if (@available(macOS 10.15, iOS 10.3, *))
+	{
+		std::lock_guard<std::mutex> l(m_mtx);
+		m_gpu_timing_enabled = enabled;
+		m_accumulated_gpu_time = 0;
+		m_last_gpu_time_end = 0;
+		return true;
+	}
+	return false;
+}
+
+float MetalHostDisplay::GetAndResetAccumulatedGPUTime()
+{
+	std::lock_guard<std::mutex> l(m_mtx);
+	float time = m_accumulated_gpu_time * 1000;
+	m_accumulated_gpu_time = 0;
+	return time;
+}
+
+void MetalHostDisplay::AccumulateCommandBufferTime(id<MTLCommandBuffer> buffer)
+{
+	std::lock_guard<std::mutex> l(m_mtx);
+	if (!m_gpu_timing_enabled)
+		return;
+	// We do the check before enabling m_gpu_timing_enabled
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunguarded-availability"
+	// It's unlikely, but command buffers can overlap or run out of order
+	// This doesn't handle every case (fully out of order), but it should at least handle overlapping
+	double begin = std::max(m_last_gpu_time_end, [buffer GPUStartTime]);
+	double end = [buffer GPUEndTime];
+	if (end > begin)
+	{
+		m_accumulated_gpu_time += end - begin;
+		m_last_gpu_time_end = end;
+	}
+#pragma clang diagnostic pop
 }
 
 #endif // __APPLE__

@@ -69,9 +69,7 @@ R5900cpu GSDumpReplayerCpu = {
 	GSDumpReplayerCpuCheckExecutionState,
 	GSDumpReplayerCpuThrowException,
 	GSDumpReplayerCpuThrowCpuException,
-	GSDumpReplayerCpuClear,
-	GSDumpReplayerCpuGetCacheReserve,
-	GSDumpReplayerCpuSetCacheReserve};
+	GSDumpReplayerCpuClear};
 
 static InterpVU0 gsDumpVU0;
 static InterpVU1 gsDumpVU1;
