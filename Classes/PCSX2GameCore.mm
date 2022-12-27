@@ -38,10 +38,10 @@
 #include "VMManager.h"
 //#include "AppConfig.h"
 #include "Frontend/InputManager.h"
-#include "Frontend/INISettingsInterface.h"
+#include "pcsx2/INISettingsInterface.h"
 #include "Frontend/OpenGLHostDisplay.h"
 #include "common/SettingsWrapper.h"
-#include "CDVD/CDVDaccess.h"
+#include "CDVD/CDVD.h"
 #include "SPU2/Global.h"
 #include "SPU2/SndOut.h"
 #include "PAD/Host/KeyStatus.h"
@@ -84,7 +84,6 @@ PCSX2GameCore *_current;
 	NSString* DiscSubRegion;
 	
 	std::unique_ptr<INISettingsInterface> s_base_settings_interface;
-	std::unique_ptr<HostDisplay> hostDisplay;
 	
 	VMBootParameters params;
 	
@@ -186,10 +185,10 @@ static NSString *binCueFix(NSString *path)
 	s_base_settings_interface = std::make_unique<INISettingsInterface>(std::move(pcsx2ini));
 	Host::Internal::SetBaseSettingsLayer(s_base_settings_interface.get());
 	
-	EmuConfig = Pcsx2Config();
-	EmuFolders::SetDefaults();
-
 	SettingsInterface& si = *s_base_settings_interface.get();
+	EmuConfig = Pcsx2Config();
+	EmuFolders::SetDefaults(si);
+
 	si.SetUIntValue("UI", "SettingsVersion", 1);
 
 	{
@@ -301,16 +300,12 @@ static NSString *binCueFix(NSString *path)
 	params.fullscreen = false;
    
 	if(!hasInitialized){
-		hostDisplay = HostDisplay::CreateDisplayForAPI(OpenGLHostDisplay::RenderAPI::OpenGL);
+		g_host_display = HostDisplay::CreateForAPI(RenderAPI::OpenGL);
 		WindowInfo wi;
 			wi.type = WindowInfo::Type::MacOS;
 			wi.surface_width = screenRect.size.width ;
 			wi.surface_height = screenRect.size.height ;
-		hostDisplay->CreateRenderDevice(wi,
-				Host::GetStringSettingValue("EmuCore/GS", "Adapter", ""),
-				VsyncMode::Adaptive,
-				Host::GetBoolSettingValue("EmuCore/GS", "ThreadedPresentation", false),
-				Host::GetBoolSettingValue("EmuCore/GS", "UseDebugDevice", false));
+		g_host_display->CreateDevice(wi, VsyncMode::Adaptive);
 			
 		
 		if(VMManager::Initialize(params)){
@@ -731,11 +726,12 @@ void Host::OnSaveStateSaved(const std::string_view& filename)
 {
 }
 
-void Host::OnGameChanged(const std::string& disc_path, const std::string& game_serial, const std::string& game_name, u32 game_crc)
+void Host::OnGameChanged(const std::string& disc_path, const std::string& elf_override, const std::string& game_serial,
+						 const std::string& game_name, u32 game_crc)
 {
 }
 
-void Host::PumpMessagesOnCPUThread()
+void Host::CPUThreadVSync()
 {
 }
 
@@ -753,41 +749,34 @@ void Host::RunOnCPUThread(std::function<void()> function, bool block)
 
 #pragma mark Host Display
 
-HostDisplay* Host::AcquireHostDisplay(HostDisplay::RenderAPI api)
+bool Host::AcquireHostDisplay(RenderAPI api, bool clear_state_on_fail)
 {
-	GET_CURRENT_OR_RETURN(nullptr);
+	GET_CURRENT_OR_RETURN(false);
 	
 	[current.renderDelegate willRenderFrameOnAlternateThread];
-	return current->hostDisplay.get();
+	return g_host_display.get();
 }
 
-void Host::ReleaseHostDisplay()
+void Host::ReleaseHostDisplay(bool clear_state)
 {
 	GET_CURRENT_OR_RETURN();
-	if(current->hostDisplay.get()){
-		current->hostDisplay.reset();
+	if(g_host_display.get()){
+		g_host_display.reset();
 	}
-}
-
-HostDisplay* Host::GetHostDisplay()
-{
-	GET_CURRENT_OR_RETURN(nullptr);
-	
-	return current->hostDisplay.get();
 }
 
 bool Host::BeginPresentFrame(bool frame_skip)
 {
 	GET_CURRENT_OR_RETURN(false);
 	
-	return current->hostDisplay.get()->BeginPresent(frame_skip);
+	return g_host_display.get()->BeginPresent(frame_skip);
 }
 
 void Host::EndPresentFrame()
 {
 	GET_CURRENT_OR_RETURN();
 	
-	current->hostDisplay.get()->EndPresent();
+	g_host_display.get()->EndPresent();
 }
 
 int Host::PresentFrameBuffer()

@@ -40,15 +40,13 @@
 #include "GS.h"
 #include "GS/GS.h"
 #include "SPU2/spu2.h"
-#include "USB/USB.h"
+#include "StateWrapper.h"
 #include "PAD/Gamepad.h"
-
-#ifndef PCSX2_CORE
-#include "gui/App.h"
-#include "gui/ConsoleLogger.h"
-#include "gui/SysThreads.h"
-#else
+#include "USB/USB.h"
 #include "VMManager.h"
+
+#ifdef ENABLE_ACHIEVEMENTS
+#include "Frontend/Achievements.h"
 #endif
 
 #include "fmt/core.h"
@@ -58,23 +56,37 @@
 
 using namespace R5900;
 
+static tlbs s_tlb_backup[std::size(tlb)];
+
 static void PreLoadPrep()
 {
 	// ensure everything is in sync before we start overwriting stuff.
 	if (THREAD_VU1)
 		vu1Thread.WaitVU();
 	GetMTGS().WaitGS(false);
+
+	// backup current TLBs, since we're going to overwrite them all
+	std::memcpy(s_tlb_backup, tlb, sizeof(s_tlb_backup));
+
+	// clear protected pages, since we don't want to fault loading EE memory
+	mmap_ResetBlockTracking();
+
 	SysClearExecutionCache();
-#ifndef PCSX2_CORE
-	PatchesVerboseReset();
-#endif
 }
 
 static void PostLoadPrep()
 {
 	resetCache();
 //	WriteCP0Status(cpuRegs.CP0.n.Status.val);
-	for(int i=0; i<48; i++) MapTLB(i);
+	for (int i = 0; i < 48; i++)
+	{
+		if (std::memcmp(&s_tlb_backup[i], &tlb[i], sizeof(tlbs)) != 0)
+		{
+			UnmapTLB(s_tlb_backup[i], i);
+			MapTLB(tlb[i], i);
+		}
+	}
+
 	if (EmuConfig.Gamefixes.GoemonTlbHack) GoemonPreloadTlb();
 	CBreakPoints::SetSkipFirst(BREAKPOINT_EE, 0);
 	CBreakPoints::SetSkipFirst(BREAKPOINT_IOP, 0);
@@ -85,55 +97,6 @@ static void PostLoadPrep()
 // --------------------------------------------------------------------------------------
 //  SaveStateBase  (implementations)
 // --------------------------------------------------------------------------------------
-#ifndef PCSX2_CORE
-std::string SaveStateBase::GetSavestateFolder(int slot, bool isSavingOrLoading)
-{
-	std::string CRCvalue(StringUtil::StdStringFromFormat("%08X", ElfCRC));
-	std::string serialName;
-
-	if (g_GameStarted || g_GameLoading)
-	{
-		if (DiscSerial.empty())
-		{
-			// Running homebrew/standalone ELF, return only the ELF name.
-			// can't use FileSystem here because it's DOS paths
-			const std::string::size_type pos = std::min(DiscSerial.rfind('/'), DiscSerial.rfind('\\'));
-			if (pos != std::string::npos)
-				serialName = DiscSerial.substr(pos + 1);
-			else
-				serialName = DiscSerial;
-		}
-		else
-		{
-			// Running a normal retail game
-			// Folder format is "SLXX-XXXX - (00000000)"
-			serialName = DiscSerial;
-		}
-	}
-	else
-	{
-		// Still inside the BIOS/not running a game (why would anyone want to do this?)
-		serialName = StringUtil::StdStringFromFormat("BIOS (%s v%u.%u)", BiosZone.c_str(), (BiosVersion >> 8), BiosVersion & 0xff);
-		CRCvalue = "None";
-	}
-
-	const std::string dir(StringUtil::StdStringFromFormat("%s" FS_OSPATH_SEPARATOR_STR "%s - (%s)",
-		g_Conf->Folders.Savestates.ToUTF8().data(), serialName.c_str(), CRCvalue.c_str()));
-
-	if (isSavingOrLoading)
-	{
-		if (!FileSystem::DirectoryExists(dir.c_str()))
-		{
-			// sstates should exist, no need to create it
-			FileSystem::CreateDirectoryPath(dir.c_str(), false);
-		}
-	}
-
-	return Path::Combine(dir, StringUtil::StdStringFromFormat("%s (%s).%02d.p2s",
-		serialName.c_str(), CRCvalue.c_str(), slot));
-}
-#endif
-
 SaveStateBase::SaveStateBase( SafeArray<u8>& memblock )
 {
 	Init( &memblock );
@@ -189,12 +152,12 @@ SaveStateBase& SaveStateBase::FreezeBios()
 	// Check the BIOS, and issue a warning if the bios for this state
 	// doesn't match the bios currently being used (chances are it'll still
 	// work fine, but some games are very picky).
-	
+
 	u32 bioscheck = BiosChecksum;
 	char biosdesc[256];
 	memzero( biosdesc );
 	memcpy( biosdesc, BiosDescription.c_str(), std::min( sizeof(biosdesc), BiosDescription.length() ) );
-	
+
 	Freeze( bioscheck );
 	Freeze( biosdesc );
 
@@ -209,15 +172,17 @@ SaveStateBase& SaveStateBase::FreezeBios()
 			biosdesc, bioscheck
 		);
 	}
-	
+
 	return *this;
 }
 
 SaveStateBase& SaveStateBase::FreezeInternals()
 {
+	const u32 previousCRC = ElfCRC;
+
 	// Print this until the MTVU problem in gifPathFreeze is taken care of (rama)
 	if (THREAD_VU1) Console.Warning("MTVU speedhack is enabled, saved states may not be stable");
-	
+
 	// Second Block - Various CPU Registers and States
 	// -----------------------------------------------
 	FreezeTag( "cpuRegs" );
@@ -235,19 +200,27 @@ SaveStateBase& SaveStateBase::FreezeInternals()
 	StringUtil::Strlcpy(localDiscSerial, DiscSerial.c_str(), sizeof(localDiscSerial));
 	Freeze(localDiscSerial);
 	if (IsLoading())
+	{
 		DiscSerial = localDiscSerial;
+
+		if (ElfCRC != previousCRC)
+		{
+			// HACK: LastELF isn't in the save state... Load it before we go too far into restoring state.
+			// When we next bump save states, we should include it. We need this for achievements, because
+			// we want to load and activate achievements before restoring any of their tracked state.
+			if (const std::string& elf_override = VMManager::Internal::GetElfOverride(); !elf_override.empty())
+				cdvdReloadElfInfo(fmt::format("host:{}", elf_override));
+			else
+				cdvdReloadElfInfo();
+		}
+	}
+
 
 	// Third Block - Cycle Timers and Events
 	// -------------------------------------
 	FreezeTag( "Cycles" );
 	Freeze(EEsCycle);
 	Freeze(EEoCycle);
-	Freeze(iopCycleEE);
-	Freeze(iopBreak);
-	Freeze(g_nextEventCycle);
-	Freeze(g_iopNextEventCycle);
-	Freeze(s_iLastCOP0Cycle);
-	Freeze(s_iLastPERFCycle);
 	Freeze(nextCounter);
 	Freeze(nextsCounter);
 	Freeze(psxNextsCounter);
@@ -376,20 +349,13 @@ struct SysState_Component
 
 static int SysState_MTGSFreeze(FreezeAction mode, freezeData* fP)
 {
-#ifndef PCSX2_CORE
-	ScopedCoreThreadPause paused_core;
-#endif
 	MTGS_FreezeData sstate = { fP, 0 };
 	GetMTGS().Freeze(mode, sstate);
-#ifndef PCSX2_CORE
-	paused_core.AllowResume();
-#endif
 	return sstate.retval;
 }
 
 static constexpr SysState_Component SPU2{ "SPU2", SPU2freeze };
 static constexpr SysState_Component PAD_{ "PAD", PADfreeze };
-static constexpr SysState_Component USB{ "USB", USBfreeze };
 static constexpr SysState_Component GS{ "GS", SysState_MTGSFreeze };
 
 
@@ -409,6 +375,9 @@ static void SysState_ComponentFreezeOutRoot(void* dest, SysState_Component comp)
 
 static void SysState_ComponentFreezeIn(zip_file_t* zf, SysState_Component comp)
 {
+	if (!zf)
+		return;
+
 	freezeData fP = { 0, nullptr };
 	if (comp.freeze(FreezeAction::Size, &fP) != 0)
 		fP.size = 0;
@@ -433,6 +402,43 @@ static void SysState_ComponentFreezeOut(SaveStateBase& writer, SysState_Componen
 		writer.CommitBlock(size);
 	}
 	return;
+}
+
+static void SysState_ComponentFreezeInNew(zip_file_t* zf, const char* name, bool(*do_state_func)(StateWrapper&))
+{
+	// TODO: We could decompress on the fly here for a little bit more speed.
+	std::vector<u8> data;
+	if (zf)
+	{
+		std::optional<std::vector<u8>> optdata(ReadBinaryFileInZip(zf));
+		if (optdata.has_value())
+			data = std::move(optdata.value());
+	}
+
+	StateWrapper::ReadOnlyMemoryStream stream(data.empty() ? nullptr : data.data(), data.size());
+	StateWrapper sw(&stream, StateWrapper::Mode::Read, g_SaveVersion);
+
+	// TODO: Get rid of the bloody exceptions.
+	if (!do_state_func(sw))
+		throw std::runtime_error(fmt::format(" * {}: Error loading state!", name));
+}
+
+static void SysState_ComponentFreezeOutNew(SaveStateBase& writer, const char* name, u32 reserve, bool (*do_state_func)(StateWrapper&))
+{
+	StateWrapper::VectorMemoryStream stream(reserve);
+	StateWrapper sw(&stream, StateWrapper::Mode::Write, g_SaveVersion);
+
+	// TODO: Get rid of the bloody exceptions.
+	if (!do_state_func(sw))
+		throw std::runtime_error(fmt::format(" * {}: Error saving state!", name));
+
+	const int size = static_cast<int>(stream.GetBuffer().size());
+	if (size > 0)
+	{
+		writer.PrepBlock(size);
+		std::memcpy(writer.GetBlockPtr(), stream.GetBuffer().data(), size);
+		writer.CommitBlock(size);
+	}
 }
 
 // --------------------------------------------------------------------------------------
@@ -606,8 +612,8 @@ public:
 	virtual ~SavestateEntry_USB() = default;
 
 	const char* GetFilename() const { return "USB.bin"; }
-	void FreezeIn(zip_file_t* zf) const { return SysState_ComponentFreezeIn(zf, USB); }
-	void FreezeOut(SaveStateBase& writer) const { return SysState_ComponentFreezeOut(writer, USB); }
+	void FreezeIn(zip_file_t* zf) const { return SysState_ComponentFreezeInNew(zf, "USB", &USB::DoState); }
+	void FreezeOut(SaveStateBase& writer) const { return SysState_ComponentFreezeOutNew(writer, "USB", 16 * 1024, &USB::DoState); }
 	bool IsRequired() const { return false; }
 };
 
@@ -633,7 +639,44 @@ public:
 	bool IsRequired() const { return true; }
 };
 
+#ifdef ENABLE_ACHIEVEMENTS
+class SaveStateEntry_Achievements : public BaseSavestateEntry
+{
+	virtual ~SaveStateEntry_Achievements() override = default;
 
+	const char* GetFilename() const override { return "Achievements.bin"; }
+	void FreezeIn(zip_file_t* zf) const override
+	{
+		if (!Achievements::IsActive())
+			return;
+
+		std::optional<std::vector<u8>> data;
+		if (zf)
+			data = ReadBinaryFileInZip(zf);
+
+		if (data.has_value() && !data->empty())
+			Achievements::LoadState(data->data(), data->size());
+		else
+			Achievements::LoadState(nullptr, 0);
+	}
+
+	void FreezeOut(SaveStateBase& writer) const override
+	{
+		if (!Achievements::IsActive())
+			return;
+
+		std::vector<u8> data(Achievements::SaveState());
+		if (!data.empty())
+		{
+			writer.PrepBlock(static_cast<int>(data.size()));
+			std::memcpy(writer.GetBlockPtr(), data.data(), data.size());
+			writer.CommitBlock(static_cast<int>(data.size()));
+		}
+	}
+
+	bool IsRequired() const override { return false; }
+};
+#endif
 
 // (cpuRegs, iopRegs, VPU/GIF/DMAC structures should all remain as part of a larger unified
 //  block, since they're all PCSX2-dependent and having separate files in the archie for them
@@ -651,22 +694,16 @@ static const std::unique_ptr<BaseSavestateEntry> SavestateEntries[] = {
 	std::unique_ptr<BaseSavestateEntry>(new SavestateEntry_VU0prog),
 	std::unique_ptr<BaseSavestateEntry>(new SavestateEntry_VU1prog),
 	std::unique_ptr<BaseSavestateEntry>(new SavestateEntry_SPU2),
-#ifndef PCSX2_CORE
 	std::unique_ptr<BaseSavestateEntry>(new SavestateEntry_USB),
-#endif
 	std::unique_ptr<BaseSavestateEntry>(new SavestateEntry_PAD),
 	std::unique_ptr<BaseSavestateEntry>(new SavestateEntry_GS),
+#ifdef ENABLE_ACHIEVEMENTS
+	std::unique_ptr<BaseSavestateEntry>(new SaveStateEntry_Achievements),
+#endif
 };
 
 std::unique_ptr<ArchiveEntryList> SaveState_DownloadState()
 {
-#ifndef PCSX2_CORE
-	if (!GetCoreThread().HasActiveMachine())
-		throw Exception::RuntimeError()
-			.SetDiagMsg("SysExecEvent_DownloadState: Cannot freeze/download an invalid VM state!")
-			.SetUserMsg("There is no active virtual machine state to download or save.");
-#endif
-
 	std::unique_ptr<ArchiveEntryList> destlist = std::make_unique<ArchiveEntryList>(new VmStateBuffer("Zippable Savestate"));
 
 	memSavingState saveme(destlist->GetBuffer());
@@ -697,16 +734,17 @@ std::unique_ptr<SaveStateScreenshotData> SaveState_SaveScreenshot()
 	static constexpr u32 SCREENSHOT_WIDTH = 640;
 	static constexpr u32 SCREENSHOT_HEIGHT = 480;
 
-	std::vector<u32> pixels(SCREENSHOT_WIDTH * SCREENSHOT_HEIGHT);
-	if (!GetMTGS().SaveMemorySnapshot(SCREENSHOT_WIDTH, SCREENSHOT_HEIGHT, &pixels))
+	u32 width, height;
+	std::vector<u32> pixels;
+	if (!GetMTGS().SaveMemorySnapshot(SCREENSHOT_WIDTH, SCREENSHOT_HEIGHT, true, false, &width, &height, &pixels))
 	{
 		// saving failed for some reason, device lost?
 		return nullptr;
 	}
 
 	std::unique_ptr<SaveStateScreenshotData> data = std::make_unique<SaveStateScreenshotData>();
-	data->width = SCREENSHOT_WIDTH;
-	data->height = SCREENSHOT_HEIGHT;
+	data->width = width;
+	data->height = height;
 	data->pixels = std::move(pixels);
 	return data;
 }
@@ -970,17 +1008,15 @@ static void CheckVersion(const std::string& filename, zip_t* zf)
 	if (savever > g_SaveVersion)
 		throw Exception::SaveStateLoadError(filename)
 			.SetDiagMsg(fmt::format("Savestate uses an unsupported or unknown savestate version.\n(PCSX2 ver={:x}, state ver={:x})", g_SaveVersion, savever))
-			.SetUserMsg("Cannot load this savestate. The state is an unsupported version.");
-
+			.SetUserMsg("Cannot load this savestate. The state is an unsupported version.\nOption 1: Download an older PCSX2 version from pcsx2.net and make a memcard save like on the physical PS2.\nOption 2: Delete the savestates.");
 	// check for a "minor" version incompatibility; which happens if the savestate being loaded is a newer version
 	// than the emulator recognizes.  99% chance that trying to load it will just corrupt emulation or crash.
 	if ((savever >> 16) != (g_SaveVersion >> 16))
 		throw Exception::SaveStateLoadError(filename)
 			.SetDiagMsg(fmt::format("Savestate uses an unknown savestate version.\n(PCSX2 ver={:x}, state ver={:x})", g_SaveVersion, savever))
-			.SetUserMsg("Cannot load this savestate. The state is an unsupported version.");
-}
+			.SetUserMsg("Cannot load this savestate. The state is an unsupported version.\nOption 1: Download an older PCSX2 version from pcsx2.net and make a memcard save like on the physical PS2.\nOption 2: Delete the savestates.");}
 
-static zip_int64_t CheckFileExistsInState(zip_t* zf, const char* name)
+static zip_int64_t CheckFileExistsInState(zip_t* zf, const char* name, bool required)
 {
 	zip_int64_t index = zip_name_locate(zf, name, /*ZIP_FL_NOCASE*/ 0);
 	if (index >= 0)
@@ -989,7 +1025,11 @@ static zip_int64_t CheckFileExistsInState(zip_t* zf, const char* name)
 		return index;
 	}
 
-	Console.WriteLn(Color_Red, " ... not found '%s'!", name);
+	if (required)
+		Console.WriteLn(Color_Red, " ... not found '%s'!", name);
+	else
+		DevCon.WriteLn(Color_Red, " ... not found '%s'!", name);
+
 	return index;
 }
 
@@ -1028,15 +1068,16 @@ void SaveState_UnzipFromDisk(const std::string& filename)
 	CheckVersion(filename, zf.get());
 
 	// check that all parts are included
-	const s64 internal_index = CheckFileExistsInState(zf.get(), EntryFilename_InternalStructures);
+	const s64 internal_index = CheckFileExistsInState(zf.get(), EntryFilename_InternalStructures, true);
 	s64 entryIndices[std::size(SavestateEntries)];
 
 	// Log any parts and pieces that are missing, and then generate an exception.
 	bool throwIt = (internal_index < 0);
 	for (u32 i = 0; i < std::size(SavestateEntries); i++)
 	{
-		entryIndices[i] = CheckFileExistsInState(zf.get(), SavestateEntries[i]->GetFilename());
-		if (entryIndices[i] < 0 && SavestateEntries[i]->IsRequired())
+		const bool required = SavestateEntries[i]->IsRequired();
+		entryIndices[i] = CheckFileExistsInState(zf.get(), SavestateEntries[i]->GetFilename(), required);
+		if (entryIndices[i] < 0 && required)
 			throwIt = true;
 	}
 
@@ -1051,7 +1092,10 @@ void SaveState_UnzipFromDisk(const std::string& filename)
 		for (u32 i = 0; i < std::size(SavestateEntries); ++i)
 		{
 			if (entryIndices[i] < 0)
+			{
+				SavestateEntries[i]->FreezeIn(nullptr);
 				continue;
+			}
 
 			auto zff = zip_fopen_index_managed(zf.get(), entryIndices[i], 0);
 			if (!zff)
