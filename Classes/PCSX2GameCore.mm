@@ -40,6 +40,9 @@
 #include "Frontend/InputManager.h"
 #include "pcsx2/INISettingsInterface.h"
 #include "Frontend/OpenGLHostDisplay.h"
+#include "Frontend/CommonHost.h"
+#include "Frontend/FullscreenUI.h"
+#include "Frontend/LogSink.h"
 #include "common/SettingsWrapper.h"
 #include "CDVD/CDVD.h"
 #include "SPU2/Global.h"
@@ -664,6 +667,21 @@ void Host::WriteToSoundBuffer(s16 Left, s16 Right)
 	[[current audioBufferAtIndex:0] write:stereo maxLength:sizeof(stereo)];
 }
 
+void Host::OnPerformanceMetricsUpdated()
+{
+}
+
+std::optional<WindowInfo> Host::GetTopLevelWindowInfo()
+{
+	return {};
+}
+
+void Host::SetRelativeMouseMode(bool enabled)
+{
+}
+
+#pragma mark Host Logging
+
 void Host::AddOSDMessage(std::string message, float duration)
 {
 }
@@ -690,6 +708,16 @@ void Host::ClearOSDMessages()
 
 void Host::ReportErrorAsync(const std::string_view& title, const std::string_view& message)
 {
+}
+
+void Host::AddIconOSDMessage(std::string key, const char* icon, const std::string_view& message, float duration /* = 2.0f */)
+{
+	// Stub, do nothing.
+}
+
+void CommonHost::UpdateLogging(SettingsInterface& si)
+{
+	
 }
 
 #pragma mark Host Thread
@@ -811,6 +839,23 @@ void Host::UpdateHostDisplay()
 {
 }
 
+#pragma mark Host Settings
+
+void Host::LoadSettings(SettingsInterface& si, std::unique_lock<std::mutex>& lock)
+{
+	CommonHost::LoadSettings(si, lock);
+}
+
+void Host::CheckForSettingsChanges(const Pcsx2Config& old_config)
+{
+	CommonHost::CheckForSettingsChanges(old_config);
+}
+
+void FullscreenUI::CheckForConfigChanges(const Pcsx2Config& old_config)
+{
+	// do nothing
+}
+
 #pragma mark -
 
 const IConsoleWriter* PatchesCon = &ConsoleWriter_Null;
@@ -826,4 +871,7 @@ std::optional<std::string> InputManager::ConvertHostKeyboardCodeToString(u32 cod
 }
 
 BEGIN_HOTKEY_LIST(g_host_hotkeys)
+END_HOTKEY_LIST()
+
+BEGIN_HOTKEY_LIST(g_common_hotkeys)
 END_HOTKEY_LIST()
