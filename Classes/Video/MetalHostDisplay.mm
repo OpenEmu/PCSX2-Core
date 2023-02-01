@@ -13,6 +13,7 @@
  *  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "PCSX2GameCore.h"
 #include "PrecompiledHeader.h"
 #include "MetalHostDisplay.h"
 #include "GS/Renderers/Metal/GSMetalCPPAccessible.h"
@@ -24,6 +25,7 @@
 class MetalHostDisplayTexture final : public HostDisplayTexture
 {
 	MRCOwned<id<MTLTexture>> m_tex;
+	
 	u32 m_width, m_height;
 public:
 	MetalHostDisplayTexture(MRCOwned<id<MTLTexture>> tex, u32 width, u32 height)
@@ -82,7 +84,6 @@ bool MetalHostDisplay::HasRenderSurface()  const { return static_cast<bool>(m_la
 
 void MetalHostDisplay::AttachSurfaceOnMainThread()
 {
-	ASSERT([NSThread isMainThread]);
 	m_view = MRCRetain((__bridge NSView*)m_window_info.window_handle);
 	[m_view setWantsLayer:YES];
 	[m_view setLayer:m_layer];
@@ -90,7 +91,6 @@ void MetalHostDisplay::AttachSurfaceOnMainThread()
 
 void MetalHostDisplay::DetachSurfaceOnMainThread()
 {
-	ASSERT([NSThread isMainThread]);
 	[m_view setLayer:nullptr];
 	[m_view setWantsLayer:NO];
 	m_view = nullptr;
@@ -99,21 +99,8 @@ void MetalHostDisplay::DetachSurfaceOnMainThread()
 bool MetalHostDisplay::CreateRenderDevice(const WindowInfo& wi, std::string_view adapter_name, VsyncMode vsync, bool threaded_presentation, bool debug_device)
 { @autoreleasepool {
 	m_window_info = wi;
-	pxAssertRel(!m_dev.dev, "Device already created!");
-	std::string null_terminated_adapter_name(adapter_name);
-	NSString* ns_adapter_name = [NSString stringWithUTF8String:null_terminated_adapter_name.c_str()];
-	auto devs = MRCTransfer(MTLCopyAllDevices());
-	for (id<MTLDevice> dev in devs.Get())
-	{
-		if ([[dev name] isEqualToString:ns_adapter_name])
-			m_dev = GSMTLDevice(MRCRetain(dev));
-	}
-	if (!m_dev.dev)
-	{
-		if (adapter_name != "Default Adapter")
-			Console.Warning("Metal: Couldn't find adapter %s, using default", null_terminated_adapter_name.c_str());
-		m_dev = GSMTLDevice(MRCTransfer(MTLCreateSystemDefaultDevice()));
-	}
+
+	m_dev=GSMTLDevice(MRCTransfer([_current getMetalDev]));
 	m_queue = MRCTransfer([m_dev.dev newCommandQueue]);
 
 	m_pass_desc = MRCTransfer([MTLRenderPassDescriptor new]);
@@ -134,13 +121,12 @@ bool MetalHostDisplay::CreateRenderDevice(const WindowInfo& wi, std::string_view
 	if (m_dev.IsOk() && m_queue)
 	{
 		Console.WriteLn("Renderer info:\n    %s", GetDriverInfo().c_str());
-		OnMainThread([this]
-		{
-			m_layer = MRCRetain([CAMetalLayer layer]);
-			[m_layer setDrawableSize:CGSizeMake(m_window_info.surface_width, m_window_info.surface_height)];
-			[m_layer setDevice:m_dev.dev];
-			AttachSurfaceOnMainThread();
-		});
+			
+		m_layer = MRCRetain([CAMetalLayer layer]);
+		m_layer.Get().framebufferOnly=NO;
+		[m_layer setDrawableSize:CGSizeMake(m_window_info.surface_width, m_window_info.surface_height)];
+		[m_layer setDevice:m_dev.dev];
+		
 		SetVSync(vsync);
 		return true;
 	}
@@ -167,18 +153,13 @@ void MetalHostDisplay::DestroyRenderSurface()
 {
 	if (!m_layer)
 		return;
-	OnMainThread([this]{ DetachSurfaceOnMainThread(); });
+	
 	m_layer = nullptr;
+	
 }
 
 bool MetalHostDisplay::ChangeRenderWindow(const WindowInfo& wi)
 {
-	OnMainThread([this, &wi]
-	{
-		DetachSurfaceOnMainThread();
-		m_window_info = wi;
-		AttachSurfaceOnMainThread();
-	});
 	return true;
 }
 
@@ -219,7 +200,7 @@ void MetalHostDisplay::ResizeRenderWindow(s32 new_window_width, s32 new_window_h
 std::unique_ptr<HostDisplayTexture> MetalHostDisplay::CreateTexture(u32 width, u32 height, const void* data, u32 data_stride, bool dynamic)
 { @autoreleasepool {
 	MTLTextureDescriptor* desc = [MTLTextureDescriptor
-		texture2DDescriptorWithPixelFormat:MTLPixelFormatRGBA8Unorm
+		texture2DDescriptorWithPixelFormat:MTLPixelFormatBGRA8Unorm
 									 width:width
 									height:height
 								 mipmapped:false];
@@ -272,7 +253,7 @@ bool MetalHostDisplay::BeginPresent(bool frame_skip)
 	if (newf8 && !f8)
 		s_capture_next = true;
 	f8 = newf8;
-	if (frame_skip || m_window_info.type == WindowInfo::Type::Surfaceless || !g_gs_device)
+	if (frame_skip  || !g_gs_device)
 	{
 		return false;
 	}
@@ -290,6 +271,8 @@ bool MetalHostDisplay::BeginPresent(bool frame_skip)
 	id<MTLRenderCommandEncoder> enc = [buf renderCommandEncoderWithDescriptor:m_pass_desc];
 	[enc setLabel:@"Present"];
 	dev->m_current_render.encoder = MRCRetain(enc);
+	
+	
 	return true;
 }}
 
@@ -298,12 +281,27 @@ void MetalHostDisplay::EndPresent()
 	GSDeviceMTL* dev = static_cast<GSDeviceMTL*>(g_gs_device.get());
 	pxAssertDev(dev && dev->m_current_render.encoder && dev->m_current_render_cmdbuf, "BeginPresent cmdbuf was destroyed");
 	dev->EndRenderPass();
-	if (m_current_drawable)
+	
+	if (m_current_drawable){  //Here is where we blit the Metal Texture to the OEMetalRenderTexture
+		id<MTLBlitCommandEncoder> blitCommandEncoder = [dev->m_current_render_cmdbuf blitCommandEncoder];
+		
+		if (@available(macOS 10.15, *)) {
+			[blitCommandEncoder copyFromTexture:[m_current_drawable texture] toTexture:id<MTLTexture>([_current getMetalTex])];
+		} else {
+			// Fallback on earlier versions
+			// TODO:  Add pre 10.15 metal blit
+		}
+		
+		[blitCommandEncoder endEncoding];
+		
 		[dev->m_current_render_cmdbuf addScheduledHandler:[drawable = std::move(m_current_drawable)](id<MTLCommandBuffer>){
 			[drawable present];
 		}];
-	dev->FlushEncoders();
+	}
+		dev->FlushEncoders();
+				
 	m_current_drawable = nullptr;
+
 	if (@available(macOS 10.15, iOS 13, *))
 	{
 		static NSString* const path = @"/tmp/PCSX2MTLCapture.gputrace";
@@ -373,19 +371,6 @@ bool MetalHostDisplay::UpdateImGuiFontTexture()
 
 bool MetalHostDisplay::GetHostRefreshRate(float* refresh_rate)
 {
-	OnMainThread([this, refresh_rate]
-	{
-		u32 did = [[[[[m_view window] screen] deviceDescription] valueForKey:@"NSScreenNumber"] unsignedIntValue];
-		if (CGDisplayModeRef mode = CGDisplayCopyDisplayMode(did))
-		{
-			*refresh_rate = CGDisplayModeGetRefreshRate(mode);
-			CGDisplayModeRelease(mode);
-		}
-		else
-		{
-			*refresh_rate = 0;
-		}
-	});
 	return *refresh_rate != 0;
 }
 

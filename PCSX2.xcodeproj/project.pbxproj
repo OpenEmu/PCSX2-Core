@@ -553,7 +553,6 @@
 		551BF6BD26424BAA0008C529 /* ThreadedFileReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551BF6BC26424BAA0008C529 /* ThreadedFileReader.cpp */; };
 		551BF6E926424D030008C529 /* InputRecording.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551BF6C026424D020008C529 /* InputRecording.cpp */; };
 		551BF71826424ED50008C529 /* bin2cpp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551BF71626424EC60008C529 /* bin2cpp.cpp */; };
-		55300EA927C747670049E2CC /* GSMTLDeviceInfo.mm in Sources */ = {isa = PBXBuildFile; fileRef = 55300EA827C747670049E2CC /* GSMTLDeviceInfo.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		55300EAD27C9A28B0049E2CC /* GSTextureReplacements.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55300EAB27C9A2830049E2CC /* GSTextureReplacements.cpp */; };
 		55300EAE27C9A28B0049E2CC /* GSTextureReplacementLoaders.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55300EAC27C9A2830049E2CC /* GSTextureReplacementLoaders.cpp */; };
 		553CF8382640D2F8003A437C /* jmp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FA79263D48AE000219EC /* jmp.cpp */; };
@@ -653,13 +652,14 @@
 		DD0302B227C43CD50006ABDC /* SndOut.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FCD0263D49BC000219EC /* SndOut.cpp */; };
 		DD0302B727C491020006ABDC /* OESndOut.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD0302B527C491020006ABDC /* OESndOut.cpp */; };
 		DD0302BD27C491160006ABDC /* OpenGLHostDisplayOverride.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD0302B927C491160006ABDC /* OpenGLHostDisplayOverride.cpp */; };
-		DD0302BE27C491160006ABDC /* GSDeviceMTL.mm in Sources */ = {isa = PBXBuildFile; fileRef = DD0302BA27C491160006ABDC /* GSDeviceMTL.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		DD0302BF27C491160006ABDC /* MetalHostDisplay.mm in Sources */ = {isa = PBXBuildFile; fileRef = DD0302BB27C491160006ABDC /* MetalHostDisplay.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		DD0302C027C491160006ABDC /* ContextAGL.mm in Sources */ = {isa = PBXBuildFile; fileRef = DD0302BC27C491160006ABDC /* ContextAGL.mm */; };
 		DD0302C327C5423F0006ABDC /* PAD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5580639827AB3261008CD5D2 /* PAD.cpp */; };
 		DD0302C927C549730006ABDC /* StateManagement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5580639727AB3261008CD5D2 /* StateManagement.cpp */; };
 		DD03FFD827B721F20006ABDC /* GSTextureMTL.mm in Sources */ = {isa = PBXBuildFile; fileRef = DD03FFB927B70F0C0006ABDC /* GSTextureMTL.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		DD1134E927CBCE8F00C2E60B /* SaveState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD1134E827CBCE8900C2E60B /* SaveState.cpp */; };
+		DD75EE5F29898A3A0056B3BA /* GSMTLDeviceInfo.mm in Sources */ = {isa = PBXBuildFile; fileRef = DD75EE5E29898A3A0056B3BA /* GSMTLDeviceInfo.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		DD771F8D298AE19F007BE4EA /* GSDeviceMTL.mm in Sources */ = {isa = PBXBuildFile; fileRef = DD0302BA27C491160006ABDC /* GSDeviceMTL.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -2826,7 +2826,6 @@
 		551BF70926424E7D0008C529 /* bin2cpp */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = bin2cpp; sourceTree = BUILT_PRODUCTS_DIR; };
 		551BF71626424EC60008C529 /* bin2cpp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = bin2cpp.cpp; sourceTree = "<group>"; };
 		55300EA527C744E70049E2CC /* MRCHelpers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MRCHelpers.h; sourceTree = "<group>"; };
-		55300EA827C747670049E2CC /* GSMTLDeviceInfo.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GSMTLDeviceInfo.mm; sourceTree = "<group>"; };
 		55300EAA27C9A2830049E2CC /* GSTextureReplacements.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GSTextureReplacements.h; sourceTree = "<group>"; };
 		55300EAB27C9A2830049E2CC /* GSTextureReplacements.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GSTextureReplacements.cpp; sourceTree = "<group>"; };
 		55300EAC27C9A2830049E2CC /* GSTextureReplacementLoaders.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GSTextureReplacementLoaders.cpp; sourceTree = "<group>"; };
@@ -3218,6 +3217,7 @@
 		DD1134E827CBCE8900C2E60B /* SaveState.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SaveState.cpp; sourceTree = "<group>"; };
 		DD1134EA27D28B0600C2E60B /* OEUpscalePatches.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OEUpscalePatches.h; sourceTree = "<group>"; };
 		DD5D197D27D708A900ED83D9 /* OEHostDisplay.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OEHostDisplay.h; sourceTree = "<group>"; };
+		DD75EE5E29898A3A0056B3BA /* GSMTLDeviceInfo.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GSMTLDeviceInfo.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -7545,7 +7545,7 @@
 		DD0302B827C491160006ABDC /* Video */ = {
 			isa = PBXGroup;
 			children = (
-				55300EA827C747670049E2CC /* GSMTLDeviceInfo.mm */,
+				DD75EE5E29898A3A0056B3BA /* GSMTLDeviceInfo.mm */,
 				DD0302B927C491160006ABDC /* OpenGLHostDisplayOverride.cpp */,
 				DD0302BA27C491160006ABDC /* GSDeviceMTL.mm */,
 				DD0302BB27C491160006ABDC /* MetalHostDisplay.mm */,
@@ -8069,7 +8069,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "generateMetallib () {\nmkdir -p ${DERIVED_FILE_DIR}/$3/\nxcrun metal ${flags} -std=$1 -target $2 -o ${DERIVED_FILE_DIR}/$3/fxaa.air -c ${SRCROOT}/pcsx2/pcsx2/GS/Renderers/Metal/fxaa.metal\nxcrun metal ${flags} -std=$1 -target $2 -o ${DERIVED_FILE_DIR}/$3/convert.air -c ${SRCROOT}/pcsx2/pcsx2/GS/Renderers/Metal/convert.metal\nxcrun metal ${flags} -std=$1 -target $2 -o ${DERIVED_FILE_DIR}/$3/interlace.air -c ${SRCROOT}/pcsx2/pcsx2/GS/Renderers/Metal/interlace.metal\nxcrun metal ${flags} -std=$1 -target $2 -o ${DERIVED_FILE_DIR}/$3/tfx.air -c ${SRCROOT}/pcsx2/pcsx2/GS/Renderers/Metal/tfx.metal\nxcrun metal ${flags} -std=$1 -target $2 -o ${DERIVED_FILE_DIR}/$3/merge.air -c ${SRCROOT}/pcsx2/pcsx2/GS/Renderers/Metal/merge.metal\nxcrun metallib -o ${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/$3.metallib ${DERIVED_FILE_DIR}/$3/*.air\n}\n\ngenerateMetallib macos-metal2.2 air64-apple-macos10.15 Metal22\ngenerateMetallib macos-metal2.3 air64-apple-macos11.0  Metal23\n";
+			shellScript = "generateMetallib () {\nmkdir -p ${DERIVED_FILE_DIR}/$3/\nxcrun metal ${flags} -std=$1 -target $2 -o ${DERIVED_FILE_DIR}/$3/fxaa.air -c ${SRCROOT}/pcsx2/pcsx2/GS/Renderers/Metal/fxaa.metal\nxcrun metal ${flags} -std=$1 -target $2 -o ${DERIVED_FILE_DIR}/$3/convert.air -c ${SRCROOT}/pcsx2/pcsx2/GS/Renderers/Metal/convert.metal\nxcrun metal ${flags} -std=$1 -target $2 -o ${DERIVED_FILE_DIR}/$3/interlace.air -c ${SRCROOT}/pcsx2/pcsx2/GS/Renderers/Metal/interlace.metal\nxcrun metal ${flags} -std=$1 -target $2 -o ${DERIVED_FILE_DIR}/$3/tfx.air -c ${SRCROOT}/pcsx2/pcsx2/GS/Renderers/Metal/tfx.metal\nxcrun metal ${flags} -std=$1 -target $2 -o ${DERIVED_FILE_DIR}/$3/merge.air -c ${SRCROOT}/pcsx2/pcsx2/GS/Renderers/Metal/merge.metal\nxcrun metallib -o ${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/$3.metallib ${DERIVED_FILE_DIR}/$3/*.air\n}\n\ngenerateMetallib macos-metal2.2 air64-apple-macos10.15 Metal22\ngenerateMetallib macos-metal2.3 air64-apple-macos11.0  Metal23\n\n\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -8103,6 +8103,7 @@
 				551AA14B2792AB1800658151 /* GSDeviceOGL.cpp in Sources */,
 				551BF56F26420E710008C529 /* VU1micro.cpp in Sources */,
 				551AA12B2792AB1700658151 /* GSRasterizer.cpp in Sources */,
+				DD771F8D298AE19F007BE4EA /* GSDeviceMTL.mm in Sources */,
 				551AA4E22793756000658151 /* Pcsx2Config.cpp in Sources */,
 				551AA4F027938D6900658151 /* GSNewCodeGenerator.cpp in Sources */,
 				551AA12C2792AB1700658151 /* GSTextureCacheSW.cpp in Sources */,
@@ -8167,6 +8168,7 @@
 				DD0302C027C491160006ABDC /* ContextAGL.mm in Sources */,
 				551BF57E26420E9A0008C529 /* Sio.cpp in Sources */,
 				551BF57C26420E9A0008C529 /* LegacyDmac.cpp in Sources */,
+				DD75EE5F29898A3A0056B3BA /* GSMTLDeviceInfo.mm in Sources */,
 				DD0302BF27C491160006ABDC /* MetalHostDisplay.mm in Sources */,
 				551BF5CC264212070008C529 /* IPU.cpp in Sources */,
 				551BF56726420DE90008C529 /* SymbolMap.cpp in Sources */,
@@ -8229,7 +8231,6 @@
 				551BF648264218380008C529 /* iCore-32.cpp in Sources */,
 				551BF61B264214530008C529 /* iR5900Misc.cpp in Sources */,
 				558063AD27AB4069008CD5D2 /* HostSettings.cpp in Sources */,
-				DD0302BE27C491160006ABDC /* GSDeviceMTL.mm in Sources */,
 				551BF5B7264210860008C529 /* COP0.cpp in Sources */,
 				551AA4B72793625B00658151 /* Misc.cpp in Sources */,
 				551BF68F264241F10008C529 /* MipsAssemblerTables.cpp in Sources */,
@@ -8273,7 +8274,6 @@
 				551BF69A264243310008C529 /* DriveUtility.cpp in Sources */,
 				551BF6AD2642445C0008C529 /* RegLog.cpp in Sources */,
 				551BF678264240560008C529 /* net.cpp in Sources */,
-				55300EA927C747670049E2CC /* GSMTLDeviceInfo.mm in Sources */,
 				551BF61C264214530008C529 /* ir5900tables.cpp in Sources */,
 				551AA48B27935DF400658151 /* GSRendererNull.cpp in Sources */,
 				551BF5C4264210AB0008C529 /* Gif_Logger.cpp in Sources */,
