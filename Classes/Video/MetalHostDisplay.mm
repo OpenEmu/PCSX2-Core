@@ -100,7 +100,7 @@ bool MetalHostDisplay::CreateRenderDevice(const WindowInfo& wi, std::string_view
 { @autoreleasepool {
 	m_window_info = wi;
 
-	m_dev=GSMTLDevice(MRCTransfer([_current metalDevice]));
+	m_dev=GSMTLDevice(MRCRetain([_current metalDevice]));
 	m_queue = MRCTransfer([m_dev.dev newCommandQueue]);
 
 	m_pass_desc = MRCTransfer([MTLRenderPassDescriptor new]);
