@@ -355,7 +355,10 @@ static NSString *binCueFix(NSString *path)
 
 			case VMState::Stopping:
 				VMManager::Reset();
-				continue;;
+				continue;
+				
+			case VMState::Resetting:
+				continue;
 		}
 	}
 }
@@ -686,6 +689,11 @@ void Host::WriteToSoundBuffer(s16 Left, s16 Right)
 	[[current audioBufferAtIndex:0] write:stereo maxLength:sizeof(stereo)];
 }
 
+void Host::WriteToSoundBuffer(StereoOut16 snd)
+{
+	Host::WriteToSoundBuffer(snd.Left, snd.Right);
+}
+
 void Host::OnPerformanceMetricsUpdated()
 {
 }
@@ -782,15 +790,15 @@ void Host::CPUThreadVSync()
 {
 }
 
-void Host::InvalidateSaveStateCache()
-{
-}
-
 void Host::RequestResizeHostDisplay(s32 width, s32 height)
 {
 }
 
 void Host::RunOnCPUThread(std::function<void()> function, bool block)
+{
+}
+
+void Host::RequestVMShutdown(bool allow_confirm, bool allow_save_state, bool default_save_state)
 {
 }
 

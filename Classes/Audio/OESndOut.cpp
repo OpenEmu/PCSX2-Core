@@ -31,7 +31,6 @@ static const s32 tbl_XA_Factor[16][2] =
 		{98, -55},
 		{122, -60}};
 
-
 // Performs a 64-bit multiplication between two values and returns the
 // high 32 bits as a result (discarding the fractional 32 bits).
 // The combined fractional bits of both inputs must be 32 bits for this
@@ -50,30 +49,14 @@ static __forceinline s32 MulShr32(s32 srcval, s32 mulval)
 	return (s64)srcval * mulval >> 32;
 }
 
-__forceinline s32 clamp_mix(s32 x, u8 bitshift)
+__forceinline s32 clamp_mix(s32 x)
 {
-	assert(bitshift <= 15);
-	return GetClamped(x, -(0x8000 << bitshift), 0x7fff << bitshift);
+	return std::clamp(x, -0x8000, 0x7fff);
 }
 
-#if _MSC_VER
-__forceinline
-// Without the keyword static, gcc compilation fails on the inlining...
-// Unfortunately the function is also used in Reverb.cpp. In order to keep the code
-// clean we just disable it.
-// We will need link-time code generation / Whole Program optimization to do a clean
-// inline. Gcc 4.5 has the experimental options -flto, -fwhopr and -fwhole-program to
-// do it but it still experimental...
-#endif
-	StereoOut32
-	clamp_mix(const StereoOut32& sample, u8 bitshift)
+__forceinline StereoOut32 clamp_mix(StereoOut32 sample)
 {
-	// We should clampify between -0x8000 and 0x7fff, however some audio output
-	// modules or sound drivers could (will :p) overshoot with that. So giving it a small safety.
-
-	return StereoOut32(
-		GetClamped(sample.Left, -(0x7f00 << bitshift), 0x7f00 << bitshift),
-		GetClamped(sample.Right, -(0x7f00 << bitshift), 0x7f00 << bitshift));
+	return StereoOut32(clamp_mix(sample.Left), clamp_mix(sample.Right));
 }
 
 static void __forceinline XA_decode_block(s16* buffer, const s16* block, s32& prev1, s32& prev2)
@@ -81,8 +64,8 @@ static void __forceinline XA_decode_block(s16* buffer, const s16* block, s32& pr
 	const s32 header = *block;
 	const s32 shift = (header & 0xF) + 16;
 	const int id = header >> 4 & 0xF;
-	if (id > 4 && MsgToConsole())
-		ConLog("* SPU2: Unknown ADPCM coefficients table id %d\n", id);
+	if (id > 4 && SPU2::MsgToConsole())
+		SPU2::ConLog("* SPU2: Unknown ADPCM coefficients table id %d\n", id);
 	const s32 pred1 = tbl_XA_Factor[id][0];
 	const s32 pred2 = tbl_XA_Factor[id][1];
 
@@ -94,13 +77,13 @@ static void __forceinline XA_decode_block(s16* buffer, const s16* block, s32& pr
 		s32 data = ((*blockbytes) << 28) & 0xF0000000;
 		s32 pcm = (data >> shift) + (((pred1 * prev1) + (pred2 * prev2) + 32) >> 6);
 
-		Clampify(pcm, -0x8000, 0x7fff);
+		pcm = std::clamp<s32>(pcm, -0x8000, 0x7fff);
 		*(buffer++) = pcm;
 
 		data = ((*blockbytes) << 24) & 0xF0000000;
 		s32 pcm2 = (data >> shift) + (((pred1 * pcm) + (pred2 * prev1) + 32) >> 6);
 
-		Clampify(pcm2, -0x8000, 0x7fff);
+		pcm2 = std::clamp<s32>(pcm2, -0x8000, 0x7fff);
 		*(buffer++) = pcm2;
 
 		prev2 = pcm;
@@ -161,11 +144,15 @@ static __forceinline s32 GetNextDataBuffered(V_Core& thiscore, uint voiceidx)
 				if (vc.LoopCycle < vc.PlayCycle)
 				{
 					vc.LoopStartA = vc.PendingLoopStartA;
-					ConLog("Core %d Voice %d Loop Written by HW within 4T of Key On, Now Applying\n", thiscore.Index, voiceidx);
+					if (SPU2::MsgToConsole())
+						SPU2::ConLog("Core %d Voice %d Loop Written by HW within 4T of Key On, Now Applying\n", thiscore.Index, voiceidx);
 					vc.LoopMode = 1;
 				}
 				else
-					ConLog("Loop point from waveform set within 4T's, ignoring HW write\n");
+				{
+					if (SPU2::MsgToConsole())
+						SPU2::ConLog("Loop point from waveform set within 4T's, ignoring HW write\n");
+				}
 
 				vc.PendingLoopStart = false;
 			}
@@ -184,8 +171,8 @@ static __forceinline s32 GetNextDataBuffered(V_Core& thiscore, uint voiceidx)
 
 					if (IsDevBuild)
 					{
-						if (MsgVoiceOff())
-							ConLog("* SPU2: Voice Off by EndPoint: %d \n", voiceidx);
+						if (SPU2::MsgVoiceOff())
+							SPU2::ConLog("* SPU2: Voice Off by EndPoint: %d \n", voiceidx);
 					}
 				}
 			}
@@ -329,11 +316,11 @@ static void __forceinline UpdatePitch(uint coreidx, uint voiceidx)
 	if ((vc.Modulated == 0) || (voiceidx == 0))
 		pitch = vc.Pitch;
 	else
-		pitch = GetClamped((vc.Pitch * (32768 + Cores[coreidx].Voices[voiceidx - 1].OutX)) >> 15, 0, 0x3fff);
+		pitch = std::clamp((vc.Pitch * (32768 + Cores[coreidx].Voices[voiceidx - 1].OutX)) >> 15, 0, 0x3fff);
 
+	pitch = std::min(pitch, 0x3FFF);
 	vc.SP += pitch;
 }
-
 
 static __forceinline void CalculateADSR(V_Core& thiscore, uint voiceidx)
 {
@@ -349,15 +336,14 @@ static __forceinline void CalculateADSR(V_Core& thiscore, uint voiceidx)
 	{
 		if (IsDevBuild)
 		{
-			if (MsgVoiceOff())
-				ConLog("* SPU2: Voice Off by ADSR: %d \n", voiceidx);
+			if (SPU2::MsgVoiceOff())
+				SPU2::ConLog("* SPU2: Voice Off by ADSR: %d \n", voiceidx);
 		}
 		vc.Stop();
 	}
 
 	pxAssume(vc.ADSR.Value >= 0); // ADSR should never be negative...
 }
-
 
 __forceinline static s32 GaussianInterpolate(s32 pv4, s32 pv3, s32 pv2, s32 pv1, s32 i)
 {
@@ -370,93 +356,14 @@ __forceinline static s32 GaussianInterpolate(s32 pv4, s32 pv3, s32 pv2, s32 pv1,
 	return out;
 }
 
-/*
-   Tension: 65535 is high, 32768 is normal, 0 is low
-*/
-
-template <s32 i_tension>
-__forceinline static s32 HermiteInterpolate(
-	s32 y0, // 16.0
-	s32 y1, // 16.0
-	s32 y2, // 16.0
-	s32 y3, // 16.0
-	s32 mu  //  0.12
-)
-{
-	s32 m00 = ((y1 - y0) * i_tension) >> 16; // 16.0
-	s32 m01 = ((y2 - y1) * i_tension) >> 16; // 16.0
-	s32 m0 = m00 + m01;
-
-	s32 m10 = ((y2 - y1) * i_tension) >> 16; // 16.0
-	s32 m11 = ((y3 - y2) * i_tension) >> 16; // 16.0
-	s32 m1 = m10 + m11;
-
-	s32 val = ((2 * y1 + m0 + m1 - 2 * y2) * mu) >> 12;       // 16.0
-	val = ((val - 3 * y1 - 2 * m0 - m1 + 3 * y2) * mu) >> 12; // 16.0
-	val = ((val + m0) * mu) >> 12;                            // 16.0
-
-	return (val + (y1));
-}
-
-__forceinline static s32 CatmullRomInterpolate(
-	s32 y0, // 16.0
-	s32 y1, // 16.0
-	s32 y2, // 16.0
-	s32 y3, // 16.0
-	s32 mu  //  0.12
-)
-{
-	//q(t) = 0.5 *(    	(2 * P1) +
-	//	(-P0 + P2) * t +
-	//	(2*P0 - 5*P1 + 4*P2 - P3) * t2 +
-	//	(-P0 + 3*P1- 3*P2 + P3) * t3)
-
-	s32 a3 = (-y0 + 3 * y1 - 3 * y2 + y3);
-	s32 a2 = (2 * y0 - 5 * y1 + 4 * y2 - y3);
-	s32 a1 = (-y0 + y2);
-	s32 a0 = (2 * y1);
-
-	s32 val = ((a3)*mu) >> 12;
-	val = ((a2 + val) * mu) >> 12;
-	val = ((a1 + val) * mu) >> 12;
-
-	return (a0 + val) >> 1;
-}
-
-__forceinline static s32 CubicInterpolate(
-	s32 y0, // 16.0
-	s32 y1, // 16.0
-	s32 y2, // 16.0
-	s32 y3, // 16.0
-	s32 mu  //  0.12
-)
-{
-	const s32 a0 = y3 - y2 - y0 + y1;
-	const s32 a1 = y0 - y1 - a0;
-	const s32 a2 = y2 - y0;
-
-	s32 val = ((a0)*mu) >> 12;
-	val = ((val + a1) * mu) >> 12;
-	val = ((val + a2) * mu) >> 12;
-
-	return (val + y1);
-}
-
-// Returns a 16 bit result in Value.
-// Uses standard template-style optimization techniques to statically generate five different
-// versions of this function (one for each type of interpolation).
-template <int InterpType>
 static __forceinline s32 GetVoiceValues(V_Core& thiscore, uint voiceidx)
 {
 	V_Voice& vc(thiscore.Voices[voiceidx]);
 
 	while (vc.SP >= 0)
 	{
-		if (InterpType >= 2)
-		{
-			vc.PV4 = vc.PV3;
-			vc.PV3 = vc.PV2;
-		}
+		vc.PV4 = vc.PV3;
+		vc.PV3 = vc.PV2;
 		vc.PV2 = vc.PV1;
 		vc.PV1 = GetNextDataBuffered(thiscore, voiceidx);
 		vc.SP -= 0x1000;
@@ -464,26 +371,7 @@ static __forceinline s32 GetVoiceValues(V_Core& thiscore, uint voiceidx)
 
 	const s32 mu = vc.SP + 0x1000;
 
-	switch (InterpType)
-	{
-		case 0:
-			return vc.PV1;
-		case 1:
-			return (vc.PV1) - (((vc.PV2 - vc.PV1) * mu) >> 12);
-
-		case 2:
-			return CubicInterpolate(vc.PV4, vc.PV3, vc.PV2, vc.PV1, mu);
-		case 3:
-			return HermiteInterpolate<16384>(vc.PV4, vc.PV3, vc.PV2, vc.PV1, mu);
-		case 4:
-			return CatmullRomInterpolate(vc.PV4, vc.PV3, vc.PV2, vc.PV1, mu);
-		case 5:
-			return GaussianInterpolate(vc.PV4, vc.PV3, vc.PV2, vc.PV1, (mu & 0x0ff0) >> 4);
-
-			jNO_DEFAULT;
-	}
-
-	return 0; // technically unreachable!
+	return GaussianInterpolate(vc.PV4, vc.PV3, vc.PV2, vc.PV1, (mu & 0x0ff0) >> 4);
 }
 
 // This is Dr. Hell's noise algorithm as implemented in pcsxr
@@ -585,34 +473,7 @@ static __forceinline StereoOut32 MixVoice(uint coreidx, uint voiceidx)
 		if (vc.Noise)
 			Value = GetNoiseValues(thiscore);
 		else
-		{
-			// Optimization : Forceinline'd Templated Dispatch Table.  Any halfwit compiler will
-			// turn this into a clever jump dispatch table (no call/rets, no compares, uber-efficient!)
-
-			switch (Interpolation)
-			{
-				case 0:
-					Value = GetVoiceValues<0>(thiscore, voiceidx);
-					break;
-				case 1:
-					Value = GetVoiceValues<1>(thiscore, voiceidx);
-					break;
-				case 2:
-					Value = GetVoiceValues<2>(thiscore, voiceidx);
-					break;
-				case 3:
-					Value = GetVoiceValues<3>(thiscore, voiceidx);
-					break;
-				case 4:
-					Value = GetVoiceValues<4>(thiscore, voiceidx);
-					break;
-				case 5:
-					Value = GetVoiceValues<5>(thiscore, voiceidx);
-					break;
-
-					jNO_DEFAULT;
-			}
-		}
+			Value = GetVoiceValues(thiscore, voiceidx);
 
 		// Update and Apply ADSR  (applies to normal and noise sources)
 		//
@@ -681,8 +542,10 @@ StereoOut32 V_Core::Mix(const VoiceMixSet& inVoices, const StereoOut32& Input, c
 
 	// Write mixed results to logfile (if enabled)
 
+#ifdef PCSX2_DEVBUILD
 	WaveDump::WriteCore(Index, CoreSrc_DryVoiceMix, Voices.Dry);
 	WaveDump::WriteCore(Index, CoreSrc_WetVoiceMix, Voices.Wet);
+#endif
 
 	// Mix in the Input data
 
@@ -736,11 +599,15 @@ StereoOut32 V_Core::Mix(const VoiceMixSet& inVoices, const StereoOut32& Input, c
 	TW.Left += Ext.Left & WetGate.ExtL;
 	TW.Right += Ext.Right & WetGate.ExtR;
 
+#ifdef PCSX2_DEVBUILD
 	WaveDump::WriteCore(Index, CoreSrc_PreReverb, TW);
+#endif
 
 	StereoOut32 RV = DoReverb(TW);
 
+#ifdef PCSX2_DEVBUILD
 	WaveDump::WriteCore(Index, CoreSrc_PostReverb, RV);
+#endif
 
 	// Mix Dry + Wet
 	// (master volume is applied later to the result of both outputs added together).
@@ -770,8 +637,10 @@ __forceinline
 			// CDDA is on Core 1:
 			(PlayMode & 8) ? StereoOut32::Empty : ApplyVolume(Cores[1].ReadInput(), Cores[1].InpVol)};
 
+#ifdef PCSX2_DEVBUILD
 	WaveDump::WriteCore(0, CoreSrc_Input, InputData[0]);
 	WaveDump::WriteCore(1, CoreSrc_Input, InputData[1]);
+#endif
 
 	// Todo: Replace me with memzero initializer!
 	VoiceMixSet VoiceData[2] = {VoiceMixSet::Empty, VoiceMixSet::Empty}; // mixed voice data for each core.
@@ -791,7 +660,9 @@ __forceinline
 	spu2M_WriteFast(0x800 + OutPos, Ext.Left);
 	spu2M_WriteFast(0xA00 + OutPos, Ext.Right);
 
+#ifdef PCSX2_DEVBUILD
 	WaveDump::WriteCore(0, CoreSrc_External, Ext);
+#endif
 
 	Ext = ApplyVolume(Ext, Cores[1].ExtVol);
 	StereoOut32 Out(Cores[1].Mix(VoiceData[1], InputData[1], Ext));
@@ -806,30 +677,21 @@ __forceinline
 	}
 	else
 	{
-		Out.Left = MulShr32(Out.Left << SndOutVolumeShift, Cores[1].MasterVol.Left.Value);
-		Out.Right = MulShr32(Out.Right << SndOutVolumeShift, Cores[1].MasterVol.Right.Value);
-
-		// Final Clamp!
-		// Like any good audio system, the PS2 pumps the volume and incurs some distortion in its
-		// output, giving us a nice thumpy sound at times.  So we add 1 above (2x volume pump) and
-		// then clamp it all here.
-
-		// Edit: I'm sorry Jake, but I know of no good audio system that arbitrary distorts and clips
-		// output by design.
-		// Good thing though that this code gets the volume exactly right, as per tests :)
-		Out = clamp_mix(Out, SndOutVolumeShift);
+		Out.Left = MulShr32(Out.Left, Cores[1].MasterVol.Left.Value);
+		Out.Right = MulShr32(Out.Right, Cores[1].MasterVol.Right.Value);
 	}
 
-	// Configurable output volume
-	Out.Left *= FinalVolume;
-	Out.Right *= FinalVolume;
+	// Final Clamp!
+	// Like any good audio system, the PS2 pumps the volume and incurs some distortion in its
+	// output, giving us a nice thumpy sound at times.  So we add 1 above (2x volume pump) and
+	// then clamp it all here.
 
-	//SndBuffer::Write(Out);
-		
-		//Host::WriteToSoundBuffer(Out.Left  >> 12,Out.Right >> 12);
-		Host::WriteToSoundBuffer(Out.DownSample().Left,Out.DownSample().Right);
-	if (SampleRate == 96000) // Double up samples for 96khz (Port Audio Non-Exclusive)
-		Host::WriteToSoundBuffer(Out.DownSample().Left,Out.DownSample().Right);
+	// Edit: I'm sorry Jake, but I know of no good audio system that arbitrary distorts and clips
+	// output by design.
+	// Good thing though that this code gets the volume exactly right, as per tests :)
+	Out = clamp_mix(Out);
+
+	Host::WriteToSoundBuffer(StereoOut16(Out));
 
 	// Update AutoDMA output positioning
 	OutPos++;
@@ -842,11 +704,13 @@ __forceinline
 		if (p_cachestat_counter > (48000 * 10))
 		{
 			p_cachestat_counter = 0;
-			if (MsgCache())
-				ConLog(" * SPU2 > CacheStats > Hits: %d  Misses: %d  Ignores: %d\n",
+			if (SPU2::MsgCache())
+			{
+				SPU2::ConLog(" * SPU2 > CacheStats > Hits: %d  Misses: %d  Ignores: %d\n",
 					   g_counter_cache_hits,
 					   g_counter_cache_misses,
 					   g_counter_cache_ignores);
+			}
 
 			g_counter_cache_hits =
 				g_counter_cache_misses =

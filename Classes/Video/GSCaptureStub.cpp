@@ -29,9 +29,8 @@ bool GSCapture::BeginCapture(float fps, GSVector2i recommendedResolution, float 
 	return false;
 }
 
-bool GSCapture::EndCapture()
+void GSCapture::EndCapture()
 {
-	return true;
 }
 
 bool GSCapture::IsCapturing()
@@ -44,7 +43,12 @@ GSVector2i GSCapture::GetSize()
 	return GSVector2i(0, 0);
 }
 
-bool GSCapture::DeliverFrame(const void* bits, int pitch, bool rgba)
+bool GSCapture::IsCapturingVideo()
+{
+	return false;
+}
+
+bool GSCapture::DeliverVideoFrame(GSTexture* stex)
 {
 	return false;
 }
