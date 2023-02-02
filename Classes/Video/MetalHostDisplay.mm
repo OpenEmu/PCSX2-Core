@@ -100,7 +100,7 @@ bool MetalHostDisplay::CreateRenderDevice(const WindowInfo& wi, std::string_view
 { @autoreleasepool {
 	m_window_info = wi;
 
-	m_dev=GSMTLDevice(MRCTransfer([_current getMetalDev]));
+	m_dev=GSMTLDevice(MRCTransfer([_current metalDevice]));
 	m_queue = MRCTransfer([m_dev.dev newCommandQueue]);
 
 	m_pass_desc = MRCTransfer([MTLRenderPassDescriptor new]);
@@ -286,7 +286,7 @@ void MetalHostDisplay::EndPresent()
 		id<MTLBlitCommandEncoder> blitCommandEncoder = [dev->m_current_render_cmdbuf blitCommandEncoder];
 		
 		if (@available(macOS 10.15, *)) {
-			[blitCommandEncoder copyFromTexture:[m_current_drawable texture] toTexture:id<MTLTexture>([_current getMetalTex])];
+			[blitCommandEncoder copyFromTexture:[m_current_drawable texture] toTexture:id<MTLTexture>([_current metalTexture])];
 		} else {
 			// Fallback on earlier versions
 			// TODO:  Add pre 10.15 metal blit
