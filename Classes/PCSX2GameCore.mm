@@ -56,6 +56,8 @@
 #include <OpenGL/gl3.h>
 #include <OpenGL/gl3ext.h>
 
+class MetalHostDisplay  : public HostDisplay {};
+
 static bool ExitRequested = false;
 static bool WaitRequested = false;
 static bool isExecuting = false;
@@ -108,7 +110,7 @@ PCSX2GameCore *_current;
 		_displayModes = [[NSMutableDictionary alloc] initWithDictionary:
 						 @{OEPSCSX2InternalResolution: @1,
 						   OEPSCSX2BlendingAccuracy: @1}];
-		screenRect = OEIntRectMake(0, 0, 640 * 8, 448 * 8);
+		screenRect = OEIntRectMake(0, 0, 640 * 4, 448 * 4);
 	}
 	return self;
 }
@@ -301,9 +303,13 @@ static NSString *binCueFix(NSString *path)
 	params.elf_override = "";
 	params.fast_boot = true;
 	params.fullscreen = false;
-   
+  
 	if(!hasInitialized){
-		g_host_display = HostDisplay::CreateForAPI(RenderAPI::OpenGL);
+		if (self.gameCoreRendering == OEGameCoreRenderingOpenGL3Video)
+			g_host_display = HostDisplay::CreateForAPI(RenderAPI::OpenGL);
+		else if (self.gameCoreRendering == OEGameCoreRenderingMetal2Video)
+			g_host_display = HostDisplay::CreateForAPI(RenderAPI::Metal);
+			
 		WindowInfo wi;
 			wi.type = WindowInfo::Type::MacOS;
 			wi.surface_width = screenRect.size.width ;
@@ -378,6 +384,16 @@ static NSString *binCueFix(NSString *path)
 	return 60;
 }
 
+- (GLenum)pixelType
+{
+	return GL_UNSIGNED_INT_8_8_8_8_REV;
+}
+
+- (GLenum)pixelFormat
+{
+	return GL_BGRA;
+}
+
 - (BOOL)tryToResizeVideoTo:(OEIntSize)size
 {
 	return YES;
@@ -385,8 +401,11 @@ static NSString *binCueFix(NSString *path)
 
 - (OEGameCoreRendering)gameCoreRendering
 {
-	//FIXME: return OEGameCoreRenderingMetal1Video;
-	return OEGameCoreRenderingOpenGL3Video;
+	if (@available(macOS 10.15, *)) {
+		return OEGameCoreRenderingMetal2Video;
+	} else {
+		return OEGameCoreRenderingOpenGL3Video;
+	}
 }
 
 - (BOOL)hasAlternateRenderingThread
