@@ -316,6 +316,8 @@ static NSString *binCueFix(NSString *path)
 			wi.surface_height = screenRect.size.height ;
 		g_host_display->CreateDevice(wi, VsyncMode::Adaptive);
 			
+		VMManager::Internal::InitializeGlobals() ;
+		
 		
 		if(VMManager::Initialize(params)){
 			hasInitialized = true;
@@ -353,12 +355,12 @@ static NSString *binCueFix(NSString *path)
 				}
 				continue;
 
-			case VMState::Stopping:
+			case VMState::Resetting:
 				VMManager::Reset();
 				continue;
-				
-			case VMState::Resetting:
-				continue;
+
+			case VMState::Stopping:
+				VMManager::Shutdown(true);
 		}
 	}
 }
@@ -367,7 +369,7 @@ static NSString *binCueFix(NSString *path)
 {
 	ExitRequested = true;
 	VMManager::SetState(VMState::Stopping);
-	VMManager::Shutdown(true);
+//	VMManager::Shutdown(true);
 	[super stopEmulation];
 }
 

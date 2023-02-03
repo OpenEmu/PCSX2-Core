@@ -14,14 +14,13 @@
  */
 
 #include "PrecompiledHeader.h"
-#include "SPU2/Global.h"
 #include "common/Assertions.h"
 
-#include "OESndOut.h"
-
-void ADMAOutLogWrite(void* lpData, u32 ulSize);
-
+#include "SPU2/Global.h"
+#include "SPU2/spu2.h"
 #include "SPU2/interpolate_table.h"
+
+#include "OESndOut.h"
 
 static const s32 tbl_XA_Factor[16][2] =
 	{
