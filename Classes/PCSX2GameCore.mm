@@ -591,7 +591,7 @@ static NSString *binCueFix(NSString *path)
 		s_base_settings_interface->SetIntValue("EmuCore/GS", "upscale_multiplier", [currentVal intValue]);
 		VMManager::RequestDisplaySize([currentVal floatValue]);
 		[self ApplyUpscalePatches];
-	} else if ([key isEqualToString:OEPSCSX2InternalResolution]) {
+	} else if ([key isEqualToString:OEPSCSX2BlendingAccuracy]) {
 		s_base_settings_interface->SetIntValue("EmuCore/GS", "accurate_blending_unit", [currentVal intValue]);
 	}
 	
