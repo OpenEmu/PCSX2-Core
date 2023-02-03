@@ -86,17 +86,10 @@ bool MetalHostDisplay::HasSurface()  const { return static_cast<bool>(m_layer);}
 
 void MetalHostDisplay::AttachSurfaceOnMainThread()
 {
-	m_view = MRCRetain((__bridge NSView*)m_window_info.window_handle);
-	[m_view setWantsLayer:YES];
-	[m_view setLayer:m_layer];
 }
 
 void MetalHostDisplay::DetachSurfaceOnMainThread()
 {
-	[m_view setLayer:nullptr];
-	[m_view setWantsLayer:NO];
-	m_view = nullptr;
-	m_layer = nullptr;
 }
 
 bool MetalHostDisplay::CreateDevice(const WindowInfo& wi, VsyncMode vsync)
@@ -290,15 +283,8 @@ void MetalHostDisplay::EndPresent()
 		}
 		
 		[blitCommandEncoder endEncoding];
-		
-		[dev->m_current_render_cmdbuf addScheduledHandler:[drawable = std::move(m_current_drawable)](id<MTLCommandBuffer>){
-			[drawable present];
-		}];
 	}
-		dev->FlushEncoders();
-				
-	m_current_drawable = nullptr;
-
+	
 	if (@available(macOS 10.15, iOS 13, *))
 	{
 		const bool use_present_drawable = m_use_present_drawable == UsePresentDrawable::Always ||
