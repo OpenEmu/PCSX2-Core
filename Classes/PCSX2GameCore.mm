@@ -258,7 +258,6 @@ static NSString *binCueFix(NSString *path)
 	si.SetBoolValue("EmuCore/CPU/Recompiler", "EnableVU0", true);
 	si.SetBoolValue("EmuCore/CPU/Recompiler", "EnableVU1", true);
 	si.SetStringValue("EmuCore/SPU2", "OutputModule", "NullOut");
-	si.SetBoolValue("", "EnableGameFixes", true);
 	si.SetBoolValue("EmuCore", "EnablePatches", true);
 	si.SetBoolValue("EmuCore", "EnableCheats", false);
 	si.SetBoolValue("EmuCore", "EnablePerGameSettings", true);
