@@ -474,11 +474,11 @@ static NSString *binCueFix(NSString *path)
 		stateToLoad = fileName;
 		return;
 	}
-
+	
 	WaitRequested = true;
 	while(isExecuting)
 		usleep(50);
-
+	
 	bool success = VMManager::LoadState(fileName.fileSystemRepresentation);
 	WaitRequested = false;
 
@@ -489,9 +489,10 @@ static NSString *binCueFix(NSString *path)
 {
 	if (!VMManager::HasValidVM())
 		return;
-	bool success =VMManager::SaveState(fileName.fileSystemRepresentation, false, false);
+	bool success = 	VMManager::SaveState(fileName.fileSystemRepresentation);
 	
 	block(success, success ? nil : [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotSaveStateError userInfo:@{NSLocalizedDescriptionKey: @"PCSX2 Could not save the current state.", NSFilePathErrorKey: fileName}]);
+	
 }
 
 #pragma mark - Discs
@@ -590,7 +591,7 @@ static NSString *binCueFix(NSString *path)
 		s_base_settings_interface->SetIntValue("EmuCore/GS", "upscale_multiplier", [currentVal intValue]);
 		VMManager::RequestDisplaySize([currentVal floatValue]);
 		[self ApplyUpscalePatches];
-	} else if ([key isEqualToString:OEPSCSX2BlendingAccuracy]) {
+	} else if ([key isEqualToString:OEPSCSX2InternalResolution]) {
 		s_base_settings_interface->SetIntValue("EmuCore/GS", "accurate_blending_unit", [currentVal intValue]);
 	}
 	
