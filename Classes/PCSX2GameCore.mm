@@ -270,7 +270,7 @@ static NSString *binCueFix(NSString *path)
 	si.SetIntValue("EmuCore/GS", "upscale_multiplier", 1);
 	si.SetBoolValue("EmuCore/GS", "FrameLimitEnable", true);
 	si.SetBoolValue("EmuCore/GS", "SyncToHostRefreshRate",false);
-	si.SetBoolValue("EmuCore/GS", "UserHacks", true);
+	si.SetBoolValue("EmuCore/GS", "UserHacks", false);
 	
 	[self ApplyUpscalePatches];
 }
