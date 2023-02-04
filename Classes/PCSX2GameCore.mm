@@ -28,7 +28,6 @@
 #include "Video/OEHostDisplay.h"
 #include "Audio/OESndOut.h"
 #include "Input/keymap.h"
-#include "OEUpscalePatches.h"
 
 #define BOOL PCSX2BOOL
 #include "PrecompiledHeader.h"
@@ -270,8 +269,6 @@ static NSString *binCueFix(NSString *path)
 	si.SetBoolValue("EmuCore/GS", "FrameLimitEnable", true);
 	si.SetBoolValue("EmuCore/GS", "SyncToHostRefreshRate",false);
 	si.SetBoolValue("EmuCore/GS", "UserHacks", false);
-	
-	[self ApplyUpscalePatches];
 }
 
 - (void)resetEmulation
@@ -589,23 +586,11 @@ static NSString *binCueFix(NSString *path)
 	if ([key isEqualToString:OEPSCSX2InternalResolution]) {
 		s_base_settings_interface->SetIntValue("EmuCore/GS", "upscale_multiplier", [currentVal intValue]);
 		VMManager::RequestDisplaySize([currentVal floatValue]);
-		[self ApplyUpscalePatches];
 	} else if ([key isEqualToString:OEPSCSX2BlendingAccuracy]) {
 		s_base_settings_interface->SetIntValue("EmuCore/GS", "accurate_blending_unit", [currentVal intValue]);
 	}
 	
 	VMManager::ApplySettings();
-}
-
-- (void) ApplyUpscalePatches
-{
-	if([wildArmsGames containsObject:DiscID])
-		s_base_settings_interface->SetBoolValue("EmuCore/GS", "UserHacks_WildHack", true);
-	
-	if([alignSpriteGames containsObject:DiscID]  && s_base_settings_interface->GetIntValue("EmuCore/GS", "upscale_multiplier") > 1)
-		s_base_settings_interface->SetBoolValue("EmuCore/GS", "UserHacks_AlignSpriteX", true);
-	else
-		s_base_settings_interface->SetBoolValue("EmuCore/GS", "UserHacks_AlignSpriteX", false);
 }
 
 @end
