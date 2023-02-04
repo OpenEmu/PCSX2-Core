@@ -38,7 +38,7 @@ static MRCOwned<id<MTLLibrary>> loadMainLibrary(id<MTLDevice> dev)
 	if (@available(macOS 10.14, iOS 12.0, *))
 		if (id<MTLLibrary> lib = loadMainLibrary(dev, @"Metal21"))
 			return MRCTransfer(lib);
-	return MRCTransfer([dev newDefaultLibrary]);
+	return MRCTransfer([dev newDefaultLibraryWithBundle:[NSBundle bundleForClass:[PCSX2GameCore class]] error:nullptr]);
 }
 
 static GSMTLDevice::MetalVersion detectLibraryVersion(id<MTLLibrary> lib)
