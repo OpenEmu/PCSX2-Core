@@ -474,11 +474,11 @@ static NSString *binCueFix(NSString *path)
 		stateToLoad = fileName;
 		return;
 	}
-	
+
 	WaitRequested = true;
 	while(isExecuting)
 		usleep(50);
-	
+
 	bool success = VMManager::LoadState(fileName.fileSystemRepresentation);
 	WaitRequested = false;
 
@@ -489,10 +489,9 @@ static NSString *binCueFix(NSString *path)
 {
 	if (!VMManager::HasValidVM())
 		return;
-	bool success = 	VMManager::SaveState(fileName.fileSystemRepresentation);
+	bool success =VMManager::SaveState(fileName.fileSystemRepresentation, false, false);
 	
 	block(success, success ? nil : [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotSaveStateError userInfo:@{NSLocalizedDescriptionKey: @"PCSX2 Could not save the current state.", NSFilePathErrorKey: fileName}]);
-	
 }
 
 #pragma mark - Discs
