@@ -1943,7 +1943,6 @@
 		551BF5A226420F3B0008C529 /* pcap-bpf.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "pcap-bpf.h"; sourceTree = "<group>"; };
 		551BF5A326420F3B0008C529 /* pcap-namedb.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "pcap-namedb.h"; sourceTree = "<group>"; };
 		551BF5A426420F3B0008C529 /* Packet32.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Packet32.h; sourceTree = "<group>"; };
-		551BF5A626420F3B0008C529 /* filesystem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = filesystem.h; sourceTree = "<group>"; };
 		551BF5A726420F3B0008C529 /* pcap.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = pcap.h; sourceTree = "<group>"; };
 		551BF5B626420FFC0008C529 /* svnrev.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = svnrev.h; sourceTree = "<group>"; };
 		551BF5ED264212D60008C529 /* soundtouch_config.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = soundtouch_config.h; sourceTree = "<group>"; };
@@ -3075,9 +3074,6 @@
 		558065D727AD3A31008CD5D2 /* Debugger.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = Debugger.pdf; sourceTree = "<group>"; };
 		558065D827AD3A31008CD5D2 /* PCSX2.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = PCSX2.1; sourceTree = "<group>"; };
 		558065D927AD3A31008CD5D2 /* GameIndex.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = GameIndex.pdf; sourceTree = "<group>"; };
-		5580662A27AD3A31008CD5D2 /* GS_FX_Settings.ini */ = {isa = PBXFileReference; lastKnownFileType = text; path = GS_FX_Settings.ini; sourceTree = "<group>"; };
-		5580662B27AD3A31008CD5D2 /* GS.fx */ = {isa = PBXFileReference; lastKnownFileType = text; path = GS.fx; sourceTree = "<group>"; };
-		5580662C27AD3A31008CD5D2 /* PCSX2_keys.ini.default */ = {isa = PBXFileReference; lastKnownFileType = text; path = PCSX2_keys.ini.default; sourceTree = "<group>"; };
 		5580662D27AD3A31008CD5D2 /* portable.ini */ = {isa = PBXFileReference; lastKnownFileType = text; path = portable.ini; sourceTree = "<group>"; };
 		5591D80927B468F70073E97D /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
 		5591D80B27B469200073E97D /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
@@ -3437,7 +3433,6 @@
 			isa = PBXGroup;
 			children = (
 				558065B127AD3A31008CD5D2 /* bin */,
-				551BF71026424EC60008C529 /* tools */,
 				5517E8D0263D4831000219EC /* 3rdparty */,
 				5517FA02263D48AD000219EC /* common */,
 				5517FAA7263D49BB000219EC /* pcsx2 */,
@@ -3448,17 +3443,17 @@
 		5517E8D0263D4831000219EC /* 3rdparty */ = {
 			isa = PBXGroup;
 			children = (
-				55B1EFE6295BAA2B00DB297F /* jpgd */,
-				55B1EFBA295BA17800DB297F /* simpleini */,
-				55484936288555330066EDEB /* libzip */,
 				558063BD27AB4B9E008CD5D2 /* cubeb */,
 				5517EC5E263D4834000219EC /* fmt */,
 				551AA4032792C12E00658151 /* glad */,
 				551BF59126420F3B0008C529 /* include */,
+				55B1EFE6295BAA2B00DB297F /* jpgd */,
 				5517EEE4263D4836000219EC /* libchdr */,
 				5517E930263D4831000219EC /* libjpeg */,
 				5517E970263D4831000219EC /* libpng */,
+				55484936288555330066EDEB /* libzip */,
 				5564D3FE279A07D200EECDEC /* rapidyaml */,
+				55B1EFBA295BA17800DB297F /* simpleini */,
 				5517E8D1263D4831000219EC /* soundtouch */,
 				551AA3FD2792C00100658151 /* xbyak */,
 				5517EF81263D4837000219EC /* xz */,
@@ -5438,7 +5433,6 @@
 				551BF5A226420F3B0008C529 /* pcap-bpf.h */,
 				551BF5A326420F3B0008C529 /* pcap-namedb.h */,
 				551BF5A426420F3B0008C529 /* Packet32.h */,
-				551BF5A526420F3B0008C529 /* ghc */,
 				551BF5A726420F3B0008C529 /* pcap.h */,
 			);
 			path = include;
@@ -5466,14 +5460,6 @@
 			path = pcap;
 			sourceTree = "<group>";
 		};
-		551BF5A526420F3B0008C529 /* ghc */ = {
-			isa = PBXGroup;
-			children = (
-				551BF5A626420F3B0008C529 /* filesystem.h */,
-			);
-			path = ghc;
-			sourceTree = "<group>";
-		};
 		551BF6BE26424D020008C529 /* Recording */ = {
 			isa = PBXGroup;
 			children = (
@@ -5497,13 +5483,6 @@
 				551BF6E226424D020008C529 /* InputRecordingLogger.h */,
 			);
 			path = Utilities;
-			sourceTree = "<group>";
-		};
-		551BF71026424EC60008C529 /* tools */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = tools;
 			sourceTree = "<group>";
 		};
 		5548491828853D2E0066EDEB /* zstd */ = {
@@ -7039,10 +7018,8 @@
 			isa = PBXGroup;
 			children = (
 				558065D227AD3A31008CD5D2 /* docs */,
-				5580662C27AD3A31008CD5D2 /* PCSX2_keys.ini.default */,
 				5580662D27AD3A31008CD5D2 /* portable.ini */,
 				558065B227AD3A31008CD5D2 /* resources */,
-				5580662927AD3A31008CD5D2 /* shaders */,
 			);
 			path = bin;
 			sourceTree = "<group>";
@@ -7123,23 +7100,14 @@
 		558065D227AD3A31008CD5D2 /* docs */ = {
 			isa = PBXGroup;
 			children = (
+				558065D727AD3A31008CD5D2 /* Debugger.pdf */,
 				558065D327AD3A31008CD5D2 /* debugger.txt */,
+				558065D927AD3A31008CD5D2 /* GameIndex.pdf */,
 				558065D427AD3A31008CD5D2 /* GPL.html */,
 				558065D527AD3A31008CD5D2 /* PCSX2_FAQ.pdf */,
-				558065D727AD3A31008CD5D2 /* Debugger.pdf */,
 				558065D827AD3A31008CD5D2 /* PCSX2.1 */,
-				558065D927AD3A31008CD5D2 /* GameIndex.pdf */,
 			);
 			path = docs;
-			sourceTree = "<group>";
-		};
-		5580662927AD3A31008CD5D2 /* shaders */ = {
-			isa = PBXGroup;
-			children = (
-				5580662A27AD3A31008CD5D2 /* GS_FX_Settings.ini */,
-				5580662B27AD3A31008CD5D2 /* GS.fx */,
-			);
-			path = shaders;
 			sourceTree = "<group>";
 		};
 		5591D80F27B5BF170073E97D /* Vulkan */ = {
