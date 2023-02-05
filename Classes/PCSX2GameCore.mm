@@ -28,7 +28,6 @@
 #include "Video/OEHostDisplay.h"
 #include "Audio/OESndOut.h"
 #include "Input/keymap.h"
-#include "OEUpscalePatches.h"
 
 #define BOOL PCSX2BOOL
 #include "PrecompiledHeader.h"
@@ -36,12 +35,15 @@
 #include "HostSettings.h"
 #include "HostDisplay.h"
 #include "VMManager.h"
-#include "AppConfig.h"
+//#include "AppConfig.h"
 #include "Frontend/InputManager.h"
-#include "Frontend/INISettingsInterface.h"
+#include "pcsx2/INISettingsInterface.h"
 #include "Frontend/OpenGLHostDisplay.h"
+#include "Frontend/CommonHost.h"
+#include "Frontend/FullscreenUI.h"
+#include "Frontend/LogSink.h"
 #include "common/SettingsWrapper.h"
-#include "CDVD/CDVDaccess.h"
+#include "CDVD/CDVD.h"
 #include "SPU2/Global.h"
 #include "SPU2/SndOut.h"
 #include "PAD/Host/KeyStatus.h"
@@ -86,7 +88,6 @@ PCSX2GameCore *_current;
 	NSString* DiscSubRegion;
 	
 	std::unique_ptr<INISettingsInterface> s_base_settings_interface;
-	std::unique_ptr<HostDisplay> hostDisplay;
 	
 	VMBootParameters params;
 	
@@ -103,7 +104,7 @@ PCSX2GameCore *_current;
 {
 	if (self = [super init]) {
 		_current = self;
-		VMManager::InitializeMemory();
+		VMManager::Internal::InitializeMemory();
 		_maxDiscs = 0;
 		_displayModes = [[NSMutableDictionary alloc] initWithDictionary:
 						 @{OEPSCSX2InternalResolution: @1,
@@ -165,32 +166,33 @@ static NSString *binCueFix(NSString *path)
 	}
 	
 	//Lets get the Disc ID with some Magic out of PCSX2 CDVD :)
-	VMManager::ChangeDisc(path.fileSystemRepresentation);
-	wxString DiscName;
+	VMManager::ChangeDisc(CDVD_SourceType::Iso, path.fileSystemRepresentation);
+	std::string DiscName;
 	GetPS2ElfName(DiscName);
 	
-	wxString fname = DiscName.AfterLast('\\').BeforeFirst('_');
-	wxString fname2 = DiscName.AfterLast('_').BeforeFirst('.');
-	wxString fname3 = DiscName.AfterLast('.').BeforeFirst(';');
-	DiscName = fname + "-" + fname2 + fname3;
+	//TODO: update!
+//	std::string fname = DiscName.AfterLast('\\').BeforeFirst('_');
+//	std::string fname2 = DiscName.AfterLast('_').BeforeFirst('.');
+//	std::string fname3 = DiscName.AfterLast('.').BeforeFirst(';');
+//	DiscName = fname + "-" + fname2 + fname3;
 	
-	DiscID = [NSString stringWithCString:DiscName.char_str() encoding:NSASCIIStringEncoding];
-	DiscRegion = [[NSString stringWithCString:fname.char_str() encoding:NSASCIIStringEncoding] substringWithRange:NSMakeRange(2,1)];
-	DiscSubRegion = [[NSString stringWithCString:fname.char_str() encoding:NSASCIIStringEncoding] substringWithRange:NSMakeRange(3,1)];
+	DiscID = [NSString stringWithCString:DiscName.c_str() encoding:NSASCIIStringEncoding];
+//	DiscRegion = [[NSString stringWithCString:fname.c_str() encoding:NSASCIIStringEncoding] substringWithRange:NSMakeRange(2,1)];
+//	DiscSubRegion = [[NSString stringWithCString:fname.c_str() encoding:NSASCIIStringEncoding] substringWithRange:NSMakeRange(3,1)];
 	
 	return true;
 }
 
 - (void)setupEmulation
 {
-	const std::string pcsx2ini(Path::CombineStdString([self.supportDirectoryPath stringByAppendingPathComponent:@"inis"].fileSystemRepresentation, "PCSX2.ini"));
+	const std::string pcsx2ini([[self.supportDirectoryPath stringByAppendingPathComponent:@"inis"] stringByAppendingPathComponent:@"PCSX2.ini"].fileSystemRepresentation);
 	s_base_settings_interface = std::make_unique<INISettingsInterface>(std::move(pcsx2ini));
 	Host::Internal::SetBaseSettingsLayer(s_base_settings_interface.get());
 	
-	EmuConfig = Pcsx2Config();
-	EmuFolders::SetDefaults();
-
 	SettingsInterface& si = *s_base_settings_interface.get();
+	EmuConfig = Pcsx2Config();
+	EmuFolders::SetDefaults(si);
+
 	si.SetUIntValue("UI", "SettingsVersion", 1);
 
 	{
@@ -255,7 +257,6 @@ static NSString *binCueFix(NSString *path)
 	si.SetBoolValue("EmuCore/CPU/Recompiler", "EnableVU0", true);
 	si.SetBoolValue("EmuCore/CPU/Recompiler", "EnableVU1", true);
 	si.SetStringValue("EmuCore/SPU2", "OutputModule", "NullOut");
-	si.SetBoolValue("", "EnableGameFixes", true);
 	si.SetBoolValue("EmuCore", "EnablePatches", true);
 	si.SetBoolValue("EmuCore", "EnableCheats", false);
 	si.SetBoolValue("EmuCore", "EnablePerGameSettings", true);
@@ -267,12 +268,7 @@ static NSString *binCueFix(NSString *path)
 	si.SetIntValue("EmuCore/GS", "upscale_multiplier", 1);
 	si.SetBoolValue("EmuCore/GS", "FrameLimitEnable", true);
 	si.SetBoolValue("EmuCore/GS", "SyncToHostRefreshRate",false);
-	si.SetBoolValue("EmuCore/GS", "UserHacks", true);
-	
-	[self ApplyUpscalePatches];
-
-	wxModule::RegisterModules();
-	wxModule::InitializeModules();
+	si.SetBoolValue("EmuCore/GS", "UserHacks", false);
 }
 
 - (void)resetEmulation
@@ -297,30 +293,27 @@ static NSString *binCueFix(NSString *path)
 	[self.renderDelegate willRenderFrameOnAlternateThread];
 	[self.renderDelegate suspendFPSLimiting];
 	
-	params.source = gamePath.fileSystemRepresentation;
+	params.filename = gamePath.fileSystemRepresentation;
 	params.save_state = "";
 	params.source_type = CDVD_SourceType::Iso;
 	params.elf_override = "";
 	params.fast_boot = true;
 	params.fullscreen = false;
-	params.batch_mode = std::nullopt;
   
 	if(!hasInitialized){
 		if (self.gameCoreRendering == OEGameCoreRenderingOpenGL3Video)
-			hostDisplay = HostDisplay::CreateDisplayForAPI(OpenGLHostDisplay::RenderAPI::OpenGL);
+			g_host_display = HostDisplay::CreateForAPI(RenderAPI::OpenGL);
 		else if (self.gameCoreRendering == OEGameCoreRenderingMetal2Video)
-			hostDisplay = HostDisplay::CreateDisplayForAPI(MetalHostDisplay::RenderAPI::Metal);
+			g_host_display = HostDisplay::CreateForAPI(RenderAPI::Metal);
 			
 		WindowInfo wi;
 			wi.type = WindowInfo::Type::MacOS;
 			wi.surface_width = screenRect.size.width ;
 			wi.surface_height = screenRect.size.height ;
-		hostDisplay->CreateRenderDevice(wi,
-				Host::GetStringSettingValue("EmuCore/GS", "Adapter", ""),
-				VsyncMode::Adaptive,
-				Host::GetBoolSettingValue("EmuCore/GS", "ThreadedPresentation", false),
-				Host::GetBoolSettingValue("EmuCore/GS", "UseDebugDevice", false));
+		g_host_display->CreateDevice(wi, VsyncMode::Adaptive);
 			
+		VMManager::Internal::InitializeGlobals() ;
+		
 		
 		if(VMManager::Initialize(params)){
 			hasInitialized = true;
@@ -358,9 +351,12 @@ static NSString *binCueFix(NSString *path)
 				}
 				continue;
 
-			case VMState::Stopping:
+			case VMState::Resetting:
 				VMManager::Reset();
-				continue;;
+				continue;
+
+			case VMState::Stopping:
+				VMManager::Shutdown(true);
 		}
 	}
 }
@@ -369,7 +365,7 @@ static NSString *binCueFix(NSString *path)
 {
 	ExitRequested = true;
 	VMManager::SetState(VMState::Stopping);
-	VMManager::Shutdown();
+//	VMManager::Shutdown(true);
 	[super stopEmulation];
 }
 
@@ -406,8 +402,11 @@ static NSString *binCueFix(NSString *path)
 
 - (OEGameCoreRendering)gameCoreRendering
 {
-	//FIXME: return OEGameCoreRenderingMetal1Video;
-	return OEGameCoreRenderingOpenGL3Video;
+	if (@available(macOS 10.15, *)) {
+		return OEGameCoreRenderingMetal2Video;
+	} else {
+		return OEGameCoreRenderingOpenGL3Video;
+	}
 }
 
 - (BOOL)hasAlternateRenderingThread
@@ -486,7 +485,7 @@ static NSString *binCueFix(NSString *path)
 {
 	if (!VMManager::HasValidVM())
 		return;
-	bool success = 	VMManager::SaveState(fileName.fileSystemRepresentation);
+	bool success = 	VMManager::SaveState(fileName.fileSystemRepresentation, false, false);
 	
 	block(success, success ? nil : [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotSaveStateError userInfo:@{NSLocalizedDescriptionKey: @"PCSX2 Could not save the current state.", NSFilePathErrorKey: fileName}]);
 	
@@ -506,7 +505,7 @@ static NSString *binCueFix(NSString *path)
 	
 	gamePath = ToPassBack;
 
-	VMManager::ChangeDisc(gamePath.fileSystemRepresentation);
+	VMManager::ChangeDisc(CDVD_SourceType::Iso, gamePath.fileSystemRepresentation);
 }
 
 #pragma mark - Display Options
@@ -587,23 +586,11 @@ static NSString *binCueFix(NSString *path)
 	if ([key isEqualToString:OEPSCSX2InternalResolution]) {
 		s_base_settings_interface->SetIntValue("EmuCore/GS", "upscale_multiplier", [currentVal intValue]);
 		VMManager::RequestDisplaySize([currentVal floatValue]);
-		[self ApplyUpscalePatches];
 	} else if ([key isEqualToString:OEPSCSX2BlendingAccuracy]) {
 		s_base_settings_interface->SetIntValue("EmuCore/GS", "accurate_blending_unit", [currentVal intValue]);
 	}
 	
 	VMManager::ApplySettings();
-}
-
-- (void) ApplyUpscalePatches
-{
-	if([wildArmsGames containsObject:DiscID])
-		s_base_settings_interface->SetBoolValue("EmuCore/GS", "UserHacks_WildHack", true);
-	
-	if([alignSpriteGames containsObject:DiscID]  && s_base_settings_interface->GetIntValue("EmuCore/GS", "upscale_multiplier") > 1)
-		s_base_settings_interface->SetBoolValue("EmuCore/GS", "UserHacks_AlignSpriteX", true);
-	else
-		s_base_settings_interface->SetBoolValue("EmuCore/GS", "UserHacks_AlignSpriteX", false);
 }
 
 @end
@@ -688,6 +675,26 @@ void Host::WriteToSoundBuffer(s16 Left, s16 Right)
 	[[current audioBufferAtIndex:0] write:stereo maxLength:sizeof(stereo)];
 }
 
+void Host::WriteToSoundBuffer(StereoOut16 snd)
+{
+	Host::WriteToSoundBuffer(snd.Left, snd.Right);
+}
+
+void Host::OnPerformanceMetricsUpdated()
+{
+}
+
+std::optional<WindowInfo> Host::GetTopLevelWindowInfo()
+{
+	return {};
+}
+
+void Host::SetRelativeMouseMode(bool enabled)
+{
+}
+
+#pragma mark Host Logging
+
 void Host::AddOSDMessage(std::string message, float duration)
 {
 }
@@ -714,6 +721,16 @@ void Host::ClearOSDMessages()
 
 void Host::ReportErrorAsync(const std::string_view& title, const std::string_view& message)
 {
+}
+
+void Host::AddIconOSDMessage(std::string key, const char* icon, const std::string_view& message, float duration /* = 2.0f */)
+{
+	// Stub, do nothing.
+}
+
+void CommonHost::UpdateLogging(SettingsInterface& si)
+{
+	
 }
 
 #pragma mark Host Thread
@@ -750,15 +767,12 @@ void Host::OnSaveStateSaved(const std::string_view& filename)
 {
 }
 
-void Host::OnGameChanged(const std::string& disc_path, const std::string& game_serial, const std::string& game_name, u32 game_crc)
+void Host::OnGameChanged(const std::string& disc_path, const std::string& elf_override, const std::string& game_serial,
+						 const std::string& game_name, u32 game_crc)
 {
 }
 
-void Host::PumpMessagesOnCPUThread()
-{
-}
-
-void Host::InvalidateSaveStateCache()
+void Host::CPUThreadVSync()
 {
 }
 
@@ -770,44 +784,40 @@ void Host::RunOnCPUThread(std::function<void()> function, bool block)
 {
 }
 
+void Host::RequestVMShutdown(bool allow_confirm, bool allow_save_state, bool default_save_state)
+{
+}
+
 #pragma mark Host Display
 
-HostDisplay* Host::AcquireHostDisplay(HostDisplay::RenderAPI api)
+bool Host::AcquireHostDisplay(RenderAPI api, bool clear_state_on_fail)
 {
-	GET_CURRENT_OR_RETURN(nullptr);
+	GET_CURRENT_OR_RETURN(false);
 	
 	[current.renderDelegate willRenderFrameOnAlternateThread];
-	return current->hostDisplay.get();
+	return g_host_display.get();
 }
 
-void Host::ReleaseHostDisplay()
+void Host::ReleaseHostDisplay(bool clear_state)
 {
 	GET_CURRENT_OR_RETURN();
-	if(current->hostDisplay.get()){
-		current->hostDisplay->DestroyRenderDevice();
-		current->hostDisplay.reset();
+	if(g_host_display.get()){
+		g_host_display.reset();
 	}
-}
-
-HostDisplay* Host::GetHostDisplay()
-{
-	GET_CURRENT_OR_RETURN(nullptr);
-	
-	return current->hostDisplay.get();
 }
 
 bool Host::BeginPresentFrame(bool frame_skip)
 {
 	GET_CURRENT_OR_RETURN(false);
 	
-	return current->hostDisplay.get()->BeginPresent(frame_skip);
+	return g_host_display.get()->BeginPresent(frame_skip);
 }
 
 void Host::EndPresentFrame()
 {
 	GET_CURRENT_OR_RETURN();
 	
-	current->hostDisplay.get()->EndPresent();
+	g_host_display.get()->EndPresent();
 }
 
 int Host::PresentFrameBuffer()
@@ -833,8 +843,30 @@ void Host::ResizeHostDisplay(u32 new_window_width, u32 new_window_height, float 
 	 
 }
 
+void Host::CancelGameListRefresh()
+{
+	
+}
+
 void Host::UpdateHostDisplay()
 {
+}
+
+#pragma mark Host Settings
+
+void Host::LoadSettings(SettingsInterface& si, std::unique_lock<std::mutex>& lock)
+{
+	CommonHost::LoadSettings(si, lock);
+}
+
+void Host::CheckForSettingsChanges(const Pcsx2Config& old_config)
+{
+	CommonHost::CheckForSettingsChanges(old_config);
+}
+
+void FullscreenUI::CheckForConfigChanges(const Pcsx2Config& old_config)
+{
+	// do nothing
 }
 
 #pragma mark -
@@ -852,4 +884,7 @@ std::optional<std::string> InputManager::ConvertHostKeyboardCodeToString(u32 cod
 }
 
 BEGIN_HOTKEY_LIST(g_host_hotkeys)
+END_HOTKEY_LIST()
+
+BEGIN_HOTKEY_LIST(g_common_hotkeys)
 END_HOTKEY_LIST()

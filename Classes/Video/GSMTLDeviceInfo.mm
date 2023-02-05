@@ -14,7 +14,7 @@
  */
 
 #include "GSMTLDeviceInfo.h"
-
+#include "GS/GS.h"
 #include "common/Console.h"
 
 #ifdef __APPLE__
@@ -154,6 +154,10 @@ GSMTLDevice::GSMTLDevice(MRCOwned<id<MTLDevice>> dev)
 		if ([dev supportsFamily:MTLGPUFamilyApple1])
 			features.framebuffer_fetch = true;
 
+	if (@available(macOS 10.15, iOS 13.0, *))
+		if ([dev supportsFamily:MTLGPUFamilyMac2] || [dev supportsFamily:MTLGPUFamilyApple1])
+			features.has_fast_half = true; // Approximate guess
+
 	features.shader_version = detectLibraryVersion(shaders);
 	if (features.framebuffer_fetch && features.shader_version < MetalVersion::Metal23)
 	{
@@ -180,7 +184,13 @@ GSMTLDevice::GSMTLDevice(MRCOwned<id<MTLDevice>> dev)
 				break;
 		}
 	}
- 
+
+	if (features.framebuffer_fetch && GSConfig.DisableFramebufferFetch)
+	{
+		Console.Warning("Framebuffer fetch was found but is disabled. This will reduce performance.");
+		features.framebuffer_fetch = false;
+	}
+
 	if (char* env = getenv("MTL_SLOW_COLOR_COMPRESSION"))
 		features.slow_color_compression = env[0] == '1' || env[0] == 'y' || env[0] == 'Y';
 	else

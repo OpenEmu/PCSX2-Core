@@ -18,7 +18,6 @@
 #include "MetalHostDisplay.h"
 #include "GS/Renderers/Metal/GSMetalCPPAccessible.h"
 #include "GS/Renderers/Metal/GSDeviceMTL.h"
-#include <Carbon/Carbon.h>
 
 #ifdef __APPLE__
 
@@ -51,6 +50,9 @@ MetalHostDisplay::MetalHostDisplay()
 
 MetalHostDisplay::~MetalHostDisplay()
 {
+	MetalHostDisplay::DestroySurface();
+	m_queue = nullptr;
+	m_dev.Reset();
 }
 
 HostDisplay::AdapterAndModeList GetMetalAdapterAndModeList()
@@ -71,32 +73,26 @@ static void OnMainThread(Fn&& fn)
 		dispatch_sync(dispatch_get_main_queue(), fn);
 }
 
-HostDisplay::RenderAPI MetalHostDisplay::GetRenderAPI() const
+RenderAPI MetalHostDisplay::GetRenderAPI() const
 {
 	return RenderAPI::Metal;
 }
 
-void* MetalHostDisplay::GetRenderDevice()  const { return const_cast<void*>(static_cast<const void*>(&m_dev)); }
-void* MetalHostDisplay::GetRenderContext() const { return (__bridge void*)m_queue; }
-void* MetalHostDisplay::GetRenderSurface() const { return (__bridge void*)m_layer; }
-bool MetalHostDisplay::HasRenderDevice()   const { return m_dev.IsOk(); }
-bool MetalHostDisplay::HasRenderSurface()  const { return static_cast<bool>(m_layer);}
+void* MetalHostDisplay::GetDevice()  const { return const_cast<void*>(static_cast<const void*>(&m_dev)); }
+void* MetalHostDisplay::GetContext() const { return (__bridge void*)m_queue; }
+void* MetalHostDisplay::GetSurface() const { return (__bridge void*)m_layer; }
+bool MetalHostDisplay::HasDevice()   const { return m_dev.IsOk(); }
+bool MetalHostDisplay::HasSurface()  const { return static_cast<bool>(m_layer);}
 
 void MetalHostDisplay::AttachSurfaceOnMainThread()
 {
-	m_view = MRCRetain((__bridge NSView*)m_window_info.window_handle);
-	[m_view setWantsLayer:YES];
-	[m_view setLayer:m_layer];
 }
 
 void MetalHostDisplay::DetachSurfaceOnMainThread()
 {
-	[m_view setLayer:nullptr];
-	[m_view setWantsLayer:NO];
-	m_view = nullptr;
 }
 
-bool MetalHostDisplay::CreateRenderDevice(const WindowInfo& wi, std::string_view adapter_name, VsyncMode vsync, bool threaded_presentation, bool debug_device)
+bool MetalHostDisplay::CreateDevice(const WindowInfo& wi, VsyncMode vsync)
 { @autoreleasepool {
 	m_window_info = wi;
 
@@ -107,6 +103,13 @@ bool MetalHostDisplay::CreateRenderDevice(const WindowInfo& wi, std::string_view
 	[m_pass_desc colorAttachments][0].loadAction = MTLLoadActionClear;
 	[m_pass_desc colorAttachments][0].clearColor = MTLClearColorMake(0, 0, 0, 0);
 	[m_pass_desc colorAttachments][0].storeAction = MTLStoreActionStore;
+
+	if (char* env = getenv("MTL_USE_PRESENT_DRAWABLE"))
+		m_use_present_drawable = static_cast<UsePresentDrawable>(atoi(env));
+	else if (@available(macOS 13.0, *))
+		m_use_present_drawable = UsePresentDrawable::Always;
+	else // Before Ventura, presentDrawable acts like vsync is on when windowed
+		m_use_present_drawable = UsePresentDrawable::IfVsync;
 
 	m_capture_start_frame = 0;
 	if (char* env = getenv("MTL_CAPTURE"))
@@ -134,22 +137,15 @@ bool MetalHostDisplay::CreateRenderDevice(const WindowInfo& wi, std::string_view
 		return false;
 }}
 
-bool MetalHostDisplay::InitializeRenderDevice(std::string_view shader_cache_directory, bool debug_device)
+bool MetalHostDisplay::SetupDevice()
 {
 	return true;
 }
 
-bool MetalHostDisplay::MakeRenderContextCurrent() { return true; }
-bool MetalHostDisplay::DoneRenderContextCurrent() { return true; }
+bool MetalHostDisplay::MakeCurrent() { return true; }
+bool MetalHostDisplay::DoneCurrent() { return true; }
 
-void MetalHostDisplay::DestroyRenderDevice()
-{
-	DestroyRenderSurface();
-	m_queue = nullptr;
-	m_dev.Reset();
-}
-
-void MetalHostDisplay::DestroyRenderSurface()
+void MetalHostDisplay::DestroySurface()
 {
 	if (!m_layer)
 		return;
@@ -158,7 +154,7 @@ void MetalHostDisplay::DestroyRenderSurface()
 	
 }
 
-bool MetalHostDisplay::ChangeRenderWindow(const WindowInfo& wi)
+bool MetalHostDisplay::ChangeWindow(const WindowInfo& wi)
 {
 	return true;
 }
@@ -184,7 +180,7 @@ std::string MetalHostDisplay::GetDriverInfo() const
 	return desc;
 }}
 
-void MetalHostDisplay::ResizeRenderWindow(s32 new_window_width, s32 new_window_height, float new_window_scale)
+void MetalHostDisplay::ResizeWindow(s32 new_window_width, s32 new_window_height, float new_window_scale)
 {
 	m_window_info.surface_scale = new_window_scale;
 	if (m_window_info.surface_width == static_cast<u32>(new_window_width) && m_window_info.surface_height == static_cast<u32>(new_window_height))
@@ -223,11 +219,11 @@ void MetalHostDisplay::UpdateTexture(id<MTLTexture> texture, u32 x, u32 y, u32 w
 	MRCOwned<id<MTLBuffer>> buf = MRCTransfer([m_dev.dev newBufferWithLength:bytes options:MTLResourceStorageModeShared | MTLResourceCPUCacheModeWriteCombined]);
 	memcpy([buf contents], data, bytes);
 	[enc copyFromBuffer:buf
-		   sourceOffset:0
+	       sourceOffset:0
 	  sourceBytesPerRow:data_stride
 	sourceBytesPerImage:bytes
-			 sourceSize:MTLSizeMake(width, height, 1)
-			  toTexture:texture
+	         sourceSize:MTLSizeMake(width, height, 1)
+	          toTexture:texture
 	   destinationSlice:0
 	   destinationLevel:0
 	  destinationOrigin:MTLOriginMake(0, 0, 0)];
@@ -247,13 +243,7 @@ bool MetalHostDisplay::BeginPresent(bool frame_skip)
 	GSDeviceMTL* dev = static_cast<GSDeviceMTL*>(g_gs_device.get());
 	if (dev && m_capture_start_frame && dev->FrameNo() == m_capture_start_frame)
 		s_capture_next = true;
-	static bool f8 = false;
-	bool option = CGEventSourceKeyState(kCGEventSourceStateHIDSystemState, kVK_Option) || CGEventSourceKeyState(kCGEventSourceStateHIDSystemState, kVK_RightOption);
-	bool newf8 = CGEventSourceKeyState(kCGEventSourceStateHIDSystemState, kVK_F8) && option;
-	if (newf8 && !f8)
-		s_capture_next = true;
-	f8 = newf8;
-	if (frame_skip  || !g_gs_device)
+	if (frame_skip || m_window_info.type == WindowInfo::Type::Surfaceless || !g_gs_device)
 	{
 		return false;
 	}
@@ -293,57 +283,68 @@ void MetalHostDisplay::EndPresent()
 		}
 		
 		[blitCommandEncoder endEncoding];
-		
-		[dev->m_current_render_cmdbuf addScheduledHandler:[drawable = std::move(m_current_drawable)](id<MTLCommandBuffer>){
-			[drawable present];
-		}];
 	}
-		dev->FlushEncoders();
-				
-	m_current_drawable = nullptr;
-
+	
 	if (@available(macOS 10.15, iOS 13, *))
 	{
-		static NSString* const path = @"/tmp/PCSX2MTLCapture.gputrace";
-		static u32 frames;
-		if (frames)
+		const bool use_present_drawable = m_use_present_drawable == UsePresentDrawable::Always ||
+			(m_use_present_drawable == UsePresentDrawable::IfVsync && m_vsync_mode != VsyncMode::Off);
+
+		if (use_present_drawable)
+			[dev->m_current_render_cmdbuf presentDrawable:m_current_drawable];
+		else
+			[dev->m_current_render_cmdbuf addScheduledHandler:[drawable = std::move(m_current_drawable)](id<MTLCommandBuffer>){
+				[drawable present];
+			}];
+	}
+	dev->FlushEncoders();
+	dev->FrameCompleted();
+	m_current_drawable = nullptr;
+	if (m_capture_start_frame)
+	{
+		if (@available(macOS 10.15, iOS 13, *))
 		{
-			--frames;
-			if (!frames)
+			static NSString* const path = @"/tmp/PCSX2MTLCapture.gputrace";
+			static u32 frames;
+			if (frames)
 			{
-				[[MTLCaptureManager sharedCaptureManager] stopCapture];
-				Console.WriteLn("Metal Trace Capture to /tmp/PCSX2MTLCapture.gputrace finished");
-				[[NSWorkspace sharedWorkspace] selectFile:path
-								 inFileViewerRootedAtPath:@"/tmp/"];
-			}
-		}
-		else if (s_capture_next)
-		{
-			s_capture_next = false;
-			MTLCaptureManager* mgr = [MTLCaptureManager sharedCaptureManager];
-			if ([mgr supportsDestination:MTLCaptureDestinationGPUTraceDocument])
-			{
-				MTLCaptureDescriptor* desc = [[MTLCaptureDescriptor new] autorelease];
-				[desc setCaptureObject:m_dev.dev];
-				if ([[NSFileManager defaultManager] fileExistsAtPath:path])
-					[[NSFileManager defaultManager] removeItemAtPath:path error:nil];
-				[desc setOutputURL:[NSURL fileURLWithPath:path]];
-				[desc setDestination:MTLCaptureDestinationGPUTraceDocument];
-				NSError* err = nullptr;
-				[mgr startCaptureWithDescriptor:desc error:&err];
-				if (err)
+				--frames;
+				if (!frames)
 				{
-					Console.Error("Metal Trace Capture failed: %s", [[err localizedDescription] UTF8String]);
+					[[MTLCaptureManager sharedCaptureManager] stopCapture];
+					Console.WriteLn("Metal Trace Capture to /tmp/PCSX2MTLCapture.gputrace finished");
+					[[NSWorkspace sharedWorkspace] selectFile:path
+					                 inFileViewerRootedAtPath:@"/tmp/"];
+				}
+			}
+			else if (s_capture_next)
+			{
+				s_capture_next = false;
+				MTLCaptureManager* mgr = [MTLCaptureManager sharedCaptureManager];
+				if ([mgr supportsDestination:MTLCaptureDestinationGPUTraceDocument])
+				{
+					MTLCaptureDescriptor* desc = [[MTLCaptureDescriptor new] autorelease];
+					[desc setCaptureObject:m_dev.dev];
+					if ([[NSFileManager defaultManager] fileExistsAtPath:path])
+						[[NSFileManager defaultManager] removeItemAtPath:path error:nil];
+					[desc setOutputURL:[NSURL fileURLWithPath:path]];
+					[desc setDestination:MTLCaptureDestinationGPUTraceDocument];
+					NSError* err = nullptr;
+					[mgr startCaptureWithDescriptor:desc error:&err];
+					if (err)
+					{
+						Console.Error("Metal Trace Capture failed: %s", [[err localizedDescription] UTF8String]);
+					}
+					else
+					{
+						Console.WriteLn("Metal Trace Capture to /tmp/PCSX2MTLCapture.gputrace started");
+						frames = 2;
+					}
 				}
 				else
 				{
-					Console.WriteLn("Metal Trace Capture to /tmp/PCSX2MTLCapture.gputrace started");
-					frames = 2;
+					Console.Error("Metal Trace Capture Failed: MTLCaptureManager doesn't support GPU trace documents! (Did you forget to run with METAL_CAPTURE_ENABLED=1?)");
 				}
-			}
-			else
-			{
-				Console.Error("Metal Trace Capture Failed: MTLCaptureManager doesn't support GPU trace documents! (Did you forget to run with METAL_CAPTURE_ENABLED=1?)");
 			}
 		}
 	}
@@ -372,6 +373,49 @@ bool MetalHostDisplay::UpdateImGuiFontTexture()
 bool MetalHostDisplay::GetHostRefreshRate(float* refresh_rate)
 {
 	return *refresh_rate != 0;
+}
+
+bool MetalHostDisplay::SetGPUTimingEnabled(bool enabled)
+{
+	if (enabled == m_gpu_timing_enabled)
+		return true;
+	if (@available(macOS 10.15, iOS 10.3, *))
+	{
+		std::lock_guard<std::mutex> l(m_mtx);
+		m_gpu_timing_enabled = enabled;
+		m_accumulated_gpu_time = 0;
+		m_last_gpu_time_end = 0;
+		return true;
+	}
+	return false;
+}
+
+float MetalHostDisplay::GetAndResetAccumulatedGPUTime()
+{
+	std::lock_guard<std::mutex> l(m_mtx);
+	float time = m_accumulated_gpu_time * 1000;
+	m_accumulated_gpu_time = 0;
+	return time;
+}
+
+void MetalHostDisplay::AccumulateCommandBufferTime(id<MTLCommandBuffer> buffer)
+{
+	std::lock_guard<std::mutex> l(m_mtx);
+	if (!m_gpu_timing_enabled)
+		return;
+	// We do the check before enabling m_gpu_timing_enabled
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunguarded-availability"
+	// It's unlikely, but command buffers can overlap or run out of order
+	// This doesn't handle every case (fully out of order), but it should at least handle overlapping
+	double begin = std::max(m_last_gpu_time_end, [buffer GPUStartTime]);
+	double end = [buffer GPUEndTime];
+	if (end > begin)
+	{
+		m_accumulated_gpu_time += end - begin;
+		m_last_gpu_time_end = end;
+	}
+#pragma clang diagnostic pop
 }
 
 #endif // __APPLE__

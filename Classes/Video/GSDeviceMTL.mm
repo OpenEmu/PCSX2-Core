@@ -16,6 +16,8 @@
 #include "PrecompiledHeader.h"
 #include "GSMetalCPPAccessible.h"
 #include "GSDeviceMTL.h"
+
+#include "Frontend/MetalHostDisplay.h"
 #include "GSTextureMTL.h"
 #include "GS/GSPerfMon.h"
 #include "HostDisplay.h"
@@ -26,6 +28,11 @@
 GSDevice* MakeGSDeviceMTL()
 {
 	return new GSDeviceMTL();
+}
+
+static constexpr simd::float2 ToSimd(const GSVector2& vec)
+{
+	return simd::make_float2(vec.x, vec.y);
 }
 
 bool GSDeviceMTL::UsageTracker::PrepareForAllocation(u64 last_draw, size_t amt)
@@ -119,10 +126,10 @@ GSDeviceMTL::Map GSDeviceMTL::Allocate(BufferPair& buffer, size_t amt)
 		{
 			id<MTLBlitCommandEncoder> enc = GetVertexUploadEncoder();
 			[enc copyFromBuffer:buffer.cpubuffer
-				   sourceOffset:buffer.last_upload
-					   toBuffer:buffer.gpubuffer
+			       sourceOffset:buffer.last_upload
+			           toBuffer:buffer.gpubuffer
 			  destinationOffset:buffer.last_upload
-						   size:base_pos - buffer.last_upload];
+			               size:base_pos - buffer.last_upload];
 		}
 		buffer.last_upload = 0;
 	}
@@ -159,10 +166,10 @@ void GSDeviceMTL::Sync(BufferPair& buffer)
 
 	id<MTLBlitCommandEncoder> enc = GetVertexUploadEncoder();
 	[enc copyFromBuffer:buffer.cpubuffer
-		   sourceOffset:buffer.last_upload
-			   toBuffer:buffer.gpubuffer
+	       sourceOffset:buffer.last_upload
+	           toBuffer:buffer.gpubuffer
 	  destinationOffset:buffer.last_upload
-				   size:buffer.usage.Pos() - buffer.last_upload];
+	               size:buffer.usage.Pos() - buffer.last_upload];
 	[enc updateFence:m_draw_sync_fence];
 	buffer.last_upload = buffer.usage.Pos();
 }
@@ -210,11 +217,30 @@ id<MTLCommandBuffer> GSDeviceMTL::GetRenderCmdBuf()
 {
 	if (!m_current_render_cmdbuf)
 	{
+		m_encoders_in_current_cmdbuf = 0;
 		m_current_render_cmdbuf = MRCRetain([m_queue commandBuffer]);
 		pxAssertRel(m_current_render_cmdbuf, "Failed to create draw command buffer!");
 		[m_current_render_cmdbuf setLabel:@"Draw"];
 	}
 	return m_current_render_cmdbuf;
+}
+
+id<MTLCommandBuffer> GSDeviceMTL::GetRenderCmdBufWithoutCreate()
+{
+	return m_current_render_cmdbuf;
+}
+
+id<MTLFence> GSDeviceMTL::GetSpinFence()
+{
+	return m_spin_timer ? m_spin_fence : nil;
+}
+
+void GSDeviceMTL::DrawCommandBufferFinished(u64 draw, id<MTLCommandBuffer> buffer)
+{
+	// We can do the update non-atomically because we only ever update under the lock
+	u64 newval = std::max(draw, m_last_finished_draw.load(std::memory_order_relaxed));
+	m_last_finished_draw.store(newval, std::memory_order_release);
+	static_cast<MetalHostDisplay*>(g_host_display.get())->AccumulateCommandBufferTime(buffer);
 }
 
 void GSDeviceMTL::FlushEncoders()
@@ -246,53 +272,91 @@ void GSDeviceMTL::FlushEncoders()
 		[m_late_texture_upload_encoder endEncoding];
 		m_late_texture_upload_encoder = nil;
 	}
-	[m_current_render_cmdbuf addCompletedHandler:[backref = m_backref, draw = m_current_draw](id<MTLCommandBuffer> buf)
+	u32 spin_cycles = 0;
+	constexpr double s_to_ns = 1000000000;
+	if (m_spin_timer)
 	{
-		std::lock_guard<std::mutex> guard(backref->first);
-		if (GSDeviceMTL* dev = backref->second)
+		u32 spin_id;
 		{
-			// We can do the update non-atomically because we only ever update under the lock
-			u64 newval = std::max(draw, dev->m_last_finished_draw.load(std::memory_order_relaxed));
-			dev->m_last_finished_draw.store(newval, std::memory_order_release);
+			std::lock_guard<std::mutex> guard(m_backref->first);
+			auto draw = m_spin_manager.DrawSubmitted(m_encoders_in_current_cmdbuf);
+			u32 constant_offset = 200000 * m_spin_manager.SpinsPerUnitTime(); // 200µs
+			u32 minimum_spin = 2 * constant_offset; // 400µs (200µs after subtracting constant_offset)
+			u32 maximum_spin = std::max<u32>(1024, 16000000 * m_spin_manager.SpinsPerUnitTime()); // 16ms
+			if (draw.recommended_spin > minimum_spin)
+				spin_cycles = std::min(draw.recommended_spin - constant_offset, maximum_spin);
+			spin_id = draw.id;
 		}
-	}];
-	if (m_last_spin_cmdbuf)
-	{
-		double seconds_to_spin = m_spin_timer.GetTimeSeconds();
-		[m_current_render_cmdbuf addCompletedHandler:[spin = std::move(m_last_spin_cmdbuf), backref = m_backref, seconds_to_spin](id<MTLCommandBuffer> render){
-			if (@available(macOS 10.15, iOS 10.3, *))
+		[m_current_render_cmdbuf addCompletedHandler:[backref = m_backref, draw = m_current_draw, spin_id](id<MTLCommandBuffer> buf)
+		{
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunguarded-availability"
+			// Starting from kernelStartTime includes time the command buffer spent waiting to execute
+			// This is useful for avoiding issues on GPUs without async compute (Intel) where spinning
+			// delays the next command buffer start, which then makes the spin manager think it should spin more
+			// (If a command buffer contains multiple encoders, the GPU will start before the kernel finishes,
+			//  so we choose kernelStartTime over kernelEndTime)
+			u64 begin = [buf kernelStartTime] * s_to_ns;
+			u64 end = [buf GPUEndTime] * s_to_ns;
+#pragma clang diagnostic pop
+			std::lock_guard<std::mutex> guard(backref->first);
+			if (GSDeviceMTL* dev = backref->second)
 			{
-				CFTimeInterval start = [spin GPUStartTime];
-				CFTimeInterval end   = [spin GPUEndTime];
-				CFTimeInterval rstart = [render GPUStartTime];
-				[[maybe_unused]] CFTimeInterval spin_time = end - start;
-				[[maybe_unused]] CFTimeInterval total_time = rstart - start;
-				// Console.WriteLn("Spin Result: duration: %.2fms, time to fill: %.2fms, ratio: %.2f, target: %.2fms", spin_time * 1000, total_time * 1000, spin_time / total_time, seconds_to_spin * 1000);
-				std::lock_guard<std::mutex> lock(backref->first);
-				if (GSDeviceMTL* dev = backref->second)
-				{
-					if (!start || !end)
-					{
-						Console.Warning("Spin never ended???");
-					}
-					else if (spin_time < seconds_to_spin - 0.001)
-					{
-						dev->m_spin_cycles += (dev->m_spin_cycles >> 4);
-						// Console.WriteLn("Spin finished early, increasing cycles to %d", dev->m_spin_cycles);
-					}
-					else if (spin_time > seconds_to_spin)
-					{
-						dev->m_spin_cycles -= (dev->m_spin_cycles >> 4);
-						// Console.WriteLn("Spin finished late, reducing cycles to %d", dev->m_spin_cycles);
-					}
-				}
+				dev->DrawCommandBufferFinished(draw, buf);
+				dev->m_spin_manager.DrawCompleted(spin_id, static_cast<u32>(begin), static_cast<u32>(end));
 			}
 		}];
-		m_last_spin_cmdbuf = nil;
+	}
+	else
+	{
+		[m_current_render_cmdbuf addCompletedHandler:[backref = m_backref, draw = m_current_draw](id<MTLCommandBuffer> buf)
+		{
+			std::lock_guard<std::mutex> guard(backref->first);
+			if (GSDeviceMTL* dev = backref->second)
+				dev->DrawCommandBufferFinished(draw, buf);
+		}];
 	}
 	[m_current_render_cmdbuf commit];
 	m_current_render_cmdbuf = nil;
 	m_current_draw++;
+	if (spin_cycles)
+	{
+		id<MTLCommandBuffer> spinCmdBuf = [m_queue commandBuffer];
+		[spinCmdBuf setLabel:@"Spin"];
+		id<MTLComputeCommandEncoder> spinCmdEncoder = [spinCmdBuf computeCommandEncoder];
+		[spinCmdEncoder setLabel:@"Spin"];
+		[spinCmdEncoder waitForFence:m_spin_fence];
+		[spinCmdEncoder setComputePipelineState:m_spin_pipeline];
+		[spinCmdEncoder setBytes:&spin_cycles length:sizeof(spin_cycles) atIndex:0];
+		[spinCmdEncoder setBuffer:m_spin_buffer offset:0 atIndex:1];
+		[spinCmdEncoder dispatchThreadgroups:MTLSizeMake(1, 1, 1) threadsPerThreadgroup:MTLSizeMake(1, 1, 1)];
+		[spinCmdEncoder endEncoding];
+		[spinCmdBuf addCompletedHandler:[backref = m_backref, spin_cycles](id<MTLCommandBuffer> buf)
+		{
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunguarded-availability"
+			u64 begin = [buf GPUStartTime] * s_to_ns;
+			u64 end = [buf GPUEndTime] * s_to_ns;
+#pragma clang diagnostic pop
+			std::lock_guard<std::mutex> guard(backref->first);
+			if (GSDeviceMTL* dev = backref->second)
+				dev->m_spin_manager.SpinCompleted(spin_cycles, static_cast<u32>(begin), static_cast<u32>(end));
+		}];
+		[spinCmdBuf commit];
+	}
+}
+
+void GSDeviceMTL::FlushEncodersForReadback()
+{
+	FlushEncoders();
+	if (@available(macOS 10.15, iOS 10.3, *))
+	{
+		if (GSConfig.HWSpinGPUForReadbacks)
+		{
+			m_spin_manager.ReadbackRequested();
+			m_spin_timer = 30;
+		}
+	}
 }
 
 void GSDeviceMTL::EndRenderPass()
@@ -300,6 +364,8 @@ void GSDeviceMTL::EndRenderPass()
 	if (m_current_render.encoder)
 	{
 		EndDebugGroup(m_current_render.encoder);
+		if (m_spin_timer)
+			[m_current_render.encoder updateFence:m_spin_fence afterStages:MTLRenderStageFragment];
 		[m_current_render.encoder endEncoding];
 		m_current_render.encoder = nil;
 		memset(&m_current_render, 0, offsetof(MainRenderEncoder, depth_sel));
@@ -307,17 +373,17 @@ void GSDeviceMTL::EndRenderPass()
 	}
 }
 
-void GSDeviceMTL::BeginRenderPass(NSString* name, GSTexture* color, MTLLoadAction color_load, GSTexture* depth, MTLLoadAction depth_load, GSTexture* stencil, MTLLoadAction stencil_load, GSVector2i size)
+void GSDeviceMTL::BeginRenderPass(NSString* name, GSTexture* color, MTLLoadAction color_load, GSTexture* depth, MTLLoadAction depth_load, GSTexture* stencil, MTLLoadAction stencil_load)
 {
 	GSTextureMTL* mc = static_cast<GSTextureMTL*>(color);
 	GSTextureMTL* md = static_cast<GSTextureMTL*>(depth);
 	GSTextureMTL* ms = static_cast<GSTextureMTL*>(stencil);
 	bool needs_new = color   != m_current_render.color_target
-				  || depth   != m_current_render.depth_target
-				  || stencil != m_current_render.stencil_target;
+	              || depth   != m_current_render.depth_target
+	              || stencil != m_current_render.stencil_target;
 	GSVector4 color_clear;
-	float depth_clear;
-	int stencil_clear;
+	float depth_clear=0;
+	int stencil_clear=0;
 	bool needs_color_clear = false;
 	bool needs_depth_clear = false;
 	bool needs_stencil_clear = false;
@@ -330,12 +396,6 @@ void GSDeviceMTL::BeginRenderPass(NSString* name, GSTexture* color, MTLLoadActio
 	needs_new |= mc && color_load   == MTLLoadActionClear;
 	needs_new |= md && depth_load   == MTLLoadActionClear;
 	needs_new |= ms && stencil_load == MTLLoadActionClear;
-	if (m_current_render.size != GSVector2i(0, 0))
-	{
-		needs_new |= size == GSVector2i(0, 0);
-		needs_new |= size.x > m_current_render.size.x;
-		needs_new |= size.y > m_current_render.size.y;
-	}
 
 	if (!needs_new)
 	{
@@ -346,6 +406,8 @@ void GSDeviceMTL::BeginRenderPass(NSString* name, GSTexture* color, MTLLoadActio
 		}
 		return;
 	}
+
+	m_encoders_in_current_cmdbuf++;
 
 	if (m_late_texture_upload_encoder)
 	{
@@ -384,29 +446,24 @@ void GSDeviceMTL::BeginRenderPass(NSString* name, GSTexture* color, MTLLoadActio
 		desc.stencilAttachment.loadAction = stencil_load;
 	}
 
-	if (@available(macOS 10.15, iOS 11, *))
-	{
-		desc.renderTargetWidth = size.x;
-		desc.renderTargetHeight = size.y;
-	}
-
 	EndRenderPass();
 	m_current_render.encoder = MRCRetain([GetRenderCmdBuf() renderCommandEncoderWithDescriptor:desc]);
 	m_current_render.name = (__bridge void*)name;
 	[m_current_render.encoder setLabel:name];
 	if (!m_dev.features.unified_memory)
 		[m_current_render.encoder waitForFence:m_draw_sync_fence
-								  beforeStages:MTLRenderStageVertex];
+		                          beforeStages:MTLRenderStageVertex];
 	m_current_render.color_target = color;
 	m_current_render.depth_target = depth;
 	m_current_render.stencil_target = stencil;
-	m_current_render.size = size;
-	if (size != GSVector2i(0, 0))
-	{
-		GSVector2i rtsize = color ? color->GetSize() : depth ? depth->GetSize() : stencil->GetSize();
-		[m_current_render.encoder setViewport: (MTLViewport){ .originX = 0, .originY = 0, .width = (double)rtsize.x, .height = (double)rtsize.y, .znear = 0, .zfar = 1 }];
-	}
 	pxAssertRel(m_current_render.encoder, "Failed to create render encoder!");
+}
+
+void GSDeviceMTL::FrameCompleted()
+{
+	if (m_spin_timer)
+		m_spin_timer--;
+	m_spin_manager.NextFrame();
 }
 
 static constexpr MTLPixelFormat ConvertPixelFormat(GSTexture::Format format)
@@ -418,7 +475,7 @@ static constexpr MTLPixelFormat ConvertPixelFormat(GSTexture::Format format)
 		case GSTexture::Format::UInt16:       return MTLPixelFormatR16Uint;
 		case GSTexture::Format::UNorm8:       return MTLPixelFormatA8Unorm;
 		case GSTexture::Format::Color:        return MTLPixelFormatRGBA8Unorm;
-		case GSTexture::Format::FloatColor:   return MTLPixelFormatRGBA32Float;
+		case GSTexture::Format::HDRColor:     return MTLPixelFormatRGBA16Unorm;
 		case GSTexture::Format::DepthStencil: return MTLPixelFormatDepth32Float_Stencil8;
 		case GSTexture::Format::Invalid:      return MTLPixelFormatInvalid;
 		case GSTexture::Format::BC1:          return MTLPixelFormatBC1_RGBA;
@@ -435,9 +492,9 @@ GSTexture* GSDeviceMTL::CreateSurface(GSTexture::Type type, int width, int heigh
 
 	MTLTextureDescriptor* desc = [MTLTextureDescriptor
 		texture2DDescriptorWithPixelFormat:fmt
-									 width:std::max(1, std::min(width,  m_dev.features.max_texsize))
-									height:std::max(1, std::min(height, m_dev.features.max_texsize))
-								 mipmapped:levels > 1];
+		                             width:std::max(1, std::min(width,  m_dev.features.max_texsize))
+		                            height:std::max(1, std::min(height, m_dev.features.max_texsize))
+		                         mipmapped:levels > 1];
 
 	if (levels > 1)
 		[desc setMipmapLevelCount:levels];
@@ -448,15 +505,14 @@ GSTexture* GSDeviceMTL::CreateSurface(GSTexture::Type type, int width, int heigh
 		case GSTexture::Type::Texture:
 			[desc setUsage:MTLTextureUsageShaderRead];
 			break;
-		case GSTexture::Type::Offscreen:
-			[desc setUsage:MTLTextureUsageRenderTarget];
-			break;
 		case GSTexture::Type::RenderTarget:
-		case GSTexture::Type::SparseRenderTarget:
 			if (m_dev.features.slow_color_compression)
 				[desc setUsage:MTLTextureUsageShaderRead | MTLTextureUsageRenderTarget | MTLTextureUsagePixelFormatView]; // Force color compression off by including PixelFormatView
 			else
 				[desc setUsage:MTLTextureUsageShaderRead | MTLTextureUsageRenderTarget];
+			break;
+		case GSTexture::Type::RWTexture:
+			[desc setUsage:MTLTextureUsageShaderRead | MTLTextureUsageShaderWrite];
 			break;
 		default:
 			[desc setUsage:MTLTextureUsageShaderRead | MTLTextureUsageRenderTarget];
@@ -538,21 +594,21 @@ void GSDeviceMTL::DoMerge(GSTexture* sTex[3], GSVector4* sRect, GSTexture* dTex,
 		StretchRect(dTex, full_r, sTex[2], dRect[0], ShaderConvert::YUV);
 }}
 
-void GSDeviceMTL::DoInterlace(GSTexture* sTex, GSTexture* dTex, int shader, bool linear, float yoffset)
+void GSDeviceMTL::DoInterlace(GSTexture* sTex, GSTexture* dTex, int shader, bool linear, float yoffset, int bufIdx)
 { @autoreleasepool {
 	id<MTLCommandBuffer> cmdbuf = GetRenderCmdBuf();
 	GSScopedDebugGroupMTL dbg(cmdbuf, @"DoInterlace");
 
-	GSVector4 s = GSVector4(dTex->GetSize());
+	GSVector4 ds = GSVector4(dTex->GetSize());
 
 	GSVector4 sRect(0, 0, 1, 1);
-	GSVector4 dRect(0.f, yoffset, s.x, s.y + yoffset);
+	GSVector4 dRect(0.f, yoffset, ds.x, ds.y + yoffset);
 
 	GSMTLInterlacePSUniform cb = {};
-	cb.ZrH = {0, 1.f / s.y};
-	cb.hH = s.y / 2;
+	cb.ZrH = {static_cast<float>(bufIdx), 1.0f / ds.y, ds.y, MAD_SENSITIVITY};
 
-	DoStretchRect(sTex, sRect, dTex, dRect, m_interlace_pipeline[shader], linear, shader > 1 ? LoadAction::DontCareIfFull : LoadAction::Load, &cb, sizeof(cb));
+	const bool can_discard = shader == 0 || shader == 3;
+	DoStretchRect(sTex, sRect, dTex, dRect, m_interlace_pipeline[shader], linear, !can_discard ? LoadAction::DontCareIfFull : LoadAction::Load, &cb, sizeof(cb));
 }}
 
 void GSDeviceMTL::DoFXAA(GSTexture* sTex, GSTexture* dTex)
@@ -561,46 +617,34 @@ void GSDeviceMTL::DoFXAA(GSTexture* sTex, GSTexture* dTex)
 	RenderCopy(sTex, m_fxaa_pipeline, GSVector4i(0, 0, dTex->GetSize().x, dTex->GetSize().y));
 }
 
-void GSDeviceMTL::DoShadeBoost(GSTexture* sTex, GSTexture* dTex)
+void GSDeviceMTL::DoShadeBoost(GSTexture* sTex, GSTexture* dTex, const float params[4])
 {
 	BeginRenderPass(@"ShadeBoost", dTex, MTLLoadActionDontCare, nullptr, MTLLoadActionDontCare);
-	[m_current_render.encoder setFragmentBytes:&m_shadeboost_constants
-										length:sizeof(m_shadeboost_constants)
-									   atIndex:GSMTLBufferIndexUniforms];
+	[m_current_render.encoder setFragmentBytes:params
+	                                    length:sizeof(float) * 4
+	                                   atIndex:GSMTLBufferIndexUniforms];
 	RenderCopy(sTex, m_shadeboost_pipeline, GSVector4i(0, 0, dTex->GetSize().x, dTex->GetSize().y));
 }
 
-void GSDeviceMTL::DoExternalFX(GSTexture* sTex, GSTexture* dTex)
-{
-	// TODO: Implement
-}
+bool GSDeviceMTL::DoCAS(GSTexture* sTex, GSTexture* dTex, bool sharpen_only, const std::array<u32, NUM_CAS_CONSTANTS>& constants)
+{ @autoreleasepool {
+	static constexpr int threadGroupWorkRegionDim = 16;
+	const int dispatchX = (dTex->GetWidth() + (threadGroupWorkRegionDim - 1)) / threadGroupWorkRegionDim;
+	const int dispatchY = (dTex->GetHeight() + (threadGroupWorkRegionDim - 1)) / threadGroupWorkRegionDim;
+	static_assert(sizeof(constants) == sizeof(GSMTLCASPSUniform));
 
-u16 GSDeviceMTL::ConvertBlendEnum(u16 generic)
-{
-	switch (generic)
-	{
-		case SRC_COLOR       : return MTLBlendFactorSourceColor;
-		case INV_SRC_COLOR   : return MTLBlendFactorOneMinusSourceColor;
-		case DST_COLOR       : return MTLBlendFactorDestinationColor;
-		case INV_DST_COLOR   : return MTLBlendFactorOneMinusBlendColor;
-		case SRC1_COLOR      : return MTLBlendFactorSource1Color;
-		case INV_SRC1_COLOR  : return MTLBlendFactorOneMinusSource1Color;
-		case SRC_ALPHA       : return MTLBlendFactorSourceAlpha;
-		case INV_SRC_ALPHA   : return MTLBlendFactorOneMinusSourceAlpha;
-		case DST_ALPHA       : return MTLBlendFactorDestinationAlpha;
-		case INV_DST_ALPHA   : return MTLBlendFactorOneMinusDestinationAlpha;
-		case SRC1_ALPHA      : return MTLBlendFactorSource1Alpha;
-		case INV_SRC1_ALPHA  : return MTLBlendFactorOneMinusSource1Alpha;
-		case CONST_COLOR     : return MTLBlendFactorBlendColor;
-		case INV_CONST_COLOR : return MTLBlendFactorOneMinusBlendColor;
-		case CONST_ONE       : return MTLBlendFactorOne;
-		case CONST_ZERO      : return MTLBlendFactorZero;
-		case OP_ADD          : return MTLBlendOperationAdd;
-		case OP_SUBTRACT     : return MTLBlendOperationSubtract;
-		case OP_REV_SUBTRACT : return MTLBlendOperationReverseSubtract;
-		default              : ASSERT(0); return 0;
-	}
-}
+	EndRenderPass();
+	id<MTLComputeCommandEncoder> enc = [GetRenderCmdBuf() computeCommandEncoder];
+	[enc setLabel:@"CAS"];
+	[enc setComputePipelineState:m_cas_pipeline[sharpen_only]];
+	[enc setTexture:static_cast<GSTextureMTL*>(sTex)->GetTexture() atIndex:0];
+	[enc setTexture:static_cast<GSTextureMTL*>(dTex)->GetTexture() atIndex:1];
+	[enc setBytes:&constants length:sizeof(constants) atIndex:GSMTLBufferIndexUniforms];
+	[enc dispatchThreadgroups:MTLSizeMake(dispatchX, dispatchY, 1)
+	    threadsPerThreadgroup:MTLSizeMake(64, 1, 1)];
+	[enc endEncoding];
+	return true;
+}}
 
 MRCOwned<id<MTLFunction>> GSDeviceMTL::LoadShader(NSString* name)
 {
@@ -631,6 +675,26 @@ MRCOwned<id<MTLRenderPipelineState>> GSDeviceMTL::MakePipeline(MTLRenderPipeline
 	return res;
 }
 
+MRCOwned<id<MTLComputePipelineState>> GSDeviceMTL::MakeComputePipeline(id<MTLFunction> compute, NSString* name)
+{
+	MRCOwned<MTLComputePipelineDescriptor*> desc = MRCTransfer([MTLComputePipelineDescriptor new]);
+	[desc setLabel:name];
+	[desc setComputeFunction:compute];
+	NSError* err;
+	MRCOwned<id<MTLComputePipelineState>> res = MRCTransfer([m_dev.dev
+		newComputePipelineStateWithDescriptor:desc
+		                              options:0
+		                           reflection:nil
+		                                error:&err]);
+	if (unlikely(err))
+	{
+		NSString* msg = [NSString stringWithFormat:@"Failed to create pipeline %@: %@", name, [err localizedDescription]];
+		Console.Error("%s", [msg UTF8String]);
+		throw GSRecoverableError();
+	}
+	return res;
+}
+
 static void applyAttribute(MTLVertexDescriptor* desc, NSUInteger idx, MTLVertexFormat fmt, NSUInteger offset, NSUInteger buffer_index)
 {
 	MTLVertexAttributeDescriptor* attrs = desc.attributes[idx];
@@ -649,49 +713,64 @@ static void setFnConstantI(MTLFunctionConstantValues* fc, unsigned int value, GS
 	[fc setConstantValue:&value type:MTLDataTypeUInt atIndex:constant];
 }
 
-bool GSDeviceMTL::Create(HostDisplay* display)
+bool GSDeviceMTL::Create()
 { @autoreleasepool {
-	if (!GSDevice::Create(display))
+	if (!GSDevice::Create())
 		return false;
 
-	if (display->GetRenderAPI() != HostDisplay::RenderAPI::Metal)
+	if (g_host_display->GetRenderAPI() != RenderAPI::Metal)
 		return false;
 
-	if (!m_display->HasRenderDevice() || !m_display->HasRenderSurface())
+	if (!g_host_display->HasDevice() || !g_host_display->HasSurface())
 		return false;
-	m_dev = *static_cast<const GSMTLDevice*>(m_display->GetRenderDevice());
-	m_queue = MRCRetain((__bridge id<MTLCommandQueue>)m_display->GetRenderContext());
-	MTLPixelFormat layer_px_fmt = [(__bridge CAMetalLayer*)m_display->GetRenderSurface() pixelFormat];
+	m_dev = *static_cast<const GSMTLDevice*>(g_host_display->GetDevice());
+	m_queue = MRCRetain((__bridge id<MTLCommandQueue>)g_host_display->GetContext());
+	MTLPixelFormat layer_px_fmt = [(__bridge CAMetalLayer*)g_host_display->GetSurface() pixelFormat];
 
-	if (const char* env = getenv("MTL_SPIN_READBACK"))
-		m_spin_enable = env[0] == '1' || env[0] == 'y' || env[0] == 'Y';
-	else
-		m_spin_enable = false;
-
-	if (const char* env = getenv("MTL_SMALL_RT"))
-		m_enable_small_rt = env[0] == '1' || env[0] == 'y' || env[0] == 'Y';
-	else
-		m_enable_small_rt = false;
-
+	m_features.broken_point_sampler = [[m_dev.dev name] containsString:@"AMD"];
 	m_features.geometry_shader = false;
-	m_features.image_load_store = m_dev.features.primid;
+	m_features.vs_expand = true;
+	m_features.primitive_id = m_dev.features.primid;
 	m_features.texture_barrier = true;
+	m_features.provoking_vertex_last = false;
 	m_features.point_expand = true;
+	m_features.line_expand = false;
 	m_features.prefer_new_textures = true;
-	m_features.one_barrier_is_full = m_dev.features.framebuffer_fetch;
-
-	m_shadeboost_constants = simd::clamp<simd::float3>(simd_make_float3(theApp.GetConfigI("ShadeBoost_Contrast"), theApp.GetConfigI("ShadeBoost_Brightness"), theApp.GetConfigI("ShadeBoost_Saturation")), 0, 100) / 50;
+	m_features.dxt_textures = true;
+	m_features.bptc_textures = true;
+	m_features.framebuffer_fetch = m_dev.features.framebuffer_fetch;
+	m_features.dual_source_blend = true;
+	m_features.stencil_buffer = true;
+	m_features.cas_sharpening = true;
 
 	try
 	{
 		// Init metal stuff
-		m_draw_sync_fence = MRCTransfer([m_dev.dev newFence]);
-
 		m_fn_constants = MRCTransfer([MTLFunctionConstantValues new]);
-		u8 upscale = std::max(1, theApp.GetConfigI("upscale_multiplier"));
-		vector_uchar2 upscale2 = vector2(upscale, upscale);
-		[m_fn_constants setConstantValue:&upscale2 type:MTLDataTypeUChar2 atIndex:GSMTLConstantIndex_SCALING_FACTOR];
+		vector_float2 upscale2 = vector2(GSConfig.UpscaleMultiplier, GSConfig.UpscaleMultiplier);
+		[m_fn_constants setConstantValue:&upscale2 type:MTLDataTypeFloat2 atIndex:GSMTLConstantIndex_SCALING_FACTOR];
 		setFnConstantB(m_fn_constants, m_dev.features.framebuffer_fetch, GSMTLConstantIndex_FRAMEBUFFER_FETCH);
+
+		m_draw_sync_fence = MRCTransfer([m_dev.dev newFence]);
+		[m_draw_sync_fence setLabel:@"Draw Sync Fence"];
+		m_spin_fence = MRCTransfer([m_dev.dev newFence]);
+		[m_spin_fence setLabel:@"Spin Fence"];
+		constexpr MTLResourceOptions spin_opts = MTLResourceStorageModePrivate | MTLResourceHazardTrackingModeUntracked;
+		m_spin_buffer = MRCTransfer([m_dev.dev newBufferWithLength:4 options:spin_opts]);
+		[m_spin_buffer setLabel:@"Spin Buffer"];
+		id<MTLCommandBuffer> initCommands = [m_queue commandBuffer];
+		id<MTLBlitCommandEncoder> clearSpinBuffer = [initCommands blitCommandEncoder];
+		[clearSpinBuffer fillBuffer:m_spin_buffer range:NSMakeRange(0, 4) value:0];
+		[clearSpinBuffer updateFence:m_spin_fence];
+		[clearSpinBuffer endEncoding];
+		m_spin_pipeline = MakeComputePipeline(LoadShader(@"waste_time"), @"waste_time");
+
+		for (int sharpen_only = 0; sharpen_only < 2; sharpen_only++)
+		{
+			setFnConstantB(m_fn_constants, sharpen_only, GSMTLConstantIndex_CAS_SHARPEN_ONLY);
+			NSString* shader = m_dev.features.has_fast_half ? @"CASHalf" : @"CASFloat";
+			m_cas_pipeline[sharpen_only] = MakeComputePipeline(LoadShader(shader), sharpen_only ? @"CAS Sharpen" : @"CAS Upscale");
+		}
 
 		m_hw_vertex = MRCTransfer([MTLVertexDescriptor new]);
 		[[[m_hw_vertex layouts] objectAtIndexedSubscript:GSMTLBufferIndexHWVertices] setStride:sizeof(GSVertex)];
@@ -712,7 +791,6 @@ bool GSDeviceMTL::Create(HostDisplay* display)
 
 		// Init samplers
 		MTLSamplerDescriptor* sdesc = [[MTLSamplerDescriptor new] autorelease];
-		const int anisotropy = theApp.GetConfigI("MaxAnisotropy");
 		for (size_t i = 0; i < std::size(m_sampler_hw); i++)
 		{
 			GSHWDrawConfig::SamplerSelector sel;
@@ -755,7 +833,7 @@ bool GSDeviceMTL::Create(HostDisplay* display)
 			sdesc.tAddressMode = sel.tav ? MTLSamplerAddressModeRepeat : MTLSamplerAddressModeClampToEdge;
 			sdesc.rAddressMode = MTLSamplerAddressModeClampToEdge;
 
-			sdesc.maxAnisotropy = anisotropy && sel.aniso ? anisotropy : 1;
+			sdesc.maxAnisotropy = GSConfig.MaxAnisotropy && sel.aniso ? GSConfig.MaxAnisotropy : 1;
 			sdesc.lodMaxClamp = sel.lodclamp ? 0.25f : FLT_MAX;
 
 			[sdesc setLabel:[NSString stringWithFormat:@"%s%s %s%s", taudesc, tavdesc, magname, minname]];
@@ -825,10 +903,18 @@ bool GSDeviceMTL::Create(HostDisplay* display)
 		{
 			VSSelector sel;
 			sel.key = i;
+			if (sel.point_size && sel.expand != GSMTLExpandType::None)
+				continue;
 			setFnConstantB(m_fn_constants, sel.fst,        GSMTLConstantIndex_FST);
 			setFnConstantB(m_fn_constants, sel.iip,        GSMTLConstantIndex_IIP);
 			setFnConstantB(m_fn_constants, sel.point_size, GSMTLConstantIndex_VS_POINT_SIZE);
-			m_hw_vs[i] = LoadShader(@"vs_main");
+			NSString* shader = @"vs_main";
+			if (sel.expand != GSMTLExpandType::None)
+			{
+				setFnConstantI(m_fn_constants, static_cast<u32>(sel.expand), GSMTLConstantIndex_VS_EXPAND_TYPE);
+				shader = @"vs_main_expand";
+			}
+			m_hw_vs[i] = LoadShader(shader);
 		}
 
 		// Init pipelines
@@ -838,11 +924,11 @@ bool GSDeviceMTL::Create(HostDisplay* display)
 		auto pdesc = [[MTLRenderPipelineDescriptor new] autorelease];
 		// FS Triangle Pipelines
 		pdesc.colorAttachments[0].pixelFormat = ConvertPixelFormat(GSTexture::Format::Color);
-		m_hdr_resolve_pipeline = MakePipeline(pdesc, fs_triangle, LoadShader(@"ps_mod256"), @"HDR Resolve");
+		m_hdr_resolve_pipeline = MakePipeline(pdesc, fs_triangle, LoadShader(@"ps_hdr_resolve"), @"HDR Resolve");
 		m_fxaa_pipeline = MakePipeline(pdesc, fs_triangle, LoadShader(@"ps_fxaa"), @"fxaa");
 		m_shadeboost_pipeline = MakePipeline(pdesc, fs_triangle, LoadShader(@"ps_shadeboost"), @"shadeboost");
-		pdesc.colorAttachments[0].pixelFormat = ConvertPixelFormat(GSTexture::Format::FloatColor);
-		m_hdr_init_pipeline = MakePipeline(pdesc, fs_triangle, LoadShader(@"ps_copy_fs"), @"HDR Init");
+		pdesc.colorAttachments[0].pixelFormat = ConvertPixelFormat(GSTexture::Format::HDRColor);
+		m_hdr_init_pipeline = MakePipeline(pdesc, fs_triangle, LoadShader(@"ps_hdr_init"), @"HDR Init");
 		pdesc.colorAttachments[0].pixelFormat = MTLPixelFormatInvalid;
 		pdesc.stencilAttachmentPixelFormat = MTLPixelFormatDepth32Float_Stencil8;
 		m_datm_pipeline[0] = MakePipeline(pdesc, fs_triangle, LoadShader(@"ps_datm0"), @"datm0");
@@ -873,19 +959,12 @@ bool GSDeviceMTL::Create(HostDisplay* display)
 			NSString* name = [NSString stringWithCString:shaderName(conv) encoding:NSUTF8StringEncoding];
 			switch (conv)
 			{
+				case ShaderConvert::COPY:
 				case ShaderConvert::Count:
 				case ShaderConvert::DATM_0:
 				case ShaderConvert::DATM_1:
-				case ShaderConvert::MOD_256:
-					continue;
-				case ShaderConvert::COPY:
-				case ShaderConvert::SCANLINE:
-				case ShaderConvert::DIAGONAL_FILTER:
-				case ShaderConvert::TRIANGULAR_FILTER:
-				case ShaderConvert::COMPLEX_FILTER:
-					pdesc.colorAttachments[0].pixelFormat = layer_px_fmt;
-					pdesc.depthAttachmentPixelFormat = MTLPixelFormatInvalid;
-					m_present_pipeline[i] = MakePipeline(pdesc, vs_convert, LoadShader(name), [NSString stringWithFormat:@"present_%s", shaderName(conv) + 3]);
+				case ShaderConvert::HDR_INIT:
+				case ShaderConvert::HDR_RESOLVE:
 					continue;
 				case ShaderConvert::FLOAT32_TO_32_BITS:
 					pdesc.colorAttachments[0].pixelFormat = ConvertPixelFormat(GSTexture::Format::UInt32);
@@ -901,6 +980,10 @@ bool GSDeviceMTL::Create(HostDisplay* display)
 				case ShaderConvert::RGBA8_TO_FLOAT24:
 				case ShaderConvert::RGBA8_TO_FLOAT16:
 				case ShaderConvert::RGB5A1_TO_FLOAT16:
+				case ShaderConvert::RGBA8_TO_FLOAT32_BILN:
+				case ShaderConvert::RGBA8_TO_FLOAT24_BILN:
+				case ShaderConvert::RGBA8_TO_FLOAT16_BILN:
+				case ShaderConvert::RGB5A1_TO_FLOAT16_BILN:
 					pdesc.colorAttachments[0].pixelFormat = MTLPixelFormatInvalid;
 					pdesc.depthAttachmentPixelFormat = ConvertPixelFormat(GSTexture::Format::DepthStencil);
 					break;
@@ -916,9 +999,16 @@ bool GSDeviceMTL::Create(HostDisplay* display)
 			m_convert_pipeline[i] = MakePipeline(pdesc, vs_convert, LoadShader(name), name);
 		}
 		pdesc.depthAttachmentPixelFormat = MTLPixelFormatInvalid;
+		for (size_t i = 0; i < std::size(m_present_pipeline); i++)
+		{
+			PresentShader conv = static_cast<PresentShader>(i);
+			NSString* name = [NSString stringWithCString:shaderName(conv) encoding:NSUTF8StringEncoding];
+			pdesc.colorAttachments[0].pixelFormat = layer_px_fmt;
+			m_present_pipeline[i] = MakePipeline(pdesc, vs_convert, LoadShader(name), [NSString stringWithFormat:@"present_%s", shaderName(conv) + 3]);
+		}
 		pdesc.colorAttachments[0].pixelFormat = ConvertPixelFormat(GSTexture::Format::Color);
 		m_convert_pipeline_copy[0] = MakePipeline(pdesc, vs_convert, ps_copy, @"copy_color");
-		pdesc.colorAttachments[0].pixelFormat = ConvertPixelFormat(GSTexture::Format::FloatColor);
+		pdesc.colorAttachments[0].pixelFormat = ConvertPixelFormat(GSTexture::Format::HDRColor);
 		m_convert_pipeline_copy[1] = MakePipeline(pdesc, vs_convert, ps_copy, @"copy_hdr");
 
 		pdesc.colorAttachments[0].pixelFormat = MTLPixelFormatRGBA8Unorm;
@@ -983,73 +1073,12 @@ void GSDeviceMTL::ClearStencil(GSTexture* t, uint8 c)
 	static_cast<GSTextureMTL*>(t)->RequestStencilClear(c);
 }
 
-bool GSDeviceMTL::DownloadTexture(GSTexture* src, const GSVector4i& rect, GSTexture::GSMap& out_map)
-{ @autoreleasepool {
-	ASSERT(src);
-	EndRenderPass();
-	GSTextureMTL* msrc = static_cast<GSTextureMTL*>(src);
-	out_map.pitch = msrc->GetCompressedBytesPerBlock() * rect.width();
-	size_t size = out_map.pitch * rect.height();
-	if ([m_texture_download_buf length] < size)
-		m_texture_download_buf = MRCTransfer([m_dev.dev newBufferWithLength:size options:MTLResourceStorageModeShared]);
-	pxAssertRel(m_texture_download_buf, "Failed to allocate download buffer (out of memory?)");
+std::unique_ptr<GSDownloadTexture> GSDeviceMTL::CreateDownloadTexture(u32 width, u32 height, GSTexture::Format format)
+{
+	return GSDownloadTextureMTL::Create(this, width, height, format);
+}
 
-	MRCOwned<id<MTLCommandBuffer>> cmdbuf = MRCRetain(GetRenderCmdBuf());
-	[cmdbuf pushDebugGroup:@"DownloadTexture"];
-	id<MTLBlitCommandEncoder> encoder = [cmdbuf blitCommandEncoder];
-	[encoder copyFromTexture:msrc->GetTexture()
-				 sourceSlice:0
-				 sourceLevel:0
-				sourceOrigin:MTLOriginMake(rect.x, rect.y, 0)
-				  sourceSize:MTLSizeMake(rect.width(), rect.height(), 1)
-					toBuffer:m_texture_download_buf
-		   destinationOffset:0
-	  destinationBytesPerRow:out_map.pitch
-	destinationBytesPerImage:size];
-	if (m_spin_enable)
-		[encoder updateFence:m_draw_sync_fence];
-	[encoder endEncoding];
-	[cmdbuf popDebugGroup];
-
-	FlushEncoders();
-	if (m_spin_enable)
-	{
-		if (@available(macOS 10.15, iOS 10.3, *))
-		{
-			id<MTLCommandBuffer> spin_cmdbuf = [m_queue commandBuffer];
-			id<MTLComputeCommandEncoder> spin_enc = [spin_cmdbuf computeCommandEncoder];
-			[spin_enc waitForFence:m_draw_sync_fence];
-			if (!m_spin_pipeline)
-				m_spin_pipeline = MRCTransfer([m_dev.dev newComputePipelineStateWithFunction:LoadShader(@"waste_time") error:nil]);
-			if (!m_spin_buf)
-				m_spin_buf = MRCTransfer([m_dev.dev newBufferWithLength:4 options:MTLResourceStorageModeShared]);
-			*(u32*)[m_spin_buf contents] = 0;
-			[spin_enc setComputePipelineState:m_spin_pipeline];
-			[spin_enc setBuffer:m_spin_buf offset:0 atIndex:1];
-			if (m_spin_cycles < 1024)
-				m_spin_cycles = 1024;
-			// Console.WriteLn("Metal: Spin %d iters", m_spin_cycles);
-			[spin_enc setBytes:&m_spin_cycles length:4 atIndex:0];
-			[spin_enc dispatchThreads:MTLSizeMake(1, 1, 1) threadsPerThreadgroup:MTLSizeMake(1, 1, 1)];
-			[spin_enc endEncoding];
-			[spin_cmdbuf commit];
-			m_last_spin_cmdbuf = MRCRetain(spin_cmdbuf);
-			// Don't let the CPU go to sleep either!
-			while (![cmdbuf GPUEndTime])
-				ShortSpin();
-
-			m_spin_timer.Reset();
-		}
-	}
-
-	[cmdbuf waitUntilCompleted];
-
-	out_map.bits = static_cast<u8*>([m_texture_download_buf contents]);
-	g_perfmon.Put(GSPerfMon::Readbacks, 1);
-	return true;
-}}
-
-void GSDeviceMTL::CopyRect(GSTexture* sTex, GSTexture* dTex, const GSVector4i& r)
+void GSDeviceMTL::CopyRect(GSTexture* sTex, GSTexture* dTex, const GSVector4i& r, u32 destX, u32 destY)
 { @autoreleasepool {
 	g_perfmon.Put(GSPerfMon::TextureCopies, 1);
 
@@ -1072,14 +1101,14 @@ void GSDeviceMTL::CopyRect(GSTexture* sTex, GSTexture* dTex, const GSVector4i& r
 	id<MTLBlitCommandEncoder> encoder = [cmdbuf blitCommandEncoder];
 	[encoder setLabel:@"CopyRect"];
 	[encoder copyFromTexture:sT->GetTexture()
-				 sourceSlice:0
-				 sourceLevel:0
-				sourceOrigin:MTLOriginMake(r.x, r.y, 0)
-				  sourceSize:MTLSizeMake(r.width(), r.height(), 1)
-				   toTexture:dT->GetTexture()
-			destinationSlice:0
-			destinationLevel:0
-		   destinationOrigin:MTLOriginMake(0, 0, 0)];
+	             sourceSlice:0
+	             sourceLevel:0
+	            sourceOrigin:MTLOriginMake(r.x, r.y, 0)
+	              sourceSize:MTLSizeMake(r.width(), r.height(), 1)
+	               toTexture:dT->GetTexture()
+	        destinationSlice:0
+	        destinationLevel:0
+	       destinationOrigin:MTLOriginMake((int)destX, (int)destY, 0)];
 	[encoder endEncoding];
 }}
 
@@ -1095,9 +1124,9 @@ void GSDeviceMTL::DoStretchRect(GSTexture* sTex, const GSVector4& sRect, GSTextu
 	GSVector2i ds = dT->GetSize();
 
 	bool covers_target = static_cast<int>(dRect.x) <= 0
-					  && static_cast<int>(dRect.y) <= 0
-					  && static_cast<int>(dRect.z) >= ds.x
-					  && static_cast<int>(dRect.w) >= ds.y;
+	                  && static_cast<int>(dRect.y) <= 0
+	                  && static_cast<int>(dRect.z) >= ds.x
+	                  && static_cast<int>(dRect.w) >= ds.y;
 	bool dontcare = load_action == LoadAction::DontCare || (load_action == LoadAction::DontCareIfFull && covers_target);
 	MTLLoadAction action = dontcare ? MTLLoadActionDontCare : MTLLoadActionLoad;
 
@@ -1144,8 +1173,8 @@ void GSDeviceMTL::DrawStretchRect(const GSVector4& sRect, const GSVector4& dRect
 	[m_current_render.encoder setVertexBytes:vertices length:sizeof(vertices) atIndex:GSMTLBufferIndexVertices];
 
 	[m_current_render.encoder drawPrimitives:MTLPrimitiveTypeTriangleStrip
-								 vertexStart:0
-								 vertexCount:4];
+	                             vertexStart:0
+	                             vertexCount:4];
 	g_perfmon.Put(GSPerfMon::DrawCalls, 1);
 }
 
@@ -1161,17 +1190,10 @@ void GSDeviceMTL::RenderCopy(GSTexture* sTex, id<MTLRenderPipelineState> pipelin
 
 void GSDeviceMTL::StretchRect(GSTexture* sTex, const GSVector4& sRect, GSTexture* dTex, const GSVector4& dRect, ShaderConvert shader, bool linear)
 { @autoreleasepool {
-	if (!dTex)
-	{
-		// !dTex → "Present with the current draw encoder"
-		[m_current_render.encoder setRenderPipelineState:m_present_pipeline[static_cast<int>(shader)]];
-		[m_current_render.encoder setFragmentSamplerState:m_sampler_hw[linear ? SamplerSelector::Linear().key : SamplerSelector::Point().key] atIndex:0];
-		[m_current_render.encoder setFragmentTexture:static_cast<GSTextureMTL*>(sTex)->GetTexture() atIndex:0];
-		DrawStretchRect(sRect, dRect, GSVector2i(m_display->GetWindowWidth(), m_display->GetWindowHeight()));
-		return;
-	}
-
 	id<MTLRenderPipelineState> pipeline;
+
+	pxAssert(linear ? SupportsBilinear(shader) : SupportsNearest(shader));
+
 	if (shader == ShaderConvert::COPY)
 		pipeline = m_convert_pipeline_copy[dTex->GetFormat() == GSTexture::Format::Color ? 0 : 1];
 	else
@@ -1196,6 +1218,52 @@ void GSDeviceMTL::StretchRect(GSTexture* sTex, const GSVector4& sRect, GSTexture
 	DoStretchRect(sTex, sRect, dTex, dRect, pipeline, false, sel == 15 ? LoadAction::DontCareIfFull : LoadAction::Load, nullptr, 0);
 }}
 
+static_assert(sizeof(DisplayConstantBuffer) == sizeof(GSMTLPresentPSUniform));
+static_assert(offsetof(DisplayConstantBuffer, SourceRect)          == offsetof(GSMTLPresentPSUniform, source_rect));
+static_assert(offsetof(DisplayConstantBuffer, TargetRect)          == offsetof(GSMTLPresentPSUniform, target_rect));
+static_assert(offsetof(DisplayConstantBuffer, TargetSize)          == offsetof(GSMTLPresentPSUniform, target_size));
+static_assert(offsetof(DisplayConstantBuffer, TargetResolution)    == offsetof(GSMTLPresentPSUniform, target_resolution));
+static_assert(offsetof(DisplayConstantBuffer, RcpTargetResolution) == offsetof(GSMTLPresentPSUniform, rcp_target_resolution));
+static_assert(offsetof(DisplayConstantBuffer, SourceResolution)    == offsetof(GSMTLPresentPSUniform, source_resolution));
+static_assert(offsetof(DisplayConstantBuffer, RcpSourceResolution) == offsetof(GSMTLPresentPSUniform, rcp_source_resolution));
+static_assert(offsetof(DisplayConstantBuffer, TimeAndPad.x)        == offsetof(GSMTLPresentPSUniform, time));
+
+void GSDeviceMTL::PresentRect(GSTexture* sTex, const GSVector4& sRect, GSTexture* dTex, const GSVector4& dRect, PresentShader shader, float shaderTime, bool linear)
+{ @autoreleasepool {
+	GSVector2i ds = dTex ? dTex->GetSize() : GSVector2i(g_host_display->GetWindowWidth(), g_host_display->GetWindowHeight());
+	DisplayConstantBuffer cb;
+	cb.SetSource(sRect, sTex->GetSize());
+	cb.SetTarget(dRect, ds);
+	cb.SetTime(shaderTime);
+	id<MTLRenderPipelineState> pipe = m_present_pipeline[static_cast<int>(shader)];
+
+	if (dTex)
+	{
+		DoStretchRect(sTex, sRect, dTex, dRect, pipe, linear, LoadAction::DontCareIfFull, &cb, sizeof(cb));
+	}
+	else
+	{
+		// !dTex → Use current draw encoder
+		[m_current_render.encoder setRenderPipelineState:pipe];
+		[m_current_render.encoder setFragmentSamplerState:m_sampler_hw[linear ? SamplerSelector::Linear().key : SamplerSelector::Point().key] atIndex:0];
+		[m_current_render.encoder setFragmentTexture:static_cast<GSTextureMTL*>(sTex)->GetTexture() atIndex:0];
+		[m_current_render.encoder setFragmentBytes:&cb length:sizeof(cb) atIndex:GSMTLBufferIndexUniforms];
+		DrawStretchRect(sRect, dRect, ds);
+	}
+}}
+
+void GSDeviceMTL::UpdateCLUTTexture(GSTexture* sTex, u32 offsetX, u32 offsetY, GSTexture* dTex, u32 dOffset, u32 dSize)
+{
+	GSMTLCLUTConvertPSUniform uniform = { ToSimd(sTex->GetScale()), {offsetX, offsetY}, dOffset };
+
+	const bool is_clut4 = dSize == 16;
+	const GSVector4i dRect(0, 0, dSize, 1);
+
+	BeginRenderPass(@"CLUT Update", dTex, MTLLoadActionDontCare, nullptr, MTLLoadActionDontCare);
+	[m_current_render.encoder setFragmentBytes:&uniform length:sizeof(uniform) atIndex:GSMTLBufferIndexUniforms];
+	RenderCopy(sTex, m_clut_pipeline[!is_clut4], dRect);
+}
+
 void GSDeviceMTL::FlushClears(GSTexture* tex)
 {
 	if (tex)
@@ -1204,17 +1272,49 @@ void GSDeviceMTL::FlushClears(GSTexture* tex)
 
 // MARK: - MainRenderEncoder Operations
 
-static bool isDualSourceBlend(u32 factor)
+static MTLBlendFactor ConvertBlendFactor(GSDevice::BlendFactor generic)
 {
-	switch (factor)
+	switch (generic)
 	{
-		case MTLBlendFactorSource1Color:
-		case MTLBlendFactorSource1Alpha:
-		case MTLBlendFactorOneMinusSource1Color:
-		case MTLBlendFactorOneMinusSource1Alpha:
-			return true;
-		default:
-			return false;
+		case GSDevice::SRC_COLOR:       return MTLBlendFactorSourceColor;
+		case GSDevice::INV_SRC_COLOR:   return MTLBlendFactorOneMinusSourceColor;
+		case GSDevice::DST_COLOR:       return MTLBlendFactorDestinationColor;
+		case GSDevice::INV_DST_COLOR:   return MTLBlendFactorOneMinusBlendColor;
+		case GSDevice::SRC1_COLOR:      return MTLBlendFactorSource1Color;
+		case GSDevice::INV_SRC1_COLOR:  return MTLBlendFactorOneMinusSource1Color;
+		case GSDevice::SRC_ALPHA:       return MTLBlendFactorSourceAlpha;
+		case GSDevice::INV_SRC_ALPHA:   return MTLBlendFactorOneMinusSourceAlpha;
+		case GSDevice::DST_ALPHA:       return MTLBlendFactorDestinationAlpha;
+		case GSDevice::INV_DST_ALPHA:   return MTLBlendFactorOneMinusDestinationAlpha;
+		case GSDevice::SRC1_ALPHA:      return MTLBlendFactorSource1Alpha;
+		case GSDevice::INV_SRC1_ALPHA:  return MTLBlendFactorOneMinusSource1Alpha;
+		case GSDevice::CONST_COLOR:     return MTLBlendFactorBlendColor;
+		case GSDevice::INV_CONST_COLOR: return MTLBlendFactorOneMinusBlendColor;
+		case GSDevice::CONST_ONE:       return MTLBlendFactorOne;
+		case GSDevice::CONST_ZERO:      return MTLBlendFactorZero;
+	}
+}
+
+static MTLBlendOperation ConvertBlendOp(GSDevice::BlendOp generic)
+{
+	switch (generic)
+	{
+		case GSDevice::OP_ADD:          return MTLBlendOperationAdd;
+		case GSDevice::OP_SUBTRACT:     return MTLBlendOperationSubtract;
+		case GSDevice::OP_REV_SUBTRACT: return MTLBlendOperationReverseSubtract;
+	}
+}
+
+static constexpr MTLColorWriteMask MTLColorWriteMaskRGB = MTLColorWriteMaskRed | MTLColorWriteMaskGreen | MTLColorWriteMaskBlue;
+
+static GSMTLExpandType ConvertVSExpand(GSHWDrawConfig::VSExpand generic)
+{
+	switch (generic)
+	{
+		case GSHWDrawConfig::VSExpand::None:   return GSMTLExpandType::None;
+		case GSHWDrawConfig::VSExpand::Point:  return GSMTLExpandType::Point;
+		case GSHWDrawConfig::VSExpand::Line:   return GSMTLExpandType::Line;
+		case GSHWDrawConfig::VSExpand::Sprite: return GSMTLExpandType::Sprite;
 	}
 }
 
@@ -1234,26 +1334,16 @@ void GSDeviceMTL::MRESetHWPipelineState(GSHWDrawConfig::VSSelector vssel, GSHWDr
 	}
 
 	bool primid_tracking_init = pssel.date == 1 || pssel.date == 2;
-	HWBlend b = GetBlend(extras.blend);
-	if (extras.accumulation_blend)
-		b.src = b.dst = MTLBlendFactorOne;
-	if (extras.mixed_hw_sw_blend)
-		b.src = MTLBlendFactorOne;
 
 	VSSelector vssel_mtl;
 	vssel_mtl.fst = vssel.fst;
 	vssel_mtl.iip = vssel.iip;
 	vssel_mtl.point_size = vssel.point_size;
+	vssel_mtl.expand = ConvertVSExpand(vssel.expand);
 	id<MTLFunction> vs = m_hw_vs[vssel_mtl.key];
 
 	id<MTLFunction> ps;
-	// Stupid Intel bug: Outputting to Src1 without using it makes depth randomly not write (see https://github.com/tellowkrinkle/MetalBugReproduction/releases/tag/BrokenDepthWrite)
-	// Solution: Only output to Src1 if you actually need it
-	bool dual_source_blend = !primid_tracking_init && (isDualSourceBlend(b.src) || isDualSourceBlend(b.dst));
-	u64 pskey = pssel.key;
-	if (dual_source_blend)
-		pskey = ~pskey; // Didn't feel like finding another open bit
-	auto idx2 = m_hw_ps.find(pskey);
+	auto idx2 = m_hw_ps.find(pssel);
 	if (idx2 != m_hw_ps.end())
 	{
 		ps = idx2->second;
@@ -1287,8 +1377,13 @@ void GSDeviceMTL::MRESetHWPipelineState(GSHWDrawConfig::VSSelector vssel, GSHWDr
 		setFnConstantI(m_fn_constants, pssel.clr_hw,             GSMTLConstantIndex_PS_CLR_HW);
 		setFnConstantB(m_fn_constants, pssel.hdr,                GSMTLConstantIndex_PS_HDR);
 		setFnConstantB(m_fn_constants, pssel.colclip,            GSMTLConstantIndex_PS_COLCLIP);
-		setFnConstantB(m_fn_constants, pssel.blend_mix,          GSMTLConstantIndex_PS_BLEND_MIX);
+		setFnConstantI(m_fn_constants, pssel.blend_mix,          GSMTLConstantIndex_PS_BLEND_MIX);
+		setFnConstantB(m_fn_constants, pssel.fixed_one_a,        GSMTLConstantIndex_PS_FIXED_ONE_A);
 		setFnConstantB(m_fn_constants, pssel.pabe,               GSMTLConstantIndex_PS_PABE);
+		setFnConstantB(m_fn_constants, pssel.no_color,           GSMTLConstantIndex_PS_NO_COLOR);
+		setFnConstantB(m_fn_constants, pssel.no_color1,          GSMTLConstantIndex_PS_NO_COLOR1);
+		// no_ablend ignored for now (No Metal driver has had DSB so broken that it's needed to be disabled, though Intel's was pretty close)
+		setFnConstantB(m_fn_constants, pssel.only_alpha,         GSMTLConstantIndex_PS_ONLY_ALPHA);
 		setFnConstantI(m_fn_constants, pssel.channel,            GSMTLConstantIndex_PS_CHANNEL);
 		setFnConstantI(m_fn_constants, pssel.dither,             GSMTLConstantIndex_PS_DITHER);
 		setFnConstantB(m_fn_constants, pssel.zclamp,             GSMTLConstantIndex_PS_ZCLAMP);
@@ -1301,14 +1396,18 @@ void GSDeviceMTL::MRESetHWPipelineState(GSHWDrawConfig::VSSelector vssel, GSHWDr
 		setFnConstantB(m_fn_constants, pssel.point_sampler,      GSMTLConstantIndex_PS_POINT_SAMPLER);
 		setFnConstantB(m_fn_constants, pssel.invalid_tex0,       GSMTLConstantIndex_PS_INVALID_TEX0);
 		setFnConstantI(m_fn_constants, pssel.scanmsk,            GSMTLConstantIndex_PS_SCANMSK);
-		setFnConstantB(m_fn_constants, dual_source_blend,        GSMTLConstantIndex_PS_DUAL_SOURCE_BLEND);
 		auto newps = LoadShader(@"ps_main");
 		ps = newps;
-		m_hw_ps.insert(std::make_pair(pskey, std::move(newps)));
+		m_hw_ps.insert(std::make_pair(pssel, std::move(newps)));
 	}
 
 	MRCOwned<MTLRenderPipelineDescriptor*> pdesc = MRCTransfer([MTLRenderPipelineDescriptor new]);
-	[pdesc setVertexDescriptor:m_hw_vertex];
+	if (vssel_mtl.point_size)
+		[pdesc setInputPrimitiveTopology:MTLPrimitiveTopologyClassPoint];
+	if (vssel_mtl.expand == GSMTLExpandType::None)
+		[pdesc setVertexDescriptor:m_hw_vertex];
+	else
+		[pdesc setInputPrimitiveTopology:MTLPrimitiveTopologyClassTriangle];
 	MTLRenderPipelineColorAttachmentDescriptor* color = [[pdesc colorAttachments] objectAtIndexedSubscript:0];
 	color.pixelFormat = ConvertPixelFormat(extras.rt);
 	[pdesc setDepthAttachmentPixelFormat:extras.has_depth ? MTLPixelFormatDepth32Float_Stencil8 : MTLPixelFormatInvalid];
@@ -1320,15 +1419,17 @@ void GSDeviceMTL::MRESetHWPipelineState(GSHWDrawConfig::VSSelector vssel, GSHWDr
 		color.rgbBlendOperation = MTLBlendOperationMin;
 		color.sourceRGBBlendFactor = MTLBlendFactorOne;
 		color.destinationRGBBlendFactor = MTLBlendFactorOne;
+		color.writeMask = MTLColorWriteMaskRed;
 	}
-	else if (extras.blend)
+	else if (extras.blend_enable && (extras.writemask & MTLColorWriteMaskRGB))
 	{
 		color.blendingEnabled = YES;
-		color.rgbBlendOperation = static_cast<MTLBlendOperation>(b.op);
-		color.sourceRGBBlendFactor = static_cast<MTLBlendFactor>(b.src);
-		color.destinationRGBBlendFactor = static_cast<MTLBlendFactor>(b.dst);
+		color.rgbBlendOperation = ConvertBlendOp(extras.blend_op);
+		color.sourceRGBBlendFactor = ConvertBlendFactor(extras.src_factor);
+		color.destinationRGBBlendFactor = ConvertBlendFactor(extras.dst_factor);
 	}
-	auto pipeline = MakePipeline(pdesc, vs, ps, [NSString stringWithFormat:@"HW Render %x.%llx.%x", vssel_mtl.key, pssel.key, extras.key]);
+	NSString* pname = [NSString stringWithFormat:@"HW Render %x.%x.%llx.%x", vssel_mtl.key, pssel.key_hi, pssel.key_lo, extras.fullkey()];
+	auto pipeline = MakePipeline(pdesc, vs, ps, pname);
 
 	[m_current_render.encoder setRenderPipelineState:pipeline];
 	m_hw_pipeline.insert(std::make_pair(fullsel, std::move(pipeline)));
@@ -1361,8 +1462,8 @@ static void textureBarrier(id<MTLRenderCommandEncoder> enc)
 {
 	if (@available(macOS 10.14, *)) {
 		[enc memoryBarrierWithScope:MTLBarrierScopeRenderTargets
-						afterStages:MTLRenderStageFragment
-					   beforeStages:MTLRenderStageFragment];
+		                afterStages:MTLRenderStageFragment
+		               beforeStages:MTLRenderStageFragment];
 	} else {
 		[enc textureBarrier];
 	}
@@ -1460,14 +1561,16 @@ void GSDeviceMTL::MRESetPipeline(id<MTLRenderPipelineState> pipe)
 
 // MARK: - HW Render
 
-template <typename Dst, typename Src>
-void bitcpy(Dst& dst, const Src& src)
-{
-	static_assert(sizeof(dst) == sizeof(src), "Must be the same size");
-	memcpy(&dst, &src, sizeof(dst));
-}
-
 // Metal can't import GSDevice.h, but we should make sure the structs are at least compatible
+static_assert(sizeof(GSVertex) == sizeof(GSMTLMainVertex));
+static_assert(offsetof(GSVertex, ST)      == offsetof(GSMTLMainVertex, st));
+static_assert(offsetof(GSVertex, RGBAQ.R) == offsetof(GSMTLMainVertex, rgba));
+static_assert(offsetof(GSVertex, RGBAQ.Q) == offsetof(GSMTLMainVertex, q));
+static_assert(offsetof(GSVertex, XYZ.X)   == offsetof(GSMTLMainVertex, xy));
+static_assert(offsetof(GSVertex, XYZ.Z)   == offsetof(GSMTLMainVertex, z));
+static_assert(offsetof(GSVertex, UV)      == offsetof(GSMTLMainVertex, uv));
+static_assert(offsetof(GSVertex, FOG)     == offsetof(GSMTLMainVertex, fog));
+
 static_assert(sizeof(GSHWDrawConfig::VSConstantBuffer) == sizeof(GSMTLMainVSUniform));
 static_assert(sizeof(GSHWDrawConfig::PSConstantBuffer) == sizeof(GSMTLMainPSUniform));
 static_assert(offsetof(GSHWDrawConfig::VSConstantBuffer, vertex_scale)     == offsetof(GSMTLMainVSUniform, vertex_scale));
@@ -1522,13 +1625,6 @@ void GSDeviceMTL::MREInitHWDraw(GSHWDrawConfig& config, const Map& verts)
 
 void GSDeviceMTL::RenderHW(GSHWDrawConfig& config)
 { @autoreleasepool {
-	if (m_dev.features.framebuffer_fetch)
-	{
-		config.require_one_barrier = false;
-		config.require_full_barrier = false;
-		config.drawlist = nullptr;
-	}
-
 	if (config.topology == GSHWDrawConfig::Topology::Point)
 		config.vs.point_size = 1; // M1 requires point size output on *all* points
 
@@ -1592,7 +1688,7 @@ void GSDeviceMTL::RenderHW(GSHWDrawConfig& config)
 	if (config.ps.hdr)
 	{
 		GSVector2i size = config.rt->GetSize();
-		hdr_rt = CreateRenderTarget(size.x, size.y, GSTexture::Format::FloatColor);
+		hdr_rt = CreateRenderTarget(size.x, size.y, GSTexture::Format::HDRColor);
 		BeginRenderPass(@"HDR Init", hdr_rt, MTLLoadActionDontCare, nullptr, MTLLoadActionDontCare);
 		RenderCopy(config.rt, m_hdr_init_pipeline, config.drawarea);
 		rt = hdr_rt;
@@ -1605,8 +1701,7 @@ void GSDeviceMTL::RenderHW(GSHWDrawConfig& config)
 	if (!config.ds && m_current_render.color_target == rt && stencil == m_current_render.stencil_target && m_current_render.depth_target != config.tex)
 		config.ds = m_current_render.depth_target;
 
-	GSVector2i rtsize = m_enable_small_rt ? GSVector2i(config.scissor.z, config.scissor.w) : GSVector2i(0, 0);
-	BeginRenderPass(@"RenderHW", rt, MTLLoadActionLoad, config.ds, MTLLoadActionLoad, stencil, MTLLoadActionLoad, rtsize);
+	BeginRenderPass(@"RenderHW", rt, MTLLoadActionLoad, config.ds, MTLLoadActionLoad, stencil, MTLLoadActionLoad);
 	id<MTLRenderCommandEncoder> mtlenc = m_current_render.encoder;
 	FlushDebugEntries(mtlenc);
 	MREInitHWDraw(config, allocation);
@@ -1614,8 +1709,8 @@ void GSDeviceMTL::RenderHW(GSHWDrawConfig& config)
 		MRESetTexture(config.rt, GSMTLTextureIndexRenderTarget);
 	if (primid_tex)
 		MRESetTexture(primid_tex, GSMTLTextureIndexPrimIDs);
-	if (config.blend.index && config.blend.is_constant)
-		MRESetBlendColor(config.blend.factor);
+	if (config.blend.constant_enable)
+		MRESetBlendColor(config.blend.constant);
 	MRESetHWPipelineState(config.vs, config.ps, config.blend, config.colormask);
 	MRESetDSS(config.depth);
 
@@ -1673,31 +1768,35 @@ void GSDeviceMTL::SendHWDraw(GSHWDrawConfig& config, id<MTLRenderCommandEncoder>
 			config.nindices / config.indices_per_prim, config.drawlist->size(), message.c_str()]];
 #endif
 
+
+		g_perfmon.Put(GSPerfMon::DrawCalls, config.drawlist->size());
+		g_perfmon.Put(GSPerfMon::Barriers, config.drawlist->size());
 		for (size_t count = 0, p = 0, n = 0; n < config.drawlist->size(); p += count, ++n)
 		{
 			count = (*config.drawlist)[n] * config.indices_per_prim;
 			textureBarrier(enc);
 			[enc drawIndexedPrimitives:topology
-							indexCount:count
-							 indexType:MTLIndexTypeUInt32
-						   indexBuffer:buffer
-					 indexBufferOffset:off + p * sizeof(*config.indices)];
-			g_perfmon.Put(GSPerfMon::DrawCalls, 1);
+			                indexCount:count
+			                 indexType:MTLIndexTypeUInt32
+			               indexBuffer:buffer
+			         indexBufferOffset:off + p * sizeof(*config.indices)];
 		}
 		[enc popDebugGroup];
 	}
 	else if (config.require_full_barrier)
 	{
-		[enc pushDebugGroup:[NSString stringWithFormat:@"Full barrier split draw (%d prims)", config.nindices / config.indices_per_prim]];
+		const u32 ndraws = config.nindices / config.indices_per_prim;
+		g_perfmon.Put(GSPerfMon::DrawCalls, ndraws);
+		g_perfmon.Put(GSPerfMon::Barriers, ndraws);
+		[enc pushDebugGroup:[NSString stringWithFormat:@"Full barrier split draw (%d prims)", ndraws]];
 		for (size_t p = 0; p < config.nindices; p += config.indices_per_prim)
 		{
 			textureBarrier(enc);
 			[enc drawIndexedPrimitives:topology
-							indexCount:config.indices_per_prim
-							 indexType:MTLIndexTypeUInt32
-						   indexBuffer:buffer
-					 indexBufferOffset:off + p * sizeof(*config.indices)];
-			g_perfmon.Put(GSPerfMon::DrawCalls, 1);
+			                indexCount:config.indices_per_prim
+			                 indexType:MTLIndexTypeUInt32
+			               indexBuffer:buffer
+			         indexBufferOffset:off + p * sizeof(*config.indices)];
 		}
 		[enc popDebugGroup];
 	}
@@ -1706,20 +1805,21 @@ void GSDeviceMTL::SendHWDraw(GSHWDrawConfig& config, id<MTLRenderCommandEncoder>
 		// One barrier needed
 		textureBarrier(enc);
 		[enc drawIndexedPrimitives:topology
-						indexCount:config.nindices
-						 indexType:MTLIndexTypeUInt32
-					   indexBuffer:buffer
-				 indexBufferOffset:off];
+		                indexCount:config.nindices
+		                 indexType:MTLIndexTypeUInt32
+		               indexBuffer:buffer
+		         indexBufferOffset:off];
 		g_perfmon.Put(GSPerfMon::DrawCalls, 1);
+		g_perfmon.Put(GSPerfMon::Barriers, 1);
 	}
 	else
 	{
 		// No barriers needed
 		[enc drawIndexedPrimitives:topology
-						indexCount:config.nindices
-						 indexType:MTLIndexTypeUInt32
-					   indexBuffer:buffer
-				 indexBufferOffset:off];
+		                indexCount:config.nindices
+		                 indexType:MTLIndexTypeUInt32
+		               indexBuffer:buffer
+		         indexBufferOffset:off];
 		g_perfmon.Put(GSPerfMon::DrawCalls, 1);
 	}
 }

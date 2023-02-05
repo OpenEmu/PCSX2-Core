@@ -22,7 +22,6 @@
 #include "common/ScopedGuard.h"
 #include "common/StringUtil.h"
 #include "common/GL/Program.h"
-
 #include <array>
 #include <tuple>
 
@@ -44,38 +43,40 @@ public:
 	u32 GetHeight() const override { return m_height; }
 
 	GLuint GetGLID() const { return m_texture; }
-	
+
 private:
 	GLuint m_texture;
 	u32 m_width;
 	u32 m_height;
-	u32 m_layers;
-	u32 m_levels;
 };
 
 OpenGLHostDisplay::OpenGLHostDisplay() = default;
 
 OpenGLHostDisplay::~OpenGLHostDisplay()
 {
-	pxAssertMsg(!m_gl_context, "Context should have been destroyed by now");
+	if (m_gl_context)
+	{
+		m_gl_context->DoneCurrent();
+		m_gl_context.reset();
+	}
 }
 
-HostDisplay::RenderAPI OpenGLHostDisplay::GetRenderAPI() const
+RenderAPI OpenGLHostDisplay::GetRenderAPI() const
 {
 	return m_gl_context->IsGLES() ? RenderAPI::OpenGLES : RenderAPI::OpenGL;
 }
 
-void* OpenGLHostDisplay::GetRenderDevice() const
+void* OpenGLHostDisplay::GetDevice() const
 {
 	return nullptr;
 }
 
-void* OpenGLHostDisplay::GetRenderContext() const
+void* OpenGLHostDisplay::GetContext() const
 {
 	return m_gl_context.get();
 }
 
-void* OpenGLHostDisplay::GetRenderSurface() const
+void* OpenGLHostDisplay::GetSurface() const
 {
 	return nullptr;
 }
@@ -85,14 +86,25 @@ std::unique_ptr<HostDisplayTexture> OpenGLHostDisplay::CreateTexture(u32 width, 
 	// clear error
 	glGetError();
 
+	// don't worry, I'm planning on removing this eventually - we'll use GSTexture instead.
+	glActiveTexture(GL_TEXTURE7);
+
 	GLuint id;
 	glGenTextures(1, &id);
 	glBindTexture(GL_TEXTURE_2D, id);
 
-	if ((GLAD_GL_ARB_texture_storage || GLAD_GL_ES_VERSION_3_0) && !data)
+	if (GLAD_GL_ARB_texture_storage || GLAD_GL_ES_VERSION_3_0)
+	{
 		glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, width, height);
+		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, data);
+	}
 	else
+	{
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+	}
+
+	glActiveTexture(GL_TEXTURE0);
 
 	GLenum error = glGetError();
 	if (error != GL_NO_ERROR)
@@ -107,37 +119,20 @@ std::unique_ptr<HostDisplayTexture> OpenGLHostDisplay::CreateTexture(u32 width, 
 
 void OpenGLHostDisplay::UpdateTexture(HostDisplayTexture* texture, u32 x, u32 y, u32 width, u32 height, const void* texture_data, u32 texture_data_stride)
 {
-	OpenGLHostDisplayTexture* tex = static_cast<OpenGLHostDisplayTexture*>(texture);
+	glActiveTexture(GL_TEXTURE7);
 
-	GLint alignment;
-	if (texture_data_stride & 1)
-		alignment = 1;
-	else if (texture_data_stride & 2)
-		alignment = 2;
-	else
-		alignment = 4;
-
-	GLint old_texture_binding = 0, old_alignment = 0, old_row_length = 0;
-	glGetIntegerv(GL_TEXTURE_BINDING_2D, &old_texture_binding);
-	glBindTexture(GL_TEXTURE_2D, tex->GetGLID());
-
-	glGetIntegerv(GL_UNPACK_ALIGNMENT, &old_alignment);
-	glPixelStorei(GL_UNPACK_ALIGNMENT, alignment);
-
-	glGetIntegerv(GL_UNPACK_ROW_LENGTH, &old_row_length);
 	glPixelStorei(GL_UNPACK_ROW_LENGTH, texture_data_stride / sizeof(u32));
 
 	glTexSubImage2D(GL_TEXTURE_2D, 0, x, y, width, height, GL_RGBA8, GL_UNSIGNED_BYTE, texture_data);
 
-	glPixelStorei(GL_UNPACK_ROW_LENGTH, old_row_length);
+	glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
 
-	glPixelStorei(GL_UNPACK_ALIGNMENT, old_alignment);
-	glBindTexture(GL_TEXTURE_2D, old_texture_binding);
+	glActiveTexture(GL_TEXTURE0);
 }
 
 void OpenGLHostDisplay::SetVSync(VsyncMode mode)
 {
-	if (m_gl_context->GetWindowInfo().type == WindowInfo::Type::Surfaceless)
+	if (m_vsync_mode == mode || m_gl_context->GetWindowInfo().type == WindowInfo::Type::Surfaceless)
 		return;
 
 	// Window framebuffer has to be bound to call SetSwapInterval.
@@ -149,6 +144,7 @@ void OpenGLHostDisplay::SetVSync(VsyncMode mode)
 		m_gl_context->SetSwapInterval(static_cast<s32>(mode != VsyncMode::Off));
 
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, current_fbo);
+	m_vsync_mode = mode;
 }
 
 const char* OpenGLHostDisplay::GetGLSLVersionString() const
@@ -182,17 +178,17 @@ std::string OpenGLHostDisplay::GetGLSLVersionHeader() const
 	return header;
 }
 
-bool OpenGLHostDisplay::HasRenderDevice() const
+bool OpenGLHostDisplay::HasDevice() const
 {
 	return static_cast<bool>(m_gl_context);
 }
 
-bool OpenGLHostDisplay::HasRenderSurface() const
+bool OpenGLHostDisplay::HasSurface() const
 {
 	return m_window_info.type != WindowInfo::Type::Surfaceless;
 }
 
-bool OpenGLHostDisplay::CreateRenderDevice(const WindowInfo& wi, std::string_view adapter_name, VsyncMode vsync, bool threaded_presentation, bool debug_device)
+bool OpenGLHostDisplay::CreateDevice(const WindowInfo& wi, VsyncMode vsync)
 {
 	m_gl_context = GL::Context::Create(wi);
 	if (!m_gl_context)
@@ -209,8 +205,11 @@ bool OpenGLHostDisplay::CreateRenderDevice(const WindowInfo& wi, std::string_vie
 	return true;
 }
 
-bool OpenGLHostDisplay::InitializeRenderDevice(std::string_view shader_cache_directory, bool debug_device)
+bool OpenGLHostDisplay::SetupDevice()
 {
+	// We do use 8-bit formats, and higher alignment for 32-bit formats won't hurt anything.
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
 	SetSwapInterval();
 	GL::Program::ResetLastProgram();
 	return true;
@@ -222,7 +221,7 @@ void OpenGLHostDisplay::SetSwapInterval()
 	m_gl_context->SetSwapInterval(interval);
 }
 
-bool OpenGLHostDisplay::MakeRenderContextCurrent()
+bool OpenGLHostDisplay::MakeCurrent()
 {
 	if (!m_gl_context->MakeCurrent())
 	{
@@ -234,21 +233,12 @@ bool OpenGLHostDisplay::MakeRenderContextCurrent()
 	return true;
 }
 
-bool OpenGLHostDisplay::DoneRenderContextCurrent()
+bool OpenGLHostDisplay::DoneCurrent()
 {
 	return m_gl_context->DoneCurrent();
 }
 
-void OpenGLHostDisplay::DestroyRenderDevice()
-{
-	if (!m_gl_context)
-		return;
-
-	m_gl_context->DoneCurrent();
-	m_gl_context.reset();
-}
-
-bool OpenGLHostDisplay::ChangeRenderWindow(const WindowInfo& new_wi)
+bool OpenGLHostDisplay::ChangeWindow(const WindowInfo& new_wi)
 {
 	pxAssert(m_gl_context);
 
@@ -270,7 +260,7 @@ bool OpenGLHostDisplay::ChangeRenderWindow(const WindowInfo& new_wi)
 	return true;
 }
 
-void OpenGLHostDisplay::ResizeRenderWindow(s32 new_window_width, s32 new_window_height, float new_window_scale)
+void OpenGLHostDisplay::ResizeWindow(s32 new_window_width, s32 new_window_height, float new_window_scale)
 {
 	if (!m_gl_context)
 		return;
@@ -314,7 +304,7 @@ HostDisplay::AdapterAndModeList OpenGLHostDisplay::GetAdapterAndModeList()
 	return aml;
 }
 
-void OpenGLHostDisplay::DestroyRenderSurface()
+void OpenGLHostDisplay::DestroySurface()
 {
 	if (!m_gl_context)
 		return;
@@ -353,24 +343,146 @@ bool OpenGLHostDisplay::BeginPresent(bool frame_skip)
 	{
 		return false;
 	}
-	
+
 	glDisable(GL_SCISSOR_TEST);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, OE_FBO);
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 	glViewport(0, 0, m_window_info.surface_width, m_window_info.surface_height);
+
 	return true;
 }
 
 void OpenGLHostDisplay::EndPresent()
 {
-	// clear out pipeline bindings, since imgui doesn't use them
-	glBindProgramPipeline(0);
 	glDisable(GL_SCISSOR_TEST);
 	glDisable(GL_STENCIL_TEST);
-	glActiveTexture(GL_TEXTURE0);
 
 	GL::Program::ResetLastProgram();
 
+	if (m_gpu_timing_enabled)
+		PopTimestampQuery();
+
 	m_gl_context->SwapBuffers();
+
+	if (m_gpu_timing_enabled)
+		KickTimestampQuery();
 }
+
+void OpenGLHostDisplay::CreateTimestampQueries()
+{
+	const bool gles = m_gl_context->IsGLES();
+	const auto GenQueries = gles ? glGenQueriesEXT : glGenQueries;
+
+	GenQueries(static_cast<u32>(m_timestamp_queries.size()), m_timestamp_queries.data());
+	KickTimestampQuery();
+}
+
+void OpenGLHostDisplay::DestroyTimestampQueries()
+{
+	if (m_timestamp_queries[0] == 0)
+		return;
+
+	const bool gles = m_gl_context->IsGLES();
+	const auto DeleteQueries = gles ? glDeleteQueriesEXT : glDeleteQueries;
+
+	if (m_timestamp_query_started)
+	{
+		const auto EndQuery = gles ? glEndQueryEXT : glEndQuery;
+		EndQuery(GL_TIME_ELAPSED);
+	}
+
+	DeleteQueries(static_cast<u32>(m_timestamp_queries.size()), m_timestamp_queries.data());
+	m_timestamp_queries.fill(0);
+	m_read_timestamp_query = 0;
+	m_write_timestamp_query = 0;
+	m_waiting_timestamp_queries = 0;
+	m_timestamp_query_started = false;
+}
+
+void OpenGLHostDisplay::PopTimestampQuery()
+{
+	const bool gles = m_gl_context->IsGLES();
+
+	if (gles)
+	{
+		GLint disjoint = 0;
+		glGetIntegerv(GL_GPU_DISJOINT_EXT, &disjoint);
+		if (disjoint)
+		{
+			DevCon.WriteLn("GPU timing disjoint, resetting.");
+			if (m_timestamp_query_started)
+				glEndQueryEXT(GL_TIME_ELAPSED);
+
+			m_read_timestamp_query = 0;
+			m_write_timestamp_query = 0;
+			m_waiting_timestamp_queries = 0;
+			m_timestamp_query_started = false;
+		}
+	}
+
+	while (m_waiting_timestamp_queries > 0)
+	{
+		const auto GetQueryObjectiv = gles ? glGetQueryObjectivEXT : glGetQueryObjectiv;
+		const auto GetQueryObjectui64v = gles ? glGetQueryObjectui64vEXT : glGetQueryObjectui64v;
+
+		GLint available = 0;
+		GetQueryObjectiv(m_timestamp_queries[m_read_timestamp_query], GL_QUERY_RESULT_AVAILABLE, &available);
+
+		if (!available)
+			break;
+
+		u64 result = 0;
+		GetQueryObjectui64v(m_timestamp_queries[m_read_timestamp_query], GL_QUERY_RESULT, &result);
+		m_accumulated_gpu_time += static_cast<float>(static_cast<double>(result) / 1000000.0);
+		m_read_timestamp_query = (m_read_timestamp_query + 1) % NUM_TIMESTAMP_QUERIES;
+		m_waiting_timestamp_queries--;
+	}
+
+	if (m_timestamp_query_started)
+	{
+		const auto EndQuery = gles ? glEndQueryEXT : glEndQuery;
+		EndQuery(GL_TIME_ELAPSED);
+
+		m_write_timestamp_query = (m_write_timestamp_query + 1) % NUM_TIMESTAMP_QUERIES;
+		m_timestamp_query_started = false;
+		m_waiting_timestamp_queries++;
+	}
+}
+
+void OpenGLHostDisplay::KickTimestampQuery()
+{
+	if (m_timestamp_query_started || m_waiting_timestamp_queries == NUM_TIMESTAMP_QUERIES)
+		return;
+
+	const bool gles = m_gl_context->IsGLES();
+	const auto BeginQuery = gles ? glBeginQueryEXT : glBeginQuery;
+
+	BeginQuery(GL_TIME_ELAPSED, m_timestamp_queries[m_write_timestamp_query]);
+	m_timestamp_query_started = true;
+}
+
+bool OpenGLHostDisplay::SetGPUTimingEnabled(bool enabled)
+{
+	if (m_gpu_timing_enabled == enabled)
+		return true;
+
+	if (enabled && m_gl_context->IsGLES() && !GLAD_GL_EXT_disjoint_timer_query)
+		return false;
+
+	m_gpu_timing_enabled = enabled;
+	if (m_gpu_timing_enabled)
+		CreateTimestampQueries();
+	else
+		DestroyTimestampQueries();
+
+	return true;
+}
+
+float OpenGLHostDisplay::GetAndResetAccumulatedGPUTime()
+{
+	const float value = m_accumulated_gpu_time;
+	m_accumulated_gpu_time = 0.0f;
+	return value;
+}
+

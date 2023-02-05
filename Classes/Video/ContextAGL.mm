@@ -36,25 +36,25 @@ namespace GL
 
 	ContextAGL::~ContextAGL()
 	{
+		CleanupView();
+
+		if (m_opengl_module_handle)
+			dlclose(m_opengl_module_handle);
 	}
 
-	std::unique_ptr<Context> ContextAGL::Create(const WindowInfo& wi, const Version* versions_to_try,
-		size_t num_versions_to_try)
+	std::unique_ptr<Context> ContextAGL::Create(const WindowInfo& wi, gsl::span<const Version> versions_to_try)
 	{
 		std::unique_ptr<ContextAGL> context = std::make_unique<ContextAGL>(wi);
-		if (!context->Initialize(versions_to_try, num_versions_to_try))
+		if (!context->Initialize(versions_to_try))
 			return nullptr;
 
 		return context;
 	}
 
-	bool ContextAGL::Initialize(const Version* versions_to_try, size_t num_versions_to_try)
+	bool ContextAGL::Initialize(gsl::span<const Version> versions_to_try)
 	{
-		MakeCurrent();
-		
-		for (size_t i = 0; i < num_versions_to_try; i++)
+		for (const Version& cv : versions_to_try)
 		{
-			const Version& cv = versions_to_try[i];
 			if (cv.profile == Profile::NoProfile && CreateContext(nullptr, NSOpenGLProfileVersionLegacy, true))
 			{
 				// we already have the dummy context, so just use that
@@ -89,8 +89,8 @@ namespace GL
 
 	bool ContextAGL::ChangeSurface(const WindowInfo& new_wi)
 	{
-		m_wi.surface_width = new_wi.surface_width;
-		m_wi.surface_height = new_wi.surface_height;
+		m_wi = new_wi;
+		BindContextToView();
 		return true;
 	}
 
@@ -101,6 +101,26 @@ namespace GL
 
 	bool ContextAGL::UpdateDimensions()
 	{
+		if (![NSThread isMainThread])
+		{
+			bool ret;
+			dispatch_sync(dispatch_get_main_queue(), [this, &ret]{ ret = UpdateDimensions(); });
+			return ret;
+		}
+
+		const NSSize window_size = [m_view frame].size;
+		const CGFloat window_scale = [[m_view window] backingScaleFactor];
+		const u32 new_width = static_cast<u32>(window_size.width * window_scale);
+		const u32 new_height = static_cast<u32>(window_size.height * window_scale);
+
+		if (m_wi.surface_width == new_width && m_wi.surface_height == new_height)
+			return false;
+
+		m_wi.surface_width = new_width;
+		m_wi.surface_height = new_height;
+
+		[m_context update];
+
 		return true;
 	}
 
