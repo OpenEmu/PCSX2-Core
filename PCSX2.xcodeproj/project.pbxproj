@@ -393,6 +393,8 @@
 		551BF6E926424D030008C529 /* InputRecording.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551BF6C026424D020008C529 /* InputRecording.cpp */; };
 		55300EAD27C9A28B0049E2CC /* GSTextureReplacements.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55300EAB27C9A2830049E2CC /* GSTextureReplacements.cpp */; };
 		55300EAE27C9A28B0049E2CC /* GSTextureReplacementLoaders.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55300EAC27C9A2830049E2CC /* GSTextureReplacementLoaders.cpp */; };
+		55324ED929973BA300A8FF1A /* ARP_PacketEditor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55324ED729973BA300A8FF1A /* ARP_PacketEditor.cpp */; };
+		55324EDC29973BBF00A8FF1A /* EthernetFrameEditor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55324EDA29973BBE00A8FF1A /* EthernetFrameEditor.cpp */; };
 		553CF8382640D2F8003A437C /* jmp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FA79263D48AE000219EC /* jmp.cpp */; };
 		553CF8392640D2F8003A437C /* x86emitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FA78263D48AE000219EC /* x86emitter.cpp */; };
 		553CF83A2640D2F8003A437C /* legacy_sse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FA6F263D48AE000219EC /* legacy_sse.cpp */; };
@@ -1965,6 +1967,10 @@
 		55300EAA27C9A2830049E2CC /* GSTextureReplacements.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GSTextureReplacements.h; sourceTree = "<group>"; };
 		55300EAB27C9A2830049E2CC /* GSTextureReplacements.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GSTextureReplacements.cpp; sourceTree = "<group>"; };
 		55300EAC27C9A2830049E2CC /* GSTextureReplacementLoaders.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GSTextureReplacementLoaders.cpp; sourceTree = "<group>"; };
+		55324ED729973BA300A8FF1A /* ARP_PacketEditor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ARP_PacketEditor.cpp; sourceTree = "<group>"; };
+		55324ED829973BA300A8FF1A /* ARP_PacketEditor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ARP_PacketEditor.h; sourceTree = "<group>"; };
+		55324EDA29973BBE00A8FF1A /* EthernetFrameEditor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EthernetFrameEditor.cpp; sourceTree = "<group>"; };
+		55324EDB29973BBE00A8FF1A /* EthernetFrameEditor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EthernetFrameEditor.h; sourceTree = "<group>"; };
 		553CF8172640CCCD003A437C /* libemitter_PCSX2.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libemitter_PCSX2.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		5541B76E27CECF3200AE70C2 /* OEPatching.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OEPatching.cpp; sourceTree = "<group>"; };
 		5548491928853D2E0066EDEB /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
@@ -3202,7 +3208,7 @@
 		DD0302B427C491020006ABDC /* OESndOut.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OESndOut.h; sourceTree = "<group>"; };
 		DD0302B527C491020006ABDC /* OESndOut.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OESndOut.cpp; sourceTree = "<group>"; };
 		DD0302B927C491160006ABDC /* OpenGLHostDisplayOverride.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpenGLHostDisplayOverride.cpp; sourceTree = "<group>"; };
-		DD0302BA27C491160006ABDC /* GSDeviceMTL.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GSDeviceMTL.mm; sourceTree = "<group>"; };
+		DD0302BA27C491160006ABDC /* GSDeviceMTL.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GSDeviceMTL.mm; sourceTree = "<group>"; usesTabs = 1; };
 		DD0302BB27C491160006ABDC /* MetalHostDisplay.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MetalHostDisplay.mm; sourceTree = "<group>"; };
 		DD0302BC27C491160006ABDC /* ContextAGL.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ContextAGL.mm; sourceTree = "<group>"; };
 		DD0302C827C5494A0006ABDC /* keymap.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = keymap.h; sourceTree = "<group>"; };
@@ -4899,12 +4905,12 @@
 				5517FC95263D49BC000219EC /* CompressedFileReader.h */,
 				5517FCB5263D49BC000219EC /* CsoFileReader.cpp */,
 				5517FC94263D49BC000219EC /* CsoFileReader.h */,
+				5517FC9D263D49BC000219EC /* Darwin */,
 				5517FC8B263D49BC000219EC /* GzippedFileReader.cpp */,
 				5517FC91263D49BC000219EC /* GzippedFileReader.h */,
 				5517FCA1263D49BC000219EC /* InputIsoFile.cpp */,
 				5517FC8A263D49BC000219EC /* IsoFileFormats.h */,
 				5517FCA9263D49BC000219EC /* IsoFS */,
-				5517FC9D263D49BC000219EC /* Linux */,
 				5517FCA3263D49BC000219EC /* OutputIsoFile.cpp */,
 				5548492A288554210066EDEB /* Ps1CD.cpp */,
 				55484929288554210066EDEB /* Ps1CD.h */,
@@ -4915,13 +4921,13 @@
 			path = CDVD;
 			sourceTree = "<group>";
 		};
-		5517FC9D263D49BC000219EC /* Linux */ = {
+		5517FC9D263D49BC000219EC /* Darwin */ = {
 			isa = PBXGroup;
 			children = (
 				5517FC9E263D49BC000219EC /* DriveUtility.cpp */,
 				5517FC9F263D49BC000219EC /* IOCtlSrc.cpp */,
 			);
-			path = Linux;
+			path = Darwin;
 			sourceTree = "<group>";
 		};
 		5517FCA9263D49BC000219EC /* IsoFS */ = {
@@ -5342,6 +5348,8 @@
 				55B1F00A295BACE200DB297F /* ARP */,
 				551AA49027935E9100658151 /* EthernetFrame.cpp */,
 				551AA4A627935E9100658151 /* EthernetFrame.h */,
+				55324EDA29973BBE00A8FF1A /* EthernetFrameEditor.cpp */,
+				55324EDB29973BBE00A8FF1A /* EthernetFrameEditor.h */,
 				551AA49127935E9100658151 /* IP */,
 				551AA48F27935E9100658151 /* NetLib.h */,
 				551AA48E27935E9100658151 /* Payload.h */,
@@ -7198,6 +7206,8 @@
 			children = (
 				55B1F00C295BACE200DB297F /* ARP_Packet.cpp */,
 				55B1F00B295BACE200DB297F /* ARP_Packet.h */,
+				55324ED729973BA300A8FF1A /* ARP_PacketEditor.cpp */,
+				55324ED829973BA300A8FF1A /* ARP_PacketEditor.h */,
 			);
 			path = ARP;
 			sourceTree = "<group>";
@@ -8035,6 +8045,7 @@
 				551BF685264241BF0008C529 /* DisR3000A.cpp in Sources */,
 				551BF690264241F10008C529 /* MipsStackWalk.cpp in Sources */,
 				551BF6152642142F0008C529 /* microVU.cpp in Sources */,
+				55324ED929973BA300A8FF1A /* ARP_PacketEditor.cpp in Sources */,
 				551AA4E827937A4B00658151 /* GSDrawScanlineCodeGenerator.all.cpp in Sources */,
 				551BF5AA26420FA50008C529 /* Hw.cpp in Sources */,
 				55B1F037295BAE5100DB297F /* IPU_MultiISA.cpp in Sources */,
@@ -8179,6 +8190,7 @@
 				551BF62D264216F50008C529 /* OutputIsoFile.cpp in Sources */,
 				55AB8FB7298C57550024DCBC /* VirtualMemory.cpp in Sources */,
 				551BF645264218380008C529 /* iR5900Branch.cpp in Sources */,
+				55324EDC29973BBF00A8FF1A /* EthernetFrameEditor.cpp in Sources */,
 				55EBA8AB295CDC8D0035A1FD /* SaveState.cpp in Sources */,
 				551BF6A4264244280008C529 /* Wavedump_wav.cpp in Sources */,
 				551BF69F264243C20008C529 /* ATA_CmdExecuteDeviceDiag.cpp in Sources */,
