@@ -806,9 +806,9 @@ void Host::ReleaseHostDisplay(bool clear_state)
 	}
 }
 
-bool Host::BeginPresentFrame(bool frame_skip)
+HostDisplay::PresentResult Host::BeginPresentFrame(bool frame_skip)
 {
-	GET_CURRENT_OR_RETURN(false);
+	GET_CURRENT_OR_RETURN(HostDisplay::PresentResult::DeviceLost);
 	
 	return g_host_display.get()->BeginPresent(frame_skip);
 }

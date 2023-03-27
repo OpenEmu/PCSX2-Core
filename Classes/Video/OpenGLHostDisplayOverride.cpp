@@ -337,11 +337,11 @@ bool OpenGLHostDisplay::UpdateImGuiFontTexture()
 	return true;
 }
 
-bool OpenGLHostDisplay::BeginPresent(bool frame_skip)
+HostDisplay::PresentResult OpenGLHostDisplay::BeginPresent(bool frame_skip)
 {
 	if (frame_skip || m_window_info.type == WindowInfo::Type::Surfaceless)
 	{
-		return false;
+		return PresentResult::FrameSkipped;
 	}
 
 	glDisable(GL_SCISSOR_TEST);
@@ -350,7 +350,7 @@ bool OpenGLHostDisplay::BeginPresent(bool frame_skip)
 	glClear(GL_COLOR_BUFFER_BIT);
 	glViewport(0, 0, m_window_info.surface_width, m_window_info.surface_height);
 
-	return true;
+	return PresentResult::OK;
 }
 
 void OpenGLHostDisplay::EndPresent()

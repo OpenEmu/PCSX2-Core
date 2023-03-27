@@ -119,9 +119,23 @@ bool GSDumpReplayer::Initialize(const char* filename)
 	return true;
 }
 
-void GSDumpReplayer::Reset()
+bool GSDumpReplayer::ChangeDump(const char* filename)
 {
+	Console.WriteLn("(GSDumpReplayer) Switching to '%s'...", filename);
+
+	std::unique_ptr<GSDumpFile> new_dump(GSDumpFile::OpenGSDump(filename));
+	if (!new_dump || !new_dump->ReadFile())
+	{
+		Host::ReportFormattedErrorAsync("GSDumpReplayer", "Failed to open or read '%s'.", filename);
+		return false;
+	}
+
+	s_dump_file = std::move(new_dump);
+	s_current_packet = 0;
+
+	// Don't forget to reset the GS!
 	GSDumpReplayerCpuReset();
+	return true;
 }
 
 void GSDumpReplayer::Shutdown()

@@ -154,8 +154,6 @@
 		551AA47F27935D8800658151 /* crc64_fast.c in Sources */ = {isa = PBXBuildFile; fileRef = 5517F0CB263D4838000219EC /* crc64_fast.c */; };
 		551AA48027935D9200658151 /* crc64_table.c in Sources */ = {isa = PBXBuildFile; fileRef = 5517F0C1263D4838000219EC /* crc64_table.c */; };
 		551AA48127935D9A00658151 /* crc32_table.c in Sources */ = {isa = PBXBuildFile; fileRef = 5517F0BA263D4838000219EC /* crc32_table.c */; };
-		551AA48927935DF400658151 /* GSTextureNull.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551AA48327935DF400658151 /* GSTextureNull.cpp */; };
-		551AA48A27935DF400658151 /* GSDeviceNull.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551AA48427935DF400658151 /* GSDeviceNull.cpp */; };
 		551AA48B27935DF400658151 /* GSRendererNull.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551AA48527935DF400658151 /* GSRendererNull.cpp */; };
 		551AA4A927935E9100658151 /* EthernetFrame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551AA49027935E9100658151 /* EthernetFrame.cpp */; };
 		551AA4AA27935E9100658151 /* UDP_Packet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551AA49327935E9100658151 /* UDP_Packet.cpp */; };
@@ -1829,8 +1827,6 @@
 		551AA1082792AB1700658151 /* GS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GS.cpp; sourceTree = "<group>"; };
 		551AA1092792AB1700658151 /* GSLzma.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GSLzma.cpp; sourceTree = "<group>"; };
 		551AA10A2792AB1700658151 /* GSDrawingContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSDrawingContext.h; sourceTree = "<group>"; };
-		551AA1112792AB1700658151 /* GSSetting.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GSSetting.cpp; sourceTree = "<group>"; };
-		551AA1122792AB1700658151 /* GSSetting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSSetting.h; sourceTree = "<group>"; };
 		551AA1142792AB1700658151 /* GSVector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GSVector.cpp; sourceTree = "<group>"; };
 		551AA1152792AB1700658151 /* GSClut.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GSClut.cpp; sourceTree = "<group>"; };
 		551AA1162792AB1700658151 /* GSPerfMon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSPerfMon.h; sourceTree = "<group>"; };
@@ -1873,12 +1869,8 @@
 		551AA4182792C82A00658151 /* PINE.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PINE.cpp; sourceTree = "<group>"; };
 		551AA4192792C82A00658151 /* PINE.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PINE.h; sourceTree = "<group>"; };
 		551AA41B2792C85500658151 /* SingleRegisterTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SingleRegisterTypes.h; sourceTree = "<group>"; };
-		551AA48327935DF400658151 /* GSTextureNull.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GSTextureNull.cpp; sourceTree = "<group>"; };
-		551AA48427935DF400658151 /* GSDeviceNull.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GSDeviceNull.cpp; sourceTree = "<group>"; };
 		551AA48527935DF400658151 /* GSRendererNull.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GSRendererNull.cpp; sourceTree = "<group>"; };
 		551AA48627935DF400658151 /* GSRendererNull.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSRendererNull.h; sourceTree = "<group>"; };
-		551AA48727935DF400658151 /* GSDeviceNull.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSDeviceNull.h; sourceTree = "<group>"; };
-		551AA48827935DF400658151 /* GSTextureNull.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSTextureNull.h; sourceTree = "<group>"; };
 		551AA48E27935E9100658151 /* Payload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Payload.h; sourceTree = "<group>"; };
 		551AA48F27935E9100658151 /* NetLib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetLib.h; sourceTree = "<group>"; };
 		551AA49027935E9100658151 /* EthernetFrame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EthernetFrame.cpp; sourceTree = "<group>"; };
@@ -5153,7 +5145,6 @@
 				55B1EFCE295BA71D00DB297F /* MultiISA.cpp */,
 				55B1EFD0295BA71D00DB297F /* MultiISA.h */,
 				551AA08B2792AB1700658151 /* Renderers */,
-				551AA10B2792AB1700658151 /* Window */,
 			);
 			path = GS;
 			sourceTree = "<group>";
@@ -5258,15 +5249,6 @@
 			path = OpenGL;
 			sourceTree = "<group>";
 		};
-		551AA10B2792AB1700658151 /* Window */ = {
-			isa = PBXGroup;
-			children = (
-				551AA1112792AB1700658151 /* GSSetting.cpp */,
-				551AA1122792AB1700658151 /* GSSetting.h */,
-			);
-			path = Window;
-			sourceTree = "<group>";
-		};
 		551AA1712792B66400658151 /* InternalServers */ = {
 			isa = PBXGroup;
 			children = (
@@ -5332,12 +5314,8 @@
 		551AA48227935DF400658151 /* Null */ = {
 			isa = PBXGroup;
 			children = (
-				551AA48327935DF400658151 /* GSTextureNull.cpp */,
-				551AA48427935DF400658151 /* GSDeviceNull.cpp */,
 				551AA48527935DF400658151 /* GSRendererNull.cpp */,
 				551AA48627935DF400658151 /* GSRendererNull.h */,
-				551AA48727935DF400658151 /* GSDeviceNull.h */,
-				551AA48827935DF400658151 /* GSTextureNull.h */,
 			);
 			path = Null;
 			sourceTree = "<group>";
@@ -7985,7 +7963,6 @@
 				5580652827AB4DE9008CD5D2 /* SettingsWrapper.cpp in Sources */,
 				551AA4AA27935E9100658151 /* UDP_Packet.cpp in Sources */,
 				551BF689264241E80008C529 /* DisR5900asm.cpp in Sources */,
-				551AA48927935DF400658151 /* GSTextureNull.cpp in Sources */,
 				DD0302C027C491160006ABDC /* ContextAGL.mm in Sources */,
 				55484D3D28855E740066EDEB /* GSDumpReplayer.cpp in Sources */,
 				551BF57E26420E9A0008C529 /* Sio.cpp in Sources */,
@@ -8118,7 +8095,6 @@
 				551BF5AC26420FA50008C529 /* IopHw.cpp in Sources */,
 				551BF67E264240660008C529 /* ATA_Info.cpp in Sources */,
 				551BF5A826420FA50008C529 /* HwWrite.cpp in Sources */,
-				551AA48A27935DF400658151 /* GSDeviceNull.cpp in Sources */,
 				551BF57826420E720008C529 /* vtlb.cpp in Sources */,
 				551AA4E52793775E00658151 /* StringUtil.cpp in Sources */,
 				551BF5D5264212270008C529 /* MTGS.cpp in Sources */,
@@ -8787,7 +8763,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1.7.0;
+				CURRENT_PROJECT_VERSION = 1.7.4280;
 				EXPORTED_SYMBOLS_FILE = Classes/PCSX2Exports.exp;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = pcsx2/pcsx2/PrecompiledHeader.h;
@@ -8814,7 +8790,7 @@
 				);
 				INFOPLIST_FILE = Resources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
-				MARKETING_VERSION = 1.7.0;
+				MARKETING_VERSION = 1.7.4280;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.openemu.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -8866,7 +8842,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1.7.0;
+				CURRENT_PROJECT_VERSION = 1.7.4280;
 				DEAD_CODE_STRIPPING = YES;
 				EXPORTED_SYMBOLS_FILE = Classes/PCSX2Exports.exp;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -8895,7 +8871,7 @@
 				INFOPLIST_FILE = Resources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
 				LLVM_LTO = YES_THIN;
-				MARKETING_VERSION = 1.7.0;
+				MARKETING_VERSION = 1.7.4280;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.openemu.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

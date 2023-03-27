@@ -32,9 +32,9 @@
 			<true/>
 			<key>OEGameCoreSupportsCheatCode</key>
 			<false/>
-			<key>OEGameCoreSupportsMultipleDiscs</key>
-			<true/>
 			<key>OEGameCoreSupportsDisplayModeChange</key>
+			<true/>
+			<key>OEGameCoreSupportsMultipleDiscs</key>
 			<true/>
 			<key>OERequiredFiles</key>
 			<array>
