@@ -81,8 +81,8 @@ PCSX2GameCore *_current;
 @implementation PCSX2GameCore {
 	@package
 	bool hasInitialized;
-	NSString* gamePath;
-	NSString* stateToLoad;
+	NSURL* gamePath;
+	NSURL* stateToLoad;
 	NSString* DiscID;
 	NSString* DiscRegion;
 	NSString* DiscSubRegion;
@@ -94,7 +94,7 @@ PCSX2GameCore *_current;
 	//Multi-disc booting.
 	NSUInteger _maxDiscs;
 	NSMutableArray<NSString*> *_allCueSheetFiles;
-	NSString *basePath;
+	NSURL *basePath;
 	// Display modes.
 	NSMutableDictionary <NSString *, id> *_displayModes;
 	OEIntRect screenRect;
@@ -114,24 +114,24 @@ PCSX2GameCore *_current;
 	return self;
 }
 
-static NSString *binCueFix(NSString *path)
+static NSURL *binCueFix(NSURL *path)
 {
 	if ([[path pathExtension] caseInsensitiveCompare:@"cue"] == NSOrderedSame) {
 		// Assume the bin file is the same as the cue.
-		return [[path stringByDeletingPathExtension] stringByAppendingPathExtension:@"bin"];
+		return [[path URLByDeletingPathExtension] URLByAppendingPathExtension:@"bin"];
 	}
 	return path;
 }
 
-- (BOOL)loadFileAtPath:(NSString *)path error:(NSError **)error
+- (BOOL)loadFileAtURL:(NSURL *)url error:(NSError **)error
 {
 	// PCSX2 can't handle cue files... but can read bin files
-	if ([[path pathExtension] caseInsensitiveCompare:@"cue"] == NSOrderedSame) {
+	if ([[url pathExtension] caseInsensitiveCompare:@"cue"] == NSOrderedSame) {
 		// Assume the bin file is the same name as the cue.
-		gamePath = [[path stringByDeletingPathExtension] stringByAppendingPathExtension:@"bin"];
-	} else if([path.pathExtension.lowercaseString isEqualToString:@"m3u"]) {
-		basePath = path.stringByDeletingLastPathComponent;
-		NSString *m3uString = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
+		gamePath = [[url URLByDeletingPathExtension] URLByAppendingPathExtension:@"bin"];
+	} else if([url.pathExtension.lowercaseString isEqualToString:@"m3u"]) {
+		basePath = url.URLByDeletingLastPathComponent;
+		NSString *m3uString = [NSString stringWithContentsOfURL:url encoding:NSUTF8StringEncoding error:nil];
 		NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@".*\\.cue|.*\\.ccd|.*\\.iso" options:NSRegularExpressionCaseInsensitive error:nil];
 		NSUInteger numberOfMatches = [regex numberOfMatchesInString:m3uString options:0 range:NSMakeRange(0, m3uString.length)];
 		
@@ -151,22 +151,22 @@ static NSString *binCueFix(NSString *path)
 		
 		if (_allCueSheetFiles.count <= 0) {
 			if (error) {
-				*error = [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotLoadROMError userInfo:@{NSFilePathErrorKey: path}];
+				*error = [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotLoadROMError userInfo:@{NSFilePathErrorKey: url.path}];
 			}
 			
 			return false;
 		} else {
-			NSString *ToPassBack = [basePath stringByAppendingPathComponent:_allCueSheetFiles.firstObject];
-			ToPassBack = [binCueFix(ToPassBack) stringByStandardizingPath];
+			NSURL *ToPassBack = [basePath URLByAppendingPathComponent:_allCueSheetFiles.firstObject];
+			ToPassBack = [binCueFix(ToPassBack) URLByStandardizingPath];
 			
 			gamePath = ToPassBack;
 		}
 	} else {
-		gamePath = [path copy];
+		gamePath = [url copy];
 	}
 	
 	//Lets get the Disc ID with some Magic out of PCSX2 CDVD :)
-	VMManager::ChangeDisc(CDVD_SourceType::Iso, path.fileSystemRepresentation);
+	VMManager::ChangeDisc(CDVD_SourceType::Iso, url.fileSystemRepresentation);
 	std::string DiscName;
 	GetPS2ElfName(DiscName);
 	
@@ -185,7 +185,7 @@ static NSString *binCueFix(NSString *path)
 
 - (void)setupEmulation
 {
-	const std::string pcsx2ini([[self.supportDirectoryPath stringByAppendingPathComponent:@"inis"] stringByAppendingPathComponent:@"PCSX2.ini"].fileSystemRepresentation);
+	const std::string pcsx2ini([[self.supportDirectory URLByAppendingPathComponent:@"inis" isDirectory:YES] URLByAppendingPathComponent:@"PCSX2.ini" isDirectory:NO].fileSystemRepresentation);
 	s_base_settings_interface = std::make_unique<INISettingsInterface>(std::move(pcsx2ini));
 	Host::Internal::SetBaseSettingsLayer(s_base_settings_interface.get());
 	
@@ -200,25 +200,25 @@ static NSString *binCueFix(NSString *path)
 		EmuConfig.LoadSave(wrapper);
 	}
 
-	NSString *path = self.batterySavesDirectoryPath;
-	if (![[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:NULL]) {
-		[[NSFileManager defaultManager] createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:NULL];
+	NSURL *url = self.batterySavesDirectory;
+	if (![[NSFileManager defaultManager] fileExistsAtPath:url.path isDirectory:NULL]) {
+		[[NSFileManager defaultManager] createDirectoryAtURL:url withIntermediateDirectories:YES attributes:nil error:NULL];
 	}
 
-	EmuFolders::MemoryCards = path.fileSystemRepresentation;
-	EmuFolders::Bios = self.biosDirectoryPath.fileSystemRepresentation;
+	EmuFolders::MemoryCards = url.fileSystemRepresentation;
+	EmuFolders::Bios = self.biosDirectory.fileSystemRepresentation;
 	EmuFolders::AppRoot = [[NSBundle bundleForClass:[self class]] resourceURL].fileSystemRepresentation;
-	EmuFolders::DataRoot = self.supportDirectoryPath.fileSystemRepresentation;
-	EmuFolders::Settings = [self.supportDirectoryPath stringByAppendingPathComponent:@"inis"].fileSystemRepresentation;
+	EmuFolders::DataRoot = self.supportDirectory.fileSystemRepresentation;
+	EmuFolders::Settings = [self.supportDirectory URLByAppendingPathComponent:@"inis" isDirectory:YES].fileSystemRepresentation;
 	EmuFolders::Resources = [[NSBundle bundleForClass:[self class]] resourceURL].fileSystemRepresentation;
-	EmuFolders::Cache = [self.supportDirectoryPath stringByAppendingPathComponent:@"Cache"].fileSystemRepresentation;
-	EmuFolders::Snapshots = [self.supportDirectoryPath stringByAppendingPathComponent:@"snaps"].fileSystemRepresentation;
-	EmuFolders::Savestates = [self.supportDirectoryPath stringByAppendingPathComponent:@"sstates"].fileSystemRepresentation;
-	EmuFolders::Logs = [self.supportDirectoryPath stringByAppendingPathComponent:@"Logs"].fileSystemRepresentation;
-	EmuFolders::Cheats = [self.supportDirectoryPath stringByAppendingPathComponent:@"Cheats"].fileSystemRepresentation;
-	EmuFolders::CheatsWS = [self.supportDirectoryPath stringByAppendingPathComponent:@"cheats_ws"].fileSystemRepresentation;
-	EmuFolders::Covers = [self.supportDirectoryPath stringByAppendingPathComponent:@"Covers"].fileSystemRepresentation;
-	EmuFolders::GameSettings = [self.supportDirectoryPath stringByAppendingPathComponent:@"gamesettings"].fileSystemRepresentation;
+	EmuFolders::Cache = [self.supportDirectory URLByAppendingPathComponent:@"Cache" isDirectory:YES].fileSystemRepresentation;
+	EmuFolders::Snapshots = [self.supportDirectory URLByAppendingPathComponent:@"snaps" isDirectory:YES].fileSystemRepresentation;
+	EmuFolders::Savestates = [self.supportDirectory URLByAppendingPathComponent:@"sstates" isDirectory:YES].fileSystemRepresentation;
+	EmuFolders::Logs = [self.supportDirectory URLByAppendingPathComponent:@"Logs" isDirectory:YES].fileSystemRepresentation;
+	EmuFolders::Cheats = [self.supportDirectory URLByAppendingPathComponent:@"Cheats" isDirectory:YES].fileSystemRepresentation;
+	EmuFolders::CheatsWS = [self.supportDirectory URLByAppendingPathComponent:@"cheats_ws" isDirectory:YES].fileSystemRepresentation;
+	EmuFolders::Covers = [self.supportDirectory URLByAppendingPathComponent:@"Covers" isDirectory:YES].fileSystemRepresentation;
+	EmuFolders::GameSettings = [self.supportDirectory URLByAppendingPathComponent:@"gamesettings" isDirectory:YES].fileSystemRepresentation;
 	EmuFolders::EnsureFoldersExist();
 	
 	EmuConfig.Mcd[0].Enabled = true;
@@ -318,7 +318,7 @@ static NSString *binCueFix(NSString *path)
 		if(VMManager::Initialize(params)){
 			hasInitialized = true;
 			VMManager::SetState(VMState::Running);
-			if ([stateToLoad length] > 0)
+			if ([stateToLoad.path length] > 0)
 				VMManager::LoadState(stateToLoad.fileSystemRepresentation);
 
 			[NSThread detachNewThreadSelector:@selector(runVMThread) toTarget:self withObject:nil];
@@ -464,10 +464,10 @@ static NSString *binCueFix(NSString *path)
 
 
 #pragma mark Save States
-- (void)loadStateFromFileAtPath:(NSString *)fileName completionHandler:(void (^)(BOOL, NSError *))block
+- (void)loadStateFromFileAtURL:(NSURL *)fileURL completionHandler:(void (^)(BOOL, NSError *))block
 {
 	if (!VMManager::HasValidVM()){
-		stateToLoad = fileName;
+		stateToLoad = fileURL;
 		return;
 	}
 	
@@ -475,19 +475,19 @@ static NSString *binCueFix(NSString *path)
 	while(isExecuting)
 		usleep(50);
 	
-	bool success = VMManager::LoadState(fileName.fileSystemRepresentation);
+	bool success = VMManager::LoadState(fileURL.fileSystemRepresentation);
 	WaitRequested = false;
 
-	block(success, success ? nil : [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotLoadStateError userInfo:@{NSLocalizedDescriptionKey: @"PCSX2 Could not load the current state.", NSFilePathErrorKey: fileName}]);
+	block(success, success ? nil : [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotLoadStateError userInfo:@{NSLocalizedDescriptionKey: @"PCSX2 Could not load the current state.", NSFilePathErrorKey: fileURL.path}]);
 }
 
-- (void)saveStateToFileAtPath:(NSString *)fileName completionHandler:(void (^)(BOOL, NSError *))block
+- (void)saveStateToFileAtURL:(NSURL *)fileURL completionHandler:(void (^)(BOOL, NSError *))block
 {
 	if (!VMManager::HasValidVM())
 		return;
-	bool success = 	VMManager::SaveState(fileName.fileSystemRepresentation, false, false);
+	bool success = VMManager::SaveState(fileURL.fileSystemRepresentation, false, false);
 	
-	block(success, success ? nil : [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotSaveStateError userInfo:@{NSLocalizedDescriptionKey: @"PCSX2 Could not save the current state.", NSFilePathErrorKey: fileName}]);
+	block(success, success ? nil : [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotSaveStateError userInfo:@{NSLocalizedDescriptionKey: @"PCSX2 Could not save the current state.", NSFilePathErrorKey: fileURL.path}]);
 	
 }
 
@@ -500,8 +500,8 @@ static NSString *binCueFix(NSString *path)
 
 - (void)setDisc:(NSUInteger)discNumber
 {
-	NSString *ToPassBack = [basePath stringByAppendingPathComponent:_allCueSheetFiles[discNumber - 1]];
-	ToPassBack = [binCueFix(ToPassBack) stringByStandardizingPath];
+	NSURL *ToPassBack = [basePath URLByAppendingPathComponent:_allCueSheetFiles[discNumber - 1]];
+	ToPassBack = [binCueFix(ToPassBack) URLByStandardizingPath];
 	
 	gamePath = ToPassBack;
 
