@@ -74,10 +74,6 @@ namespace GSDump
 alignas(16) static SysMtgsThread s_mtgs_thread;
 PCSX2GameCore *_current;
 
-@interface PCSX2GameCore ()
-
-@end
-
 @implementation PCSX2GameCore {
 	@package
 	bool hasInitialized;
@@ -151,7 +147,7 @@ static NSURL *binCueFix(NSURL *path)
 		
 		if (_allCueSheetFiles.count <= 0) {
 			if (error) {
-				*error = [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotLoadROMError userInfo:@{NSFilePathErrorKey: url.path}];
+				*error = [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotLoadROMError userInfo:@{NSURLErrorKey: url}];
 			}
 			
 			return false;
@@ -312,21 +308,22 @@ static NSURL *binCueFix(NSURL *path)
 			wi.surface_height = screenRect.size.height ;
 		g_host_display->CreateDevice(wi, VsyncMode::Adaptive);
 			
-		VMManager::Internal::InitializeGlobals() ;
+		VMManager::Internal::InitializeGlobals();
 		
 		
-		if(VMManager::Initialize(params)){
+		if (VMManager::Initialize(params)) {
 			hasInitialized = true;
 			VMManager::SetState(VMState::Running);
-			if ([stateToLoad.path length] > 0)
+			if ([stateToLoad.path length] > 0) {
 				VMManager::LoadState(stateToLoad.fileSystemRepresentation);
+			}
 
-			[NSThread detachNewThreadSelector:@selector(runVMThread) toTarget:self withObject:nil];
+			[NSThread detachNewThreadSelector:@selector(runVMThread:) toTarget:self withObject:nil];
 		}
 	}
 }
 
-- (void)runVMThread
+- (void)runVMThread:(id)unused
 {
 	OESetThreadRealtime(1. / 50, .007, .03); // guessed from bsnes
 		
@@ -377,6 +374,7 @@ static NSURL *binCueFix(NSURL *path)
 #pragma mark Video
 - (OEIntSize)aspectSize
 {
+	//TODO: change based off of app/user availability.
 	return (OEIntSize){ 4, 3 };
 }
 
@@ -478,7 +476,7 @@ static NSURL *binCueFix(NSURL *path)
 	bool success = VMManager::LoadState(fileURL.fileSystemRepresentation);
 	WaitRequested = false;
 
-	block(success, success ? nil : [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotLoadStateError userInfo:@{NSLocalizedDescriptionKey: @"PCSX2 Could not load the current state.", NSFilePathErrorKey: fileURL.path}]);
+	block(success, success ? nil : [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotLoadStateError userInfo:@{NSLocalizedDescriptionKey: @"PCSX2 Could not load the current state.", NSURLErrorKey: fileURL}]);
 }
 
 - (void)saveStateToFileAtURL:(NSURL *)fileURL completionHandler:(void (^)(BOOL, NSError *))block
@@ -487,7 +485,7 @@ static NSURL *binCueFix(NSURL *path)
 		return;
 	bool success = VMManager::SaveState(fileURL.fileSystemRepresentation, false, false);
 	
-	block(success, success ? nil : [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotSaveStateError userInfo:@{NSLocalizedDescriptionKey: @"PCSX2 Could not save the current state.", NSFilePathErrorKey: fileURL.path}]);
+	block(success, success ? nil : [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotSaveStateError userInfo:@{NSLocalizedDescriptionKey: @"PCSX2 Could not save the current state.", NSURLErrorKey: fileURL}]);
 	
 }
 
@@ -801,7 +799,7 @@ bool Host::AcquireHostDisplay(RenderAPI api, bool clear_state_on_fail)
 void Host::ReleaseHostDisplay(bool clear_state)
 {
 	GET_CURRENT_OR_RETURN();
-	if(g_host_display.get()){
+	if (g_host_display.get()) {
 		g_host_display.reset();
 	}
 }
