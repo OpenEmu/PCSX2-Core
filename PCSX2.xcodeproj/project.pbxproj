@@ -50,16 +50,13 @@
 		551AA12E2792AB1700658151 /* GSTextureCache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551AA0A52792AB1700658151 /* GSTextureCache.cpp */; };
 		551AA12F2792AB1700658151 /* GSRendererHW.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551AA0A82792AB1700658151 /* GSRendererHW.cpp */; };
 		551AA1302792AB1700658151 /* GSHwHack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551AA0A92792AB1700658151 /* GSHwHack.cpp */; };
-		551AA1392792AB1700658151 /* GSDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551AA0BE2792AB1700658151 /* GSDevice.cpp */; };
 		551AA13A2792AB1700658151 /* GSVertexTrace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551AA0BF2792AB1700658151 /* GSVertexTrace.cpp */; };
 		551AA13B2792AB1700658151 /* GSFunctionMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551AA0C22792AB1700658151 /* GSFunctionMap.cpp */; };
 		551AA13D2792AB1700658151 /* GSTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551AA0C82792AB1700658151 /* GSTexture.cpp */; };
-		551AA13E2792AB1700658151 /* GSVertexList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551AA0C92792AB1700658151 /* GSVertexList.cpp */; };
 		551AA13F2792AB1700658151 /* GSRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551AA0CC2792AB1700658151 /* GSRenderer.cpp */; };
 		551AA1402792AB1700658151 /* GSDirtyRect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551AA0CD2792AB1700658151 /* GSDirtyRect.cpp */; };
 		551AA1482792AB1800658151 /* GLState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551AA0E12792AB1700658151 /* GLState.cpp */; };
 		551AA1492792AB1800658151 /* GLLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551AA0E22792AB1700658151 /* GLLoader.cpp */; };
-		551AA14B2792AB1800658151 /* GSDeviceOGL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551AA0E72792AB1700658151 /* GSDeviceOGL.cpp */; };
 		551AA14C2792AB1800658151 /* GSTextureOGL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551AA0E82792AB1700658151 /* GSTextureOGL.cpp */; };
 		551AA16D2792B0EA00658151 /* MemoryCardFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551AA16B2792B0EA00658151 /* MemoryCardFile.cpp */; };
 		551AA16E2792B0EA00658151 /* MemoryCardFolder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551AA16C2792B0EA00658151 /* MemoryCardFolder.cpp */; };
@@ -393,6 +390,8 @@
 		55300EAE27C9A28B0049E2CC /* GSTextureReplacementLoaders.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55300EAC27C9A2830049E2CC /* GSTextureReplacementLoaders.cpp */; };
 		55324ED929973BA300A8FF1A /* ARP_PacketEditor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55324ED729973BA300A8FF1A /* ARP_PacketEditor.cpp */; };
 		55324EDC29973BBF00A8FF1A /* EthernetFrameEditor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55324EDA29973BBE00A8FF1A /* EthernetFrameEditor.cpp */; };
+		55325A072A00FB0800D4CFFA /* GSDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55325A062A00FAFA00D4CFFA /* GSDevice.cpp */; };
+		55325A092A01025600D4CFFA /* GSDeviceOGL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55325A082A01025600D4CFFA /* GSDeviceOGL.cpp */; };
 		553CF8382640D2F8003A437C /* jmp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FA79263D48AE000219EC /* jmp.cpp */; };
 		553CF8392640D2F8003A437C /* x86emitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FA78263D48AE000219EC /* x86emitter.cpp */; };
 		553CF83A2640D2F8003A437C /* legacy_sse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FA6F263D48AE000219EC /* legacy_sse.cpp */; };
@@ -579,7 +578,6 @@
 		557D49D027D00BE7006C2C69 /* merge.metal in Sources */ = {isa = PBXBuildFile; fileRef = DD03FFB727B70F0C0006ABDC /* merge.metal */; };
 		557D49D127D00BE7006C2C69 /* convert.metal in Sources */ = {isa = PBXBuildFile; fileRef = DD03FFC127B70F0C0006ABDC /* convert.metal */; };
 		5580639A27AB3262008CD5D2 /* KeyStatus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5580639627AB3261008CD5D2 /* KeyStatus.cpp */; };
-		558063A027AB346B008CD5D2 /* HostDisplay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5580639E27AB346B008CD5D2 /* HostDisplay.cpp */; };
 		558063A127AB346B008CD5D2 /* Host.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5580639F27AB346B008CD5D2 /* Host.cpp */; };
 		558063A727AB3D2D008CD5D2 /* ProgressCallback.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 558063A527AB3D2D008CD5D2 /* ProgressCallback.cpp */; };
 		558063AA27AB3E0B008CD5D2 /* WindowInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 558063A827AB3E0B008CD5D2 /* WindowInfo.cpp */; };
@@ -596,7 +594,6 @@
 		5580663227AD3ADE008CD5D2 /* tfx_vgs.glsl in Copy OpenGL Shaders */ = {isa = PBXBuildFile; fileRef = 558065C527AD3A31008CD5D2 /* tfx_vgs.glsl */; };
 		5580663327AD3AE1008CD5D2 /* interlace.glsl in Copy OpenGL Shaders */ = {isa = PBXBuildFile; fileRef = 558065C727AD3A31008CD5D2 /* interlace.glsl */; };
 		5580663427AD3AE6008CD5D2 /* merge.glsl in Copy OpenGL Shaders */ = {isa = PBXBuildFile; fileRef = 558065C827AD3A31008CD5D2 /* merge.glsl */; };
-		5580663527AD3AEC008CD5D2 /* common_header.glsl in Copy OpenGL Shaders */ = {isa = PBXBuildFile; fileRef = 558065C927AD3A31008CD5D2 /* common_header.glsl */; };
 		5580663627AD3AEF008CD5D2 /* shadeboost.glsl in Copy OpenGL Shaders */ = {isa = PBXBuildFile; fileRef = 558065CA27AD3A31008CD5D2 /* shadeboost.glsl */; };
 		5580663827AD3B38008CD5D2 /* convert.glsl in Copy Vulkan Shaders */ = {isa = PBXBuildFile; fileRef = 558065B927AD3A31008CD5D2 /* convert.glsl */; };
 		5580663927AD3B3A008CD5D2 /* interlace.glsl in Copy Vulkan Shaders */ = {isa = PBXBuildFile; fileRef = 558065BB27AD3A31008CD5D2 /* interlace.glsl */; };
@@ -677,7 +674,6 @@
 		DD0302B127C435760006ABDC /* SndOut_Cubeb.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 558063BB27AB4B6C008CD5D2 /* SndOut_Cubeb.cpp */; };
 		DD0302B727C491020006ABDC /* OESndOut.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD0302B527C491020006ABDC /* OESndOut.cpp */; };
 		DD0302BD27C491160006ABDC /* OpenGLHostDisplayOverride.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD0302B927C491160006ABDC /* OpenGLHostDisplayOverride.cpp */; };
-		DD0302BF27C491160006ABDC /* MetalHostDisplay.mm in Sources */ = {isa = PBXBuildFile; fileRef = DD0302BB27C491160006ABDC /* MetalHostDisplay.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		DD0302C027C491160006ABDC /* ContextAGL.mm in Sources */ = {isa = PBXBuildFile; fileRef = DD0302BC27C491160006ABDC /* ContextAGL.mm */; };
 		DD0302C327C5423F0006ABDC /* PAD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5580639827AB3261008CD5D2 /* PAD.cpp */; };
 		DD0302C927C549730006ABDC /* StateManagement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5580639727AB3261008CD5D2 /* StateManagement.cpp */; };
@@ -820,7 +816,6 @@
 				5580663427AD3AE6008CD5D2 /* merge.glsl in Copy OpenGL Shaders */,
 				5580663627AD3AEF008CD5D2 /* shadeboost.glsl in Copy OpenGL Shaders */,
 				55BD3E69295A58E5001DD03E /* present.glsl in Copy OpenGL Shaders */,
-				5580663527AD3AEC008CD5D2 /* common_header.glsl in Copy OpenGL Shaders */,
 			);
 			name = "Copy OpenGL Shaders";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1773,7 +1768,6 @@
 		551AA0A82792AB1700658151 /* GSRendererHW.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GSRendererHW.cpp; sourceTree = "<group>"; };
 		551AA0A92792AB1700658151 /* GSHwHack.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GSHwHack.cpp; sourceTree = "<group>"; };
 		551AA0AC2792AB1700658151 /* GSVertexHW.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSVertexHW.h; sourceTree = "<group>"; };
-		551AA0BC2792AB1700658151 /* GSVertexList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSVertexList.h; sourceTree = "<group>"; };
 		551AA0BE2792AB1700658151 /* GSDevice.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GSDevice.cpp; sourceTree = "<group>"; };
 		551AA0BF2792AB1700658151 /* GSVertexTrace.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GSVertexTrace.cpp; sourceTree = "<group>"; };
 		551AA0C02792AB1700658151 /* GSFastList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSFastList.h; sourceTree = "<group>"; };
@@ -1784,7 +1778,6 @@
 		551AA0C52792AB1700658151 /* GSVertexTrace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSVertexTrace.h; sourceTree = "<group>"; };
 		551AA0C62792AB1700658151 /* GSDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSDevice.h; sourceTree = "<group>"; };
 		551AA0C82792AB1700658151 /* GSTexture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GSTexture.cpp; sourceTree = "<group>"; };
-		551AA0C92792AB1700658151 /* GSVertexList.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GSVertexList.cpp; sourceTree = "<group>"; };
 		551AA0CA2792AB1700658151 /* GSTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSTexture.h; sourceTree = "<group>"; };
 		551AA0CB2792AB1700658151 /* GSFunctionMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSFunctionMap.h; sourceTree = "<group>"; };
 		551AA0CC2792AB1700658151 /* GSRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GSRenderer.cpp; sourceTree = "<group>"; };
@@ -1963,6 +1956,8 @@
 		55324ED829973BA300A8FF1A /* ARP_PacketEditor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ARP_PacketEditor.h; sourceTree = "<group>"; };
 		55324EDA29973BBE00A8FF1A /* EthernetFrameEditor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EthernetFrameEditor.cpp; sourceTree = "<group>"; };
 		55324EDB29973BBE00A8FF1A /* EthernetFrameEditor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EthernetFrameEditor.h; sourceTree = "<group>"; };
+		55325A062A00FAFA00D4CFFA /* GSDevice.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GSDevice.cpp; sourceTree = "<group>"; };
+		55325A082A01025600D4CFFA /* GSDeviceOGL.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GSDeviceOGL.cpp; sourceTree = "<group>"; };
 		553CF8172640CCCD003A437C /* libemitter_PCSX2.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libemitter_PCSX2.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		5541B76E27CECF3200AE70C2 /* OEPatching.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OEPatching.cpp; sourceTree = "<group>"; };
 		5548491928853D2E0066EDEB /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
@@ -2969,7 +2964,6 @@
 		556FBB39279E1067007B4F88 /* LayeredSettingsInterface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LayeredSettingsInterface.cpp; sourceTree = "<group>"; };
 		556FBB3B279E1067007B4F88 /* GameList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameList.h; sourceTree = "<group>"; };
 		556FBB3F279E1067007B4F88 /* InputSource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InputSource.cpp; sourceTree = "<group>"; };
-		556FBB40279E1067007B4F88 /* OpenGLHostDisplay.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpenGLHostDisplay.cpp; sourceTree = "<group>"; };
 		5576A4812885E10B0078CFF8 /* InputRecordingLogger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InputRecordingLogger.cpp; sourceTree = "<group>"; };
 		5580639327AB3261008CD5D2 /* Global.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Global.h; sourceTree = "<group>"; };
 		5580639427AB3261008CD5D2 /* StateManagement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StateManagement.h; sourceTree = "<group>"; };
@@ -2978,8 +2972,6 @@
 		5580639727AB3261008CD5D2 /* StateManagement.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StateManagement.cpp; sourceTree = "<group>"; };
 		5580639827AB3261008CD5D2 /* PAD.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PAD.cpp; sourceTree = "<group>"; };
 		5580639927AB3261008CD5D2 /* KeyStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyStatus.h; sourceTree = "<group>"; };
-		5580639D27AB346B008CD5D2 /* HostDisplay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HostDisplay.h; sourceTree = "<group>"; };
-		5580639E27AB346B008CD5D2 /* HostDisplay.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HostDisplay.cpp; sourceTree = "<group>"; };
 		5580639F27AB346B008CD5D2 /* Host.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Host.cpp; sourceTree = "<group>"; };
 		558063A527AB3D2D008CD5D2 /* ProgressCallback.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ProgressCallback.cpp; sourceTree = "<group>"; };
 		558063A627AB3D2D008CD5D2 /* ProgressCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProgressCallback.h; sourceTree = "<group>"; };
@@ -3045,7 +3037,6 @@
 		5580652627AB4DE9008CD5D2 /* SettingsWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsWrapper.h; sourceTree = "<group>"; };
 		5580652727AB4DE9008CD5D2 /* SettingsWrapper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SettingsWrapper.cpp; sourceTree = "<group>"; };
 		5580652C27AB504C008CD5D2 /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
-		5580653127AB50CC008CD5D2 /* OpenGLHostDisplay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenGLHostDisplay.h; sourceTree = "<group>"; };
 		5580653527AB5369008CD5D2 /* PCSX2Exports.exp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.exports; path = PCSX2Exports.exp; sourceTree = "<group>"; };
 		558065B427AD3A31008CD5D2 /* game_controller_db.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = game_controller_db.txt; sourceTree = "<group>"; };
 		558065B727AD3A31008CD5D2 /* fxaa.fx */ = {isa = PBXFileReference; explicitFileType = sourcecode.glsl; path = fxaa.fx; sourceTree = "<group>"; };
@@ -3058,7 +3049,6 @@
 		558065C627AD3A31008CD5D2 /* tfx_fs.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = tfx_fs.glsl; sourceTree = "<group>"; };
 		558065C727AD3A31008CD5D2 /* interlace.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = interlace.glsl; sourceTree = "<group>"; };
 		558065C827AD3A31008CD5D2 /* merge.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = merge.glsl; sourceTree = "<group>"; };
-		558065C927AD3A31008CD5D2 /* common_header.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = common_header.glsl; sourceTree = "<group>"; };
 		558065CA27AD3A31008CD5D2 /* shadeboost.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = shadeboost.glsl; sourceTree = "<group>"; };
 		558065CB27AD3A31008CD5D2 /* cover-placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cover-placeholder.png"; sourceTree = "<group>"; };
 		558065CD27AD3A31008CD5D2 /* fa-solid-900.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "fa-solid-900.ttf"; sourceTree = "<group>"; };
@@ -3201,7 +3191,6 @@
 		DD0302B527C491020006ABDC /* OESndOut.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OESndOut.cpp; sourceTree = "<group>"; };
 		DD0302B927C491160006ABDC /* OpenGLHostDisplayOverride.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpenGLHostDisplayOverride.cpp; sourceTree = "<group>"; };
 		DD0302BA27C491160006ABDC /* GSDeviceMTL.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GSDeviceMTL.mm; sourceTree = "<group>"; usesTabs = 1; };
-		DD0302BB27C491160006ABDC /* MetalHostDisplay.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MetalHostDisplay.mm; sourceTree = "<group>"; };
 		DD0302BC27C491160006ABDC /* ContextAGL.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ContextAGL.mm; sourceTree = "<group>"; };
 		DD0302C827C5494A0006ABDC /* keymap.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = keymap.h; sourceTree = "<group>"; };
 		DD03FFB427B70F0C0006ABDC /* GSMetalCPPAccessible.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSMetalCPPAccessible.h; sourceTree = "<group>"; };
@@ -3217,8 +3206,6 @@
 		DD03FFBE27B70F0C0006ABDC /* GSMTLSharedHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSMTLSharedHeader.h; sourceTree = "<group>"; };
 		DD03FFBF27B70F0C0006ABDC /* GSDeviceMTL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSDeviceMTL.h; sourceTree = "<group>"; };
 		DD03FFC127B70F0C0006ABDC /* convert.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = convert.metal; sourceTree = "<group>"; };
-		DD03FFD227B720610006ABDC /* MetalHostDisplay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MetalHostDisplay.h; sourceTree = "<group>"; };
-		DD03FFD327B720610006ABDC /* MetalHostDisplay.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MetalHostDisplay.mm; sourceTree = "<group>"; };
 		DD1134E827CBCE8900C2E60B /* SaveState.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SaveState.cpp; sourceTree = "<group>"; };
 		DD5D197D27D708A900ED83D9 /* OEHostDisplay.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OEHostDisplay.h; sourceTree = "<group>"; };
 		DD75EE5E29898A3A0056B3BA /* GSMTLDeviceInfo.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GSMTLDeviceInfo.mm; sourceTree = "<group>"; };
@@ -4499,8 +4486,6 @@
 				5517FE19263D49BC000219EC /* Hardware.h */,
 				5580639F27AB346B008CD5D2 /* Host.cpp */,
 				551AA4132792C76A00658151 /* Host.h */,
-				5580639E27AB346B008CD5D2 /* HostDisplay.cpp */,
-				5580639D27AB346B008CD5D2 /* HostDisplay.h */,
 				558063AB27AB4069008CD5D2 /* HostSettings.h */,
 				5517FB03263D49BB000219EC /* Hw.cpp */,
 				5517FDF4263D49BC000219EC /* Hw.h */,
@@ -5225,8 +5210,6 @@
 				551AA0C82792AB1700658151 /* GSTexture.cpp */,
 				551AA0CA2792AB1700658151 /* GSTexture.h */,
 				551AA0C42792AB1700658151 /* GSVertex.h */,
-				551AA0C92792AB1700658151 /* GSVertexList.cpp */,
-				551AA0BC2792AB1700658151 /* GSVertexList.h */,
 				551AA0BF2792AB1700658151 /* GSVertexTrace.cpp */,
 				551AA0C52792AB1700658151 /* GSVertexTrace.h */,
 				55B1F03B295BAF4200DB297F /* GSVertexTraceFMM.cpp */,
@@ -6874,10 +6857,6 @@
 				556FBB37279E1067007B4F88 /* InputSource.h */,
 				556FBB39279E1067007B4F88 /* LayeredSettingsInterface.cpp */,
 				556FBB38279E1067007B4F88 /* LayeredSettingsInterface.h */,
-				DD03FFD227B720610006ABDC /* MetalHostDisplay.h */,
-				DD03FFD327B720610006ABDC /* MetalHostDisplay.mm */,
-				556FBB40279E1067007B4F88 /* OpenGLHostDisplay.cpp */,
-				5580653127AB50CC008CD5D2 /* OpenGLHostDisplay.h */,
 			);
 			path = Frontend;
 			sourceTree = "<group>";
@@ -7060,7 +7039,6 @@
 			isa = PBXGroup;
 			children = (
 				55BD3E5F295A5861001DD03E /* cas.glsl */,
-				558065C927AD3A31008CD5D2 /* common_header.glsl */,
 				558065C427AD3A31008CD5D2 /* convert.glsl */,
 				558065C727AD3A31008CD5D2 /* interlace.glsl */,
 				558065C827AD3A31008CD5D2 /* merge.glsl */,
@@ -7283,14 +7261,15 @@
 		DD0302B827C491160006ABDC /* Video */ = {
 			isa = PBXGroup;
 			children = (
-				DD75EE5E29898A3A0056B3BA /* GSMTLDeviceInfo.mm */,
 				DD0302BC27C491160006ABDC /* ContextAGL.mm */,
+				55EBA8B8295CDEF90035A1FD /* GSCaptureStub.cpp */,
 				DD0302BA27C491160006ABDC /* GSDeviceMTL.mm */,
+				55325A082A01025600D4CFFA /* GSDeviceOGL.cpp */,
 				55484D3C28855E740066EDEB /* GSDumpReplayer.cpp */,
-				DD0302BB27C491160006ABDC /* MetalHostDisplay.mm */,
+				55325A062A00FAFA00D4CFFA /* GSDevice.cpp */,
+				DD75EE5E29898A3A0056B3BA /* GSMTLDeviceInfo.mm */,
 				DD5D197D27D708A900ED83D9 /* OEHostDisplay.h */,
 				DD0302B927C491160006ABDC /* OpenGLHostDisplayOverride.cpp */,
-				55EBA8B8295CDEF90035A1FD /* GSCaptureStub.cpp */,
 			);
 			path = Video;
 			sourceTree = "<group>";
@@ -7892,7 +7871,6 @@
 				55B1F014295BACF000DB297F /* TCP_Options.cpp in Sources */,
 				551BF57126420E720008C529 /* VUflags.cpp in Sources */,
 				551BF5BF264210A30008C529 /* FPU.cpp in Sources */,
-				551AA14B2792AB1800658151 /* GSDeviceOGL.cpp in Sources */,
 				551BF56F26420E710008C529 /* VU1micro.cpp in Sources */,
 				551AA12B2792AB1700658151 /* GSRasterizer.cpp in Sources */,
 				DD771F8D298AE19F007BE4EA /* GSDeviceMTL.mm in Sources */,
@@ -7941,7 +7919,6 @@
 				558063A127AB346B008CD5D2 /* Host.cpp in Sources */,
 				5548492B288554210066EDEB /* Ps1CD.cpp in Sources */,
 				551BF64B264218380008C529 /* iR5900Templates.cpp in Sources */,
-				558063A027AB346B008CD5D2 /* HostDisplay.cpp in Sources */,
 				551BF61D264214530008C529 /* BaseblockEx.cpp in Sources */,
 				551BF683264241530008C529 /* IsoFSCDVD.cpp in Sources */,
 				551BF69D264243B60008C529 /* ATA_CmdSMART.cpp in Sources */,
@@ -7961,13 +7938,13 @@
 				DDE1B429298C68130028DF05 /* usb-mic-singstar.cpp in Sources */,
 				551AA16E2792B0EA00658151 /* MemoryCardFolder.cpp in Sources */,
 				5580652827AB4DE9008CD5D2 /* SettingsWrapper.cpp in Sources */,
+				55325A072A00FB0800D4CFFA /* GSDevice.cpp in Sources */,
 				551AA4AA27935E9100658151 /* UDP_Packet.cpp in Sources */,
 				551BF689264241E80008C529 /* DisR5900asm.cpp in Sources */,
 				DD0302C027C491160006ABDC /* ContextAGL.mm in Sources */,
 				55484D3D28855E740066EDEB /* GSDumpReplayer.cpp in Sources */,
 				551BF57E26420E9A0008C529 /* Sio.cpp in Sources */,
 				DD75EE5F29898A3A0056B3BA /* GSMTLDeviceInfo.mm in Sources */,
-				DD0302BF27C491160006ABDC /* MetalHostDisplay.mm in Sources */,
 				551BF5CC264212070008C529 /* IPU.cpp in Sources */,
 				551BF56726420DE90008C529 /* SymbolMap.cpp in Sources */,
 				551BF5B9264210860008C529 /* Counters.cpp in Sources */,
@@ -8047,7 +8024,6 @@
 				551BF635264216F50008C529 /* CDVDdiscThread.cpp in Sources */,
 				DDE1B42E298C68210028DF05 /* usb-pad-ff.cpp in Sources */,
 				5517E8C7263D45F4000219EC /* PCSX2GameCore.mm in Sources */,
-				551AA1392792AB1700658151 /* GSDevice.cpp in Sources */,
 				551BF5BC2642109F0008C529 /* Elfheader.cpp in Sources */,
 				551BF649264218380008C529 /* iR5900MultDiv.cpp in Sources */,
 				55B1EFC7295BA52A00DB297F /* USB.cpp in Sources */,
@@ -8055,7 +8031,6 @@
 				551AA14C2792AB1800658151 /* GSTextureOGL.cpp in Sources */,
 				551BF57626420E720008C529 /* Vif1_MFIFO.cpp in Sources */,
 				551BF56C26420E710008C529 /* Vif_Transfer.cpp in Sources */,
-				551AA13E2792AB1700658151 /* GSVertexList.cpp in Sources */,
 				551BF5DA264212270008C529 /* Memory.cpp in Sources */,
 				551BF637264216F50008C529 /* BlockdumpFileReader.cpp in Sources */,
 				DDE1B427298C68130028DF05 /* audiodev-cubeb.cpp in Sources */,
@@ -8088,6 +8063,7 @@
 				551BF61C264214530008C529 /* ir5900tables.cpp in Sources */,
 				551AA48B27935DF400658151 /* GSRendererNull.cpp in Sources */,
 				551BF5C4264210AB0008C529 /* Gif_Logger.cpp in Sources */,
+				55325A092A01025600D4CFFA /* GSDeviceOGL.cpp in Sources */,
 				556FBB48279E1067007B4F88 /* InputManager.cpp in Sources */,
 				551BF58A26420E9A0008C529 /* R3000A.cpp in Sources */,
 				551AA16D2792B0EA00658151 /* MemoryCardFile.cpp in Sources */,
@@ -8763,7 +8739,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1.7.4280;
+				CURRENT_PROJECT_VERSION = 1.7.4452;
 				EXPORTED_SYMBOLS_FILE = Classes/PCSX2Exports.exp;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = pcsx2/pcsx2/PrecompiledHeader.h;
@@ -8790,7 +8766,7 @@
 				);
 				INFOPLIST_FILE = Resources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
-				MARKETING_VERSION = 1.7.4280;
+				MARKETING_VERSION = 1.7.4452;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.openemu.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -8842,7 +8818,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1.7.4280;
+				CURRENT_PROJECT_VERSION = 1.7.4452;
 				DEAD_CODE_STRIPPING = YES;
 				EXPORTED_SYMBOLS_FILE = Classes/PCSX2Exports.exp;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -8871,7 +8847,7 @@
 				INFOPLIST_FILE = Resources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
 				LLVM_LTO = YES_THIN;
-				MARKETING_VERSION = 1.7.4280;
+				MARKETING_VERSION = 1.7.4452;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.openemu.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

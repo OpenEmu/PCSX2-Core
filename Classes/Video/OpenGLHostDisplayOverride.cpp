@@ -16,7 +16,6 @@
 #include "PrecompiledHeader.h"
 #include "Video/OEHostDisplay.h"
 
-#include "OpenGLHostDisplay.h"
 #include "common/Assertions.h"
 #include "common/Console.h"
 #include "common/ScopedGuard.h"
@@ -27,6 +26,7 @@
 
 static int OE_FBO = 0;
 
+#if 0
 class OpenGLHostDisplayTexture : public HostDisplayTexture
 {
 public:
@@ -486,3 +486,4 @@ float OpenGLHostDisplay::GetAndResetAccumulatedGPUTime()
 	return value;
 }
 
+#endif
