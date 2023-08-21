@@ -316,6 +316,7 @@ static NSURL *binCueFix(NSURL *path)
 			VMManager::SetState(VMState::Running);
 			if ([stateToLoad.path length] > 0) {
 				VMManager::LoadState(stateToLoad.fileSystemRepresentation);
+				stateToLoad = nil;
 			}
 
 			[NSThread detachNewThreadSelector:@selector(runVMThread:) toTarget:self withObject:nil];
@@ -464,8 +465,10 @@ static NSURL *binCueFix(NSURL *path)
 #pragma mark Save States
 - (void)loadStateFromFileAtURL:(NSURL *)fileURL completionHandler:(void (^)(BOOL, NSError *))block
 {
-	if (!VMManager::HasValidVM()){
+	if (!VMManager::HasValidVM()) {
 		stateToLoad = fileURL;
+		// Assume we'll succeed
+		block(YES, nil);
 		return;
 	}
 	
@@ -481,8 +484,11 @@ static NSURL *binCueFix(NSURL *path)
 
 - (void)saveStateToFileAtURL:(NSURL *)fileURL completionHandler:(void (^)(BOOL, NSError *))block
 {
-	if (!VMManager::HasValidVM())
+	if (!VMManager::HasValidVM()) {
+		// Not loaded. Then we fail?
+		block(NO, [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotStartCoreError userInfo:@{NSLocalizedDescriptionKey: @"PCSX2 is not initialized, creating save state impossible.", NSURLErrorKey: fileURL}]);
 		return;
+	}
 	bool success = VMManager::SaveState(fileURL.fileSystemRepresentation, false, false);
 	
 	block(success, success ? nil : [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotSaveStateError userInfo:@{NSLocalizedDescriptionKey: @"PCSX2 Could not save the current state.", NSURLErrorKey: fileURL}]);
