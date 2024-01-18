@@ -48,16 +48,6 @@ static __forceinline s32 MulShr32(s32 srcval, s32 mulval)
 	return (s64)srcval * mulval >> 32;
 }
 
-__forceinline s32 clamp_mix(s32 x)
-{
-	return std::clamp(x, -0x8000, 0x7fff);
-}
-
-__forceinline StereoOut32 clamp_mix(StereoOut32 sample)
-{
-	return StereoOut32(clamp_mix(sample.Left), clamp_mix(sample.Right));
-}
-
 static void __forceinline XA_decode_block(s16* buffer, const s16* block, s32& prev1, s32& prev2)
 {
 	const s32 header = *block;
@@ -115,7 +105,7 @@ static void __forceinline IncrementNextA(V_Core& thiscore, uint voiceidx)
 // decoded pcm data, used to cache the decoded data so that it needn't be decoded
 // multiple times.  Cache chunks are decoded when the mixer requests the blocks, and
 // invalided when DMA transfers and memory writes are performed.
-PcmCacheEntry* pcm_cache_data = nullptr;
+PcmCacheEntry pcm_cache_data[pcm_BlockCount];
 
 int g_counter_cache_hits = 0;
 int g_counter_cache_misses = 0;
@@ -331,7 +321,7 @@ static __forceinline void CalculateADSR(V_Core& thiscore, uint voiceidx)
 		return;
 	}
 
-	if (!vc.ADSR.Calculate())
+	if (!vc.ADSR.Calculate(voiceidx))
 	{
 		if (IsDevBuild)
 		{
@@ -347,10 +337,10 @@ static __forceinline void CalculateADSR(V_Core& thiscore, uint voiceidx)
 __forceinline static s32 GaussianInterpolate(s32 pv4, s32 pv3, s32 pv2, s32 pv1, s32 i)
 {
 	s32 out = 0;
-	out =  (interpTable[0x0FF - i] * pv4) >> 15;
-	out += (interpTable[0x1FF - i] * pv3) >> 15;
-	out += (interpTable[0x100 + i] * pv2) >> 15;
-	out += (interpTable[0x000 + i] * pv1) >> 15;
+	out =  (interpTable[i][0] * pv4) >> 15;
+	out += (interpTable[i][1] * pv3) >> 15;
+	out += (interpTable[i][2] * pv2) >> 15;
+	out += (interpTable[i][3] * pv1) >> 15;
 
 	return out;
 }
@@ -577,14 +567,6 @@ StereoOut32 V_Core::Mix(const VoiceMixSet& inVoices, const StereoOut32& Input, c
 	//  2. Writes to ESA (and possibly EEA) reset the buffer pointers to 0.
 	//
 	// On the other hand, updating the buffer is cheap and easy, so might as well. ;)
-
-	Reverb_AdvanceBuffer(); // Updates the reverb work area as well, if needed.
-
-	// ToDo:
-	// Bad EndA causes memory corruption. Bad for us, unknown on PS2!
-	// According to no$psx, effects always run but don't always write back, so the FxEnable check may be wrong
-	if (!FxEnable || EffectsEndA >= 0x100000)
-		return TD;
 
 	StereoOut32 TW;
 
