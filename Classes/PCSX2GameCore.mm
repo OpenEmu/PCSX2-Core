@@ -269,7 +269,7 @@ static NSURL *binCueFix(NSURL *path)
 
 - (void)resetEmulation
 {
-	VMManager::SetState(VMState::Stopping);
+	VMManager::SetState(VMState::Resetting);
 }
 
 - (void)setPauseEmulation:(BOOL)pauseEmulation
