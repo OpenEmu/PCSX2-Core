@@ -1,25 +1,16 @@
-/*  PCSX2 - PS2 Emulator for PCs
- *  Copyright (C) 2002-2021 PCSX2 Dev Team
- *
- *  PCSX2 is free software: you can redistribute it and/or modify it under the terms
- *  of the GNU Lesser General Public License as published by the Free Software Found-
- *  ation, either version 3 of the License, or (at your option) any later version.
- *
- *  PCSX2 is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
- *  without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
- *  PURPOSE.  See the GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License along with PCSX2.
- *  If not, see <http://www.gnu.org/licenses/>.
- */
+// SPDX-FileCopyrightText: 2002-2023 PCSX2 Dev Team
+// SPDX-License-Identifier: LGPL-3.0+
 
-#include "PrecompiledHeader.h"
 #include "GS/Renderers/Common/GSDevice.h"
 #include "GS/GSGL.h"
 #include "GS/GS.h"
 #include "Host.h"
-#include "HostSettings.h"
-#include "common/Align.h"
+
+#include "common/Console.h"
+#include "common/BitUtils.h"
+#include "common/FileSystem.h"
+#include "common/Path.h"
+#include "common/SmallString.h"
 #include "common/StringUtil.h"
 
 //#include "imgui.h"
@@ -41,6 +32,7 @@ const char* shaderName(ShaderConvert value)
 		case ShaderConvert::FLOAT32_TO_16_BITS:     return "ps_convert_float32_32bits";
 		case ShaderConvert::FLOAT32_TO_32_BITS:     return "ps_convert_float32_32bits";
 		case ShaderConvert::FLOAT32_TO_RGBA8:       return "ps_convert_float32_rgba8";
+		case ShaderConvert::FLOAT32_TO_RGB8:        return "ps_convert_float32_rgba8";
 		case ShaderConvert::FLOAT16_TO_RGB5A1:      return "ps_convert_float16_rgb5a1";
 		case ShaderConvert::RGBA8_TO_FLOAT32:       return "ps_convert_rgba8_float32";
 		case ShaderConvert::RGBA8_TO_FLOAT24:       return "ps_convert_rgba8_float24";
@@ -57,7 +49,7 @@ const char* shaderName(ShaderConvert value)
 		case ShaderConvert::YUV:                    return "ps_yuv";
 			// clang-format on
 		default:
-			ASSERT(0);
+			pxAssert(0);
 			return "ShaderConvertUnknownShader";
 	}
 }
@@ -67,15 +59,17 @@ const char* shaderName(PresentShader value)
 	switch (value)
 	{
 			// clang-format off
-		case PresentShader::COPY:              return "ps_copy";
-		case PresentShader::SCANLINE:          return "ps_filter_scanlines";
-		case PresentShader::DIAGONAL_FILTER:   return "ps_filter_diagonal";
-		case PresentShader::TRIANGULAR_FILTER: return "ps_filter_triangular";
-		case PresentShader::COMPLEX_FILTER:    return "ps_filter_complex";
-		case PresentShader::LOTTES_FILTER:     return "ps_filter_lottes";
+		case PresentShader::COPY:               return "ps_copy";
+		case PresentShader::SCANLINE:           return "ps_filter_scanlines";
+		case PresentShader::DIAGONAL_FILTER:    return "ps_filter_diagonal";
+		case PresentShader::TRIANGULAR_FILTER:  return "ps_filter_triangular";
+		case PresentShader::COMPLEX_FILTER:     return "ps_filter_complex";
+		case PresentShader::LOTTES_FILTER:      return "ps_filter_lottes";
+		case PresentShader::SUPERSAMPLE_4xRGSS: return "ps_4x_rgss";
+		case PresentShader::SUPERSAMPLE_AUTO:   return "ps_automagical_supersampling";
 			// clang-format on
 		default:
-			ASSERT(0);
+			pxAssert(0);
 			return "DisplayShaderUnknownShader";
 	}
 }
@@ -85,9 +79,111 @@ static int MipmapLevelsForSize(int width, int height)
 	return std::min(static_cast<int>(std::log2(std::max(width, height))) + 1, MAXIMUM_TEXTURE_MIPMAP_LEVELS);
 }
 
+#ifdef PCSX2_DEVBUILD
+
+enum class TextureLabel
+{
+	ColorRT,
+	HDRRT,
+	U16RT,
+	U32RT,
+	DepthStencil,
+	PrimIDTexture,
+	RWTexture,
+	CLUTTexture,
+	Texture,
+	ReplacementTexture,
+	Other,
+	Last = Other,
+};
+
+static std::array<u32, static_cast<u32>(TextureLabel::Last) + 1> s_texture_counts;
+
+static TextureLabel GetTextureLabel(GSTexture::Type type, GSTexture::Format format)
+{
+	switch (type)
+	{
+		case GSTexture::Type::RenderTarget:
+			switch (format)
+			{
+				case GSTexture::Format::Color:
+					return TextureLabel::ColorRT;
+				case GSTexture::Format::HDRColor:
+					return TextureLabel::HDRRT;
+				case GSTexture::Format::UInt16:
+					return TextureLabel::U16RT;
+				case GSTexture::Format::UInt32:
+					return TextureLabel::U32RT;
+				case GSTexture::Format::PrimID:
+					return TextureLabel::PrimIDTexture;
+				default:
+					return TextureLabel::Other;
+			}
+		case GSTexture::Type::Texture:
+			switch (format)
+			{
+				case GSTexture::Format::Color:
+					return TextureLabel::Texture;
+				case GSTexture::Format::UNorm8:
+					return TextureLabel::CLUTTexture;
+				case GSTexture::Format::BC1:
+				case GSTexture::Format::BC2:
+				case GSTexture::Format::BC3:
+				case GSTexture::Format::BC7:
+					return TextureLabel::ReplacementTexture;
+				default:
+					return TextureLabel::Other;
+			}
+		case GSTexture::Type::DepthStencil:
+			return TextureLabel::DepthStencil;
+		case GSTexture::Type::RWTexture:
+			return TextureLabel::RWTexture;
+		case GSTexture::Type::Invalid:
+		default:
+			return TextureLabel::Other;
+	}
+}
+
+static const char* TextureLabelString(TextureLabel label)
+{
+	switch (label)
+	{
+		case TextureLabel::ColorRT:
+			return "Color RT";
+		case TextureLabel::HDRRT:
+			return "HDR RT";
+		case TextureLabel::U16RT:
+			return "U16 RT";
+		case TextureLabel::U32RT:
+			return "U32 RT";
+		case TextureLabel::DepthStencil:
+			return "Depth Stencil";
+		case TextureLabel::PrimIDTexture:
+			return "PrimID";
+		case TextureLabel::RWTexture:
+			return "RW Texture";
+		case TextureLabel::CLUTTexture:
+			return "CLUT Texture";
+		case TextureLabel::Texture:
+			return "Texture";
+		case TextureLabel::ReplacementTexture:
+			return "Replacement Texture";
+		case TextureLabel::Other:
+		default:
+			return "Unknown Texture";
+	}
+}
+
+#endif
+
 std::unique_ptr<GSDevice> g_gs_device;
 
-GSDevice::GSDevice() = default;
+GSDevice::GSDevice()
+{
+#ifdef PCSX2_DEVBUILD
+	s_texture_counts.fill(0);
+#endif
+}
 
 GSDevice::~GSDevice()
 {
@@ -184,6 +280,11 @@ void GSDevice::GenerateExpansionIndexBuffer(void* buffer)
 	}
 }
 
+std::optional<std::string> GSDevice::ReadShaderSource(const char* filename)
+{
+	return FileSystem::ReadFileToString(Path::Combine(EmuFolders::Resources, filename).c_str());
+}
+
 bool GSDevice::Create()
 {
 	m_vsync_mode = Host::GetEffectiveVSyncMode();
@@ -227,15 +328,29 @@ bool GSDevice::GetHostRefreshRate(float* refresh_rate)
 	return WindowInfo::QueryRefreshRateForWindow(m_window_info, refresh_rate);
 }
 
+void GSDevice::ClearRenderTarget(GSTexture* t, u32 c)
+{
+	t->SetClearColor(c);
+}
+
+void GSDevice::ClearDepth(GSTexture* t, float d)
+{
+	t->SetClearDepth(d);
+}
+
+void GSDevice::InvalidateRenderTarget(GSTexture* t)
+{
+	t->SetState(GSTexture::State::Invalidated);
+}
+
 bool GSDevice::UpdateImGuiFontTexture()
 {
 	return true;
 }
 
-GSTexture* GSDevice::FetchSurface(GSTexture::Type type, int width, int height, int levels, GSTexture::Format format, bool clear, bool prefer_reuse)
+GSTexture* GSDevice::FetchSurface(GSTexture::Type type, int width, int height, int levels, GSTexture::Format format, bool clear, bool prefer_unused_texture)
 {
 	const GSVector2i size(width, height);
-	const bool prefer_new_texture = (m_features.prefer_new_textures && type == GSTexture::Type::Texture && !prefer_reuse);
 	FastList<GSTexture*>& pool = m_pool[type != GSTexture::Type::Texture];
 
 	GSTexture* t = nullptr;
@@ -245,11 +360,11 @@ GSTexture* GSDevice::FetchSurface(GSTexture::Type type, int width, int height, i
 	{
 		t = *i;
 
-		assert(t);
+		pxAssert(t);
 
 		if (t->GetType() == type && t->GetFormat() == format && t->GetSize() == size && t->GetMipmapLevels() == levels)
 		{
-			if (!prefer_new_texture || t->GetLastFrameUsed() != m_frame)
+			if (!prefer_unused_texture || t->GetLastFrameUsed() != m_frame)
 			{
 				m_pool_memory_usage -= t->GetMemUsage();
 				pool.erase(i);
@@ -277,7 +392,24 @@ GSTexture* GSDevice::FetchSurface(GSTexture::Type type, int width, int height, i
 		{
 			t = CreateSurface(type, width, height, levels, format);
 			if (!t)
-				throw std::bad_alloc();
+			{
+				Console.Error("GS: Memory allocation failure for %dx%d texture. Purging pool and retrying.", width, height);
+				PurgePool();
+				if (!t)
+				{
+					Console.Error("GS: Memory allocation failure for %dx%d texture after purging pool.", width, height);
+					return nullptr;
+				}
+			}
+
+#ifdef PCSX2_DEVBUILD
+			if (GSConfig.UseDebugDevice)
+			{
+				const TextureLabel label = GetTextureLabel(type, format);
+				const u32 id = ++s_texture_counts[static_cast<u32>(label)];
+				t->SetDebugName(TinyString::from_fmt("{} {}", TextureLabelString(label), id));
+			}
+#endif
 		}
 	}
 
@@ -294,7 +426,7 @@ GSTexture* GSDevice::FetchSurface(GSTexture::Type type, int width, int height, i
 	case GSTexture::Type::DepthStencil:
 		{
 			if (clear)
-				ClearDepth(t);
+				ClearDepth(t, 0.0f);
 			else
 				InvalidateRenderTarget(t);
 		}
@@ -374,20 +506,20 @@ void GSDevice::PurgePool()
 	m_pool_memory_usage = 0;
 }
 
-GSTexture* GSDevice::CreateRenderTarget(int w, int h, GSTexture::Format format, bool clear)
+GSTexture* GSDevice::CreateRenderTarget(int w, int h, GSTexture::Format format, bool clear, bool prefer_reuse)
 {
-	return FetchSurface(GSTexture::Type::RenderTarget, w, h, 1, format, clear, true);
+	return FetchSurface(GSTexture::Type::RenderTarget, w, h, 1, format, clear, !prefer_reuse);
 }
 
-GSTexture* GSDevice::CreateDepthStencil(int w, int h, GSTexture::Format format, bool clear)
+GSTexture* GSDevice::CreateDepthStencil(int w, int h, GSTexture::Format format, bool clear, bool prefer_reuse)
 {
-	return FetchSurface(GSTexture::Type::DepthStencil, w, h, 1, format, clear, true);
+	return FetchSurface(GSTexture::Type::DepthStencil, w, h, 1, format, clear, !prefer_reuse);
 }
 
 GSTexture* GSDevice::CreateTexture(int w, int h, int mipmap_levels, GSTexture::Format format, bool prefer_reuse /* = false */)
 {
 	const int levels = mipmap_levels < 0 ? MipmapLevelsForSize(w, h) : mipmap_levels;
-	return FetchSurface(GSTexture::Type::Texture, w, h, levels, format, false, prefer_reuse);
+	return FetchSurface(GSTexture::Type::Texture, w, h, levels, format, false, m_features.prefer_new_textures && !prefer_reuse);
 }
 
 void GSDevice::StretchRect(GSTexture* sTex, GSTexture* dTex, const GSVector4& dRect, ShaderConvert shader, bool linear)
@@ -441,7 +573,7 @@ void GSDevice::ClearCurrent()
 	m_cas = nullptr;
 }
 
-void GSDevice::Merge(GSTexture* sTex[3], GSVector4* sRect, GSVector4* dRect, const GSVector2i& fs, const GSRegPMODE& PMODE, const GSRegEXTBUF& EXTBUF, const GSVector4& c)
+void GSDevice::Merge(GSTexture* sTex[3], GSVector4* sRect, GSVector4* dRect, const GSVector2i& fs, const GSRegPMODE& PMODE, const GSRegEXTBUF& EXTBUF, u32 c)
 {
 	if (ResizeRenderTarget(&m_merge, fs.x, fs.y, false, false))
 		DoMerge(sTex, sRect, m_merge, dRect, PMODE, EXTBUF, c, GSConfig.PCRTCOffsets);
@@ -578,19 +710,16 @@ bool GSDevice::ResizeRenderTarget(GSTexture** t, int w, int h, bool preserve_con
 		return true;
 	}
 
-	GSTexture* new_tex;
-	try
-	{
-		const GSTexture::Format fmt = orig_tex ? orig_tex->GetFormat() : GSTexture::Format::Color;
-		new_tex = FetchSurface(GSTexture::Type::RenderTarget, w, h, 1, fmt, !preserve_contents, true);
-	}
-	catch (std::bad_alloc&)
+	const GSTexture::Format fmt = orig_tex ? orig_tex->GetFormat() : GSTexture::Format::Color;
+	const bool really_preserve_contents = (preserve_contents && orig_tex);
+	GSTexture* new_tex = FetchSurface(GSTexture::Type::RenderTarget, w, h, 1, fmt, !really_preserve_contents, true);
+	if (!new_tex)
 	{
 		Console.WriteLn("%dx%d texture allocation failed in ResizeTexture()", w, h);
 		return false;
 	}
 
-	if (preserve_contents && orig_tex)
+	if (really_preserve_contents)
 	{
 		constexpr GSVector4 sRect = GSVector4::cxpr(0, 0, 1, 1);
 		const GSVector4 dRect = GSVector4(orig_tex->GetRect());
@@ -658,8 +787,8 @@ void GSDevice::SetHWDrawConfigForAlphaPass(GSHWDrawConfig::PSSelector* ps,
 
 bool GSDevice::GetCASShaderSource(std::string* source)
 {
-	std::optional<std::string> ffx_a_source(Host::ReadResourceFileToString("shaders/common/ffx_a.h"));
-	std::optional<std::string> ffx_cas_source(Host::ReadResourceFileToString("shaders/common/ffx_cas.h"));
+	std::optional<std::string> ffx_a_source = ReadShaderSource("shaders/common/ffx_a.h");
+	std::optional<std::string> ffx_cas_source = ReadShaderSource("shaders/common/ffx_cas.h");
 	if (!ffx_a_source.has_value() || !ffx_cas_source.has_value())
 		return false;
 
@@ -799,10 +928,10 @@ const std::array<HWBlend, 3*3*3*3> GSDevice::m_blendMap =
 	{ 0                        , OP_SUBTRACT     , CONST_ZERO      , SRC1_ALPHA}      , // 2102: (0  - Cd)*As +  0 ==> 0 - Cd*As
 	{ 0                        , OP_SUBTRACT     , CONST_ONE       , DST_ALPHA}       , // 2110: (0  - Cd)*Ad + Cs ==> Cs - Cd*Ad
 	{ 0                        , OP_ADD          , CONST_ZERO      , INV_DST_ALPHA}   , // 2111: (0  - Cd)*Ad + Cd ==> Cd*(1 - Ad)
-	{ 0                        , OP_SUBTRACT     , CONST_ONE       , DST_ALPHA}       , // 2112: (0  - Cd)*Ad +  0 ==> 0 - Cd*Ad
+	{ 0                        , OP_SUBTRACT     , CONST_ZERO      , DST_ALPHA}       , // 2112: (0  - Cd)*Ad +  0 ==> 0 - Cd*Ad
 	{ 0                        , OP_SUBTRACT     , CONST_ONE       , CONST_COLOR}     , // 2120: (0  - Cd)*F  + Cs ==> Cs - Cd*F
 	{ 0                        , OP_ADD          , CONST_ZERO      , INV_CONST_COLOR} , // 2121: (0  - Cd)*F  + Cd ==> Cd*(1 - F)
-	{ 0                        , OP_SUBTRACT     , CONST_ONE       , CONST_COLOR}     , // 2122: (0  - Cd)*F  +  0 ==> 0 - Cd*F
+	{ 0                        , OP_SUBTRACT     , CONST_ZERO      , CONST_COLOR}     , // 2122: (0  - Cd)*F  +  0 ==> 0 - Cd*F
 	{ BLEND_NO_REC             , OP_ADD          , CONST_ONE       , CONST_ZERO}      , // 2200: (0  -  0)*As + Cs ==> Cs
 	{ BLEND_CD                 , OP_ADD          , CONST_ZERO      , CONST_ONE}       , // 2201: (0  -  0)*As + Cd ==> Cd
 	{ BLEND_NO_REC             , OP_ADD          , CONST_ZERO      , CONST_ZERO}      , // 2202: (0  -  0)*As +  0 ==> 0

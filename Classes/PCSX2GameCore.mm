@@ -27,26 +27,24 @@
 #import <OpenEmuBase/OERingBuffer.h>
 #include "Video/OEHostDisplay.h"
 #include "Audio/OESndOut.h"
-#include "Input/keymap.h"
+//#include "Input/keymap.h"
 
 #define BOOL PCSX2BOOL
 #include "PrecompiledHeader.h"
 #include "GS.h"
-#include "HostSettings.h"
+//#include "HostSettings.h"
 #include "Host.h"
 //#include "core/host_display.h"
 #include "VMManager.h"
 //#include "AppConfig.h"
-#include "Frontend/InputManager.h"
+#include "Input/InputManager.h"
 #include "pcsx2/INISettingsInterface.h"
-#include "Frontend/CommonHost.h"
-#include "Frontend/FullscreenUI.h"
-#include "Frontend/LogSink.h"
+#include "MTGS.h"
 #include "common/SettingsWrapper.h"
 #include "CDVD/CDVD.h"
 #include "SPU2/Global.h"
 #include "SPU2/SndOut.h"
-#include "PAD/Host/KeyStatus.h"
+//#include "PAD/Host/KeyStatus.h"
 #include "R3000A.h"
 #include "MTVU.h"
 #include "Elfheader.h"
@@ -71,7 +69,7 @@ namespace GSDump
 	bool isRunning = false;
 }
 
-alignas(16) static SysMtgsThread s_mtgs_thread;
+//alignas(16) static MTGS::Thread s_mtgs_thread;
 PCSX2GameCore *_current;
 
 @implementation PCSX2GameCore {
@@ -100,7 +98,7 @@ PCSX2GameCore *_current;
 {
 	if (self = [super init]) {
 		_current = self;
-		VMManager::Internal::InitializeMemory();
+//		VMManager::Internal::InitializeMemory();
 		_maxDiscs = 0;
 		_displayModes = [[NSMutableDictionary alloc] initWithDictionary:
 						 @{OEPSCSX2InternalResolution: @1,
@@ -164,7 +162,7 @@ static NSURL *binCueFix(NSURL *path)
 	//Lets get the Disc ID with some Magic out of PCSX2 CDVD :)
 	VMManager::ChangeDisc(CDVD_SourceType::Iso, url.fileSystemRepresentation);
 	std::string DiscName;
-	GetPS2ElfName(DiscName);
+	cdvdGetDiscInfo(nullptr, &DiscName, nullptr, nullptr, nullptr);
 	
 	//TODO: update!
 //	std::string fname = DiscName.AfterLast('\\').BeforeFirst('_');
@@ -212,7 +210,7 @@ static NSURL *binCueFix(NSURL *path)
 	EmuFolders::Savestates = [self.supportDirectory URLByAppendingPathComponent:@"sstates" isDirectory:YES].fileSystemRepresentation;
 	EmuFolders::Logs = [self.supportDirectory URLByAppendingPathComponent:@"Logs" isDirectory:YES].fileSystemRepresentation;
 	EmuFolders::Cheats = [self.supportDirectory URLByAppendingPathComponent:@"Cheats" isDirectory:YES].fileSystemRepresentation;
-	EmuFolders::CheatsWS = [self.supportDirectory URLByAppendingPathComponent:@"cheats_ws" isDirectory:YES].fileSystemRepresentation;
+	EmuFolders::Patches = [self.supportDirectory URLByAppendingPathComponent:@"Patches" isDirectory:YES].fileSystemRepresentation;
 	EmuFolders::Covers = [self.supportDirectory URLByAppendingPathComponent:@"Covers" isDirectory:YES].fileSystemRepresentation;
 	EmuFolders::GameSettings = [self.supportDirectory URLByAppendingPathComponent:@"gamesettings" isDirectory:YES].fileSystemRepresentation;
 	EmuFolders::EnsureFoldersExist();
@@ -308,7 +306,7 @@ static NSURL *binCueFix(NSURL *path)
 			wi.surface_height = screenRect.size.height ;
 //		g_host_display->CreateDevice(wi, VsyncMode::Adaptive);
 			
-		VMManager::Internal::InitializeGlobals();
+//		VMManager::Internal::InitializeGlobals();
 		
 		
 		if (VMManager::Initialize(params)) {
@@ -447,17 +445,17 @@ static NSURL *binCueFix(NSURL *path)
 #pragma mark Input
 - (oneway void)didMovePS2JoystickDirection:(OEPS2Button)button withValue:(CGFloat)value forPlayer:(NSUInteger)player
 {
-	g_key_status.Set(u32(player - 1), ps2keymap[button].ps2key , value);
+//	g_key_status.Set(u32(player - 1), ps2keymap[button].ps2key , value);
 }
 
 - (oneway void)didPushPS2Button:(OEPS2Button)button forPlayer:(NSUInteger)player
 {
-	g_key_status.Set(u32(player - 1), ps2keymap[button].ps2key , 1.0f);
+//	g_key_status.Set(u32(player - 1), ps2keymap[button].ps2key , 1.0f);
 	
 }
 
 - (oneway void)didReleasePS2Button:(OEPS2Button)button forPlayer:(NSUInteger)player {
-	g_key_status.Set(u32(player - 1), ps2keymap[button].ps2key, 0.0f);
+//	g_key_status.Set(u32(player - 1), ps2keymap[button].ps2key, 0.0f);
 }
 
 
@@ -593,13 +591,14 @@ static NSURL *binCueFix(NSURL *path)
 
 @end
 
-SysMtgsThread& GetMTGS()
-{
-	return s_mtgs_thread;
-}
+//SysMtgsThread& GetMTGS()
+//{
+//	return s_mtgs_thread;
+//}
 
 #pragma mark - Host Namespace
 
+#if 0
 std::optional<std::vector<u8>> Host::ReadResourceFile(const char* filename)
 {
 	@autoreleasepool {
@@ -664,6 +663,7 @@ std::optional<std::string> Host::ReadResourceFileToString(const char* filename)
 	return ret;
 	}
 }
+#endif
 
 void Host::WriteToSoundBuffer(s16 Left, s16 Right)
 {
@@ -687,7 +687,7 @@ std::optional<WindowInfo> Host::GetTopLevelWindowInfo()
 	return {};
 }
 
-void Host::SetRelativeMouseMode(bool enabled)
+void Host::SetMouseMode(bool relative_mode, bool hide_cursor)
 {
 }
 
@@ -698,14 +698,6 @@ void Host::AddOSDMessage(std::string message, float duration)
 }
 
 void Host::AddKeyedOSDMessage(std::string key, std::string message, float duration)
-{
-}
-
-void Host::AddFormattedOSDMessage(float duration, const char* format, ...)
-{
-}
-
-void Host::AddKeyedFormattedOSDMessage(std::string key, float duration, const char* format, ...)
 {
 }
 
@@ -724,11 +716,6 @@ void Host::ReportErrorAsync(const std::string_view& title, const std::string_vie
 void Host::AddIconOSDMessage(std::string key, const char* icon, const std::string_view& message, float duration /* = 2.0f */)
 {
 	// Stub, do nothing.
-}
-
-void CommonHost::UpdateLogging(SettingsInterface& si)
-{
-	
 }
 
 #pragma mark Host Thread
@@ -765,12 +752,12 @@ void Host::OnSaveStateSaved(const std::string_view& filename)
 {
 }
 
-void Host::OnGameChanged(const std::string& disc_path, const std::string& elf_override, const std::string& game_serial,
-						 const std::string& game_name, u32 game_crc)
+void Host::OnGameChanged(const std::string& title, const std::string& elf_override, const std::string& disc_path,
+						 const std::string& disc_serial, u32 disc_crc, u32 current_crc)
 {
 }
 
-void Host::CPUThreadVSync()
+void Host::VSyncOnCPUThread()
 {
 }
 
@@ -859,22 +846,15 @@ void Host::CancelGameListRefresh()
 
 void Host::LoadSettings(SettingsInterface& si, std::unique_lock<std::mutex>& lock)
 {
-	CommonHost::LoadSettings(si, lock);
+//	CommonHost::LoadSettings(si, lock);
 }
 
 void Host::CheckForSettingsChanges(const Pcsx2Config& old_config)
 {
-	CommonHost::CheckForSettingsChanges(old_config);
-}
-
-void FullscreenUI::CheckForConfigChanges(const Pcsx2Config& old_config)
-{
-	// do nothing
+//	CommonHost::CheckForSettingsChanges(old_config);
 }
 
 #pragma mark -
-
-const IConsoleWriter* PatchesCon = &ConsoleWriter_Null;
 
 std::optional<u32> InputManager::ConvertHostKeyboardStringToCode(const std::string_view& str)
 {
