@@ -297,9 +297,9 @@ static NSURL *binCueFix(NSURL *path)
 	params.fullscreen = false;
   
 	if(!hasInitialized){
-		if (self.gameCoreRendering == OEGameCoreRenderingOpenGL3Video)
+		if (self.gameCoreRendering == OEGameCoreRenderingOpenGL3)
 			g_host_display = HostDisplay::CreateForAPI(RenderAPI::OpenGL);
-		else if (self.gameCoreRendering == OEGameCoreRenderingMetal2Video)
+		else if (self.gameCoreRendering == OEGameCoreRenderingMetal2)
 			g_host_display = HostDisplay::CreateForAPI(RenderAPI::Metal);
 			
 		WindowInfo wi;
@@ -402,9 +402,9 @@ static NSURL *binCueFix(NSURL *path)
 - (OEGameCoreRendering)gameCoreRendering
 {
 	if (@available(macOS 10.15, *)) {
-		return OEGameCoreRenderingMetal2Video;
+		return OEGameCoreRenderingMetal2;
 	} else {
-		return OEGameCoreRenderingOpenGL3Video;
+		return OEGameCoreRenderingOpenGL3;
 	}
 }
 
