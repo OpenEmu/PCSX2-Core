@@ -700,6 +700,8 @@
 		55C767822B777677005DC873 /* GLProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55C767812B777677005DC873 /* GLProgram.cpp */; };
 		55C767842B77772A005DC873 /* zip_err_str.c in Sources */ = {isa = PBXBuildFile; fileRef = 55C767832B77772A005DC873 /* zip_err_str.c */; };
 		55C767872B7778A5005DC873 /* GLContext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55C767862B7778A5005DC873 /* GLContext.cpp */; };
+		55C97CF12B7817AC004AB53D /* achievements-oe.mm in Sources */ = {isa = PBXBuildFile; fileRef = 55C97CF02B7817AC004AB53D /* achievements-oe.mm */; };
+		55C97CF32B78192D004AB53D /* imgui_stubs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55C97CF22B78192D004AB53D /* imgui_stubs.cpp */; };
 		55DB5A352B59027B00B3BD75 /* RedumpDatabase.yaml in Resources */ = {isa = PBXBuildFile; fileRef = 55DB5A342B59027B00B3BD75 /* RedumpDatabase.yaml */; };
 		55DB5A592B5903E400B3BD75 /* Assertions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55DB5A412B5903B000B3BD75 /* Assertions.cpp */; };
 		55DB5A5A2B5903EA00B3BD75 /* CrashHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55DB5A392B5903AE00B3BD75 /* CrashHandler.cpp */; };
@@ -2647,6 +2649,18 @@
 		55C767832B77772A005DC873 /* zip_err_str.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = zip_err_str.c; sourceTree = "<group>"; };
 		55C767852B77781A005DC873 /* GLContext.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GLContext.h; sourceTree = "<group>"; };
 		55C767862B7778A5005DC873 /* GLContext.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLContext.cpp; sourceTree = "<group>"; };
+		55C97CEF2B781775004AB53D /* Achievements.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Achievements.h; sourceTree = "<group>"; };
+		55C97CF02B7817AC004AB53D /* achievements-oe.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "achievements-oe.mm"; sourceTree = "<group>"; };
+		55C97CF22B78192D004AB53D /* imgui_stubs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = imgui_stubs.cpp; sourceTree = "<group>"; };
+		55C97CF52B78196B004AB53D /* ImGuiOverlays.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ImGuiOverlays.cpp; sourceTree = "<group>"; };
+		55C97CF62B78196B004AB53D /* FullscreenUI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FullscreenUI.h; sourceTree = "<group>"; };
+		55C97CF72B78196B004AB53D /* ImGuiOverlays.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImGuiOverlays.h; sourceTree = "<group>"; };
+		55C97CF82B78196B004AB53D /* FullscreenUI.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FullscreenUI.cpp; sourceTree = "<group>"; };
+		55C97CF92B78196B004AB53D /* ImGuiFullscreen.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImGuiFullscreen.h; sourceTree = "<group>"; };
+		55C97CFA2B78196B004AB53D /* ImGuiManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImGuiManager.h; sourceTree = "<group>"; };
+		55C97CFB2B78196B004AB53D /* ImGuiFullscreen.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ImGuiFullscreen.cpp; sourceTree = "<group>"; };
+		55C97CFC2B78196B004AB53D /* ImGuiAnimated.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImGuiAnimated.h; sourceTree = "<group>"; };
+		55C97CFD2B78196B004AB53D /* ImGuiManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ImGuiManager.cpp; sourceTree = "<group>"; };
 		55DB5A342B59027B00B3BD75 /* RedumpDatabase.yaml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = RedumpDatabase.yaml; sourceTree = "<group>"; };
 		55DB5A362B5903AE00B3BD75 /* StackWalker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StackWalker.cpp; sourceTree = "<group>"; };
 		55DB5A372B5903AE00B3BD75 /* FPControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FPControl.h; sourceTree = "<group>"; };
@@ -3193,19 +3207,21 @@
 		5517E8B6263D4213000219EC /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				DD0302B327C491020006ABDC /* Audio */,
+				DD0302B627C491020006ABDC /* Input */,
 				55484D2E2885595F0066EDEB /* libzip */,
 				DD1134E727CBCE8900C2E60B /* SaveState */,
 				DD0302B827C491160006ABDC /* Video */,
-				DD0302B327C491020006ABDC /* Audio */,
-				DD0302B627C491020006ABDC /* Input */,
+				55C97CF02B7817AC004AB53D /* achievements-oe.mm */,
+				55C767722B777407005DC873 /* DiscordStubs.cpp */,
+				55C97CF22B78192D004AB53D /* imgui_stubs.cpp */,
+				5541B76E27CECF3200AE70C2 /* OEPatching.cpp */,
 				5517E8C3263D4598000219EC /* OEPS2SystemResponderClient.h */,
+				5580653527AB5369008CD5D2 /* PCSX2Exports.exp */,
 				5517E8C5263D45F4000219EC /* PCSX2GameCore.h */,
 				5517E8C6263D45F4000219EC /* PCSX2GameCore.mm */,
-				5580653527AB5369008CD5D2 /* PCSX2Exports.exp */,
-				551BF5B626420FFC0008C529 /* svnrev.h */,
 				551BF5ED264212D60008C529 /* soundtouch_config.h */,
-				5541B76E27CECF3200AE70C2 /* OEPatching.cpp */,
-				55C767722B777407005DC873 /* DiscordStubs.cpp */,
+				551BF5B626420FFC0008C529 /* svnrev.h */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -3927,6 +3943,7 @@
 		5517FAA7263D49BB000219EC /* pcsx2 */ = {
 			isa = PBXGroup;
 			children = (
+				55C97CEF2B781775004AB53D /* Achievements.h */,
 				5517FDEF263D49BC000219EC /* AsyncFileReader.h */,
 				5517FCBC263D49BC000219EC /* Cache.cpp */,
 				5517FB54263D49BB000219EC /* Cache.h */,
@@ -3970,6 +3987,7 @@
 				5517FDF4263D49BC000219EC /* Hw.h */,
 				5517FE14263D49BC000219EC /* HwRead.cpp */,
 				5517FB32263D49BB000219EC /* HwWrite.cpp */,
+				55C97CF42B78196B004AB53D /* ImGui */,
 				55B1EFB7295BA12E00DB297F /* INISettingsInterface.cpp */,
 				55B1EFB8295BA12E00DB297F /* INISettingsInterface.h */,
 				55C765852B776805005DC873 /* Input */,
@@ -6027,6 +6045,22 @@
 			path = src;
 			sourceTree = "<group>";
 		};
+		55C97CF42B78196B004AB53D /* ImGui */ = {
+			isa = PBXGroup;
+			children = (
+				55C97CF82B78196B004AB53D /* FullscreenUI.cpp */,
+				55C97CF62B78196B004AB53D /* FullscreenUI.h */,
+				55C97CFC2B78196B004AB53D /* ImGuiAnimated.h */,
+				55C97CFB2B78196B004AB53D /* ImGuiFullscreen.cpp */,
+				55C97CF92B78196B004AB53D /* ImGuiFullscreen.h */,
+				55C97CFD2B78196B004AB53D /* ImGuiManager.cpp */,
+				55C97CFA2B78196B004AB53D /* ImGuiManager.h */,
+				55C97CF52B78196B004AB53D /* ImGuiOverlays.cpp */,
+				55C97CF72B78196B004AB53D /* ImGuiOverlays.h */,
+			);
+			path = ImGui;
+			sourceTree = "<group>";
+		};
 		55DB5A7F2B590A6C00B3BD75 /* libwebp */ = {
 			isa = PBXGroup;
 			children = (
@@ -7461,6 +7495,7 @@
 				551BF689264241E80008C529 /* DisR5900asm.cpp in Sources */,
 				DD0302C027C491160006ABDC /* GLContextAGL.mm in Sources */,
 				55484D3D28855E740066EDEB /* GSDumpReplayer.cpp in Sources */,
+				55C97CF32B78192D004AB53D /* imgui_stubs.cpp in Sources */,
 				DD75EE5F29898A3A0056B3BA /* GSMTLDeviceInfo.mm in Sources */,
 				551BF5CC264212070008C529 /* IPU.cpp in Sources */,
 				551BF56726420DE90008C529 /* SymbolMap.cpp in Sources */,
@@ -7625,6 +7660,7 @@
 				551BF638264216F50008C529 /* CDVD.cpp in Sources */,
 				551BF62B264216F50008C529 /* CDVDdiscReader.cpp in Sources */,
 				DD0302B727C491020006ABDC /* OESndOut.cpp in Sources */,
+				55C97CF12B7817AC004AB53D /* achievements-oe.mm in Sources */,
 				551BF6A92642444F0008C529 /* DplIIdecoder.cpp in Sources */,
 				551BF5AF26420FA50008C529 /* IopDma.cpp in Sources */,
 				55C765B72B776E88005DC873 /* MultitapProtocol.cpp in Sources */,

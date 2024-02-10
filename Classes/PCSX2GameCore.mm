@@ -775,72 +775,27 @@ void Host::RequestVMShutdown(bool allow_confirm, bool allow_save_state, bool def
 
 #pragma mark Host Display
 
-//std::optional<WindowInfo> EmuThread::acquireRenderWindow()
-//{
-//	return {};
-//}
-//
-//bool Host::AcquireHostDisplay(RenderAPI api, bool clear_state_on_fail)
-//{
-//	GET_CURRENT_OR_RETURN(false);
-//
-//	[current.renderDelegate willRenderFrameOnAlternateThread];
-//	return g_host_display.get();
-//}
-//
-//void Host::ReleaseHostDisplay(bool clear_state)
-//{
-//	GET_CURRENT_OR_RETURN();
-//	if (g_host_display.get()) {
-//		g_host_display.reset();
-//	}
-//}
-
-//HostDisplay::PresentResult Host::BeginPresentFrame(bool frame_skip)
-//{
-//	GET_CURRENT_OR_RETURN(HostDisplay::PresentResult::DeviceLost);
-//
-//	return g_host_display.get()->BeginPresent(frame_skip);
-//}
-//
-//void Host::EndPresentFrame()
-//{
-//	GET_CURRENT_OR_RETURN();
-//
-//	g_host_display.get()->EndPresent();
-//}
-//
-//int Host::PresentFrameBuffer()
-//{
-//	GET_CURRENT_OR_RETURN(0);
-//
-//	return [[current.renderDelegate presentationFramebuffer] intValue];
-//}
-
-//void Host::ResizeHostDisplay(u32 new_window_width, u32 new_window_height, float new_window_scale)
-//{
-	
-	//Once We have METAL,  we may be able to scale the frontend canvas
-	
-//	GET_CURRENT_OR_RETURN();
-//
-//	WindowInfo wi;
-//		wi.type = WindowInfo::Type::MacOS;
-//		wi.surface_width = new_window_width;
-//		wi.surface_height = new_window_height;
-//	current->hostDisplay.get()->ChangeRenderWindow(wi);
-//	current->screenRect = OEIntRectMake(0, 0 , new_window_width, new_window_height);
-//
-//}
-
-void Host::CancelGameListRefresh()
+void Host::BeginPresentFrame()
 {
 	
 }
 
-//void Host::UpdateHostDisplay()
-//{
-//}
+std::optional<WindowInfo> Host::AcquireRenderWindow(bool recreate_window)
+{
+	GET_CURRENT_OR_RETURN(std::nullopt);
+
+	//TODO: implement!
+	return {};
+}
+
+void Host::ReleaseRenderWindow()
+{
+	
+}
+void Host::CancelGameListRefresh()
+{
+	
+}
 
 #pragma mark Host Settings
 
@@ -854,6 +809,18 @@ void Host::CheckForSettingsChanges(const Pcsx2Config& old_config)
 //	CommonHost::CheckForSettingsChanges(old_config);
 }
 
+s32 Host::Internal::GetTranslatedStringImpl(const std::string_view &context, const std::string_view &msg, char *tbuf, size_t tbuf_space)
+{
+	if (msg.size() > tbuf_space) {
+		return -1;
+	} else if (msg.empty()) {
+		return 0;
+	}
+
+	std::memcpy(tbuf, msg.data(), msg.size());
+	return static_cast<s32>(msg.size());
+}
+
 #pragma mark -
 
 std::optional<u32> InputManager::ConvertHostKeyboardStringToCode(const std::string_view& str)
@@ -864,6 +831,11 @@ std::optional<u32> InputManager::ConvertHostKeyboardStringToCode(const std::stri
 std::optional<std::string> InputManager::ConvertHostKeyboardCodeToString(u32 code)
 {
 	return std::nullopt;
+}
+
+void VMManager::Internal::ResetVMHotkeyState()
+{
+	
 }
 
 BEGIN_HOTKEY_LIST(g_host_hotkeys)
