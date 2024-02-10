@@ -7279,14 +7279,14 @@
 		DD0302B827C491160006ABDC /* Video */ = {
 			isa = PBXGroup;
 			children = (
-				DD75EE5E29898A3A0056B3BA /* GSMTLDeviceInfo.mm */,
 				DD0302BC27C491160006ABDC /* ContextAGL.mm */,
+				55EBA8B8295CDEF90035A1FD /* GSCaptureStub.cpp */,
 				DD0302BA27C491160006ABDC /* GSDeviceMTL.mm */,
 				55484D3C28855E740066EDEB /* GSDumpReplayer.cpp */,
+				DD75EE5E29898A3A0056B3BA /* GSMTLDeviceInfo.mm */,
 				DD0302BB27C491160006ABDC /* MetalHostDisplay.mm */,
 				DD5D197D27D708A900ED83D9 /* OEHostDisplay.h */,
 				DD0302B927C491160006ABDC /* OpenGLHostDisplayOverride.cpp */,
-				55EBA8B8295CDEF90035A1FD /* GSCaptureStub.cpp */,
 			);
 			path = Video;
 			sourceTree = "<group>";
