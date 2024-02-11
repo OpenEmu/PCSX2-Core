@@ -48,6 +48,7 @@
 #include "R3000A.h"
 #include "MTVU.h"
 #include "Elfheader.h"
+#include "USB/deviceproxy.h"
 #undef BOOL
 
 #include <OpenGL/gl3.h>
@@ -306,8 +307,8 @@ static NSURL *binCueFix(NSURL *path)
 			wi.surface_height = screenRect.size.height ;
 //		g_host_display->CreateDevice(wi, VsyncMode::Adaptive);
 			
-//		VMManager::Internal::InitializeGlobals();
-		
+		VMManager::Internal::CPUThreadInitialize();
+
 		
 		if (VMManager::Initialize(params)) {
 			hasInitialized = true;
@@ -323,6 +324,10 @@ static NSURL *binCueFix(NSURL *path)
 
 - (void)runVMThread:(id)unused
 {
+	const char *tmp;
+	if (!VMManager::PerformEarlyHardwareChecks(&tmp)) {
+		abort();
+	}
 	OESetThreadRealtime(1. / 50, .007, .03); // guessed from bsnes
 		
 	while(!ExitRequested)
@@ -831,6 +836,42 @@ std::optional<u32> InputManager::ConvertHostKeyboardStringToCode(const std::stri
 std::optional<std::string> InputManager::ConvertHostKeyboardCodeToString(u32 code)
 {
 	return std::nullopt;
+}
+
+void InputManager::SetPadVibrationIntensity(u32 pad_index, float large_or_single_motor_intensity, float small_motor_intensity)
+{
+	// TODO: add vibration support to OpenEmu
+}
+
+void InputManager::ReloadBindings(SettingsInterface &si, SettingsInterface &binding_si)
+{
+	
+}
+
+void InputManager::PauseVibration()
+{
+	
+}
+
+void InputManager::ReloadSources(SettingsInterface &si, std::unique_lock<std::mutex> &settings_lock)
+{
+	
+}
+
+void InputManager::PollSources()
+{
+	
+}
+
+std::pair<float, float> InputManager::GetPointerAbsolutePosition(u32 index)
+{
+	return {0, 0};
+}
+
+RegisterDevice* RegisterDevice::registerDevice = nullptr;
+void RegisterDevice::Register()
+{
+	
 }
 
 void VMManager::Internal::ResetVMHotkeyState()

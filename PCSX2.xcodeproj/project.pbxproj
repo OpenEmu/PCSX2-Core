@@ -467,7 +467,6 @@
 		55B1F030295BAD5600DB297F /* AdapterUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55B1F028295BAD5600DB297F /* AdapterUtils.cpp */; };
 		55B1F034295BADAC00DB297F /* ICMP_Packet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55B1F033295BADAC00DB297F /* ICMP_Packet.cpp */; };
 		55B1F037295BAE5100DB297F /* IPU_MultiISA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55B1F035295BAE5000DB297F /* IPU_MultiISA.cpp */; };
-		55B1F038295BAE9900DB297F /* deviceproxy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FBFF263D49BC000219EC /* deviceproxy.cpp */; };
 		55B1F03A295BAF0A00DB297F /* GSRendererHWMultiISA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55B1F039295BAF0900DB297F /* GSRendererHWMultiISA.cpp */; };
 		55B1F03C295BAF4300DB297F /* GSVertexTraceFMM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55B1F03B295BAF4200DB297F /* GSVertexTraceFMM.cpp */; };
 		55BD3E67295A58B3001DD03E /* ffx_a.h in Copy Common Shaders */ = {isa = PBXBuildFile; fileRef = 55BD3E64295A587C001DD03E /* ffx_a.h */; };
@@ -2909,11 +2908,7 @@
 		55DB5CDA2B590FBB00B3BD75 /* libcpuinfo-pcsx2.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libcpuinfo-pcsx2.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		55DB5CE62B590FF200B3BD75 /* cpuinfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cpuinfo.h; sourceTree = "<group>"; };
 		55DB5CE72B590FF200B3BD75 /* cpuinfo-mock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "cpuinfo-mock.h"; sourceTree = "<group>"; };
-		55DB5CED2B590FF200B3BD75 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
-		55DB5CEE2B590FF200B3BD75 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		55DB5CF02B590FF200B3BD75 /* clog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = clog.h; sourceTree = "<group>"; };
-		55DB5CF12B590FF200B3BD75 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		55DB5CF22B590FF200B3BD75 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		55DB5CF42B590FF200B3BD75 /* clog.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = clog.c; sourceTree = "<group>"; };
 		55DB5CF72B590FF200B3BD75 /* log.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = log.c; sourceTree = "<group>"; };
 		55DB5CF82B590FF200B3BD75 /* api.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = api.c; sourceTree = "<group>"; };
@@ -6390,11 +6385,7 @@
 		55DB5CEC2B590FF200B3BD75 /* clog */ = {
 			isa = PBXGroup;
 			children = (
-				55DB5CED2B590FF200B3BD75 /* CMakeLists.txt */,
-				55DB5CEE2B590FF200B3BD75 /* LICENSE */,
 				55DB5CEF2B590FF200B3BD75 /* include */,
-				55DB5CF12B590FF200B3BD75 /* README.md */,
-				55DB5CF22B590FF200B3BD75 /* .gitignore */,
 				55DB5CF32B590FF200B3BD75 /* src */,
 			);
 			path = clog;
@@ -6434,18 +6425,18 @@
 		55DB5CFC2B590FF200B3BD75 /* x86 */ = {
 			isa = PBXGroup;
 			children = (
+				55DB5D082B590FF200B3BD75 /* api.h */,
 				55DB5CFD2B590FF200B3BD75 /* cache */,
 				55DB5D012B590FF200B3BD75 /* cpuid.h */,
-				55DB5D022B590FF200B3BD75 /* init.c */,
-				55DB5D032B590FF200B3BD75 /* vendor.c */,
 				55DB5D042B590FF200B3BD75 /* info.c */,
-				55DB5D052B590FF200B3BD75 /* topology.c */,
-				55DB5D062B590FF200B3BD75 /* mockcpuid.c */,
-				55DB5D072B590FF200B3BD75 /* uarch.c */,
-				55DB5D082B590FF200B3BD75 /* api.h */,
-				55DB5D0D2B590FF200B3BD75 /* name.c */,
+				55DB5D022B590FF200B3BD75 /* init.c */,
 				55DB5D0E2B590FF200B3BD75 /* isa.c */,
 				55DB5D0F2B590FF300B3BD75 /* mach */,
+				55DB5D062B590FF200B3BD75 /* mockcpuid.c */,
+				55DB5D0D2B590FF200B3BD75 /* name.c */,
+				55DB5D052B590FF200B3BD75 /* topology.c */,
+				55DB5D072B590FF200B3BD75 /* uarch.c */,
+				55DB5D032B590FF200B3BD75 /* vendor.c */,
 			);
 			path = x86;
 			sourceTree = "<group>";
@@ -7631,7 +7622,6 @@
 				551BF58726420E9A0008C529 /* pgif.cpp in Sources */,
 				DD03FFD827B721F20006ABDC /* GSTextureMTL.mm in Sources */,
 				551BF61E264214530008C529 /* iMMI.cpp in Sources */,
-				55B1F038295BAE9900DB297F /* deviceproxy.cpp in Sources */,
 				55B1F004295BABDB00DB297F /* bus.cpp in Sources */,
 				551BF5DB264212270008C529 /* MMI.cpp in Sources */,
 				55B1F00D295BACE200DB297F /* ARP_Packet.cpp in Sources */,
@@ -9306,6 +9296,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ENABLE_MODULES = NO;
 				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -9317,7 +9308,12 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SYSTEM_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/pcsx2/3rdparty/cpuinfo/src\"";
+				SYSTEM_HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/pcsx2/3rdparty/cpuinfo/src/\"",
+					"\"$(SRCROOT)/pcsx2/3rdparty/cpuinfo/include/\"",
+					"\"$(SRCROOT)/pcsx2/3rdparty/cpuinfo/deps/clog/include\"",
+				);
+				USE_HEADERMAP = NO;
 			};
 			name = Debug;
 		};
@@ -9325,6 +9321,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ENABLE_MODULES = NO;
 				CODE_SIGN_STYLE = Automatic;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				EXECUTABLE_PREFIX = lib;
@@ -9335,7 +9332,12 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SYSTEM_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/pcsx2/3rdparty/cpuinfo/src\"";
+				SYSTEM_HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/pcsx2/3rdparty/cpuinfo/src/\"",
+					"\"$(SRCROOT)/pcsx2/3rdparty/cpuinfo/include/\"",
+					"\"$(SRCROOT)/pcsx2/3rdparty/cpuinfo/deps/clog/include\"",
+				);
+				USE_HEADERMAP = NO;
 			};
 			name = Release;
 		};
