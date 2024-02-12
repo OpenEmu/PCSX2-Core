@@ -27,16 +27,12 @@
 #import <OpenEmuBase/OERingBuffer.h>
 #include "Video/OEHostDisplay.h"
 #include "Audio/OESndOut.h"
-//#include "Input/keymap.h"
 
 #define BOOL PCSX2BOOL
 #include "PrecompiledHeader.h"
 #include "GS.h"
-//#include "HostSettings.h"
 #include "Host.h"
-//#include "core/host_display.h"
 #include "VMManager.h"
-//#include "AppConfig.h"
 #include "Input/InputManager.h"
 #include "pcsx2/INISettingsInterface.h"
 #include "MTGS.h"
@@ -44,7 +40,6 @@
 #include "CDVD/CDVD.h"
 #include "SPU2/Global.h"
 #include "SPU2/SndOut.h"
-//#include "PAD/Host/KeyStatus.h"
 #include "R3000A.h"
 #include "MTVU.h"
 #include "Elfheader.h"
@@ -53,8 +48,6 @@
 
 #include <OpenGL/gl3.h>
 #include <OpenGL/gl3ext.h>
-
-//class MetalHostDisplay  : public HostDisplay {};
 
 static bool ExitRequested = false;
 static bool WaitRequested = false;
@@ -70,7 +63,6 @@ namespace GSDump
 	bool isRunning = false;
 }
 
-//alignas(16) static MTGS::Thread s_mtgs_thread;
 PCSX2GameCore *_current;
 
 @implementation PCSX2GameCore {
@@ -93,13 +85,13 @@ PCSX2GameCore *_current;
 	// Display modes.
 	NSMutableDictionary <NSString *, id> *_displayModes;
 	OEIntRect screenRect;
+	WindowInfo windowInfo;
 }
 
 - (instancetype)init
 {
 	if (self = [super init]) {
 		_current = self;
-//		VMManager::Internal::InitializeMemory();
 		_maxDiscs = 0;
 		_displayModes = [[NSMutableDictionary alloc] initWithDictionary:
 						 @{OEPSCSX2InternalResolution: @1,
@@ -301,14 +293,7 @@ static NSURL *binCueFix(NSURL *path)
 //		else if (self.gameCoreRendering == OEGameCoreRenderingMetal2Video)
 //			g_host_display = HostDisplay::CreateForAPI(RenderAPI::Metal);
 			
-		WindowInfo wi;
-			wi.type = WindowInfo::Type::MacOS;
-			wi.surface_width = screenRect.size.width ;
-			wi.surface_height = screenRect.size.height ;
-//		g_host_display->CreateDevice(wi, VsyncMode::Adaptive);
-			
 		VMManager::Internal::CPUThreadInitialize();
-
 		
 		if (VMManager::Initialize(params)) {
 			hasInitialized = true;
@@ -450,16 +435,18 @@ static NSURL *binCueFix(NSURL *path)
 #pragma mark Input
 - (oneway void)didMovePS2JoystickDirection:(OEPS2Button)button withValue:(CGFloat)value forPlayer:(NSUInteger)player
 {
+	//TODO: update!
 //	g_key_status.Set(u32(player - 1), ps2keymap[button].ps2key , value);
 }
 
 - (oneway void)didPushPS2Button:(OEPS2Button)button forPlayer:(NSUInteger)player
 {
+	//TODO: update!
 //	g_key_status.Set(u32(player - 1), ps2keymap[button].ps2key , 1.0f);
-	
 }
 
 - (oneway void)didReleasePS2Button:(OEPS2Button)button forPlayer:(NSUInteger)player {
+	//TODO: update!
 //	g_key_status.Set(u32(player - 1), ps2keymap[button].ps2key, 0.0f);
 }
 
@@ -469,6 +456,7 @@ static NSURL *binCueFix(NSURL *path)
 {
 	if (!VMManager::HasValidVM()){
 		stateToLoad = fileURL;
+		block(true, nil);
 		return;
 	}
 	
@@ -484,8 +472,10 @@ static NSURL *binCueFix(NSURL *path)
 
 - (void)saveStateToFileAtURL:(NSURL *)fileURL completionHandler:(void (^)(BOOL, NSError *))block
 {
-	if (!VMManager::HasValidVM())
+	if (!VMManager::HasValidVM()) {
+		block(false, [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotSaveStateError userInfo:nil]);
 		return;
+	}
 	bool success = VMManager::SaveState(fileURL.fileSystemRepresentation, false, false);
 	
 	block(success, success ? nil : [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotSaveStateError userInfo:@{NSLocalizedDescriptionKey: @"PCSX2 Could not save the current state.", NSURLErrorKey: fileURL}]);
@@ -596,79 +586,7 @@ static NSURL *binCueFix(NSURL *path)
 
 @end
 
-//SysMtgsThread& GetMTGS()
-//{
-//	return s_mtgs_thread;
-//}
-
 #pragma mark - Host Namespace
-
-#if 0
-std::optional<std::vector<u8>> Host::ReadResourceFile(const char* filename)
-{
-	@autoreleasepool {
-	NSString *nsFile = @(filename);
-	NSString *baseName = nsFile.lastPathComponent.stringByDeletingPathExtension;
-	NSString *upperName = nsFile.stringByDeletingLastPathComponent;
-	NSString *baseExt = nsFile.pathExtension;
-	if (baseExt.length == 0) {
-		baseExt = nil;
-	}
-	if (upperName.length == 0 || [upperName isEqualToString:@"/"]) {
-		upperName = nil;
-	}
-	NSURL *aURL;
-	if (upperName) {
-		aURL = [[NSBundle bundleForClass:[PCSX2GameCore class]] URLForResource:baseName withExtension:baseExt subdirectory:upperName];
-	} else {
-		aURL = [[NSBundle bundleForClass:[PCSX2GameCore class]] URLForResource:baseName withExtension:baseExt];
-	}
-	if (!aURL) {
-		return std::nullopt;
-	}
-	NSData *data = [[NSData alloc] initWithContentsOfURL:aURL];
-	if (!data) {
-		return std::nullopt;
-	}
-	auto retVal = std::vector<u8>(data.length);
-	[data getBytes:retVal.data() length:retVal.size()];
-	return retVal;
-	}
-}
-
-std::optional<std::string> Host::ReadResourceFileToString(const char* filename)
-{
-	@autoreleasepool {
-	NSString *nsFile = @(filename);
-	NSString *baseName = nsFile.lastPathComponent.stringByDeletingPathExtension;
-	NSString *upperName = nsFile.stringByDeletingLastPathComponent;
-	NSString *baseExt = nsFile.pathExtension;
-	if (baseExt.length == 0) {
-		baseExt = nil;
-	}
-	if (upperName.length == 0 || [upperName isEqualToString:@"/"]) {
-		upperName = nil;
-	}
-	NSURL *aURL;
-	if (upperName) {
-		aURL = [[NSBundle bundleForClass:[PCSX2GameCore class]] URLForResource:baseName withExtension:baseExt subdirectory:upperName];
-	} else {
-		aURL = [[NSBundle bundleForClass:[PCSX2GameCore class]] URLForResource:baseName withExtension:baseExt];
-	}
-	if (!aURL) {
-		return std::nullopt;
-	}
-	NSData *data = [[NSData alloc] initWithContentsOfURL:aURL];
-	if (!data) {
-		return std::nullopt;
-	}
-	std::string ret;
-	ret.resize(data.length);
-	[data getBytes:ret.data() length:ret.size()];
-	return ret;
-	}
-}
-#endif
 
 void Host::WriteToSoundBuffer(s16 Left, s16 Right)
 {
@@ -689,7 +607,9 @@ void Host::OnPerformanceMetricsUpdated()
 
 std::optional<WindowInfo> Host::GetTopLevelWindowInfo()
 {
-	return {};
+	GET_CURRENT_OR_RETURN(std::nullopt);
+
+	return current->windowInfo;
 }
 
 void Host::SetMouseMode(bool relative_mode, bool hide_cursor)
@@ -789,8 +709,14 @@ std::optional<WindowInfo> Host::AcquireRenderWindow(bool recreate_window)
 {
 	GET_CURRENT_OR_RETURN(std::nullopt);
 
-	//TODO: implement!
-	return {};
+	WindowInfo wi;
+		wi.type = WindowInfo::Type::MacOS;
+		wi.surface_width = current->screenRect.size.width;
+		wi.surface_height = current->screenRect.size.height;
+	
+	current->windowInfo = wi;
+	
+	return current->windowInfo;
 }
 
 void Host::ReleaseRenderWindow()

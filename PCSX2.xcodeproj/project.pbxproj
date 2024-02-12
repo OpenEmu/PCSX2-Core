@@ -2006,7 +2006,6 @@
 		55325A062A00FAFA00D4CFFA /* GSDevice.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GSDevice.cpp; sourceTree = "<group>"; };
 		55325A082A01025600D4CFFA /* GSDeviceOGL.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GSDeviceOGL.cpp; sourceTree = "<group>"; };
 		553CF8172640CCCD003A437C /* libemitter_PCSX2.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libemitter_PCSX2.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		5541B76E27CECF3200AE70C2 /* OEPatching.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OEPatching.cpp; sourceTree = "<group>"; };
 		5548491928853D2E0066EDEB /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		5548491A28853D2E0066EDEB /* zstd.vcxproj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = zstd.vcxproj; sourceTree = "<group>"; };
 		5548491B28853D2E0066EDEB /* zstd.vcxproj.filters */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = zstd.vcxproj.filters; sourceTree = "<group>"; };
@@ -3210,7 +3209,6 @@
 				55C97CF02B7817AC004AB53D /* achievements-oe.mm */,
 				55C767722B777407005DC873 /* DiscordStubs.cpp */,
 				55C97CF22B78192D004AB53D /* imgui_stubs.cpp */,
-				5541B76E27CECF3200AE70C2 /* OEPatching.cpp */,
 				5517E8C3263D4598000219EC /* OEPS2SystemResponderClient.h */,
 				5580653527AB5369008CD5D2 /* PCSX2Exports.exp */,
 				5517E8C5263D45F4000219EC /* PCSX2GameCore.h */,

@@ -29,5 +29,8 @@
 //#define SOUNDTOUCH_ALLOW_SSE
 //#define SOUNDTOUCH_ALLOW_X86_OPTIMIZATIONS
 //#endif
+#ifdef __arm64__
+#define SOUNDTOUCH_USE_NEON
+#endif
 
 #endif /* soundtouch_config_h */
