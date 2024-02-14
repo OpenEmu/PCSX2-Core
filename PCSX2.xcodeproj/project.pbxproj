@@ -426,6 +426,12 @@
 		5591D80C27B469200073E97D /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5591D80B27B469200073E97D /* CoreAudio.framework */; };
 		5591D80D27B4693D0073E97D /* cubeb_utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 558064CA27AB4B9E008CD5D2 /* cubeb_utils.cpp */; };
 		5591D80E27B469600073E97D /* cubeb_osx_run_loop.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 558064C627AB4B9E008CD5D2 /* cubeb_osx_run_loop.cpp */; };
+		559261382B7CB4A8006F4A8C /* GSDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551AA0BE2792AB1700658151 /* GSDevice.cpp */; };
+		559261552B7CB6F3006F4A8C /* imconfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 5592613F2B7CB67E006F4A8C /* imconfig.h */; };
+		559261562B7CB6F3006F4A8C /* imgui_internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 559261412B7CB67E006F4A8C /* imgui_internal.h */; };
+		559261572B7CB6F3006F4A8C /* imgui.h in Headers */ = {isa = PBXBuildFile; fileRef = 5592613D2B7CB67E006F4A8C /* imgui.h */; };
+		559261582B7CB6F3006F4A8C /* imgui_stdlib.h in Headers */ = {isa = PBXBuildFile; fileRef = 559261402B7CB67E006F4A8C /* imgui_stdlib.h */; };
+		559261592B7CB6F3006F4A8C /* imstb_textedit.h in Headers */ = {isa = PBXBuildFile; fileRef = 5592613E2B7CB67E006F4A8C /* imstb_textedit.h */; };
 		55B1EFAE295BA06F00DB297F /* SettingsInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 55B1EFAD295BA06F00DB297F /* SettingsInterface.h */; };
 		55B1EFB1295BA0CB00DB297F /* MemorySettingsInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 55B1EFAF295BA0CA00DB297F /* MemorySettingsInterface.h */; };
 		55B1EFB2295BA0CB00DB297F /* MemorySettingsInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55B1EFB0295BA0CB00DB297F /* MemorySettingsInterface.cpp */; };
@@ -2284,9 +2290,7 @@
 		558065D127AD3A31008CD5D2 /* GameIndex.yaml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = GameIndex.yaml; sourceTree = "<group>"; };
 		558065D327AD3A31008CD5D2 /* debugger.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = debugger.txt; sourceTree = "<group>"; };
 		558065D427AD3A31008CD5D2 /* GPL.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = GPL.html; sourceTree = "<group>"; };
-		558065D527AD3A31008CD5D2 /* PCSX2_FAQ.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = PCSX2_FAQ.pdf; sourceTree = "<group>"; };
 		558065D727AD3A31008CD5D2 /* Debugger.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = Debugger.pdf; sourceTree = "<group>"; };
-		558065D827AD3A31008CD5D2 /* PCSX2.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = PCSX2.1; sourceTree = "<group>"; };
 		558065D927AD3A31008CD5D2 /* GameIndex.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = GameIndex.pdf; sourceTree = "<group>"; };
 		5580662D27AD3A31008CD5D2 /* portable.ini */ = {isa = PBXFileReference; lastKnownFileType = text; path = portable.ini; sourceTree = "<group>"; };
 		5591D80927B468F70073E97D /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
@@ -2295,6 +2299,20 @@
 		5591D82727B5C12D0073E97D /* GSDeviceVK.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GSDeviceVK.cpp; sourceTree = "<group>"; };
 		5591D82827B5C12D0073E97D /* GSTextureVK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GSTextureVK.h; sourceTree = "<group>"; };
 		5591D82927B5C12D0073E97D /* GSDeviceVK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GSDeviceVK.h; sourceTree = "<group>"; };
+		5592613D2B7CB67E006F4A8C /* imgui.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = imgui.h; sourceTree = "<group>"; };
+		5592613E2B7CB67E006F4A8C /* imstb_textedit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = imstb_textedit.h; sourceTree = "<group>"; };
+		5592613F2B7CB67E006F4A8C /* imconfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = imconfig.h; sourceTree = "<group>"; };
+		559261402B7CB67E006F4A8C /* imgui_stdlib.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = imgui_stdlib.h; sourceTree = "<group>"; };
+		559261412B7CB67E006F4A8C /* imgui_internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = imgui_internal.h; sourceTree = "<group>"; };
+		559261452B7CB67E006F4A8C /* imgui_widgets.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = imgui_widgets.cpp; sourceTree = "<group>"; };
+		559261462B7CB67E006F4A8C /* imstb_truetype.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = imstb_truetype.h; sourceTree = "<group>"; };
+		559261472B7CB67E006F4A8C /* imgui.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = imgui.cpp; sourceTree = "<group>"; };
+		559261482B7CB67E006F4A8C /* imstb_rectpack.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = imstb_rectpack.h; sourceTree = "<group>"; };
+		559261492B7CB67E006F4A8C /* imgui_stdlib.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = imgui_stdlib.cpp; sourceTree = "<group>"; };
+		5592614A2B7CB67E006F4A8C /* imgui_tables.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = imgui_tables.cpp; sourceTree = "<group>"; };
+		5592614B2B7CB67E006F4A8C /* imgui_demo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = imgui_demo.cpp; sourceTree = "<group>"; };
+		5592614C2B7CB67E006F4A8C /* imgui_draw.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = imgui_draw.cpp; sourceTree = "<group>"; };
+		559261512B7CB6EB006F4A8C /* libimgui-pcsx2.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libimgui-pcsx2.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		55B1EFAD295BA06F00DB297F /* SettingsInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsInterface.h; sourceTree = "<group>"; };
 		55B1EFAF295BA0CA00DB297F /* MemorySettingsInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemorySettingsInterface.h; sourceTree = "<group>"; };
 		55B1EFB0295BA0CB00DB297F /* MemorySettingsInterface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MemorySettingsInterface.cpp; sourceTree = "<group>"; };
@@ -3132,6 +3150,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		5592614F2B7CB6EB006F4A8C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		55B1EFF0295BAA4700DB297F /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -3194,6 +3219,7 @@
 				55DB5A7B2B590A2700B3BD75 /* libwebp-pcsx2.a */,
 				55DB5CDA2B590FBB00B3BD75 /* libcpuinfo-pcsx2.a */,
 				55DB5DC52B59173400B3BD75 /* liblz4-pcsx2.a */,
+				559261512B7CB6EB006F4A8C /* libimgui-pcsx2.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -3266,6 +3292,7 @@
 				558063BD27AB4B9E008CD5D2 /* cubeb */,
 				5517EC5E263D4834000219EC /* fmt */,
 				551AA4032792C12E00658151 /* glad */,
+				5592613A2B7CB67E006F4A8C /* imgui */,
 				551BF59126420F3B0008C529 /* include */,
 				55B1EFE6295BAA2B00DB297F /* jpgd */,
 				5517EEE4263D4836000219EC /* libchdr */,
@@ -5573,8 +5600,6 @@
 				558065D327AD3A31008CD5D2 /* debugger.txt */,
 				558065D927AD3A31008CD5D2 /* GameIndex.pdf */,
 				558065D427AD3A31008CD5D2 /* GPL.html */,
-				558065D527AD3A31008CD5D2 /* PCSX2_FAQ.pdf */,
-				558065D827AD3A31008CD5D2 /* PCSX2.1 */,
 			);
 			path = docs;
 			sourceTree = "<group>";
@@ -5588,6 +5613,42 @@
 				5591D82827B5C12D0073E97D /* GSTextureVK.h */,
 			);
 			path = Vulkan;
+			sourceTree = "<group>";
+		};
+		5592613A2B7CB67E006F4A8C /* imgui */ = {
+			isa = PBXGroup;
+			children = (
+				5592613C2B7CB67E006F4A8C /* include */,
+				559261442B7CB67E006F4A8C /* src */,
+			);
+			path = imgui;
+			sourceTree = "<group>";
+		};
+		5592613C2B7CB67E006F4A8C /* include */ = {
+			isa = PBXGroup;
+			children = (
+				5592613F2B7CB67E006F4A8C /* imconfig.h */,
+				559261412B7CB67E006F4A8C /* imgui_internal.h */,
+				559261402B7CB67E006F4A8C /* imgui_stdlib.h */,
+				5592613D2B7CB67E006F4A8C /* imgui.h */,
+				5592613E2B7CB67E006F4A8C /* imstb_textedit.h */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		559261442B7CB67E006F4A8C /* src */ = {
+			isa = PBXGroup;
+			children = (
+				5592614B2B7CB67E006F4A8C /* imgui_demo.cpp */,
+				5592614C2B7CB67E006F4A8C /* imgui_draw.cpp */,
+				559261492B7CB67E006F4A8C /* imgui_stdlib.cpp */,
+				5592614A2B7CB67E006F4A8C /* imgui_tables.cpp */,
+				559261452B7CB67E006F4A8C /* imgui_widgets.cpp */,
+				559261472B7CB67E006F4A8C /* imgui.cpp */,
+				559261482B7CB67E006F4A8C /* imstb_rectpack.h */,
+				559261462B7CB67E006F4A8C /* imstb_truetype.h */,
+			);
+			path = src;
 			sourceTree = "<group>";
 		};
 		55B1EFBA295BA17800DB297F /* simpleini */ = {
@@ -6815,6 +6876,18 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		5592614D2B7CB6EB006F4A8C /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				559261582B7CB6F3006F4A8C /* imgui_stdlib.h in Headers */,
+				559261572B7CB6F3006F4A8C /* imgui.h in Headers */,
+				559261592B7CB6F3006F4A8C /* imstb_textedit.h in Headers */,
+				559261552B7CB6F3006F4A8C /* imconfig.h in Headers */,
+				559261562B7CB6F3006F4A8C /* imgui_internal.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		55B1EFEE295BAA4700DB297F /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -7142,6 +7215,23 @@
 			productReference = 5580651927AB4BBE008CD5D2 /* libcubeb-pcsx2.a */;
 			productType = "com.apple.product-type.library.static";
 		};
+		559261502B7CB6EB006F4A8C /* imgui-pcsx2 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 559261522B7CB6EB006F4A8C /* Build configuration list for PBXNativeTarget "imgui-pcsx2" */;
+			buildPhases = (
+				5592614D2B7CB6EB006F4A8C /* Headers */,
+				5592614E2B7CB6EB006F4A8C /* Sources */,
+				5592614F2B7CB6EB006F4A8C /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "imgui-pcsx2";
+			productName = "imgui-pcsx2";
+			productReference = 559261512B7CB6EB006F4A8C /* libimgui-pcsx2.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 		55B1EFF1295BAA4700DB297F /* jpgd */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 55B1EFF3295BAA4700DB297F /* Build configuration list for PBXNativeTarget "jpgd" */;
@@ -7255,6 +7345,9 @@
 					5580651827AB4BBE008CD5D2 = {
 						CreatedOnToolsVersion = 13.2.1;
 					};
+					559261502B7CB6EB006F4A8C = {
+						CreatedOnToolsVersion = 15.2;
+					};
 					55B1EFF1295BAA4700DB297F = {
 						CreatedOnToolsVersion = 14.2;
 					};
@@ -7270,7 +7363,7 @@
 				};
 			};
 			buildConfigurationList = 5517E8AF263D4213000219EC /* Build configuration list for PBXProject "PCSX2" */;
-			compatibilityVersion = "Xcode 9.3";
+			compatibilityVersion = "Xcode 12.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -7299,6 +7392,7 @@
 				55DB5A7A2B590A2700B3BD75 /* webp-pcsx2 */,
 				55DB5CD92B590FBB00B3BD75 /* cpuinfo-pcsx2 */,
 				55DB5DC42B59173400B3BD75 /* lz4-pcsx2 */,
+				559261502B7CB6EB006F4A8C /* imgui-pcsx2 */,
 			);
 		};
 /* End PBXProject section */
@@ -7422,6 +7516,7 @@
 				551AA4E22793756000658151 /* Pcsx2Config.cpp in Sources */,
 				551AA12C2792AB1700658151 /* GSTextureCacheSW.cpp in Sources */,
 				551BF5B326420FA50008C529 /* IopMem.cpp in Sources */,
+				559261382B7CB4A8006F4A8C /* GSDevice.cpp in Sources */,
 				55B1EFD3295BA71D00DB297F /* GSXXH.cpp in Sources */,
 				55C7677F2B77763B005DC873 /* GameList.cpp in Sources */,
 				551BF56E26420E710008C529 /* Vif1_Dma.cpp in Sources */,
@@ -8079,6 +8174,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		5592614E2B7CB6EB006F4A8C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		55B1EFEF295BAA4700DB297F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -8347,10 +8449,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = (
+					"$(ARCHS_STANDARD)",
+					x86_64h,
+				);
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
-				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -8407,6 +8512,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
+				VALID_ARCHS = "$(inherited) x86_64h";
 				WARNING_CFLAGS = "-Wno-ignored-attributes";
 			};
 			name = Debug;
@@ -8415,10 +8521,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = (
+					"$(ARCHS_STANDARD)",
+					x86_64h,
+				);
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
-				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -8471,6 +8580,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
+				VALID_ARCHS = "$(inherited) x86_64h";
 				WARNING_CFLAGS = "-Wno-ignored-attributes";
 			};
 			name = Release;
@@ -8553,6 +8663,7 @@
 					"\"$(SRCROOT)/pcsx2/3rdparty/cpuinfo/include\"",
 					"\"$(SRCROOT)/pcsx2/3rdparty/lz4/lz4/lib\"",
 					"\"$(SRCROOT)/pcsx2/3rdparty/discord-rpc/include\"",
+					"\"$(SRCROOT)/pcsx2/3rdparty/imgui/include\"",
 				);
 				USE_HEADERMAP = NO;
 				WRAPPER_EXTENSION = oecoreplugin;
@@ -8639,6 +8750,7 @@
 					"\"$(SRCROOT)/pcsx2/3rdparty/cpuinfo/include\"",
 					"\"$(SRCROOT)/pcsx2/3rdparty/lz4/lz4/lib\"",
 					"\"$(SRCROOT)/pcsx2/3rdparty/discord-rpc/include\"",
+					"\"$(SRCROOT)/pcsx2/3rdparty/imgui/include\"",
 				);
 				USE_HEADERMAP = NO;
 				WRAPPER_EXTENSION = oecoreplugin;
@@ -9230,6 +9342,41 @@
 			};
 			name = Release;
 		};
+		559261532B7CB6EB006F4A8C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				EXECUTABLE_PREFIX = lib;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.2;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		559261542B7CB6EB006F4A8C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CODE_SIGN_STYLE = Automatic;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				EXECUTABLE_PREFIX = lib;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.2;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
 		55B1EFF4295BAA4700DB297F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -9497,6 +9644,15 @@
 			buildConfigurations = (
 				5580651B27AB4BBE008CD5D2 /* Debug */,
 				5580651C27AB4BBE008CD5D2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		559261522B7CB6EB006F4A8C /* Build configuration list for PBXNativeTarget "imgui-pcsx2" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				559261532B7CB6EB006F4A8C /* Debug */,
+				559261542B7CB6EB006F4A8C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

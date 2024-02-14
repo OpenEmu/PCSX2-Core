@@ -260,7 +260,7 @@ static NSURL *binCueFix(NSURL *path)
 
 - (void)resetEmulation
 {
-	VMManager::SetState(VMState::Stopping);
+	VMManager::SetState(VMState::Resetting);
 }
 
 - (void)setPauseEmulation:(BOOL)pauseEmulation
@@ -300,6 +300,7 @@ static NSURL *binCueFix(NSURL *path)
 			VMManager::SetState(VMState::Running);
 			if ([stateToLoad.path length] > 0) {
 				VMManager::LoadState(stateToLoad.fileSystemRepresentation);
+				stateToLoad = nil;
 			}
 
 			[NSThread detachNewThreadSelector:@selector(runVMThread:) toTarget:self withObject:nil];
@@ -389,9 +390,9 @@ static NSURL *binCueFix(NSURL *path)
 - (OEGameCoreRendering)gameCoreRendering
 {
 	if (@available(macOS 10.15, *)) {
-		return OEGameCoreRenderingMetal2Video;
+		return OEGameCoreRenderingMetal2;
 	} else {
-		return OEGameCoreRenderingOpenGL3Video;
+		return OEGameCoreRenderingOpenGL3;
 	}
 }
 
@@ -454,8 +455,9 @@ static NSURL *binCueFix(NSURL *path)
 #pragma mark Save States
 - (void)loadStateFromFileAtURL:(NSURL *)fileURL completionHandler:(void (^)(BOOL, NSError *))block
 {
-	if (!VMManager::HasValidVM()){
+	if (!VMManager::HasValidVM()) {
 		stateToLoad = fileURL;
+		// Assume we'll succeed
 		block(true, nil);
 		return;
 	}
@@ -473,7 +475,8 @@ static NSURL *binCueFix(NSURL *path)
 - (void)saveStateToFileAtURL:(NSURL *)fileURL completionHandler:(void (^)(BOOL, NSError *))block
 {
 	if (!VMManager::HasValidVM()) {
-		block(false, [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotSaveStateError userInfo:nil]);
+		// Not loaded. Then we fail?
+		block(NO, [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotStartCoreError userInfo:@{NSLocalizedDescriptionKey: @"PCSX2 is not initialized, creating save state impossible.", NSURLErrorKey: fileURL}]);
 		return;
 	}
 	bool success = VMManager::SaveState(fileURL.fileSystemRepresentation, false, false);
@@ -682,7 +685,7 @@ void Host::OnGameChanged(const std::string& title, const std::string& elf_overri
 {
 }
 
-void Host::VSyncOnCPUThread()
+void Host::PumpMessagesOnCPUThread()
 {
 }
 
