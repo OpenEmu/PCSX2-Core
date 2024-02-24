@@ -2292,7 +2292,6 @@
 		558065D427AD3A31008CD5D2 /* GPL.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = GPL.html; sourceTree = "<group>"; };
 		558065D727AD3A31008CD5D2 /* Debugger.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = Debugger.pdf; sourceTree = "<group>"; };
 		558065D927AD3A31008CD5D2 /* GameIndex.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = GameIndex.pdf; sourceTree = "<group>"; };
-		5580662D27AD3A31008CD5D2 /* portable.ini */ = {isa = PBXFileReference; lastKnownFileType = text; path = portable.ini; sourceTree = "<group>"; };
 		5591D80927B468F70073E97D /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
 		5591D80B27B469200073E97D /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		5591D82627B5C12D0073E97D /* GSTextureVK.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GSTextureVK.cpp; sourceTree = "<group>"; };
@@ -3013,7 +3012,7 @@
 		DD0302B427C491020006ABDC /* OESndOut.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OESndOut.h; sourceTree = "<group>"; };
 		DD0302B527C491020006ABDC /* OESndOut.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OESndOut.cpp; sourceTree = "<group>"; };
 		DD0302B927C491160006ABDC /* OpenGLHostDisplayOverride.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpenGLHostDisplayOverride.cpp; sourceTree = "<group>"; };
-		DD0302BA27C491160006ABDC /* GSDeviceMTL.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GSDeviceMTL.mm; sourceTree = "<group>"; usesTabs = 0; };
+		DD0302BA27C491160006ABDC /* GSDeviceMTL.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GSDeviceMTL.mm; sourceTree = "<group>"; usesTabs = 1; };
 		DD0302BC27C491160006ABDC /* GLContextAGL.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GLContextAGL.mm; sourceTree = "<group>"; };
 		DD0302C827C5494A0006ABDC /* keymap.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = keymap.h; sourceTree = "<group>"; };
 		DD03FFB427B70F0C0006ABDC /* GSMetalCPPAccessible.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSMetalCPPAccessible.h; sourceTree = "<group>"; };
@@ -5514,7 +5513,6 @@
 			isa = PBXGroup;
 			children = (
 				558065D227AD3A31008CD5D2 /* docs */,
-				5580662D27AD3A31008CD5D2 /* portable.ini */,
 				558065B227AD3A31008CD5D2 /* resources */,
 			);
 			path = bin;

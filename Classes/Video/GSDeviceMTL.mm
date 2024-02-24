@@ -14,6 +14,7 @@
 
 #ifdef __APPLE__
 #include "GSMTLSharedHeader.h"
+#include "PCSX2GameCore.h"
 
 static constexpr simd::float2 ToSimd(const GSVector2& vec)
 {
@@ -383,7 +384,7 @@ void GSDeviceMTL::BeginRenderPass(NSString* name, GSTexture* color, MTLLoadActio
 	              || depth   != m_current_render.depth_target
 	              || stencil != m_current_render.stencil_target;
 	GSVector4 color_clear;
-	float depth_clear;
+	float depth_clear=0;
 	// Depth and stencil might be the same, so do all invalidation checks before resetting invalidation
 #define CHECK_CLEAR(tex, load_action, clear, ClearGetter) \
 	if (tex) \
@@ -727,7 +728,7 @@ static void OnMainThread(Fn&& fn)
 	if ([NSThread isMainThread])
 		fn();
 	else
-		dispatch_sync(dispatch_get_main_queue(), fn);
+		::dispatch_sync(dispatch_get_main_queue(), fn);
 }
 
 RenderAPI GSDeviceMTL::GetRenderAPI() const
@@ -827,20 +828,10 @@ bool GSDeviceMTL::Create()
 	if (!GSDevice::Create())
 		return false;
 
-	NSString* ns_adapter_name = [NSString stringWithUTF8String:GSConfig.Adapter.c_str()];
-	auto devs = MRCTransfer(MTLCopyAllDevices());
-	for (id<MTLDevice> dev in devs.Get())
-	{
-		if ([[dev name] isEqualToString:ns_adapter_name])
-			m_dev = GSMTLDevice(MRCRetain(dev));
-	}
+	m_dev = GSMTLDevice(MRCRetain([_current metalDevice]));
 	if (!m_dev.dev)
 	{
-		if (!GSConfig.Adapter.empty())
-			Console.Warning("Metal: Couldn't find adapter %s, using default", GSConfig.Adapter.c_str());
-		m_dev = GSMTLDevice(MRCTransfer(MTLCreateSystemDefaultDevice()));
-		if (!m_dev.dev)
-			Host::ReportErrorAsync("No Metal Devices Available", "No Metal-supporting GPUs were found.  PCSX2 requires a Metal GPU (available on all macs from 2012 onwards).");
+		Host::ReportErrorAsync("No Metal Devices Available", "No Metal-supporting GPUs were found.  PCSX2 requires a Metal GPU (available on all macs from 2012 onwards).");
 	}
 	m_queue = MRCTransfer([m_dev.dev newCommandQueue]);
 
@@ -1286,7 +1277,18 @@ void GSDeviceMTL::EndPresent()
 //	RenderImGui(ImGui::GetDrawData());
 	EndRenderPass();
 	if (m_current_drawable)
-	{
+	{ //Here is where we blit the Metal Texture to the OEMetalRenderTexture
+		id<MTLBlitCommandEncoder> blitCommandEncoder = [m_current_render_cmdbuf blitCommandEncoder];
+
+		if (@available(macOS 10.15, *)) {
+			[blitCommandEncoder copyFromTexture:[m_current_drawable texture] toTexture:id<MTLTexture>([_current metalTexture])];
+		} else {
+			// Fallback on earlier versions
+			// TODO:  Add pre 10.15 metal blit
+		}
+		
+		[blitCommandEncoder endEncoding];
+		
 		const bool use_present_drawable = m_use_present_drawable == UsePresentDrawable::Always ||
 			(m_use_present_drawable == UsePresentDrawable::IfVsync && m_vsync_mode != VsyncMode::Off);
 
