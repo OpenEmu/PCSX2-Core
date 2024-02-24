@@ -281,7 +281,12 @@ static NSURL *binCueFix(NSURL *path)
 	[self.renderDelegate suspendFPSLimiting];
 	
 	params.filename = gamePath.fileSystemRepresentation;
-	params.save_state = "";
+	if ([stateToLoad.path length] > 0) {
+		params.save_state = stateToLoad.fileSystemRepresentation;
+		stateToLoad = nil;
+	} else {
+		params.save_state = "";
+	}
 	params.source_type = CDVD_SourceType::Iso;
 	params.elf_override = "";
 	params.fast_boot = true;
@@ -298,10 +303,6 @@ static NSURL *binCueFix(NSURL *path)
 		if (VMManager::Initialize(params)) {
 			hasInitialized = true;
 			VMManager::SetState(VMState::Running);
-			if ([stateToLoad.path length] > 0) {
-				VMManager::LoadState(stateToLoad.fileSystemRepresentation);
-				stateToLoad = nil;
-			}
 
 			[NSThread detachNewThreadSelector:@selector(runVMThread:) toTarget:self withObject:nil];
 		}
