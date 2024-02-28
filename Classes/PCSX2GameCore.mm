@@ -40,6 +40,9 @@
 #include "CDVD/CDVD.h"
 #include "SPU2/Global.h"
 #include "SPU2/SndOut.h"
+#include "SIO/Pad/Pad.h"
+#include "SIO/Pad/PadBase.h"
+#include "SIO/Pad/PadDualshock2.h"
 #include "R3000A.h"
 #include "MTVU.h"
 #include "Elfheader.h"
@@ -300,6 +303,8 @@ static NSURL *binCueFix(NSURL *path)
 			
 		VMManager::Internal::CPUThreadInitialize();
 		
+		VMManager::ApplySettings();
+		
 		if (VMManager::Initialize(params)) {
 			hasInitialized = true;
 			VMManager::SetState(VMState::Running);
@@ -344,6 +349,7 @@ static NSURL *binCueFix(NSURL *path)
 
 			case VMState::Stopping:
 				VMManager::Shutdown(true);
+				VMManager::Internal::CPUThreadShutdown();
 		}
 	}
 }
@@ -437,17 +443,20 @@ static NSURL *binCueFix(NSURL *path)
 #pragma mark Input
 - (oneway void)didMovePS2JoystickDirection:(OEPS2Button)button withValue:(CGFloat)value forPlayer:(NSUInteger)player
 {
+	auto pad = Pad::GetPad(player);
 	//TODO: update!
 //	g_key_status.Set(u32(player - 1), ps2keymap[button].ps2key , value);
 }
 
 - (oneway void)didPushPS2Button:(OEPS2Button)button forPlayer:(NSUInteger)player
 {
+	auto pad = Pad::GetPad(player);
 	//TODO: update!
 //	g_key_status.Set(u32(player - 1), ps2keymap[button].ps2key , 1.0f);
 }
 
 - (oneway void)didReleasePS2Button:(OEPS2Button)button forPlayer:(NSUInteger)player {
+	auto pad = Pad::GetPad(player);
 	//TODO: update!
 //	g_key_status.Set(u32(player - 1), ps2keymap[button].ps2key, 0.0f);
 }
@@ -696,6 +705,8 @@ void Host::RequestResizeHostDisplay(s32 width, s32 height)
 
 void Host::RunOnCPUThread(std::function<void()> function, bool block)
 {
+	//TODO: put this in the right thread...
+	function();
 }
 
 void Host::RequestVMShutdown(bool allow_confirm, bool allow_save_state, bool default_save_state)
@@ -793,6 +804,11 @@ void InputManager::PollSources()
 	
 }
 
+void InputManager::CloseSources()
+{
+	
+}
+
 std::pair<float, float> InputManager::GetPointerAbsolutePosition(u32 index)
 {
 	return {0, 0};
@@ -803,6 +819,13 @@ void RegisterDevice::Register()
 {
 	
 }
+
+void RegisterDevice::Unregister()
+{
+	
+}
+
+#pragma mark -
 
 void VMManager::Internal::ResetVMHotkeyState()
 {
