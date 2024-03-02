@@ -25,8 +25,8 @@
 #import "PCSX2GameCore.h"
 #import <OpenEmuBase/OETimingUtils.h>
 #import <OpenEmuBase/OERingBuffer.h>
-#include "Video/OEHostDisplay.h"
 #include "Audio/OESndOut.h"
+#include "Input/keymap.h"
 
 #define BOOL PCSX2BOOL
 #include "PrecompiledHeader.h"
@@ -296,11 +296,6 @@ static NSURL *binCueFix(NSURL *path)
 	params.fullscreen = false;
   
 	if(!hasInitialized){
-//		if (self.gameCoreRendering == OEGameCoreRenderingOpenGL3Video)
-//			g_host_display = HostDisplay::CreateForAPI(RenderAPI::OpenGL);
-//		else if (self.gameCoreRendering == OEGameCoreRenderingMetal2Video)
-//			g_host_display = HostDisplay::CreateForAPI(RenderAPI::Metal);
-			
 		VMManager::Internal::CPUThreadInitialize();
 		
 		VMManager::ApplySettings();
@@ -358,7 +353,6 @@ static NSURL *binCueFix(NSURL *path)
 {
 	ExitRequested = true;
 	VMManager::SetState(VMState::Stopping);
-//	VMManager::Shutdown(true);
 	[super stopEmulation];
 }
 
@@ -450,40 +444,6 @@ static PadDualshock2* getPadToDualShock(const NSUInteger player)
 	auto pad2 = static_cast<PadDualshock2*>(pad);
 	return pad2;
 }
-
-
-typedef struct
-{
-	PadDualshock2::Inputs ps2key;
-}keymap;
-
-static const keymap ps2keymap[25]={
-	{PadDualshock2::PAD_UP},			//	OEPS2ButtonUp,
-	{PadDualshock2::PAD_DOWN},			//	OEPS2ButtonDown,
-	{PadDualshock2::PAD_LEFT},			//	OEPS2ButtonLeft,
-	{PadDualshock2::PAD_RIGHT},			//	OEPS2ButtonRight,
-	{PadDualshock2::PAD_TRIANGLE},		//	OEPS2ButtonTriangle,
-	{PadDualshock2::PAD_CIRCLE},		//	OEPS2ButtonCircle,
-	{PadDualshock2::PAD_CROSS},			//	OEPS2ButtonCross,
-	{PadDualshock2::PAD_SQUARE},		//	OEPS2ButtonSquare,
-	{PadDualshock2::PAD_L1},			//	OEPS2ButtonL1,
-	{PadDualshock2::PAD_L2},			//	OEPS2ButtonL2,
-	{PadDualshock2::PAD_L3},			//	OEPS2ButtonL3,
-	{PadDualshock2::PAD_R1},			//	OEPS2ButtonR1,
-	{PadDualshock2::PAD_R2},			//	OEPS2ButtonR2,
-	{PadDualshock2::PAD_R3},			//	OEPS2ButtonR3,
-	{PadDualshock2::PAD_START},			//	OEPS2ButtonStart,
-	{PadDualshock2::PAD_SELECT},		//	OEPS2ButtonSelect,
-	{PadDualshock2::PAD_ANALOG}, 		//  OEPS2ButtonAnalogMode,
-	{PadDualshock2::PAD_L_UP},			//	OEPS2LeftAnalogUp,
-	{PadDualshock2::PAD_L_DOWN},		//	OEPS2LeftAnalogDown,
-	{PadDualshock2::PAD_L_LEFT},		//	OEPS2LeftAnalogLeft,
-	{PadDualshock2::PAD_L_RIGHT},		//	OEPS2LeftAnalogRight,
-	{PadDualshock2::PAD_R_UP},			//	OEPS2RightAnalogUp,
-	{PadDualshock2::PAD_R_DOWN},		//	OEPS2RightAnalogDown,
-	{PadDualshock2::PAD_R_LEFT},		//	OEPS2RightAnalogLeft,
-	{PadDualshock2::PAD_R_RIGHT},		//	OEPS2RightAnalogRight
-};
 
 - (oneway void)didMovePS2JoystickDirection:(OEPS2Button)button withValue:(CGFloat)value forPlayer:(NSUInteger)player
 {

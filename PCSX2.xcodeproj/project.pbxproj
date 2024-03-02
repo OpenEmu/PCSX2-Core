@@ -3027,7 +3027,6 @@
 		DD03FFBF27B70F0C0006ABDC /* GSDeviceMTL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSDeviceMTL.h; sourceTree = "<group>"; };
 		DD03FFC127B70F0C0006ABDC /* convert.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = convert.metal; sourceTree = "<group>"; };
 		DD1134E827CBCE8900C2E60B /* SaveState.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SaveState.cpp; sourceTree = "<group>"; };
-		DD5D197D27D708A900ED83D9 /* OEHostDisplay.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OEHostDisplay.h; sourceTree = "<group>"; };
 		DD75EE5E29898A3A0056B3BA /* GSMTLDeviceInfo.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GSMTLDeviceInfo.mm; sourceTree = "<group>"; };
 		DDE1B431298C68320028DF05 /* usb-printer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "usb-printer.h"; sourceTree = "<group>"; };
 		DDE1B432298C68320028DF05 /* usb-printer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "usb-printer.cpp"; sourceTree = "<group>"; };
@@ -6673,7 +6672,6 @@
 				55325A082A01025600D4CFFA /* GSDeviceOGL.cpp */,
 				55484D3C28855E740066EDEB /* GSDumpReplayer.cpp */,
 				DD75EE5E29898A3A0056B3BA /* GSMTLDeviceInfo.mm */,
-				DD5D197D27D708A900ED83D9 /* OEHostDisplay.h */,
 			);
 			path = Video;
 			sourceTree = "<group>";
