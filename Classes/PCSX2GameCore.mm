@@ -441,24 +441,83 @@ static NSURL *binCueFix(NSURL *path)
 }
 
 #pragma mark Input
+
+/// The code assumes the controller is a PadDualshock2. This tests it and returns the actual object if it is, or \c NULL if it is not.
+static PadDualshock2* getPadToDualShock(const NSUInteger player);
+static PadDualshock2* getPadToDualShock(const NSUInteger player)
+{
+	auto pad = Pad::GetPad(player - 1);
+	auto pad2 = static_cast<PadDualshock2*>(pad);
+	return pad2;
+}
+
+
+typedef struct
+{
+	PadDualshock2::Inputs ps2key;
+}keymap;
+
+static const keymap ps2keymap[25]={
+	{PadDualshock2::PAD_UP},			//	OEPS2ButtonUp,
+	{PadDualshock2::PAD_DOWN},			//	OEPS2ButtonDown,
+	{PadDualshock2::PAD_LEFT},			//	OEPS2ButtonLeft,
+	{PadDualshock2::PAD_RIGHT},			//	OEPS2ButtonRight,
+	{PadDualshock2::PAD_TRIANGLE},		//	OEPS2ButtonTriangle,
+	{PadDualshock2::PAD_CIRCLE},		//	OEPS2ButtonCircle,
+	{PadDualshock2::PAD_CROSS},			//	OEPS2ButtonCross,
+	{PadDualshock2::PAD_SQUARE},		//	OEPS2ButtonSquare,
+	{PadDualshock2::PAD_L1},			//	OEPS2ButtonL1,
+	{PadDualshock2::PAD_L2},			//	OEPS2ButtonL2,
+	{PadDualshock2::PAD_L3},			//	OEPS2ButtonL3,
+	{PadDualshock2::PAD_R1},			//	OEPS2ButtonR1,
+	{PadDualshock2::PAD_R2},			//	OEPS2ButtonR2,
+	{PadDualshock2::PAD_R3},			//	OEPS2ButtonR3,
+	{PadDualshock2::PAD_START},			//	OEPS2ButtonStart,
+	{PadDualshock2::PAD_SELECT},		//	OEPS2ButtonSelect,
+	{PadDualshock2::PAD_ANALOG}, 		//  OEPS2ButtonAnalogMode,
+	{PadDualshock2::PAD_L_UP},			//	OEPS2LeftAnalogUp,
+	{PadDualshock2::PAD_L_DOWN},		//	OEPS2LeftAnalogDown,
+	{PadDualshock2::PAD_L_LEFT},		//	OEPS2LeftAnalogLeft,
+	{PadDualshock2::PAD_L_RIGHT},		//	OEPS2LeftAnalogRight,
+	{PadDualshock2::PAD_R_UP},			//	OEPS2RightAnalogUp,
+	{PadDualshock2::PAD_R_DOWN},		//	OEPS2RightAnalogDown,
+	{PadDualshock2::PAD_R_LEFT},		//	OEPS2RightAnalogLeft,
+	{PadDualshock2::PAD_R_RIGHT},		//	OEPS2RightAnalogRight
+};
+
 - (oneway void)didMovePS2JoystickDirection:(OEPS2Button)button withValue:(CGFloat)value forPlayer:(NSUInteger)player
 {
-	auto pad = Pad::GetPad(player);
-	//TODO: update!
-//	g_key_status.Set(u32(player - 1), ps2keymap[button].ps2key , value);
+	auto pad = getPadToDualShock(player);
+	if (pad == nullptr) {
+		// A setting is wrong...
+		NSLog(@"Unknown controller on port %lu", (unsigned long)player);
+		// Bailing out!
+		return;
+	}
+	pad->Set(ps2keymap[button].ps2key, value);
 }
 
 - (oneway void)didPushPS2Button:(OEPS2Button)button forPlayer:(NSUInteger)player
 {
-	auto pad = Pad::GetPad(player);
-	//TODO: update!
-//	g_key_status.Set(u32(player - 1), ps2keymap[button].ps2key , 1.0f);
+	auto pad = getPadToDualShock(player);
+	if (pad == nullptr) {
+		// A setting is wrong...
+		NSLog(@"Unknown controller on port %lu", (unsigned long)player);
+		// Bailing out!
+		return;
+	}
+	pad->Set(ps2keymap[button].ps2key, 1.0f);
 }
 
 - (oneway void)didReleasePS2Button:(OEPS2Button)button forPlayer:(NSUInteger)player {
-	auto pad = Pad::GetPad(player);
-	//TODO: update!
-//	g_key_status.Set(u32(player - 1), ps2keymap[button].ps2key, 0.0f);
+	auto pad = getPadToDualShock(player);
+	if (pad == nullptr) {
+		// A setting is wrong...
+		NSLog(@"Unknown controller on port %lu", (unsigned long)player);
+		// Bailing out!
+		return;
+	}
+	pad->Set(ps2keymap[button].ps2key, 0.0f);
 }
 
 
