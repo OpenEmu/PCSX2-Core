@@ -956,7 +956,6 @@
 		DD03001927BD695D0006ABDC /* tfx_fs.glsl in Copy OpenGL Shaders */ = {isa = PBXBuildFile; fileRef = 558065C627AD3A31008CD5D2 /* tfx_fs.glsl */; };
 		DD0302B127C435760006ABDC /* SndOut_Cubeb.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 558063BB27AB4B6C008CD5D2 /* SndOut_Cubeb.cpp */; };
 		DD0302B727C491020006ABDC /* OESndOut.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD0302B527C491020006ABDC /* OESndOut.cpp */; };
-		DD0302BD27C491160006ABDC /* OpenGLHostDisplayOverride.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD0302B927C491160006ABDC /* OpenGLHostDisplayOverride.cpp */; };
 		DD0302C027C491160006ABDC /* GLContextAGL.mm in Sources */ = {isa = PBXBuildFile; fileRef = DD0302BC27C491160006ABDC /* GLContextAGL.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		DD03FFD827B721F20006ABDC /* GSTextureMTL.mm in Sources */ = {isa = PBXBuildFile; fileRef = DD03FFB927B70F0C0006ABDC /* GSTextureMTL.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		DD5A404E298CA9B700EFBE7A /* SndOut.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FCD0263D49BC000219EC /* SndOut.cpp */; };
@@ -3011,7 +3010,6 @@
 		55F9D7E228120385005286B6 /* fxaa.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = fxaa.metal; sourceTree = "<group>"; };
 		DD0302B427C491020006ABDC /* OESndOut.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OESndOut.h; sourceTree = "<group>"; };
 		DD0302B527C491020006ABDC /* OESndOut.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OESndOut.cpp; sourceTree = "<group>"; };
-		DD0302B927C491160006ABDC /* OpenGLHostDisplayOverride.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpenGLHostDisplayOverride.cpp; sourceTree = "<group>"; };
 		DD0302BA27C491160006ABDC /* GSDeviceMTL.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GSDeviceMTL.mm; sourceTree = "<group>"; usesTabs = 1; };
 		DD0302BC27C491160006ABDC /* GLContextAGL.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GLContextAGL.mm; sourceTree = "<group>"; };
 		DD0302C827C5494A0006ABDC /* keymap.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = keymap.h; sourceTree = "<group>"; };
@@ -6676,7 +6674,6 @@
 				55484D3C28855E740066EDEB /* GSDumpReplayer.cpp */,
 				DD75EE5E29898A3A0056B3BA /* GSMTLDeviceInfo.mm */,
 				DD5D197D27D708A900ED83D9 /* OEHostDisplay.h */,
-				DD0302B927C491160006ABDC /* OpenGLHostDisplayOverride.cpp */,
 			);
 			path = Video;
 			sourceTree = "<group>";
@@ -7665,7 +7662,6 @@
 				551BF637264216F50008C529 /* BlockdumpFileReader.cpp in Sources */,
 				DDE1B427298C68130028DF05 /* audiodev-cubeb.cpp in Sources */,
 				551BF57926420E720008C529 /* Vif0_Dma.cpp in Sources */,
-				DD0302BD27C491160006ABDC /* OpenGLHostDisplayOverride.cpp in Sources */,
 				55B1F02C295BAD5600DB297F /* ICMP_Session.cpp in Sources */,
 				551BF56826420E3B0008C529 /* newVif_Unpack.cpp in Sources */,
 				557D49D027D00BE7006C2C69 /* merge.metal in Sources */,
