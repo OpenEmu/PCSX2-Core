@@ -265,6 +265,7 @@ static NSURL *binCueFix(NSURL *path)
 	si.SetBoolValue("EmuCore/GS", "FrameLimitEnable", true);
 	si.SetBoolValue("EmuCore/GS", "SyncToHostRefreshRate",false);
 	si.SetBoolValue("EmuCore/GS", "UserHacks", false);
+	si.SetStringValue("Pad2", "Type", "DualShock2");
 }
 
 - (void)resetEmulation
