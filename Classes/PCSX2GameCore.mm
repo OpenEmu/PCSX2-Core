@@ -246,10 +246,12 @@ static NSURL *binCueFix(NSURL *path)
 	si.SetBoolValue("EmuCore/CPU/Recompiler", "EnableIOP", true);
 	si.SetBoolValue("EmuCore/CPU/Recompiler", "EnableVU0", true);
 	si.SetBoolValue("EmuCore/CPU/Recompiler", "EnableVU1", true);
-	si.SetStringValue("EmuCore/SPU2", "OutputModule", "NullOut");
+	si.SetStringValue("SPU2/Output", "OutputModule", "nullout");
 	si.SetBoolValue("EmuCore", "EnablePatches", true);
 	si.SetBoolValue("EmuCore", "EnableCheats", false);
 	si.SetBoolValue("EmuCore", "EnablePerGameSettings", true);
+	//TODO: somehow work this into OpenEmu...
+	si.SetBoolValue("EmuCore", "EnableWideScreenPatches", false);
 	si.SetBoolValue("EmuCore", "HostFs", false);
 	si.SetBoolValue("EmuCore/Speedhacks", "vuFlagHack", true);
 	si.SetBoolValue("EmuCore/Speedhacks", "IntcStat", true);
@@ -260,6 +262,10 @@ static NSURL *binCueFix(NSURL *path)
 	si.SetBoolValue("EmuCore/GS", "SyncToHostRefreshRate",false);
 	si.SetBoolValue("EmuCore/GS", "UserHacks", false);
 	si.SetStringValue("Pad2", "Type", "DualShock2");
+	si.SetIntValue("SPU2/Output", "SynchMode", 2);
+	si.SetIntValue("SPU2/Output", "Latency", 60);
+	si.SetIntValue("SPU2/Output", "OutputLatency", 20);
+	si.SetIntValue("SPU2/Mixing", "FinalVolume", 100);
 }
 
 - (void)resetEmulation

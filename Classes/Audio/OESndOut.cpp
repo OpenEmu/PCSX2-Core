@@ -671,6 +671,7 @@ __forceinline
 	// output by design.
 	// Good thing though that this code gets the volume exactly right, as per tests :)
 	Out = clamp_mix(Out);
+	SndBuffer::Write(StereoOut16(Out));
 
 	Host::WriteToSoundBuffer(StereoOut16(Out));
 

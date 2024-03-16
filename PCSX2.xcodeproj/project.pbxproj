@@ -7032,6 +7032,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				55860B712B971973002A91B6 /* PBXTargetDependency */,
 			);
 			name = "chdr-pcsx2";
 			productName = "chdr-pcsx2";
@@ -8414,6 +8415,10 @@
 			target = 5580651827AB4BBE008CD5D2 /* cubeb-pcsx2 */;
 			targetProxy = 5580652227AB4CCB008CD5D2 /* PBXContainerItemProxy */;
 		};
+		55860B712B971973002A91B6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 55860B702B971973002A91B6 /* libzstd */;
+		};
 		55B1EFF9295BAA7A00DB297F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 55B1EFF1295BAA4700DB297F /* jpgd */;
@@ -8779,6 +8784,7 @@
 				STRIP_INSTALLED_PRODUCT = NO;
 				USER_HEADER_SEARCH_PATHS = (
 					"\"${SRCROOT}/pcsx2/3rdparty/lzma/include\"",
+					"\"${SRCROOT}/pcsx2/3rdparty/zstd/zstd/lib\"",
 					"$(inherited)",
 				);
 			};
@@ -8800,6 +8806,7 @@
 				STRIP_INSTALLED_PRODUCT = NO;
 				USER_HEADER_SEARCH_PATHS = (
 					"\"${SRCROOT}/pcsx2/3rdparty/lzma/include\"",
+					"\"${SRCROOT}/pcsx2/3rdparty/zstd/zstd/lib\"",
 					"$(inherited)",
 				);
 			};
@@ -9693,6 +9700,10 @@
 			productName = libzstd;
 		};
 		55484D2B288555E10066EDEB /* libzstd */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = libzstd;
+		};
+		55860B702B971973002A91B6 /* libzstd */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = libzstd;
 		};
