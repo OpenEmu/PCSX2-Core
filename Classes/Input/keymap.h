@@ -25,38 +25,38 @@
 #ifndef keymap_h
 #define keymap_h
 
-#include "PAD/Host/Global.h"
+#include "SIO/Pad/PadDualshock2.h"
 
 typedef struct
 {
-	gamePadValues ps2key;
+	PadDualshock2::Inputs ps2key;
 }keymap;
 
 keymap ps2keymap[25]={
-	{PAD_UP},			//	OEPS2ButtonUp,
-	{PAD_DOWN},			//	OEPS2ButtonDown,
-	{PAD_LEFT},			//	OEPS2ButtonLeft,
-	{PAD_RIGHT},		//	OEPS2ButtonRight,
-	{PAD_TRIANGLE},		//	OEPS2ButtonTriangle,
-	{PAD_CIRCLE},		//	OEPS2ButtonCircle,
-	{PAD_CROSS},		//	OEPS2ButtonCross,
-	{PAD_SQUARE},		//	OEPS2ButtonSquare,
-	{PAD_L1},			//	OEPS2ButtonL1,
-	{PAD_L2},			//	OEPS2ButtonL2,
-	{PAD_L3},			//	OEPS2ButtonL3,
-	{PAD_R1},			//	OEPS2ButtonR1,
-	{PAD_R2},			//	OEPS2ButtonR2,
-	{PAD_R3},			//	OEPS2ButtonR3,
-	{PAD_START},		//	OEPS2ButtonStart,
-	{PAD_SELECT},		//	OEPS2ButtonSelect,
-	{}, 				//  OEPS2ButtonAnalogMode,
-	{PAD_L_UP},			//	OEPS2LeftAnalogUp,
-	{PAD_L_DOWN},		//	OEPS2LeftAnalogDown,
-	{PAD_L_LEFT},		//	OEPS2LeftAnalogLeft,
-	{PAD_L_RIGHT},		//	OEPS2LeftAnalogRight,
-	{PAD_R_UP},			//	OEPS2RightAnalogUp,
-	{PAD_R_DOWN},		//	OEPS2RightAnalogDown,
-	{PAD_R_LEFT},		//	OEPS2RightAnalogLeft,
-	{PAD_R_RIGHT},		//	OEPS2RightAnalogRight
+	{PadDualshock2::PAD_UP},			//	OEPS2ButtonUp,
+	{PadDualshock2::PAD_DOWN},			//	OEPS2ButtonDown,
+	{PadDualshock2::PAD_LEFT},			//	OEPS2ButtonLeft,
+	{PadDualshock2::PAD_RIGHT},			//	OEPS2ButtonRight,
+	{PadDualshock2::PAD_TRIANGLE},		//	OEPS2ButtonTriangle,
+	{PadDualshock2::PAD_CIRCLE},		//	OEPS2ButtonCircle,
+	{PadDualshock2::PAD_CROSS},			//	OEPS2ButtonCross,
+	{PadDualshock2::PAD_SQUARE},		//	OEPS2ButtonSquare,
+	{PadDualshock2::PAD_L1},			//	OEPS2ButtonL1,
+	{PadDualshock2::PAD_L2},			//	OEPS2ButtonL2,
+	{PadDualshock2::PAD_L3},			//	OEPS2ButtonL3,
+	{PadDualshock2::PAD_R1},			//	OEPS2ButtonR1,
+	{PadDualshock2::PAD_R2},			//	OEPS2ButtonR2,
+	{PadDualshock2::PAD_R3},			//	OEPS2ButtonR3,
+	{PadDualshock2::PAD_START},			//	OEPS2ButtonStart,
+	{PadDualshock2::PAD_SELECT},		//	OEPS2ButtonSelect,
+	{PadDualshock2::PAD_ANALOG}, 		//  OEPS2ButtonAnalogMode,
+	{PadDualshock2::PAD_L_UP},			//	OEPS2LeftAnalogUp,
+	{PadDualshock2::PAD_L_DOWN},		//	OEPS2LeftAnalogDown,
+	{PadDualshock2::PAD_L_LEFT},		//	OEPS2LeftAnalogLeft,
+	{PadDualshock2::PAD_L_RIGHT},		//	OEPS2LeftAnalogRight,
+	{PadDualshock2::PAD_R_UP},			//	OEPS2RightAnalogUp,
+	{PadDualshock2::PAD_R_DOWN},		//	OEPS2RightAnalogDown,
+	{PadDualshock2::PAD_R_LEFT},		//	OEPS2RightAnalogLeft,
+	{PadDualshock2::PAD_R_RIGHT},		//	OEPS2RightAnalogRight
 };
 #endif /* keymap_h */

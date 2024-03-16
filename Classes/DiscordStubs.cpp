@@ -1,4 +1,4 @@
-// Copyright (c) 2022, OpenEmu Team
+// Copyright (c) 2024, OpenEmu Team
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:
@@ -22,13 +22,51 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef OEHostDisplay_h
-#define OEHostDisplay_h
+#include "discord_rpc.h"
 
-namespace Host {
-	int PresentFrameBuffer();
-} // namespace Host
+void Discord_Initialize(const char* applicationId,
+									   DiscordEventHandlers* handlers,
+									   int autoRegister,
+									   const char* optionalSteamId)
+{
+	
+}
 
+void Discord_Shutdown(void)
+{
+	
+}
 
+/* checks for incoming messages, dispatches callbacks */
+void Discord_RunCallbacks(void)
+{
+	
+}
 
-#endif /* OEHostDisplay_h */
+/* If you disable the lib starting its own io thread, you'll need to call this from your own */
+#ifdef DISCORD_DISABLE_IO_THREAD
+void Discord_UpdateConnection(void)
+{
+	
+}
+#endif
+
+void Discord_UpdatePresence(const DiscordRichPresence* presence)
+{
+	
+}
+
+void Discord_ClearPresence(void)
+{
+	
+}
+
+void Discord_Respond(const char* userid, /* DISCORD_REPLY_ */ int reply)
+{
+	
+}
+
+void Discord_UpdateHandlers(DiscordEventHandlers* handlers)
+{
+	
+}

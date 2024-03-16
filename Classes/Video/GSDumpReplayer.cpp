@@ -28,7 +28,7 @@
 // Has to come before Gif.h
 #include "MemoryTypes.h"
 
-#include "Frontend/GameList.h"
+#include "GameList.h"
 #include "Gif.h"
 #include "Gif_Unit.h"
 #include "GSDumpReplayer.h"
@@ -204,8 +204,8 @@ static void GSDumpReplayerLoadInitialState()
 	// load GS state
 	freezeData fd = {static_cast<int>(s_dump_file->GetStateData().size()),
 		const_cast<u8*>(s_dump_file->GetStateData().data())};
-	MTGS_FreezeData mfd = {&fd, 0};
-	GetMTGS().Freeze(FreezeAction::Load, mfd);
+	MTGS::FreezeData mfd = {&fd, 0};
+	MTGS::Freeze(FreezeAction::Load, mfd);
 	if (mfd.retval != 0)
 		Host::ReportFormattedErrorAsync("GSDumpReplayer", "Failed to load GS state.");
 }
@@ -227,7 +227,7 @@ static void GSDumpReplayerSendPacketToMTGS(GIF_PATH path, const u8* data, u32 le
 static void GSDumpReplayerUpdateFrameLimit()
 {
 	constexpr u32 default_frame_limit = 60;
-	const u32 frame_limit = static_cast<u32>(default_frame_limit * EmuConfig.GS.LimitScalar);
+	const u32 frame_limit = static_cast<u32>(default_frame_limit * VMManager::GetTargetSpeed());
 
 	if (frame_limit > 0)
 		s_frame_ticks = (GetTickFrequency() + (frame_limit / 2)) / frame_limit;
@@ -308,7 +308,7 @@ void GSDumpReplayerCpuStep()
 			s_dump_frame_number++;
 			GSDumpReplayerUpdateFrameLimit();
 			GSDumpReplayerFrameLimit();
-			GetMTGS().PostVsyncStart(false);
+			MTGS::PostVsyncStart(false);
 			VMManager::Internal::VSyncOnCPUThread();
 			if (VMManager::Internal::IsExecutionInterrupted())
 				GSDumpReplayerExitExecution();
@@ -321,7 +321,7 @@ void GSDumpReplayerCpuStep()
 			std::memcpy(&size, packet.data, sizeof(size));
 
 			std::unique_ptr<u8[]> arr(new u8[size * 16]);
-			GetMTGS().InitAndReadFIFO(arr.get(), size);
+			MTGS::InitAndReadFIFO(arr.get(), size);
 		}
 		break;
 
