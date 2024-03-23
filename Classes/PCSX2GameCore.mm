@@ -217,13 +217,15 @@ static NSURL *binCueFix(NSURL *path)
 	EmuFolders::GameSettings = [self.supportDirectory URLByAppendingPathComponent:@"gamesettings" isDirectory:YES].fileSystemRepresentation;
 	EmuFolders::EnsureFoldersExist();
 	
-	EmuConfig.Mcd[0].Enabled = true;
-	EmuConfig.Mcd[0].Type = MemoryCardType::Folder;
-	EmuConfig.Mcd[0].Filename = "Memory folder 1.ps2";
-
-	EmuConfig.Mcd[1].Enabled = true;
-	EmuConfig.Mcd[1].Type = MemoryCardType::Folder;
-	EmuConfig.Mcd[1].Filename = "Memory folder 2.ps2";
+	// Create a folder (if it doesn't exist) instead of letting PCSX2 create a small 8 MiB memory card.
+	// This makes it easier for the user to have multiple saves without having to worry about space.
+	// Also, PCSX2 automatically makes it so that games that can load saves from other games CAN see the extra saves.
+	if (![[self.batterySavesDirectory URLByAppendingPathComponent:@"Memory folder 1.ps2"] checkResourceIsReachableAndReturnError:NULL]) {
+		[[NSFileManager defaultManager] createDirectoryAtURL:[self.batterySavesDirectory URLByAppendingPathComponent:@"Memory folder 1.ps2"] withIntermediateDirectories:YES attributes:nil error:NULL];
+	}
+	if (![[self.batterySavesDirectory URLByAppendingPathComponent:@"Memory folder 2.ps2"] checkResourceIsReachableAndReturnError:NULL]) {
+		[[NSFileManager defaultManager] createDirectoryAtURL:[self.batterySavesDirectory URLByAppendingPathComponent:@"Memory folder 2.ps2"] withIntermediateDirectories:YES attributes:nil error:NULL];
+	}
 	
 	if ([DiscRegion isEqualToString:@"U"]) {
 		// NTSC-US
@@ -266,6 +268,11 @@ static NSURL *binCueFix(NSURL *path)
 	si.SetBoolValue("EmuCore/GS", "SyncToHostRefreshRate",false);
 	si.SetBoolValue("EmuCore/GS", "UserHacks", false);
 	si.SetStringValue("Pad2", "Type", "DualShock2");
+	
+	si.SetStringValue("MemoryCards", "Slot1_Filename", "Memory folder 1.ps2");
+	si.SetBoolValue("MemoryCards", "Slot1_Enable", true);
+	si.SetStringValue("MemoryCards", "Slot2_Filename", "Memory folder 2.ps2");
+	si.SetBoolValue("MemoryCards", "Slot2_Enable", true);
 }
 
 - (void)resetEmulation
