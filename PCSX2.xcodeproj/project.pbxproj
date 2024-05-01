@@ -8602,6 +8602,14 @@
 					__POSIX__,
 					"GIT_REV=\"\\\"huh...\\\"\"",
 				);
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=arm64]" = (
+					_M_ARM64,
+					"$(inherited)",
+				);
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=arm64e]" = (
+					_M_ARM64,
+					"$(inherited)",
+				);
 				"GCC_PREPROCESSOR_DEFINITIONS[arch=x86_64]" = (
 					_M_X86,
 					__M_X86_64,
@@ -8687,6 +8695,14 @@
 					GL_SILENCE_DEPRECATION,
 					__POSIX__,
 					"GIT_REV=\"\\\"huh...\\\"\"",
+				);
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=arm64]" = (
+					_M_ARM64,
+					"$(inherited)",
+				);
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=arm64e]" = (
+					_M_ARM64,
+					"$(inherited)",
 				);
 				"GCC_PREPROCESSOR_DEFINITIONS[arch=x86_64]" = (
 					_M_X86,
@@ -8883,11 +8899,28 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = pcsx2/pcsx2/PrecompiledHeader.h;
 				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"__unix__=1",
+				);
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=arm64]" = (
+					_M_ARM64,
+					"$(inherited)",
+				);
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=arm64e]" = (
+					_M_ARM64,
+					"$(inherited)",
+				);
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=x86_64]" = (
 					"__M_X86_64=1",
 					_M_X86_64,
 					_M_X86,
 					"$(inherited)",
-					"__unix__=1",
+				);
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=x86_64h]" = (
+					"__M_X86_64=1",
+					_M_X86_64,
+					_M_X86,
+					"$(inherited)",
 				);
 				HEADER_SEARCH_PATHS = (
 					"\"$(SRCROOT)/pcsx2\"",
@@ -8938,11 +8971,28 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = pcsx2/pcsx2/PrecompiledHeader.h;
 				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"__unix__=1",
+				);
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=arm64]" = (
+					_M_ARM64,
+					"$(inherited)",
+				);
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=arm64e]" = (
+					_M_ARM64,
+					"$(inherited)",
+				);
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=x86_64]" = (
 					"__M_X86_64=1",
 					_M_X86_64,
 					_M_X86,
 					"$(inherited)",
-					"__unix__=1",
+				);
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=x86_64h]" = (
+					"__M_X86_64=1",
+					_M_X86_64,
+					_M_X86,
+					"$(inherited)",
 				);
 				HEADER_SEARCH_PATHS = (
 					"\"$(SRCROOT)/pcsx2\"",
@@ -9045,8 +9095,23 @@
 				EXECUTABLE_PREFIX = lib;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = pcsx2/common/PrecompiledHeader.h;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					__M_X86_64,
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=arm64]" = (
+					_M_ARM64,
+					"$(inherited)",
+				);
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=arm64e]" = (
+					_M_ARM64,
+					"$(inherited)",
+				);
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=x86_64]" = (
+					"__M_X86_64=1",
+					_M_X86_64,
+					_M_X86,
+					"$(inherited)",
+				);
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=x86_64h]" = (
+					"__M_X86_64=1",
 					_M_X86_64,
 					_M_X86,
 					"$(inherited)",
@@ -9078,8 +9143,23 @@
 				EXECUTABLE_PREFIX = lib;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = pcsx2/common/PrecompiledHeader.h;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					__M_X86_64,
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=arm64]" = (
+					_M_ARM64,
+					"$(inherited)",
+				);
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=arm64e]" = (
+					_M_ARM64,
+					"$(inherited)",
+				);
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=x86_64]" = (
+					"__M_X86_64=1",
+					_M_X86_64,
+					_M_X86,
+					"$(inherited)",
+				);
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=x86_64h]" = (
+					"__M_X86_64=1",
 					_M_X86_64,
 					_M_X86,
 					"$(inherited)",
@@ -9173,11 +9253,11 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				CODE_SIGN_STYLE = Automatic;
 				EXECUTABLE_PREFIX = lib;
-				GCC_PREPROCESSOR_DEFINITIONS = (
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=x86_64]" = (
 					"__M_X86_64=1",
 					_M_X86_64,
 					"$(inherited)",
-					"__WXOSX_COCOA__=1",
 				);
 				HEADER_SEARCH_PATHS = (
 					"\"$(SRCROOT)/pcsx2\"",
@@ -9197,11 +9277,11 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				EXECUTABLE_PREFIX = lib;
-				GCC_PREPROCESSOR_DEFINITIONS = (
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=x86_64]" = (
 					"__M_X86_64=1",
 					_M_X86_64,
 					"$(inherited)",
-					"__WXOSX_COCOA__=1",
 				);
 				HEADER_SEARCH_PATHS = (
 					"\"$(SRCROOT)/pcsx2\"",
@@ -9282,6 +9362,14 @@
 					"EXPORT=\"\"",
 					FLOATING_POINT,
 				);
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=arm64]" = (
+					_USE_NEON,
+					"$(inherited)",
+				);
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=arm64e]" = (
+					_USE_NEON,
+					"$(inherited)",
+				);
 				"GCC_PREPROCESSOR_DEFINITIONS[arch=x86_64]" = (
 					_USE_SSE,
 					_USE_SSE2,
@@ -9318,6 +9406,14 @@
 					"EXPORT=\"\"",
 					FLOATING_POINT,
 				);
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=arm64]" = (
+					_USE_NEON,
+					"$(inherited)",
+				);
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=arm64e]" = (
+					_USE_NEON,
+					"$(inherited)",
+				);
 				"GCC_PREPROCESSOR_DEFINITIONS[arch=x86_64]" = (
 					_USE_SSE,
 					_USE_SSE2,
@@ -9350,10 +9446,7 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				EXECUTABLE_PREFIX = lib;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 14.2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -9369,6 +9462,7 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				EXECUTABLE_PREFIX = lib;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 14.2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -9383,10 +9477,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				EXECUTABLE_PREFIX = lib;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -9398,6 +9489,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CODE_SIGN_STYLE = Automatic;
 				EXECUTABLE_PREFIX = lib;
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -9494,10 +9586,7 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				EXECUTABLE_PREFIX = lib;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -9512,6 +9601,7 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				EXECUTABLE_PREFIX = lib;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
