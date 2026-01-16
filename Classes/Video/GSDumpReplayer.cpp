@@ -1,44 +1,32 @@
-/*  PCSX2 - PS2 Emulator for PCs
- *  Copyright (C) 2002-2022  PCSX2 Dev Team
- *
- *  PCSX2 is free software: you can redistribute it and/or modify it under the terms
- *  of the GNU Lesser General Public License as published by the Free Software Found-
- *  ation, either version 3 of the License, or (at your option) any later version.
- *
- *  PCSX2 is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
- *  without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
- *  PURPOSE.  See the GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License along with PCSX2.
- *  If not, see <http://www.gnu.org/licenses/>.
- */
+// SPDX-FileCopyrightText: 2002-2026 PCSX2 Dev Team
+// SPDX-License-Identifier: GPL-3.0+
 
-#include "PrecompiledHeader.h"
-
-#include <atomic>
-
-#include "fmt/core.h"
-
-#include "common/FileSystem.h"
-#include "common/StringUtil.h"
-#include "common/Timer.h"
-
-//#include "imgui.h"
-
-// Has to come before Gif.h
-#include "MemoryTypes.h"
-
+#include "GS.h"
+#include "GS/GSLzma.h"
+#include "GSDumpReplayer.h"
 #include "GameList.h"
 #include "Gif.h"
 #include "Gif_Unit.h"
-#include "GSDumpReplayer.h"
-#include "GS/GSLzma.h"
-#include "GS.h"
 #include "Host.h"
+//#include "ImGui/ImGuiManager.h"
+//#include "ImGui/ImGuiOverlays.h"
 #include "R3000A.h"
 #include "R5900.h"
 #include "VMManager.h"
 #include "VUmicro.h"
+
+//#include "imgui.h"
+
+#include "fmt/format.h"
+
+#include "common/Error.h"
+#include "common/FileSystem.h"
+#include "common/Path.h"
+#include "common/StringUtil.h"
+#include "common/Threading.h"
+#include "common/Timer.h"
+
+#include <atomic>
 
 static void GSDumpReplayerCpuReserve();
 static void GSDumpReplayerCpuShutdown();
@@ -92,15 +80,22 @@ void GSDumpReplayer::SetLoopCount(s32 loop_count)
 	s_dump_loop_count = loop_count - 1;
 }
 
-bool GSDumpReplayer::Initialize(const char* filename)
+int GSDumpReplayer::GetLoopCount()
+{
+	return s_dump_loop_count;
+}
+
+bool GSDumpReplayer::Initialize(const char* filename, Error* error)
 {
 	Common::Timer timer;
-	Console.WriteLn("(GSDumpReplayer) Reading file...");
+	Console.WriteLn("(GSDumpReplayer) Reading file '%s'...", filename);
 
-	s_dump_file = GSDumpFile::OpenGSDump(filename);
-	if (!s_dump_file || !s_dump_file->ReadFile())
+	Error dump_error;
+	s_dump_file = GSDumpFile::OpenGSDump(filename, &dump_error);
+	if (!s_dump_file || !s_dump_file->ReadFile(&dump_error))
 	{
-		Host::ReportFormattedErrorAsync("GSDumpReplayer", "Failed to open or read '%s'.", filename);
+		Error::SetStringFmt(error, TRANSLATE_FS("GSDumpReplayer", "Failed to open or read '{}': {}"),
+			Path::GetFileName(filename), dump_error.GetDescription());
 		s_dump_file.reset();
 		return false;
 	}
@@ -123,10 +118,18 @@ bool GSDumpReplayer::ChangeDump(const char* filename)
 {
 	Console.WriteLn("(GSDumpReplayer) Switching to '%s'...", filename);
 
-	std::unique_ptr<GSDumpFile> new_dump(GSDumpFile::OpenGSDump(filename));
-	if (!new_dump || !new_dump->ReadFile())
+	if (!VMManager::IsGSDumpFileName(filename))
 	{
-		Host::ReportFormattedErrorAsync("GSDumpReplayer", "Failed to open or read '%s'.", filename);
+		Host::ReportFormattedErrorAsync("GSDumpReplayer", "'%s' is not a GS dump.", filename);
+		return false;
+	}
+
+	Error error;
+	std::unique_ptr<GSDumpFile> new_dump(GSDumpFile::OpenGSDump(filename));
+	if (!new_dump || !new_dump->ReadFile(&error))
+	{
+		Host::ReportErrorAsync("GSDumpReplayer", fmt::format("Failed to open or read '{}': {}",
+													 Path::GetFileName(filename), error.GetDescription()));
 		return false;
 	}
 
@@ -210,16 +213,18 @@ static void GSDumpReplayerLoadInitialState()
 		Host::ReportFormattedErrorAsync("GSDumpReplayer", "Failed to load GS state.");
 }
 
-static void GSDumpReplayerSendPacketToMTGS(GIF_PATH path, const u8* data, u32 length)
+static void GSDumpReplayerSendPacketToMTGS(GIF_PATH path, const u8* data, size_t length)
 {
-	pxAssert((length % 16) == 0);
+	pxAssert((length % 16) == 0 && length < UINT32_MAX);
+
+	const u32 truncated_length = static_cast<u32>(length);
 
 	Gif_Path& gifPath = gifUnit.gifPath[path];
-	gifPath.CopyGSPacketData(const_cast<u8*>(data), length);
+	gifPath.CopyGSPacketData(const_cast<u8*>(data), truncated_length);
 
 	GS_Packet gsPack;
 	gsPack.offset = gifPath.curOffset;
-	gsPack.size = length;
+	gsPack.size = truncated_length;
 	gifPath.curOffset += length;
 	Gif_AddCompletedGSPacket(gsPack, path);
 }
@@ -245,7 +250,7 @@ static void GSDumpReplayerFrameLimit()
 	const s64 ms = GetTickFrequency() / 1000;
 	const s64 sleep = s_next_frame_time - now - ms;
 	if (sleep > ms)
-		Threading::Sleep(sleep / ms);
+		Threading::Sleep(static_cast<s32>(sleep / ms));
 	while ((now = GetCPUTicks()) < s_next_frame_time)
 		ShortSpin();
 	s_next_frame_time = std::max(now, s_next_frame_time + s_frame_ticks);
@@ -281,8 +286,13 @@ void GSDumpReplayerCpuStep()
 			{
 				case GSDumpTypes::GSTransferPath::Path1Old:
 				{
+					if(packet.length > 16384)
+					{
+						Console.Error("GSDumpReplayer: Path1Old transfer exceeds 16KB buffer. Skipping transfer");
+						break;
+					}
 					std::unique_ptr<u8[]> data(new u8[16384]);
-					const s32 addr = 16384 - packet.length;
+					const size_t addr = 16384 - packet.length;
 					std::memcpy(data.get(), packet.data + addr, packet.length);
 					GSDumpReplayerSendPacketToMTGS(GIF_PATH_1, data.get(), packet.length);
 				}
@@ -312,6 +322,7 @@ void GSDumpReplayerCpuStep()
 			VMManager::Internal::VSyncOnCPUThread();
 			if (VMManager::Internal::IsExecutionInterrupted())
 				GSDumpReplayerExitExecution();
+			Host::PumpMessagesOnCPUThread();
 		}
 		break;
 
@@ -320,14 +331,15 @@ void GSDumpReplayerCpuStep()
 			u32 size;
 			std::memcpy(&size, packet.data, sizeof(size));
 
-			std::unique_ptr<u8[]> arr(new u8[size * 16]);
+			// Allocate an extra quadword, some transfers write too much (e.g. Lego Racers 2 with Z24 downloads).
+			std::unique_ptr<u8[]> arr(new u8[(size + 1) * 16]);
 			MTGS::InitAndReadFIFO(arr.get(), size);
 		}
 		break;
 
 		case GSDumpTypes::GSType::Registers:
 		{
-			std::memcpy(PS2MEM_GS, packet.data, std::min<size_t>(packet.length, Ps2MemSize::GSregs));
+			std::memcpy(PS2MEM_GS, packet.data, std::min<s32>(static_cast<u32>(packet.length), Ps2MemSize::GSregs));
 		}
 		break;
 	}

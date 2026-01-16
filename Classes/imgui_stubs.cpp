@@ -22,11 +22,12 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#include "SmallString.h"
 #include "ImGui/ImGuiManager.h"
 #include "ImGui/ImGuiOverlays.h"
 #include "ImGui/FullscreenUI.h"
 
-void ImGuiManager::SetFontPathAndRange(std::string path, std::vector<u16> range)
+void ImGuiManager::SetFontPath(std::string path)
 {
 	
 }
@@ -56,7 +57,7 @@ void ImGuiManager::WindowResized()
 	
 }
 
-void ImGuiManager::UpdateScale()
+void ImGuiManager::RequestScaleUpdate()
 {
 	
 }
@@ -76,32 +77,12 @@ float ImGuiManager::GetGlobalScale()
 	return 1;
 }
 
-bool ImGuiManager::HasFullscreenFonts()
-{
-	return true;
-}
-
-bool ImGuiManager::AddFullscreenFontsIfMissing()
-{
-	return true;
-}
-
 ImFont* ImGuiManager::GetStandardFont()
 {
 	return nullptr;
 }
 
 ImFont* ImGuiManager::GetFixedFont()
-{
-	return nullptr;
-}
-
-ImFont* ImGuiManager::GetMediumFont()
-{
-	return nullptr;
-}
-
-ImFont* ImGuiManager::GetLargeFont()
 {
 	return nullptr;
 }
@@ -126,7 +107,7 @@ void ImGuiManager::UpdateMousePosition(float x, float y)
 	
 }
 
-bool ImGuiManager::ProcessGenericInputEvent(GenericInputBinding key, float value)
+bool ImGuiManager::ProcessGenericInputEvent(GenericInputBinding key, InputLayout layout, float value)
 {
 	return false;
 }

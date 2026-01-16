@@ -38,8 +38,8 @@
 #include "MTGS.h"
 #include "common/SettingsWrapper.h"
 #include "CDVD/CDVD.h"
-#include "SPU2/Global.h"
-#include "SPU2/SndOut.h"
+#include "SPU2/defs.h"
+//#include "SPU2/SndOut.h"
 #include "SIO/Pad/Pad.h"
 #include "SIO/Pad/PadBase.h"
 #include "SIO/Pad/PadDualshock2.h"
@@ -448,7 +448,7 @@ static PadDualshock2* getPadToDualShock(const NSUInteger player);
 static PadDualshock2* getPadToDualShock(const NSUInteger player)
 {
 	auto pad = Pad::GetPad(player - 1);
-	auto pad2 = static_cast<PadDualshock2*>(pad);
+	auto pad2 = dynamic_cast<PadDualshock2*>(pad);
 	return pad2;
 }
 
@@ -515,7 +515,7 @@ static PadDualshock2* getPadToDualShock(const NSUInteger player)
 		block(NO, [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotStartCoreError userInfo:@{NSLocalizedDescriptionKey: @"PCSX2 is not initialized, creating save state impossible.", NSURLErrorKey: fileURL}]);
 		return;
 	}
-	bool success = VMManager::SaveState(fileURL.fileSystemRepresentation, false, false);
+	bool success = VMManager::SaveState(fileURL.fileSystemRepresentation, false, false, nullptr);
 	
 	block(success, success ? nil : [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotSaveStateError userInfo:@{NSLocalizedDescriptionKey: @"PCSX2 Could not save the current state.", NSURLErrorKey: fileURL}]);
 	
@@ -635,8 +635,9 @@ void Host::WriteToSoundBuffer(s16 Left, s16 Right)
 	[[current audioBufferAtIndex:0] write:stereo maxLength:sizeof(stereo)];
 }
 
-void Host::WriteToSoundBuffer(StereoOut16 snd)
+void Host::WriteToSoundBuffer(StereoOut32 snd)
 {
+	//TODO: better truncation!
 	Host::WriteToSoundBuffer(snd.Left, snd.Right);
 }
 
@@ -673,11 +674,11 @@ void Host::ClearOSDMessages()
 {
 }
 
-void Host::ReportErrorAsync(const std::string_view& title, const std::string_view& message)
+void Host::ReportErrorAsync(const std::string_view title, const std::string_view message)
 {
 }
 
-void Host::AddIconOSDMessage(std::string key, const char* icon, const std::string_view& message, float duration /* = 2.0f */)
+void Host::AddIconOSDMessage(std::string key, const char* icon, const std::string_view message, float duration /* = 2.0f */)
 {
 	// Stub, do nothing.
 }
@@ -704,15 +705,15 @@ void Host::OnVMResumed()
 {
 }
 
-void Host::OnSaveStateLoading(const std::string_view& filename)
+void Host::OnSaveStateLoading(const std::string_view filename)
 {
 }
 
-void Host::OnSaveStateLoaded(const std::string_view& filename, bool was_successful)
+void Host::OnSaveStateLoaded(const std::string_view filename, bool was_successful)
 {
 }
 
-void Host::OnSaveStateSaved(const std::string_view& filename)
+void Host::OnSaveStateSaved(const std::string_view filename)
 {
 }
 
@@ -781,7 +782,7 @@ void Host::CheckForSettingsChanges(const Pcsx2Config& old_config)
 //	CommonHost::CheckForSettingsChanges(old_config);
 }
 
-s32 Host::Internal::GetTranslatedStringImpl(const std::string_view &context, const std::string_view &msg, char *tbuf, size_t tbuf_space)
+s32 Host::Internal::GetTranslatedStringImpl(const std::string_view context, const std::string_view msg, char* tbuf, size_t tbuf_space)
 {
 	if (msg.size() > tbuf_space) {
 		return -1;
@@ -795,7 +796,7 @@ s32 Host::Internal::GetTranslatedStringImpl(const std::string_view &context, con
 
 #pragma mark -
 
-std::optional<u32> InputManager::ConvertHostKeyboardStringToCode(const std::string_view& str)
+std::optional<u32> InputManager::ConvertHostKeyboardStringToCode(const std::string_view str)
 {
 	return std::nullopt;
 }
@@ -810,7 +811,7 @@ void InputManager::SetPadVibrationIntensity(u32 pad_index, float large_or_single
 	// TODO: add vibration support to OpenEmu
 }
 
-void InputManager::ReloadBindings(SettingsInterface &si, SettingsInterface &binding_si)
+void InputManager::ReloadBindings(SettingsInterface& si, SettingsInterface& binding_si, SettingsInterface& hotkey_binding_si, bool is_binding_profile, bool is_hotkey_profile)
 {
 	
 }

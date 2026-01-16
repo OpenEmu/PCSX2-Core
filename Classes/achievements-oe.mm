@@ -1,7 +1,7 @@
 
 // Stubs for achievements. Obj-C++ for when OpenEmu adds support.
 
-
+#include "SmallString.h"
 #include "Achievements.h"
 
 static std::recursive_mutex s_achievements_mutex;
@@ -56,7 +56,7 @@ void Achievements::UpdateSettings(const Pcsx2Config::AchievementsOptions &old_co
 	
 }
 
-bool Achievements::ResetHardcoreMode()
+bool Achievements::ResetHardcoreMode(bool is_booting)
 {
 	return false;
 }
@@ -74,16 +74,6 @@ void Achievements::DisableHardcoreMode()
 bool Achievements::IsHardcoreModeActive()
 {
 	return false;
-}
-
-bool Achievements::ConfirmHardcoreModeDisable(const char* trigger)
-{
-	return false;
-}
-
-void Achievements::ConfirmHardcoreModeDisableAsync(const char* trigger, std::function<void(bool)> callback)
-{
-	callback(false);
 }
 
 bool Achievements::IsActive()
