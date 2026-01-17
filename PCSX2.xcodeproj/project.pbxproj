@@ -1023,6 +1023,9 @@
 		55DB5F0E2B59174900B3BD75 /* lz4file.c in Sources */ = {isa = PBXBuildFile; fileRef = 55DB5E592B59174900B3BD75 /* lz4file.c */; };
 		55DB5F242B5917BE00B3BD75 /* liblz4-pcsx2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 55DB5DC52B59173400B3BD75 /* liblz4-pcsx2.a */; };
 		55DF028927D3273400B339A6 /* iR5900Analysis.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55DF028727D3273400B339A6 /* iR5900Analysis.cpp */; };
+		55E9A54B2F1B75AB00B9CD48 /* Pad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55E9A54A2F1B75AB00B9CD48 /* Pad.cpp */; };
+		55E9A54E2F1B762D00B9CD48 /* PadJogcon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55E9A54D2F1B762D00B9CD48 /* PadJogcon.cpp */; };
+		55E9A5512F1B767300B9CD48 /* PadNegcon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55E9A5502F1B767300B9CD48 /* PadNegcon.cpp */; };
 		55EBA8AB295CDC8D0035A1FD /* SaveState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517FDFA263D49BC000219EC /* SaveState.cpp */; };
 		55EBA8B2295CDDAC0035A1FD /* WavFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5517E8F4263D4831000219EC /* WavFile.cpp */; };
 		55EBA8B5295CDDF00035A1FD /* WAVWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = 55EBA8B3295CDDF00035A1FD /* WAVWriter.h */; };
@@ -2968,6 +2971,11 @@
 		55DB5EDB2B59174900B3BD75 /* SECURITY.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = SECURITY.md; sourceTree = "<group>"; };
 		55DF028727D3273400B339A6 /* iR5900Analysis.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = iR5900Analysis.cpp; sourceTree = "<group>"; };
 		55DF028827D3273400B339A6 /* iR5900Analysis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iR5900Analysis.h; sourceTree = "<group>"; };
+		55E9A54A2F1B75AB00B9CD48 /* Pad.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Pad.cpp; sourceTree = "<group>"; };
+		55E9A54C2F1B762D00B9CD48 /* PadJogcon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PadJogcon.h; sourceTree = "<group>"; };
+		55E9A54D2F1B762D00B9CD48 /* PadJogcon.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PadJogcon.cpp; sourceTree = "<group>"; };
+		55E9A54F2F1B767300B9CD48 /* PadNegcon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PadNegcon.h; sourceTree = "<group>"; };
+		55E9A5502F1B767300B9CD48 /* PadNegcon.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PadNegcon.cpp; sourceTree = "<group>"; };
 		55EBA8B3295CDDF00035A1FD /* WAVWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WAVWriter.h; sourceTree = "<group>"; };
 		55EBA8B4295CDDF00035A1FD /* WAVWriter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WAVWriter.cpp; sourceTree = "<group>"; };
 		55EBA8B8295CDEF90035A1FD /* GSCaptureStub.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GSCaptureStub.cpp; sourceTree = "<group>"; };
@@ -3214,6 +3222,7 @@
 		550231912F1A26FB00B1C06D /* Overrides */ = {
 			isa = PBXGroup;
 			children = (
+				55E9A54A2F1B75AB00B9CD48 /* Pad.cpp */,
 			);
 			name = Overrides;
 			sourceTree = "<group>";
@@ -5526,6 +5535,10 @@
 				55C765AB2B776E88005DC873 /* PadDualshock2.cpp */,
 				55C765A92B776E88005DC873 /* PadGuitar.h */,
 				55C765B12B776E88005DC873 /* PadGuitar.cpp */,
+				55E9A54C2F1B762D00B9CD48 /* PadJogcon.h */,
+				55E9A54D2F1B762D00B9CD48 /* PadJogcon.cpp */,
+				55E9A54F2F1B767300B9CD48 /* PadNegcon.h */,
+				55E9A5502F1B767300B9CD48 /* PadNegcon.cpp */,
 				55C765B02B776E88005DC873 /* PadNotConnected.h */,
 				55C765A52B776E88005DC873 /* PadNotConnected.cpp */,
 				55C765A82B776E88005DC873 /* PadPopn.h */,
@@ -7458,6 +7471,7 @@
 				55484927288545620066EDEB /* present.metal in Sources */,
 				55F9D7E328120385005286B6 /* fxaa.metal in Sources */,
 				551BF58326420E9A0008C529 /* IopHwRead.cpp in Sources */,
+				55E9A54E2F1B762D00B9CD48 /* PadJogcon.cpp in Sources */,
 				551BF5C3264210AB0008C529 /* Gif.cpp in Sources */,
 				551BF57A26420E720008C529 /* VU1microInterp.cpp in Sources */,
 				551BF647264218380008C529 /* iR5900Move.cpp in Sources */,
@@ -7470,6 +7484,7 @@
 				551BF631264216F50008C529 /* InputIsoFile.cpp in Sources */,
 				55C767792B7775A6005DC873 /* GLStreamBuffer.cpp in Sources */,
 				551AA4AF27935E9100658151 /* IP_Options.cpp in Sources */,
+				55E9A54B2F1B75AB00B9CD48 /* Pad.cpp in Sources */,
 				551BF67A264240560008C529 /* DEV9.cpp in Sources */,
 				55B1F02E295BAD5600DB297F /* TCP_Session.cpp in Sources */,
 				55C767762B77751F005DC873 /* GLShaderCache.cpp in Sources */,
@@ -7504,6 +7519,7 @@
 				551AA13F2792AB1700658151 /* GSRenderer.cpp in Sources */,
 				55C765C02B776E88005DC873 /* PadGuitar.cpp in Sources */,
 				55B1F013295BACF000DB297F /* TCP_Packet.cpp in Sources */,
+				55E9A5512F1B767300B9CD48 /* PadNegcon.cpp in Sources */,
 				551BF620264214530008C529 /* iCOP0.cpp in Sources */,
 				5576A4802885E0C70078CFF8 /* InputRecordingControls.cpp in Sources */,
 				551AA13D2792AB1700658151 /* GSTexture.cpp in Sources */,
