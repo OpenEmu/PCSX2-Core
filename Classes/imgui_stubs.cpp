@@ -27,6 +27,8 @@
 #include "ImGui/ImGuiOverlays.h"
 #include "ImGui/FullscreenUI.h"
 
+InputRecordingUI::InputRecordingData g_InputRecordingData;
+
 void ImGuiManager::SetFontPath(std::string path)
 {
 	

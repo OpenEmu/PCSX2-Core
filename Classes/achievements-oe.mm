@@ -85,3 +85,23 @@ bool Achievements::Shutdown(bool allow_cancel)
 {
 	return true;
 }
+
+bool Achievements::HasActiveGame()
+{
+	return false;
+}
+
+const std::string& Achievements::GetGameIconURL()
+{
+	return blank;
+}
+
+bool Achievements::HasAchievementsOrLeaderboards()
+{
+	return false;
+}
+
+std::unique_lock<std::recursive_mutex> Achievements::GetLock()
+{
+	return std::unique_lock(s_achievements_mutex);
+}

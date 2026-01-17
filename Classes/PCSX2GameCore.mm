@@ -47,6 +47,8 @@
 #include "MTVU.h"
 #include "Elfheader.h"
 #include "USB/deviceproxy.h"
+#include "Error.h"
+#include "Host/AudioStream.h"
 #undef BOOL
 
 #include <OpenGL/gl3.h>
@@ -115,6 +117,19 @@ static NSURL *binCueFix(NSURL *path)
 
 - (BOOL)loadFileAtURL:(NSURL *)url error:(NSError **)error
 {
+#ifdef __aarch64__
+	//PCSX2 isn't yet ready for ARM64. Warn our user.
+	
+	if (error) {
+		*error = [NSError errorWithDomain: OEGameCoreErrorDomain
+									 code: OEGameCoreCouldNotStartCoreError
+								 userInfo: @{NSURLErrorKey: url,
+											 NSLocalizedDescriptionKey: @"PCSX2 does not run natively on Apple Silicon.",
+											 NSLocalizedRecoverySuggestionErrorKey: @"Relaunch OpenEmu under Rosetta 2 and try running the game again."}];
+	}
+	
+	return NO;
+#endif
 	// PCSX2 can't handle cue files... but can read bin files
 	if ([[url pathExtension] caseInsensitiveCompare:@"cue"] == NSOrderedSame) {
 		// Assume the bin file is the same name as the cue.
@@ -307,7 +322,9 @@ static NSURL *binCueFix(NSURL *path)
 		
 		VMManager::ApplySettings();
 		
-		if (VMManager::Initialize(params)) {
+		// TODO: handle needing to validate hardcore mode.
+		VMBootResult success = VMManager::Initialize(params);
+		if (VMBootResult::StartupSuccess == success) {
 			hasInitialized = true;
 			VMManager::SetState(VMState::Running);
 
@@ -443,7 +460,7 @@ static NSURL *binCueFix(NSURL *path)
 
 #pragma mark Input
 
-/// The code assumes the controller is a PadDualshock2. This tests it and returns the actual object if it is, or \c NULL if it is not.
+/// The code currently assumes the controller is a PadDualshock2. This tests it and returns the actual object if it is, or `NULL` if it is not.
 static PadDualshock2* getPadToDualShock(const NSUInteger player);
 static PadDualshock2* getPadToDualShock(const NSUInteger player)
 {
@@ -502,10 +519,11 @@ static PadDualshock2* getPadToDualShock(const NSUInteger player)
 	while(isExecuting)
 		usleep(50);
 	
-	bool success = VMManager::LoadState(fileURL.fileSystemRepresentation);
+	Error theError = Error();
+	bool success = VMManager::LoadState(fileURL.fileSystemRepresentation, &theError);
 	WaitRequested = false;
 
-	block(success, success ? nil : [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotLoadStateError userInfo:@{NSLocalizedDescriptionKey: @"PCSX2 Could not load the current state.", NSURLErrorKey: fileURL}]);
+	block(success, success ? nil : [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotLoadStateError userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithFormat: @"PCSX2 Could not load the current state: %s", theError.GetDescription().c_str()], NSURLErrorKey: fileURL}]);
 }
 
 - (void)saveStateToFileAtURL:(NSURL *)fileURL completionHandler:(void (^)(BOOL, NSError *))block
@@ -515,9 +533,13 @@ static PadDualshock2* getPadToDualShock(const NSUInteger player)
 		block(NO, [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotStartCoreError userInfo:@{NSLocalizedDescriptionKey: @"PCSX2 is not initialized, creating save state impossible.", NSURLErrorKey: fileURL}]);
 		return;
 	}
-	bool success = VMManager::SaveState(fileURL.fileSystemRepresentation, false, false, nullptr);
+	//TODO: verify that this works...
+	std::string hi = "";
+	VMManager::SaveState(fileURL.fileSystemRepresentation, false, false, [&hi](const std::string& err){
+		hi = err;
+	});
 	
-	block(success, success ? nil : [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotSaveStateError userInfo:@{NSLocalizedDescriptionKey: @"PCSX2 Could not save the current state.", NSURLErrorKey: fileURL}]);
+	block(hi.empty(), hi.empty() ? nil : [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotSaveStateError userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithFormat: @"PCSX2 Could not save the current state: %s", hi.c_str()], NSURLErrorKey: fileURL}]);
 	
 }
 
@@ -626,6 +648,28 @@ static PadDualshock2* getPadToDualShock(const NSUInteger player)
 @end
 
 #pragma mark - Host Namespace
+
+std::string Host::TranslatePluralToString(const char* context, const char* msg, const char* disambiguation, int count)
+{
+	TinyString count_str = TinyString::from_format("{}", count);
+
+	std::string ret(msg);
+	for (;;)
+	{
+		std::string::size_type pos = ret.find("%n");
+		if (pos == std::string::npos)
+			break;
+
+		ret.replace(pos, pos + 2, count_str.view());
+	}
+
+	return ret;
+}
+
+std::unique_ptr<ProgressCallback> Host::CreateHostProgressCallback()
+{
+	return nil;
+}
 
 void Host::WriteToSoundBuffer(s16 Left, s16 Right)
 {
@@ -853,6 +897,13 @@ void RegisterDevice::Unregister()
 }
 
 #pragma mark -
+
+std::unique_ptr<AudioStream> AudioStream::CreateSDLAudioStream(u32 sample_rate, const AudioStreamParameters& parameters, bool stretch_enabled, Error* error)
+{
+	Error::SetString(error, "Invalid OpenEmu configuration set!");
+	return nullptr;
+}
+
 
 void VMManager::Internal::ResetVMHotkeyState()
 {
