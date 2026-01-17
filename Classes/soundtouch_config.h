@@ -25,10 +25,10 @@
 #ifndef soundtouch_config_h
 #define soundtouch_config_h
 
-//#ifdef __x86_64__
-//#define SOUNDTOUCH_ALLOW_SSE
-//#define SOUNDTOUCH_ALLOW_X86_OPTIMIZATIONS
-//#endif
+#if defined(__x86_64__) || defined(__x86_64h__)
+#define SOUNDTOUCH_ALLOW_SSE
+#define SOUNDTOUCH_ALLOW_X86_OPTIMIZATIONS
+#endif
 #ifdef __arm64__
 #define SOUNDTOUCH_USE_NEON
 #endif
