@@ -98,21 +98,6 @@
 		550232AC2F1AC37D00B1C06D /* YAML.h in Headers */ = {isa = PBXBuildFile; fileRef = 550232A92F1AC37D00B1C06D /* YAML.h */; };
 		550232AE2F1AC44F00B1C06D /* zip_realloc.c in Sources */ = {isa = PBXBuildFile; fileRef = 550232AD2F1AC44F00B1C06D /* zip_realloc.c */; };
 		550232B02F1AC4B400B1C06D /* zip_source_get_dostime.c in Sources */ = {isa = PBXBuildFile; fileRef = 550232AF2F1AC4B400B1C06D /* zip_source_get_dostime.c */; };
-		550232B42F1AC53800B1C06D /* pngtrans.c in Sources */ = {isa = PBXBuildFile; fileRef = 5517E97C263D4831000219EC /* pngtrans.c */; };
-		550232B52F1AC53800B1C06D /* png.c in Sources */ = {isa = PBXBuildFile; fileRef = 5517E9F4263D4832000219EC /* png.c */; };
-		550232B62F1AC53800B1C06D /* pngrio.c in Sources */ = {isa = PBXBuildFile; fileRef = 5517E974263D4831000219EC /* pngrio.c */; };
-		550232B72F1AC53800B1C06D /* pngrtran.c in Sources */ = {isa = PBXBuildFile; fileRef = 5517E9F5263D4832000219EC /* pngrtran.c */; };
-		550232B82F1AC53800B1C06D /* pngwutil.c in Sources */ = {isa = PBXBuildFile; fileRef = 5517E9A9263D4831000219EC /* pngwutil.c */; };
-		550232B92F1AC53800B1C06D /* pngwtran.c in Sources */ = {isa = PBXBuildFile; fileRef = 5517E9AB263D4831000219EC /* pngwtran.c */; };
-		550232BA2F1AC53800B1C06D /* pngset.c in Sources */ = {isa = PBXBuildFile; fileRef = 5517E9F8263D4832000219EC /* pngset.c */; };
-		550232BB2F1AC53800B1C06D /* pngerror.c in Sources */ = {isa = PBXBuildFile; fileRef = 5517E975263D4831000219EC /* pngerror.c */; };
-		550232BC2F1AC53800B1C06D /* pngrutil.c in Sources */ = {isa = PBXBuildFile; fileRef = 5517E9F6263D4832000219EC /* pngrutil.c */; };
-		550232BD2F1AC53800B1C06D /* pngwrite.c in Sources */ = {isa = PBXBuildFile; fileRef = 5517E9A6263D4831000219EC /* pngwrite.c */; };
-		550232BE2F1AC53800B1C06D /* pngmem.c in Sources */ = {isa = PBXBuildFile; fileRef = 5517E9F2263D4832000219EC /* pngmem.c */; };
-		550232BF2F1AC53800B1C06D /* pngread.c in Sources */ = {isa = PBXBuildFile; fileRef = 5517E9B1263D4831000219EC /* pngread.c */; };
-		550232C02F1AC53800B1C06D /* pngpread.c in Sources */ = {isa = PBXBuildFile; fileRef = 5517E9AF263D4831000219EC /* pngpread.c */; };
-		550232C12F1AC53800B1C06D /* pngwio.c in Sources */ = {isa = PBXBuildFile; fileRef = 5517E978263D4831000219EC /* pngwio.c */; };
-		550232C22F1AC53800B1C06D /* pngget.c in Sources */ = {isa = PBXBuildFile; fileRef = 5517E9F3263D4832000219EC /* pngget.c */; };
 		550232CA2F1AC59900B1C06D /* elf_symtab.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 556525732F18D50A00C42B99 /* elf_symtab.cpp */; };
 		550232CB2F1AC59900B1C06D /* elf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 556525712F18D50A00C42B99 /* elf.cpp */; };
 		550232CC2F1AC59900B1C06D /* stabs_to_ast.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 556525832F18D50A00C42B99 /* stabs_to_ast.cpp */; };
@@ -486,6 +471,29 @@
 		556BF9CB2F1ADBD20070B7E5 /* MtDec.c in Sources */ = {isa = PBXBuildFile; fileRef = 556BF9CA2F1ADBD20070B7E5 /* MtDec.c */; };
 		556BF9CE2F1ADE2B0070B7E5 /* UDP_Common.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 556BF9CD2F1ADE2B0070B7E5 /* UDP_Common.cpp */; };
 		556BF9D12F1ADEAB0070B7E5 /* DHCP_Logger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 556BF9D02F1ADEAB0070B7E5 /* DHCP_Logger.cpp */; };
+		556E3CD62F20B74B00127A76 /* intrin.h in Headers */ = {isa = PBXBuildFile; fileRef = 556E3CD52F20B74400127A76 /* intrin.h */; };
+		556E3CD82F20BE7600127A76 /* RecStubs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 556E3CD72F20BE6C00127A76 /* RecStubs.cpp */; };
+		556E3D662F20BEFE00127A76 /* utils-vixl.cc in Sources */ = {isa = PBXBuildFile; fileRef = 550231C22F1A2F7B00B1C06D /* utils-vixl.cc */; };
+		556E3D672F20BEFE00127A76 /* compiler-intrinsics-vixl.cc in Sources */ = {isa = PBXBuildFile; fileRef = 550231C02F1A2F7B00B1C06D /* compiler-intrinsics-vixl.cc */; };
+		556E3D682F20BEFE00127A76 /* code-buffer-vixl.cc in Sources */ = {isa = PBXBuildFile; fileRef = 550231BF2F1A2F7B00B1C06D /* code-buffer-vixl.cc */; };
+		556E3D692F20BEFE00127A76 /* cpu-features.cc in Sources */ = {isa = PBXBuildFile; fileRef = 550231C12F1A2F7B00B1C06D /* cpu-features.cc */; };
+		556E3D6A2F20BF0A00127A76 /* assembler-sve-aarch64.cc in Sources */ = {isa = PBXBuildFile; fileRef = 550231B22F1A2F7B00B1C06D /* assembler-sve-aarch64.cc */; };
+		556E3D6B2F20BF0A00127A76 /* disasm-aarch64.cc in Sources */ = {isa = PBXBuildFile; fileRef = 550231B62F1A2F7B00B1C06D /* disasm-aarch64.cc */; };
+		556E3D6C2F20BF0A00127A76 /* assembler-aarch64.cc in Sources */ = {isa = PBXBuildFile; fileRef = 550231B12F1A2F7B00B1C06D /* assembler-aarch64.cc */; };
+		556E3D6D2F20BF0A00127A76 /* logic-aarch64.cc in Sources */ = {isa = PBXBuildFile; fileRef = 550231B82F1A2F7B00B1C06D /* logic-aarch64.cc */; };
+		556E3D6E2F20BF0A00127A76 /* operands-aarch64.cc in Sources */ = {isa = PBXBuildFile; fileRef = 550231BB2F1A2F7B00B1C06D /* operands-aarch64.cc */; };
+		556E3D6F2F20BF0A00127A76 /* decoder-aarch64.cc in Sources */ = {isa = PBXBuildFile; fileRef = 550231B52F1A2F7B00B1C06D /* decoder-aarch64.cc */; };
+		556E3D702F20BF0A00127A76 /* registers-aarch64.cc in Sources */ = {isa = PBXBuildFile; fileRef = 550231BD2F1A2F7B00B1C06D /* registers-aarch64.cc */; };
+		556E3D712F20BF0A00127A76 /* cpu-aarch64.cc in Sources */ = {isa = PBXBuildFile; fileRef = 550231B32F1A2F7B00B1C06D /* cpu-aarch64.cc */; };
+		556E3D722F20BF0A00127A76 /* macro-assembler-sve-aarch64.cc in Sources */ = {isa = PBXBuildFile; fileRef = 550231BA2F1A2F7B00B1C06D /* macro-assembler-sve-aarch64.cc */; };
+		556E3D732F20BF0A00127A76 /* cpu-features-auditor-aarch64.cc in Sources */ = {isa = PBXBuildFile; fileRef = 550231B42F1A2F7B00B1C06D /* cpu-features-auditor-aarch64.cc */; };
+		556E3D742F20BF0A00127A76 /* pointer-auth-aarch64.cc in Sources */ = {isa = PBXBuildFile; fileRef = 550231BC2F1A2F7B00B1C06D /* pointer-auth-aarch64.cc */; };
+		556E3D752F20BF0A00127A76 /* instructions-aarch64.cc in Sources */ = {isa = PBXBuildFile; fileRef = 550231B72F1A2F7B00B1C06D /* instructions-aarch64.cc */; };
+		556E3D762F20BF0A00127A76 /* macro-assembler-aarch64.cc in Sources */ = {isa = PBXBuildFile; fileRef = 550231B92F1A2F7B00B1C06D /* macro-assembler-aarch64.cc */; };
+		556E3D792F20BF7100127A76 /* libvixl-pcsx2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 556E3D652F20BEB800127A76 /* libvixl-pcsx2.a */; };
+		556E3D842F20C39F00127A76 /* arm_init.c in Sources */ = {isa = PBXBuildFile; fileRef = 556E3D7A2F20C39F00127A76 /* arm_init.c */; };
+		556E3D852F20C39F00127A76 /* palette_neon_intrinsics.c in Sources */ = {isa = PBXBuildFile; fileRef = 556E3D7D2F20C39F00127A76 /* palette_neon_intrinsics.c */; };
+		556E3D862F20C39F00127A76 /* filter_neon_intrinsics.c in Sources */ = {isa = PBXBuildFile; fileRef = 556E3D7C2F20C39F00127A76 /* filter_neon_intrinsics.c */; };
 		556FBB29279E0EAB007B4F88 /* VMManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 556FBB28279E0E76007B4F88 /* VMManager.cpp */; };
 		5576A4802885E0C70078CFF8 /* InputRecordingControls.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551BF6BF26424D020008C529 /* InputRecordingControls.cpp */; };
 		557D49CE27D00BE7006C2C69 /* interlace.metal in Sources */ = {isa = PBXBuildFile; fileRef = DD03FFB627B70F0C0006ABDC /* interlace.metal */; };
@@ -1141,6 +1149,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 556BF96E2F1ACF9B0070B7E5;
 			remoteInfo = "freesurround-pcsx2";
+		};
+		556E3D772F20BF6300127A76 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5517E8AC263D4213000219EC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 556E3CD92F20BEB800127A76;
+			remoteInfo = "vixl-pcsx2";
 		};
 		5580652227AB4CCB008CD5D2 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -2210,6 +2225,12 @@
 		556BF9CD2F1ADE2B0070B7E5 /* UDP_Common.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = UDP_Common.cpp; sourceTree = "<group>"; };
 		556BF9CF2F1ADEAB0070B7E5 /* DHCP_Logger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DHCP_Logger.h; sourceTree = "<group>"; };
 		556BF9D02F1ADEAB0070B7E5 /* DHCP_Logger.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DHCP_Logger.cpp; sourceTree = "<group>"; };
+		556E3CD52F20B74400127A76 /* intrin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = intrin.h; sourceTree = "<group>"; };
+		556E3CD72F20BE6C00127A76 /* RecStubs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RecStubs.cpp; sourceTree = "<group>"; };
+		556E3D652F20BEB800127A76 /* libvixl-pcsx2.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libvixl-pcsx2.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		556E3D7A2F20C39F00127A76 /* arm_init.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arm_init.c; sourceTree = "<group>"; };
+		556E3D7C2F20C39F00127A76 /* filter_neon_intrinsics.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = filter_neon_intrinsics.c; sourceTree = "<group>"; };
+		556E3D7D2F20C39F00127A76 /* palette_neon_intrinsics.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = palette_neon_intrinsics.c; sourceTree = "<group>"; };
 		556FBB27279E0E76007B4F88 /* VMManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VMManager.h; sourceTree = "<group>"; };
 		556FBB28279E0E76007B4F88 /* VMManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VMManager.cpp; sourceTree = "<group>"; };
 		5576A4812885E10B0078CFF8 /* InputRecordingLogger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InputRecordingLogger.cpp; sourceTree = "<group>"; };
@@ -3032,6 +3053,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				556E3D792F20BF7100127A76 /* libvixl-pcsx2.a in Frameworks */,
 				556BF9B92F1AD04D0070B7E5 /* libdemangler-pcsx2.a in Frameworks */,
 				556BF97C2F1AD01D0070B7E5 /* libfreesurround-pcsx2.a in Frameworks */,
 				550232D92F1AC5A900B1C06D /* libccc-pcsx2.a in Frameworks */,
@@ -3152,6 +3174,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		556E3D612F20BEB800127A76 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		5580651727AB4BBE008CD5D2 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -3193,6 +3222,7 @@
 		550231902F1A23F300B1C06D /* libpng */ = {
 			isa = PBXGroup;
 			children = (
+				556E3D7E2F20C39F00127A76 /* arm */,
 				5517E9F4263D4832000219EC /* png.c */,
 				5517E9A7263D4831000219EC /* png.h */,
 				5517E9AE263D4831000219EC /* pngconf.h */,
@@ -3568,6 +3598,7 @@
 				550232C72F1AC53800B1C06D /* libccc-pcsx2.a */,
 				556BF96D2F1ACF7F0070B7E5 /* libdemangler-pcsx2.a */,
 				556BF9752F1ACF9B0070B7E5 /* libfreesurround-pcsx2.a */,
+				556E3D652F20BEB800127A76 /* libvixl-pcsx2.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -4908,6 +4939,7 @@
 		554E3F3E2F1AF91800FC1734 /* ThirdParty */ = {
 			isa = PBXGroup;
 			children = (
+				556E3CD52F20B74400127A76 /* intrin.h */,
 				550232892F1ABD3600B1C06D /* libjpeg */,
 				550231902F1A23F300B1C06D /* libpng */,
 				55DB5A7F2B590A6C00B3BD75 /* libwebp */,
@@ -5165,6 +5197,16 @@
 				556BF99F2F1AD03E0070B7E5 /* README */,
 			);
 			path = demangler;
+			sourceTree = "<group>";
+		};
+		556E3D7E2F20C39F00127A76 /* arm */ = {
+			isa = PBXGroup;
+			children = (
+				556E3D7A2F20C39F00127A76 /* arm_init.c */,
+				556E3D7C2F20C39F00127A76 /* filter_neon_intrinsics.c */,
+				556E3D7D2F20C39F00127A76 /* palette_neon_intrinsics.c */,
+			);
+			path = arm;
 			sourceTree = "<group>";
 		};
 		558063BD27AB4B9E008CD5D2 /* cubeb */ = {
@@ -5827,6 +5869,7 @@
 				55D3AC6E2F1B023200F0D4F9 /* GSSetupPrimCodeGenerator.cpp */,
 				55D3AC722F1B037000F0D4F9 /* iFPU.cpp */,
 				55D3AC672F1AFEEC00F0D4F9 /* MicroVU.cpp */,
+				556E3CD72F20BE6C00127A76 /* RecStubs.cpp */,
 				55D3AC6C2F1B00D400F0D4F9 /* Vif_Dynarec.cpp */,
 				55D3AC6A2F1B007300F0D4F9 /* Vif_Unpack.cpp */,
 			);
@@ -6670,6 +6713,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		556E3CDA2F20BEB800127A76 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		5580651527AB4BBE008CD5D2 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -6740,6 +6790,7 @@
 				55DB5C572B590A6D00B3BD75 /* cost_enc.h in Headers */,
 				55DB5C312B590A6D00B3BD75 /* quant_levels_dec_utils.h in Headers */,
 				55DB5C3B2B590A6D00B3BD75 /* thread_utils.h in Headers */,
+				556E3CD62F20B74B00127A76 /* intrin.h in Headers */,
 				55DB5C432B590A6D00B3BD75 /* format_constants.h in Headers */,
 				55DB5C7D2B590A6D00B3BD75 /* msa_macro.h in Headers */,
 				55DB5C6C2B590A6D00B3BD75 /* vp8_dec.h in Headers */,
@@ -6815,6 +6866,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				556E3D782F20BF6300127A76 /* PBXTargetDependency */,
 				556BF97B2F1AD0130070B7E5 /* PBXTargetDependency */,
 				550232C92F1AC55A00B1C06D /* PBXTargetDependency */,
 				55DB5F232B5917AE00B3BD75 /* PBXTargetDependency */,
@@ -7051,6 +7103,23 @@
 			productReference = 556BF9752F1ACF9B0070B7E5 /* libfreesurround-pcsx2.a */;
 			productType = "com.apple.product-type.library.static";
 		};
+		556E3CD92F20BEB800127A76 /* vixl-pcsx2 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 556E3D622F20BEB800127A76 /* Build configuration list for PBXNativeTarget "vixl-pcsx2" */;
+			buildPhases = (
+				556E3CDA2F20BEB800127A76 /* Headers */,
+				556E3CE82F20BEB800127A76 /* Sources */,
+				556E3D612F20BEB800127A76 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "vixl-pcsx2";
+			productName = zip;
+			productReference = 556E3D652F20BEB800127A76 /* libvixl-pcsx2.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 		5580651827AB4BBE008CD5D2 /* cubeb-pcsx2 */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5580651A27AB4BBE008CD5D2 /* Build configuration list for PBXNativeTarget "cubeb-pcsx2" */;
@@ -7231,6 +7300,7 @@
 				550232B12F1AC53800B1C06D /* ccc-pcsx2 */,
 				556BF9482F1ACF7F0070B7E5 /* demangler-pcsx2 */,
 				556BF96E2F1ACF9B0070B7E5 /* freesurround-pcsx2 */,
+				556E3CD92F20BEB800127A76 /* vixl-pcsx2 */,
 			);
 		};
 /* End PBXProject section */
@@ -7332,21 +7402,6 @@
 				550232D62F1AC59900B1C06D /* sndll.cpp in Sources */,
 				550232D72F1AC59900B1C06D /* importer_flags.cpp in Sources */,
 				550232D82F1AC59900B1C06D /* mdebug_importer.cpp in Sources */,
-				550232B42F1AC53800B1C06D /* pngtrans.c in Sources */,
-				550232B52F1AC53800B1C06D /* png.c in Sources */,
-				550232B62F1AC53800B1C06D /* pngrio.c in Sources */,
-				550232B72F1AC53800B1C06D /* pngrtran.c in Sources */,
-				550232B82F1AC53800B1C06D /* pngwutil.c in Sources */,
-				550232B92F1AC53800B1C06D /* pngwtran.c in Sources */,
-				550232BA2F1AC53800B1C06D /* pngset.c in Sources */,
-				550232BB2F1AC53800B1C06D /* pngerror.c in Sources */,
-				550232BC2F1AC53800B1C06D /* pngrutil.c in Sources */,
-				550232BD2F1AC53800B1C06D /* pngwrite.c in Sources */,
-				550232BE2F1AC53800B1C06D /* pngmem.c in Sources */,
-				550232BF2F1AC53800B1C06D /* pngread.c in Sources */,
-				550232C02F1AC53800B1C06D /* pngpread.c in Sources */,
-				550232C12F1AC53800B1C06D /* pngwio.c in Sources */,
-				550232C22F1AC53800B1C06D /* pngget.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7643,6 +7698,7 @@
 				551BF645264218380008C529 /* iR5900Branch.cpp in Sources */,
 				55324EDC29973BBF00A8FF1A /* EthernetFrameEditor.cpp in Sources */,
 				55EBA8AB295CDC8D0035A1FD /* SaveState.cpp in Sources */,
+				556E3CD82F20BE7600127A76 /* RecStubs.cpp in Sources */,
 				551BF6A4264244280008C529 /* Wavedump_wav.cpp in Sources */,
 				551BF69F264243C20008C529 /* ATA_CmdExecuteDeviceDiag.cpp in Sources */,
 				55300EAD27C9A28B0049E2CC /* GSTextureReplacements.cpp in Sources */,
@@ -7758,6 +7814,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				551BF4952641F98C0008C529 /* pngtrans.c in Sources */,
+				556E3D842F20C39F00127A76 /* arm_init.c in Sources */,
+				556E3D852F20C39F00127A76 /* palette_neon_intrinsics.c in Sources */,
+				556E3D862F20C39F00127A76 /* filter_neon_intrinsics.c in Sources */,
 				551BF4942641F9790008C529 /* png.c in Sources */,
 				551BF4992641F98C0008C529 /* pngrio.c in Sources */,
 				551BF4A12641F98C0008C529 /* pngrtran.c in Sources */,
@@ -8029,6 +8088,30 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		556E3CE82F20BEB800127A76 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				556E3D662F20BEFE00127A76 /* utils-vixl.cc in Sources */,
+				556E3D6A2F20BF0A00127A76 /* assembler-sve-aarch64.cc in Sources */,
+				556E3D6B2F20BF0A00127A76 /* disasm-aarch64.cc in Sources */,
+				556E3D6C2F20BF0A00127A76 /* assembler-aarch64.cc in Sources */,
+				556E3D6D2F20BF0A00127A76 /* logic-aarch64.cc in Sources */,
+				556E3D6E2F20BF0A00127A76 /* operands-aarch64.cc in Sources */,
+				556E3D6F2F20BF0A00127A76 /* decoder-aarch64.cc in Sources */,
+				556E3D702F20BF0A00127A76 /* registers-aarch64.cc in Sources */,
+				556E3D712F20BF0A00127A76 /* cpu-aarch64.cc in Sources */,
+				556E3D722F20BF0A00127A76 /* macro-assembler-sve-aarch64.cc in Sources */,
+				556E3D732F20BF0A00127A76 /* cpu-features-auditor-aarch64.cc in Sources */,
+				556E3D742F20BF0A00127A76 /* pointer-auth-aarch64.cc in Sources */,
+				556E3D752F20BF0A00127A76 /* instructions-aarch64.cc in Sources */,
+				556E3D762F20BF0A00127A76 /* macro-assembler-aarch64.cc in Sources */,
+				556E3D672F20BEFE00127A76 /* compiler-intrinsics-vixl.cc in Sources */,
+				556E3D682F20BEFE00127A76 /* code-buffer-vixl.cc in Sources */,
+				556E3D692F20BEFE00127A76 /* cpu-features.cc in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		5580651627AB4BBE008CD5D2 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -8293,6 +8376,11 @@
 			isa = PBXTargetDependency;
 			target = 556BF96E2F1ACF9B0070B7E5 /* freesurround-pcsx2 */;
 			targetProxy = 556BF97A2F1AD0130070B7E5 /* PBXContainerItemProxy */;
+		};
+		556E3D782F20BF6300127A76 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 556E3CD92F20BEB800127A76 /* vixl-pcsx2 */;
+			targetProxy = 556E3D772F20BF6300127A76 /* PBXContainerItemProxy */;
 		};
 		5580652327AB4CCB008CD5D2 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -9108,6 +9196,7 @@
 					"\"$(SRCROOT)/ThirdParty/libpng\"",
 					"\"$(SRCROOT)/ThirdParty/libwebp/src\"",
 					"\"$(SRCROOT)/ThirdParty/libjpeg/include\"",
+					"\"$(SRCROOT)/ThirdParty/\"",
 				);
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/pcsx2/3rdparty/jpgd\"";
 			};
@@ -9162,6 +9251,7 @@
 					"\"$(SRCROOT)/ThirdParty/libpng\"",
 					"\"$(SRCROOT)/ThirdParty/libwebp/src\"",
 					"\"$(SRCROOT)/ThirdParty/libjpeg/include\"",
+					"\"$(SRCROOT)/ThirdParty/\"",
 				);
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/pcsx2/3rdparty/jpgd\"";
 			};
@@ -9417,6 +9507,57 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				STRIP_INSTALLED_PRODUCT = NO;
+			};
+			name = Release;
+		};
+		556E3D632F20BEB800127A76 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				EXCLUDED_ARCHS = "x86_64 x86_64h";
+				EXECUTABLE_PREFIX = lib;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"HAVE_UNISTD_H=1",
+					"HAVE_STRINGS_H=1",
+					"$(inherited)",
+					VIXL_INCLUDE_TARGET_AARCH64,
+					VIXL_CODE_BUFFER_MALLOC,
+				);
+				HEADER_SEARCH_PATHS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SYSTEM_HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/pcsx2/3rdparty/vixl/include/vixl\"",
+					"\"$(SRCROOT)/pcsx2/3rdparty/vixl/include/vixl/aarch64\"",
+				);
+				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/pcsx2/3rdparty/libzip/lib\"";
+				USE_HEADERMAP = NO;
+			};
+			name = Debug;
+		};
+		556E3D642F20BEB800127A76 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				EXCLUDED_ARCHS = "x86_64 x86_64h";
+				EXECUTABLE_PREFIX = lib;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"HAVE_UNISTD_H=1",
+					"HAVE_STRINGS_H=1",
+					"$(inherited)",
+					VIXL_INCLUDE_TARGET_AARCH64,
+					VIXL_CODE_BUFFER_MALLOC,
+				);
+				HEADER_SEARCH_PATHS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SYSTEM_HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/pcsx2/3rdparty/vixl/include/vixl\"",
+					"\"$(SRCROOT)/pcsx2/3rdparty/vixl/include/vixl/aarch64\"",
+				);
+				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/pcsx2/3rdparty/libzip/lib\"";
+				USE_HEADERMAP = NO;
 			};
 			name = Release;
 		};
@@ -9798,6 +9939,15 @@
 			buildConfigurations = (
 				556BF9732F1ACF9B0070B7E5 /* Debug */,
 				556BF9742F1ACF9B0070B7E5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		556E3D622F20BEB800127A76 /* Build configuration list for PBXNativeTarget "vixl-pcsx2" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				556E3D632F20BEB800127A76 /* Debug */,
+				556E3D642F20BEB800127A76 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
