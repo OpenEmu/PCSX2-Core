@@ -25,37 +25,34 @@
 #import "PCSX2GameCore.h"
 #import <OpenEmuBase/OETimingUtils.h>
 #import <OpenEmuBase/OERingBuffer.h>
-#include "Video/OEHostDisplay.h"
 #include "Audio/OESndOut.h"
 #include "Input/keymap.h"
 
 #define BOOL PCSX2BOOL
 #include "PrecompiledHeader.h"
 #include "GS.h"
-#include "HostSettings.h"
-#include "HostDisplay.h"
+#include "Host.h"
 #include "VMManager.h"
-//#include "AppConfig.h"
-#include "Frontend/InputManager.h"
+#include "Input/InputManager.h"
 #include "pcsx2/INISettingsInterface.h"
-#include "Frontend/OpenGLHostDisplay.h"
-#include "Frontend/CommonHost.h"
-#include "Frontend/FullscreenUI.h"
-#include "Frontend/LogSink.h"
+#include "MTGS.h"
 #include "common/SettingsWrapper.h"
 #include "CDVD/CDVD.h"
-#include "SPU2/Global.h"
-#include "SPU2/SndOut.h"
-#include "PAD/Host/KeyStatus.h"
+#include "SPU2/defs.h"
+//#include "SPU2/SndOut.h"
+#include "SIO/Pad/Pad.h"
+#include "SIO/Pad/PadBase.h"
+#include "SIO/Pad/PadDualshock2.h"
 #include "R3000A.h"
 #include "MTVU.h"
 #include "Elfheader.h"
+#include "USB/deviceproxy.h"
+#include "Error.h"
+#include "Host/AudioStream.h"
 #undef BOOL
 
 #include <OpenGL/gl3.h>
 #include <OpenGL/gl3ext.h>
-
-class MetalHostDisplay  : public HostDisplay {};
 
 static bool ExitRequested = false;
 static bool WaitRequested = false;
@@ -71,7 +68,6 @@ namespace GSDump
 	bool isRunning = false;
 }
 
-alignas(16) static SysMtgsThread s_mtgs_thread;
 PCSX2GameCore *_current;
 
 @implementation PCSX2GameCore {
@@ -94,13 +90,13 @@ PCSX2GameCore *_current;
 	// Display modes.
 	NSMutableDictionary <NSString *, id> *_displayModes;
 	OEIntRect screenRect;
+	WindowInfo windowInfo;
 }
 
 - (instancetype)init
 {
 	if (self = [super init]) {
 		_current = self;
-		VMManager::Internal::InitializeMemory();
 		_maxDiscs = 0;
 		_displayModes = [[NSMutableDictionary alloc] initWithDictionary:
 						 @{OEPSCSX2InternalResolution: @1,
@@ -121,6 +117,19 @@ static NSURL *binCueFix(NSURL *path)
 
 - (BOOL)loadFileAtURL:(NSURL *)url error:(NSError **)error
 {
+#ifdef __aarch64__
+	//PCSX2 isn't yet ready for ARM64. Warn our user.
+	
+	if (error) {
+		*error = [NSError errorWithDomain: OEGameCoreErrorDomain
+									 code: OEGameCoreCouldNotStartCoreError
+								 userInfo: @{NSURLErrorKey: url,
+											 NSLocalizedDescriptionKey: @"PCSX2 does not run natively on Apple Silicon.",
+											 NSLocalizedRecoverySuggestionErrorKey: @"Relaunch OpenEmu under Rosetta 2 and try running the game again."}];
+	}
+	
+	return NO;
+#endif
 	// PCSX2 can't handle cue files... but can read bin files
 	if ([[url pathExtension] caseInsensitiveCompare:@"cue"] == NSOrderedSame) {
 		// Assume the bin file is the same name as the cue.
@@ -164,7 +173,7 @@ static NSURL *binCueFix(NSURL *path)
 	//Lets get the Disc ID with some Magic out of PCSX2 CDVD :)
 	VMManager::ChangeDisc(CDVD_SourceType::Iso, url.fileSystemRepresentation);
 	std::string DiscName;
-	GetPS2ElfName(DiscName);
+	cdvdGetDiscInfo(nullptr, &DiscName, nullptr, nullptr, nullptr);
 	
 	//TODO: update!
 //	std::string fname = DiscName.AfterLast('\\').BeforeFirst('_');
@@ -212,7 +221,7 @@ static NSURL *binCueFix(NSURL *path)
 	EmuFolders::Savestates = [self.supportDirectory URLByAppendingPathComponent:@"sstates" isDirectory:YES].fileSystemRepresentation;
 	EmuFolders::Logs = [self.supportDirectory URLByAppendingPathComponent:@"Logs" isDirectory:YES].fileSystemRepresentation;
 	EmuFolders::Cheats = [self.supportDirectory URLByAppendingPathComponent:@"Cheats" isDirectory:YES].fileSystemRepresentation;
-	EmuFolders::CheatsWS = [self.supportDirectory URLByAppendingPathComponent:@"cheats_ws" isDirectory:YES].fileSystemRepresentation;
+	EmuFolders::Patches = [self.supportDirectory URLByAppendingPathComponent:@"Patches" isDirectory:YES].fileSystemRepresentation;
 	EmuFolders::Covers = [self.supportDirectory URLByAppendingPathComponent:@"Covers" isDirectory:YES].fileSystemRepresentation;
 	EmuFolders::GameSettings = [self.supportDirectory URLByAppendingPathComponent:@"gamesettings" isDirectory:YES].fileSystemRepresentation;
 	EmuFolders::EnsureFoldersExist();
@@ -254,10 +263,12 @@ static NSURL *binCueFix(NSURL *path)
 	si.SetBoolValue("EmuCore/CPU/Recompiler", "EnableIOP", true);
 	si.SetBoolValue("EmuCore/CPU/Recompiler", "EnableVU0", true);
 	si.SetBoolValue("EmuCore/CPU/Recompiler", "EnableVU1", true);
-	si.SetStringValue("EmuCore/SPU2", "OutputModule", "NullOut");
+	si.SetStringValue("SPU2/Output", "OutputModule", "nullout");
 	si.SetBoolValue("EmuCore", "EnablePatches", true);
 	si.SetBoolValue("EmuCore", "EnableCheats", false);
 	si.SetBoolValue("EmuCore", "EnablePerGameSettings", true);
+	//TODO: somehow work this into OpenEmu...
+	si.SetBoolValue("EmuCore", "EnableWideScreenPatches", false);
 	si.SetBoolValue("EmuCore", "HostFs", false);
 	si.SetBoolValue("EmuCore/Speedhacks", "vuFlagHack", true);
 	si.SetBoolValue("EmuCore/Speedhacks", "IntcStat", true);
@@ -273,6 +284,10 @@ static NSURL *binCueFix(NSURL *path)
 	si.SetBoolValue("MemoryCards", "Slot1_Enable", true);
 	si.SetStringValue("MemoryCards", "Slot2_Filename", "Memory folder 2.ps2");
 	si.SetBoolValue("MemoryCards", "Slot2_Enable", true);
+	si.SetIntValue("SPU2/Output", "SynchMode", 2);
+	si.SetIntValue("SPU2/Output", "Latency", 60);
+	si.SetIntValue("SPU2/Output", "OutputLatency", 20);
+	si.SetIntValue("SPU2/Mixing", "FinalVolume", 100);
 }
 
 - (void)resetEmulation
@@ -298,34 +313,27 @@ static NSURL *binCueFix(NSURL *path)
 	[self.renderDelegate suspendFPSLimiting];
 	
 	params.filename = gamePath.fileSystemRepresentation;
-	params.save_state = "";
+	if ([stateToLoad.path length] > 0) {
+		params.save_state = stateToLoad.fileSystemRepresentation;
+		stateToLoad = nil;
+	} else {
+		params.save_state = "";
+	}
 	params.source_type = CDVD_SourceType::Iso;
 	params.elf_override = "";
 	params.fast_boot = true;
 	params.fullscreen = false;
   
 	if(!hasInitialized){
-		if (self.gameCoreRendering == OEGameCoreRenderingOpenGL3)
-			g_host_display = HostDisplay::CreateForAPI(RenderAPI::OpenGL);
-		else if (self.gameCoreRendering == OEGameCoreRenderingMetal2)
-			g_host_display = HostDisplay::CreateForAPI(RenderAPI::Metal);
-			
-		WindowInfo wi;
-			wi.type = WindowInfo::Type::MacOS;
-			wi.surface_width = screenRect.size.width ;
-			wi.surface_height = screenRect.size.height ;
-		g_host_display->CreateDevice(wi, VsyncMode::Adaptive);
-			
-		VMManager::Internal::InitializeGlobals();
+		VMManager::Internal::CPUThreadInitialize();
 		
+		VMManager::ApplySettings();
 		
-		if (VMManager::Initialize(params)) {
+		// TODO: handle needing to validate hardcore mode.
+		VMBootResult success = VMManager::Initialize(params);
+		if (VMBootResult::StartupSuccess == success) {
 			hasInitialized = true;
 			VMManager::SetState(VMState::Running);
-			if ([stateToLoad.path length] > 0) {
-				VMManager::LoadState(stateToLoad.fileSystemRepresentation);
-				stateToLoad = nil;
-			}
 
 			[NSThread detachNewThreadSelector:@selector(runVMThread:) toTarget:self withObject:nil];
 		}
@@ -334,6 +342,10 @@ static NSURL *binCueFix(NSURL *path)
 
 - (void)runVMThread:(id)unused
 {
+	const char *tmp;
+	if (!VMManager::PerformEarlyHardwareChecks(&tmp)) {
+		abort();
+	}
 	OESetThreadRealtime(1. / 50, .007, .03); // guessed from bsnes
 		
 	while(!ExitRequested)
@@ -363,6 +375,7 @@ static NSURL *binCueFix(NSURL *path)
 
 			case VMState::Stopping:
 				VMManager::Shutdown(true);
+				VMManager::Internal::CPUThreadShutdown();
 		}
 	}
 }
@@ -371,7 +384,6 @@ static NSURL *binCueFix(NSURL *path)
 {
 	ExitRequested = true;
 	VMManager::SetState(VMState::Stopping);
-//	VMManager::Shutdown(true);
 	[super stopEmulation];
 }
 
@@ -454,19 +466,49 @@ static NSURL *binCueFix(NSURL *path)
 }
 
 #pragma mark Input
+
+/// The code currently assumes the controller is a PadDualshock2. This tests it and returns the actual object if it is, or `NULL` if it is not.
+static PadDualshock2* getPadToDualShock(const NSUInteger player);
+static PadDualshock2* getPadToDualShock(const NSUInteger player)
+{
+	auto pad = Pad::GetPad(player - 1);
+	auto pad2 = dynamic_cast<PadDualshock2*>(pad);
+	return pad2;
+}
+
 - (oneway void)didMovePS2JoystickDirection:(OEPS2Button)button withValue:(CGFloat)value forPlayer:(NSUInteger)player
 {
-	g_key_status.Set(u32(player - 1), ps2keymap[button].ps2key , value);
+	auto pad = getPadToDualShock(player);
+	if (pad == nullptr) {
+		// A setting is wrong...
+		NSLog(@"Unknown controller on port %lu", (unsigned long)player);
+		// Bailing out!
+		return;
+	}
+	pad->Set(ps2keymap[button].ps2key, value);
 }
 
 - (oneway void)didPushPS2Button:(OEPS2Button)button forPlayer:(NSUInteger)player
 {
-	g_key_status.Set(u32(player - 1), ps2keymap[button].ps2key , 1.0f);
-	
+	auto pad = getPadToDualShock(player);
+	if (pad == nullptr) {
+		// A setting is wrong...
+		NSLog(@"Unknown controller on port %lu", (unsigned long)player);
+		// Bailing out!
+		return;
+	}
+	pad->Set(ps2keymap[button].ps2key, 1.0f);
 }
 
 - (oneway void)didReleasePS2Button:(OEPS2Button)button forPlayer:(NSUInteger)player {
-	g_key_status.Set(u32(player - 1), ps2keymap[button].ps2key, 0.0f);
+	auto pad = getPadToDualShock(player);
+	if (pad == nullptr) {
+		// A setting is wrong...
+		NSLog(@"Unknown controller on port %lu", (unsigned long)player);
+		// Bailing out!
+		return;
+	}
+	pad->Set(ps2keymap[button].ps2key, 0.0f);
 }
 
 
@@ -476,7 +518,7 @@ static NSURL *binCueFix(NSURL *path)
 	if (!VMManager::HasValidVM()) {
 		stateToLoad = fileURL;
 		// Assume we'll succeed
-		block(YES, nil);
+		block(true, nil);
 		return;
 	}
 	
@@ -484,10 +526,11 @@ static NSURL *binCueFix(NSURL *path)
 	while(isExecuting)
 		usleep(50);
 	
-	bool success = VMManager::LoadState(fileURL.fileSystemRepresentation);
+	Error theError = Error();
+	bool success = VMManager::LoadState(fileURL.fileSystemRepresentation, &theError);
 	WaitRequested = false;
 
-	block(success, success ? nil : [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotLoadStateError userInfo:@{NSLocalizedDescriptionKey: @"PCSX2 Could not load the current state.", NSURLErrorKey: fileURL}]);
+	block(success, success ? nil : [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotLoadStateError userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithFormat: @"PCSX2 Could not load the current state: %s", theError.GetDescription().c_str()], NSURLErrorKey: fileURL}]);
 }
 
 - (void)saveStateToFileAtURL:(NSURL *)fileURL completionHandler:(void (^)(BOOL, NSError *))block
@@ -497,9 +540,13 @@ static NSURL *binCueFix(NSURL *path)
 		block(NO, [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotStartCoreError userInfo:@{NSLocalizedDescriptionKey: @"PCSX2 is not initialized, creating save state impossible.", NSURLErrorKey: fileURL}]);
 		return;
 	}
-	bool success = VMManager::SaveState(fileURL.fileSystemRepresentation, false, false);
+	//TODO: verify that this works...
+	std::string hi = "";
+	VMManager::SaveState(fileURL.fileSystemRepresentation, false, false, [&hi](const std::string& err){
+		hi = err;
+	});
 	
-	block(success, success ? nil : [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotSaveStateError userInfo:@{NSLocalizedDescriptionKey: @"PCSX2 Could not save the current state.", NSURLErrorKey: fileURL}]);
+	block(hi.empty(), hi.empty() ? nil : [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotSaveStateError userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithFormat: @"PCSX2 Could not save the current state: %s", hi.c_str()], NSURLErrorKey: fileURL}]);
 	
 }
 
@@ -607,76 +654,28 @@ static NSURL *binCueFix(NSURL *path)
 
 @end
 
-SysMtgsThread& GetMTGS()
-{
-	return s_mtgs_thread;
-}
-
 #pragma mark - Host Namespace
 
-std::optional<std::vector<u8>> Host::ReadResourceFile(const char* filename)
+std::string Host::TranslatePluralToString(const char* context, const char* msg, const char* disambiguation, int count)
 {
-	@autoreleasepool {
-	NSString *nsFile = @(filename);
-	NSString *baseName = nsFile.lastPathComponent.stringByDeletingPathExtension;
-	NSString *upperName = nsFile.stringByDeletingLastPathComponent;
-	NSString *baseExt = nsFile.pathExtension;
-	if (baseExt.length == 0) {
-		baseExt = nil;
+	TinyString count_str = TinyString::from_format("{}", count);
+
+	std::string ret(msg);
+	for (;;)
+	{
+		std::string::size_type pos = ret.find("%n");
+		if (pos == std::string::npos)
+			break;
+
+		ret.replace(pos, pos + 2, count_str.view());
 	}
-	if (upperName.length == 0 || [upperName isEqualToString:@"/"]) {
-		upperName = nil;
-	}
-	NSURL *aURL;
-	if (upperName) {
-		aURL = [[NSBundle bundleForClass:[PCSX2GameCore class]] URLForResource:baseName withExtension:baseExt subdirectory:upperName];
-	} else {
-		aURL = [[NSBundle bundleForClass:[PCSX2GameCore class]] URLForResource:baseName withExtension:baseExt];
-	}
-	if (!aURL) {
-		return std::nullopt;
-	}
-	NSData *data = [[NSData alloc] initWithContentsOfURL:aURL];
-	if (!data) {
-		return std::nullopt;
-	}
-	auto retVal = std::vector<u8>(data.length);
-	[data getBytes:retVal.data() length:retVal.size()];
-	return retVal;
-	}
+
+	return ret;
 }
 
-std::optional<std::string> Host::ReadResourceFileToString(const char* filename)
+std::unique_ptr<ProgressCallback> Host::CreateHostProgressCallback()
 {
-	@autoreleasepool {
-	NSString *nsFile = @(filename);
-	NSString *baseName = nsFile.lastPathComponent.stringByDeletingPathExtension;
-	NSString *upperName = nsFile.stringByDeletingLastPathComponent;
-	NSString *baseExt = nsFile.pathExtension;
-	if (baseExt.length == 0) {
-		baseExt = nil;
-	}
-	if (upperName.length == 0 || [upperName isEqualToString:@"/"]) {
-		upperName = nil;
-	}
-	NSURL *aURL;
-	if (upperName) {
-		aURL = [[NSBundle bundleForClass:[PCSX2GameCore class]] URLForResource:baseName withExtension:baseExt subdirectory:upperName];
-	} else {
-		aURL = [[NSBundle bundleForClass:[PCSX2GameCore class]] URLForResource:baseName withExtension:baseExt];
-	}
-	if (!aURL) {
-		return std::nullopt;
-	}
-	NSData *data = [[NSData alloc] initWithContentsOfURL:aURL];
-	if (!data) {
-		return std::nullopt;
-	}
-	std::string ret;
-	ret.resize(data.length);
-	[data getBytes:ret.data() length:ret.size()];
-	return ret;
-	}
+	return nil;
 }
 
 void Host::WriteToSoundBuffer(s16 Left, s16 Right)
@@ -687,8 +686,9 @@ void Host::WriteToSoundBuffer(s16 Left, s16 Right)
 	[[current audioBufferAtIndex:0] write:stereo maxLength:sizeof(stereo)];
 }
 
-void Host::WriteToSoundBuffer(StereoOut16 snd)
+void Host::WriteToSoundBuffer(StereoOut32 snd)
 {
+	//TODO: better truncation!
 	Host::WriteToSoundBuffer(snd.Left, snd.Right);
 }
 
@@ -698,10 +698,12 @@ void Host::OnPerformanceMetricsUpdated()
 
 std::optional<WindowInfo> Host::GetTopLevelWindowInfo()
 {
-	return {};
+	GET_CURRENT_OR_RETURN(std::nullopt);
+
+	return current->windowInfo;
 }
 
-void Host::SetRelativeMouseMode(bool enabled)
+void Host::SetMouseMode(bool relative_mode, bool hide_cursor)
 {
 }
 
@@ -715,14 +717,6 @@ void Host::AddKeyedOSDMessage(std::string key, std::string message, float durati
 {
 }
 
-void Host::AddFormattedOSDMessage(float duration, const char* format, ...)
-{
-}
-
-void Host::AddKeyedFormattedOSDMessage(std::string key, float duration, const char* format, ...)
-{
-}
-
 void Host::RemoveKeyedOSDMessage(std::string key)
 {
 }
@@ -731,18 +725,13 @@ void Host::ClearOSDMessages()
 {
 }
 
-void Host::ReportErrorAsync(const std::string_view& title, const std::string_view& message)
+void Host::ReportErrorAsync(const std::string_view title, const std::string_view message)
 {
 }
 
-void Host::AddIconOSDMessage(std::string key, const char* icon, const std::string_view& message, float duration /* = 2.0f */)
+void Host::AddIconOSDMessage(std::string key, const char* icon, const std::string_view message, float duration /* = 2.0f */)
 {
 	// Stub, do nothing.
-}
-
-void CommonHost::UpdateLogging(SettingsInterface& si)
-{
-	
 }
 
 #pragma mark Host Thread
@@ -767,24 +756,24 @@ void Host::OnVMResumed()
 {
 }
 
-void Host::OnSaveStateLoading(const std::string_view& filename)
+void Host::OnSaveStateLoading(const std::string_view filename)
 {
 }
 
-void Host::OnSaveStateLoaded(const std::string_view& filename, bool was_successful)
+void Host::OnSaveStateLoaded(const std::string_view filename, bool was_successful)
 {
 }
 
-void Host::OnSaveStateSaved(const std::string_view& filename)
+void Host::OnSaveStateSaved(const std::string_view filename)
 {
 }
 
-void Host::OnGameChanged(const std::string& disc_path, const std::string& elf_override, const std::string& game_serial,
-						 const std::string& game_name, u32 game_crc)
+void Host::OnGameChanged(const std::string& title, const std::string& elf_override, const std::string& disc_path,
+						 const std::string& disc_serial, u32 disc_crc, u32 current_crc)
 {
 }
 
-void Host::CPUThreadVSync()
+void Host::PumpMessagesOnCPUThread()
 {
 }
 
@@ -794,6 +783,8 @@ void Host::RequestResizeHostDisplay(s32 width, s32 height)
 
 void Host::RunOnCPUThread(std::function<void()> function, bool block)
 {
+	//TODO: put this in the right thread...
+	function();
 }
 
 void Host::RequestVMShutdown(bool allow_confirm, bool allow_save_state, bool default_save_state)
@@ -802,90 +793,61 @@ void Host::RequestVMShutdown(bool allow_confirm, bool allow_save_state, bool def
 
 #pragma mark Host Display
 
-bool Host::AcquireHostDisplay(RenderAPI api, bool clear_state_on_fail)
-{
-	GET_CURRENT_OR_RETURN(false);
-	
-	[current.renderDelegate willRenderFrameOnAlternateThread];
-	return g_host_display.get();
-}
-
-void Host::ReleaseHostDisplay(bool clear_state)
-{
-	GET_CURRENT_OR_RETURN();
-	if (g_host_display.get()) {
-		g_host_display.reset();
-	}
-}
-
-HostDisplay::PresentResult Host::BeginPresentFrame(bool frame_skip)
-{
-	GET_CURRENT_OR_RETURN(HostDisplay::PresentResult::DeviceLost);
-	
-	return g_host_display.get()->BeginPresent(frame_skip);
-}
-
-void Host::EndPresentFrame()
-{
-	GET_CURRENT_OR_RETURN();
-	
-	g_host_display.get()->EndPresent();
-}
-
-int Host::PresentFrameBuffer()
-{
-	GET_CURRENT_OR_RETURN(0);
-	
-	return [[current.renderDelegate presentationFramebuffer] intValue];
-}
-
-void Host::ResizeHostDisplay(u32 new_window_width, u32 new_window_height, float new_window_scale)
+void Host::BeginPresentFrame()
 {
 	
-	//Once We have METAL,  we may be able to scale the frontend canvas
-	
-//	GET_CURRENT_OR_RETURN();
-//
-//	WindowInfo wi;
-//		wi.type = WindowInfo::Type::MacOS;
-//		wi.surface_width = new_window_width;
-//		wi.surface_height = new_window_height;
-//	current->hostDisplay.get()->ChangeRenderWindow(wi);
-//	current->screenRect = OEIntRectMake(0, 0 , new_window_width, new_window_height);
-	 
 }
 
+std::optional<WindowInfo> Host::AcquireRenderWindow(bool recreate_window)
+{
+	GET_CURRENT_OR_RETURN(std::nullopt);
+
+	WindowInfo wi;
+		wi.type = WindowInfo::Type::MacOS;
+		wi.surface_width = current->screenRect.size.width;
+		wi.surface_height = current->screenRect.size.height;
+	
+	current->windowInfo = wi;
+	
+	return current->windowInfo;
+}
+
+void Host::ReleaseRenderWindow()
+{
+	
+}
 void Host::CancelGameListRefresh()
 {
 	
-}
-
-void Host::UpdateHostDisplay()
-{
 }
 
 #pragma mark Host Settings
 
 void Host::LoadSettings(SettingsInterface& si, std::unique_lock<std::mutex>& lock)
 {
-	CommonHost::LoadSettings(si, lock);
+//	CommonHost::LoadSettings(si, lock);
 }
 
 void Host::CheckForSettingsChanges(const Pcsx2Config& old_config)
 {
-	CommonHost::CheckForSettingsChanges(old_config);
+//	CommonHost::CheckForSettingsChanges(old_config);
 }
 
-void FullscreenUI::CheckForConfigChanges(const Pcsx2Config& old_config)
+s32 Host::Internal::GetTranslatedStringImpl(const std::string_view context, const std::string_view msg, char* tbuf, size_t tbuf_space)
 {
-	// do nothing
+	if (msg.size() > tbuf_space) {
+		return -1;
+	} else if (msg.empty()) {
+		return 0;
+	}
+
+	std::memcpy(tbuf, msg.data(), msg.size());
+	return static_cast<s32>(msg.size());
 }
 
 #pragma mark -
 
-const IConsoleWriter* PatchesCon = &ConsoleWriter_Null;
-
-std::optional<u32> InputManager::ConvertHostKeyboardStringToCode(const std::string_view& str)
+std::optional<u32> InputManager::ConvertHostKeyboardStringToCode(const std::string_view str)
 {
 	return std::nullopt;
 }
@@ -893,6 +855,66 @@ std::optional<u32> InputManager::ConvertHostKeyboardStringToCode(const std::stri
 std::optional<std::string> InputManager::ConvertHostKeyboardCodeToString(u32 code)
 {
 	return std::nullopt;
+}
+
+void InputManager::SetPadVibrationIntensity(u32 pad_index, float large_or_single_motor_intensity, float small_motor_intensity)
+{
+	// TODO: add vibration support to OpenEmu
+}
+
+void InputManager::ReloadBindings(SettingsInterface& si, SettingsInterface& binding_si, SettingsInterface& hotkey_binding_si, bool is_binding_profile, bool is_hotkey_profile)
+{
+	
+}
+
+void InputManager::PauseVibration()
+{
+	
+}
+
+void InputManager::ReloadSources(SettingsInterface &si, std::unique_lock<std::mutex> &settings_lock)
+{
+	
+}
+
+void InputManager::PollSources()
+{
+	
+}
+
+void InputManager::CloseSources()
+{
+	
+}
+
+std::pair<float, float> InputManager::GetPointerAbsolutePosition(u32 index)
+{
+	return {0, 0};
+}
+
+RegisterDevice* RegisterDevice::registerDevice = nullptr;
+void RegisterDevice::Register()
+{
+	
+}
+
+void RegisterDevice::Unregister()
+{
+	
+}
+
+#pragma mark -
+
+std::unique_ptr<AudioStream> AudioStream::CreateSDLAudioStream(u32 sample_rate, const AudioStreamParameters& parameters, bool stretch_enabled, Error* error)
+{
+	Error::SetString(error, "Invalid OpenEmu configuration set!");
+	return nullptr;
+}
+
+
+void VMManager::Internal::ResetVMHotkeyState()
+{
+	
 }
 
 BEGIN_HOTKEY_LIST(g_host_hotkeys)

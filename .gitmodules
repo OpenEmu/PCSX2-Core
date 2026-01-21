@@ -1,3 +1,9 @@
 [submodule "pcsx2"]
 	path = pcsx2
 	url = https://github.com/PCSX2/pcsx2.git
+[submodule "ThirdParty/libwebp"]
+	path = ThirdParty/libwebp
+	url = https://chromium.googlesource.com/webm/libwebp
+[submodule "ThirdParty/lz4/lz4"]
+	path = ThirdParty/lz4/lz4
+	url = https://github.com/lz4/lz4.git

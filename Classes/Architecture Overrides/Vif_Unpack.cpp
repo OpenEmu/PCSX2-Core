@@ -1,4 +1,4 @@
-// Copyright (c) 2021, OpenEmu Team
+// Copyright (c) 2026, OpenEmu Team
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:
@@ -22,15 +22,10 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef soundtouch_config_h
-#define soundtouch_config_h
-
 #if defined(__x86_64__) || defined(__x86_64h__)
-#define SOUNDTOUCH_ALLOW_SSE
-#define SOUNDTOUCH_ALLOW_X86_OPTIMIZATIONS
+#include "pcsx2/x86/Vif_UnpackSSE.cpp"
+#elif defined(__aarch64__)
+#include "pcsx2/arm64/Vif_UnpackNEON.cpp"
+#else
+#error unknown architecture!
 #endif
-#ifdef __arm64__
-#define SOUNDTOUCH_USE_NEON
-#endif
-
-#endif /* soundtouch_config_h */

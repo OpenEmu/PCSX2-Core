@@ -1,4 +1,4 @@
-// Copyright (c) 2022, OpenEmu Team
+// Copyright (c) 2026, OpenEmu Team
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:
@@ -22,13 +22,9 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef OEHostDisplay_h
-#define OEHostDisplay_h
-
-namespace Host {
-	int PresentFrameBuffer();
-} // namespace Host
-
-
-
-#endif /* OEHostDisplay_h */
+#if defined(__x86_64__) || defined(__x86_64h__)
+#include "x86/init.c"
+#elif defined(__aarch64__)
+#else
+#error unknown architecture!
+#endif

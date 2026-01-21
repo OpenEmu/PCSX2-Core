@@ -1,4 +1,4 @@
-// Copyright (c) 2021, OpenEmu Team
+// Copyright (c) 2026, OpenEmu Team
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:
@@ -22,15 +22,16 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef soundtouch_config_h
-#define soundtouch_config_h
+#ifdef __aarch64__
+#include <stdint.h>
+#include <arm_neon.h>
+//#define __umulh(x, y) __builtin_umulh((x), (y))
+static inline uint64_t __umulh(uint64_t a, uint64_t b);
+static inline uint64_t __umulh(uint64_t a, uint64_t b)
+{
+	unsigned __int128 product = (unsigned __int128)a * b;
+	uint64_t high = (uint64_t)(product >> 64);
 
-#if defined(__x86_64__) || defined(__x86_64h__)
-#define SOUNDTOUCH_ALLOW_SSE
-#define SOUNDTOUCH_ALLOW_X86_OPTIMIZATIONS
+	return high;
+}
 #endif
-#ifdef __arm64__
-#define SOUNDTOUCH_USE_NEON
-#endif
-
-#endif /* soundtouch_config_h */
