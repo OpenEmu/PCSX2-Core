@@ -1337,7 +1337,18 @@ void GSDeviceMTL::EndPresent()
 //	RenderImGui(ImGui::GetDrawData());
 	EndRenderPass();
 	if (m_current_drawable)
-	{
+	{ //Here is where we blit the Metal Texture to the OEMetalRenderTexture
+		id<MTLBlitCommandEncoder> blitCommandEncoder = [m_current_render_cmdbuf blitCommandEncoder];
+
+		if (@available(macOS 10.15, *)) {
+			[blitCommandEncoder copyFromTexture:[m_current_drawable texture] toTexture:id<MTLTexture>([_current metalTexture])];
+		} else {
+			// Fallback on earlier versions
+			// TODO:  Add pre 10.15 metal blit
+		}
+		
+		[blitCommandEncoder endEncoding];
+		
 		const bool use_present_drawable = m_use_present_drawable == UsePresentDrawable::Always ||
 			(m_use_present_drawable == UsePresentDrawable::IfVsync && m_vsync_mode == GSVSyncMode::FIFO);
 
