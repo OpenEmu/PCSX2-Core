@@ -121,11 +121,12 @@ static NSURL *binCueFix(NSURL *path)
 	//PCSX2 isn't yet ready for ARM64. Warn our user.
 	
 	if (error) {
+		NSBundle *ourBundle = [NSBundle bundleForClass:[self class]];
 		*error = [NSError errorWithDomain: OEGameCoreErrorDomain
 									 code: OEGameCoreCouldNotStartCoreError
 								 userInfo: @{NSURLErrorKey: url,
-											 NSLocalizedDescriptionKey: @"PCSX2 does not run natively on Apple Silicon.",
-											 NSLocalizedRecoverySuggestionErrorKey: @"Relaunch OpenEmu under Rosetta 2 and try running the game again."}];
+											 NSLocalizedDescriptionKey: NSLocalizedStringWithDefaultValue(@"PCSX2_RELAUNCH_REASON", @"Localizable", ourBundle, @"PCSX2 does not run natively on Apple Silicon.", @"PCSX2 does not run natively on Apple Silicon."),
+											 NSLocalizedRecoverySuggestionErrorKey: NSLocalizedStringWithDefaultValue(@"PCSX2_RELAUNCH_SUGGESTION", @"Localizable", ourBundle, @"Relaunch OpenEmu under Rosetta 2 and try running the game again.", @"Tell the user to relaunch OpenEmu under Rosetta 2.")}];
 	}
 	
 	return NO;
@@ -523,8 +524,9 @@ static PadDualshock2* getPadToDualShock(const NSUInteger player)
 	}
 	
 	WaitRequested = true;
-	while(isExecuting)
+	while (isExecuting) {
 		usleep(50);
+	}
 	
 	Error theError = Error();
 	bool success = VMManager::LoadState(fileURL.fileSystemRepresentation, &theError);
@@ -537,7 +539,12 @@ static PadDualshock2* getPadToDualShock(const NSUInteger player)
 {
 	if (!VMManager::HasValidVM()) {
 		// Not loaded. Then we fail?
-		block(NO, [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotStartCoreError userInfo:@{NSLocalizedDescriptionKey: @"PCSX2 is not initialized, creating save state impossible.", NSURLErrorKey: fileURL}]);
+		NSBundle *ourBundle = [NSBundle bundleForClass:[self class]];
+		block(NO, [NSError errorWithDomain:OEGameCoreErrorDomain
+									  code:OEGameCoreCouldNotStartCoreError
+								  userInfo:
+				   @{NSLocalizedDescriptionKey: NSLocalizedStringWithDefaultValue(@"PCSX2_NOT_INITIALIZED_SAVE_STATE", @"Localizable", ourBundle, @"PCSX2 is not initialized, creating save state impossible.", @"PCSX2 is not initialized, creating save state impossible."),
+					 NSURLErrorKey: fileURL}]);
 		return;
 	}
 	//TODO: verify that this works...
@@ -546,7 +553,17 @@ static PadDualshock2* getPadToDualShock(const NSUInteger player)
 		hi = err;
 	});
 	
-	block(hi.empty(), hi.empty() ? nil : [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotSaveStateError userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithFormat: @"PCSX2 Could not save the current state: %s", hi.c_str()], NSURLErrorKey: fileURL}]);
+	NSError *ourError = nil;
+	if (!hi.empty()) {
+		NSBundle *ourBundle = [NSBundle bundleForClass:[self class]];
+		ourError = [NSError errorWithDomain:OEGameCoreErrorDomain
+									   code:OEGameCoreCouldNotSaveStateError
+								   userInfo:@{NSLocalizedDescriptionKey:
+												  [NSString localizedStringWithFormat: NSLocalizedStringWithDefaultValue(@"PCSX2_SAVE_STATE_FAIL", @"Localizable", ourBundle, @"PCSX2 Could not save the current state: %s", @"PCSX2 Could not save the current state: followed by a C string."), hi.c_str()],
+											  NSURLErrorKey: fileURL}];
+	}
+	
+	block(hi.empty(), ourError);
 	
 }
 
@@ -600,6 +617,7 @@ static PadDualshock2* getPadToDualShock(const NSUInteger player)
 
 - (NSArray <NSDictionary <NSString *, id> *> *)displayModes
 {
+	NSBundle *ourBundle = [NSBundle bundleForClass:[self class]];
 #define OptionWithValue(n, k, v) \
 @{ \
 	OEGameCoreDisplayModeNameKey : n, \
@@ -610,22 +628,22 @@ static PadDualshock2* getPadToDualShock(const NSUInteger player)
 	OEDisplayMode_OptionToggleableWithState(n, k, _displayModes[k])
 
 	return @[
-		OEDisplayMode_Submenu(@"Internal Resolution",
-							  @[OptionWithValue(@"1x (default)", OEPSCSX2InternalResolution, 1),
-								OptionWithValue(@"2x (~720p)", OEPSCSX2InternalResolution, 2),
-								OptionWithValue(@"3x (~1080p)", OEPSCSX2InternalResolution, 3),
-								OptionWithValue(@"4x (~1440p 2k)", OEPSCSX2InternalResolution, 4),
-								OptionWithValue(@"5x (~1620p)", OEPSCSX2InternalResolution, 5),
-								OptionWithValue(@"6x (~2160p 4k)", OEPSCSX2InternalResolution, 6),
-								OptionWithValue(@"7x (~2520p)", OEPSCSX2InternalResolution, 7),
-								OptionWithValue(@"8x (~2880p)", OEPSCSX2InternalResolution, 8)]),
-		OEDisplayMode_Submenu(@"Blending Accuracy",
-							  @[OptionWithValue(@"Minimum (Fastest)", OEPSCSX2BlendingAccuracy, 0),
-								OptionWithValue(@"Basic (Recommended)", OEPSCSX2BlendingAccuracy, 1),
-								OptionWithValue(@"Medium", OEPSCSX2BlendingAccuracy, 2),
-								OptionWithValue(@"High", OEPSCSX2BlendingAccuracy, 3),
-								OptionWithValue(@"Full (Very Slow)", OEPSCSX2BlendingAccuracy, 4),
-								OptionWithValue(@"Ultra (Ultra Slow, or M1)", OEPSCSX2BlendingAccuracy, 5)]),
+		OEDisplayMode_Submenu(NSLocalizedStringWithDefaultValue(@"PCSX2_INTERNAL_RESOLUTION", @"Localizable", ourBundle, @"Internal Resolution", @"Internal Resolution"),
+							  @[OptionWithValue(NSLocalizedStringWithDefaultValue(@"PCSX2_INTERNAL_RESOLUTION_1X", @"Localizable", ourBundle, @"1x (default)", @"1x (default)"), OEPSCSX2InternalResolution, 1),
+								OptionWithValue(NSLocalizedStringWithDefaultValue(@"PCSX2_INTERNAL_RESOLUTION_2X", @"Localizable", ourBundle, @"2x (~720p)", @"2x (~720p)"), OEPSCSX2InternalResolution, 2),
+								OptionWithValue(NSLocalizedStringWithDefaultValue(@"PCSX2_INTERNAL_RESOLUTION_3X", @"Localizable", ourBundle, @"3x (~1080p)", @"3x (~1080p)"), OEPSCSX2InternalResolution, 3),
+								OptionWithValue(NSLocalizedStringWithDefaultValue(@"PCSX2_INTERNAL_RESOLUTION_4X", @"Localizable", ourBundle, @"4x (~1440p 2k)", @"4x (~1440p 2k)"), OEPSCSX2InternalResolution, 4),
+								OptionWithValue(NSLocalizedStringWithDefaultValue(@"PCSX2_INTERNAL_RESOLUTION_5X", @"Localizable", ourBundle, @"5x (~1620p)", @"5x (~1620p)"), OEPSCSX2InternalResolution, 5),
+								OptionWithValue(NSLocalizedStringWithDefaultValue(@"PCSX2_INTERNAL_RESOLUTION_6X", @"Localizable", ourBundle, @"6x (~2160p 4k)", @"6x (~2160p 4k)"), OEPSCSX2InternalResolution, 6),
+								OptionWithValue(NSLocalizedStringWithDefaultValue(@"PCSX2_INTERNAL_RESOLUTION_7X", @"Localizable", ourBundle, @"7x (~2520p)", @"7x (~2520p)"), OEPSCSX2InternalResolution, 7),
+								OptionWithValue(NSLocalizedStringWithDefaultValue(@"PCSX2_INTERNAL_RESOLUTION_8X", @"Localizable", ourBundle, @"8x (~2880p)", @"8x (~2880p)"), OEPSCSX2InternalResolution, 8)]),
+		OEDisplayMode_Submenu(NSLocalizedStringWithDefaultValue(@"PCSX2_BLENDING_ACCURACY", @"Localizable", ourBundle, @"Blending Accuracy", @"Blending Accuracy"),
+							  @[OptionWithValue(NSLocalizedStringWithDefaultValue(@"PCSX2_BLENDING_ACCURACY_0", @"Localizable", ourBundle, @"Minimum (Fastest)", @"Minimum (Fastest)"), OEPSCSX2BlendingAccuracy, 0),
+								OptionWithValue(NSLocalizedStringWithDefaultValue(@"PCSX2_BLENDING_ACCURACY_1", @"Localizable", ourBundle, @"Basic (Recommended)", @"Basic (Recommended)"), OEPSCSX2BlendingAccuracy, 1),
+								OptionWithValue(NSLocalizedStringWithDefaultValue(@"PCSX2_BLENDING_ACCURACY_2", @"Localizable", ourBundle, @"Medium", @"Medium"), OEPSCSX2BlendingAccuracy, 2),
+								OptionWithValue(NSLocalizedStringWithDefaultValue(@"PCSX2_BLENDING_ACCURACY_3", @"Localizable", ourBundle, @"High", @"High"), OEPSCSX2BlendingAccuracy, 3),
+								OptionWithValue(NSLocalizedStringWithDefaultValue(@"PCSX2_BLENDING_ACCURACY_4", @"Localizable", ourBundle, @"Full (Very Slow)", @"Full (Very Slow)"), OEPSCSX2BlendingAccuracy, 4),
+								OptionWithValue(NSLocalizedStringWithDefaultValue(@"PCSX2_BLENDING_ACCURACY_5", @"Localizable", ourBundle, @"Ultra (Ultra Slow, or Apple Silicon)", @"Ultra (Ultra Slow, or Apple Silicon)"), OEPSCSX2BlendingAccuracy, 5)]),
 	];
 	
 #undef OptionWithValue

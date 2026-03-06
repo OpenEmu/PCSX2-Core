@@ -784,6 +784,7 @@
 		55C767872B7778A5005DC873 /* GLContext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55C767862B7778A5005DC873 /* GLContext.cpp */; };
 		55C97CF12B7817AC004AB53D /* achievements-oe.mm in Sources */ = {isa = PBXBuildFile; fileRef = 55C97CF02B7817AC004AB53D /* achievements-oe.mm */; };
 		55C97CF32B78192D004AB53D /* imgui_stubs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55C97CF22B78192D004AB53D /* imgui_stubs.cpp */; };
+		55CB07662F5ACF770020FCA7 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 55CB07652F5ACF770020FCA7 /* Localizable.xcstrings */; };
 		55D3AC682F1AFEF400F0D4F9 /* MicroVU.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55D3AC672F1AFEEC00F0D4F9 /* MicroVU.cpp */; };
 		55D3AC6B2F1B007E00F0D4F9 /* Vif_Unpack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55D3AC6A2F1B007300F0D4F9 /* Vif_Unpack.cpp */; };
 		55D3AC6D2F1B00D400F0D4F9 /* Vif_Dynarec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55D3AC6C2F1B00D400F0D4F9 /* Vif_Dynarec.cpp */; };
@@ -2661,6 +2662,7 @@
 		55C97CFB2B78196B004AB53D /* ImGuiFullscreen.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ImGuiFullscreen.cpp; sourceTree = "<group>"; };
 		55C97CFC2B78196B004AB53D /* ImGuiAnimated.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImGuiAnimated.h; sourceTree = "<group>"; };
 		55C97CFD2B78196B004AB53D /* ImGuiManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ImGuiManager.cpp; sourceTree = "<group>"; };
+		55CB07652F5ACF770020FCA7 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		55D3AC672F1AFEEC00F0D4F9 /* MicroVU.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MicroVU.cpp; sourceTree = "<group>"; };
 		55D3AC6A2F1B007300F0D4F9 /* Vif_Unpack.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Vif_Unpack.cpp; sourceTree = "<group>"; };
 		55D3AC6C2F1B00D400F0D4F9 /* Vif_Dynarec.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Vif_Dynarec.cpp; sourceTree = "<group>"; };
@@ -3631,6 +3633,7 @@
 			children = (
 				550E0D452640C702008A1E48 /* PCSX2.icns */,
 				5517E8B7263D4213000219EC /* Info.plist */,
+				55CB07652F5ACF770020FCA7 /* Localizable.xcstrings */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -7313,6 +7316,7 @@
 				550E0D462640C702008A1E48 /* PCSX2.icns in Resources */,
 				55DB5A352B59027B00B3BD75 /* RedumpDatabase.yaml in Resources */,
 				5580662F27AD3A5D008CD5D2 /* GameIndex.yaml in Resources */,
+				55CB07662F5ACF770020FCA7 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -8504,6 +8508,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				VALID_ARCHS = "$(inherited) x86_64h";
 				WARNING_CFLAGS = "-Wno-ignored-attributes";
 			};
@@ -8573,6 +8578,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				VALID_ARCHS = "$(inherited) x86_64h";
 				WARNING_CFLAGS = "-Wno-ignored-attributes";
 			};
@@ -8625,6 +8631,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/ThirdParty/libjpeg",
 				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.7.5556;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.openemu.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -8737,6 +8744,7 @@
 					"$(PROJECT_DIR)/ThirdParty/libjpeg",
 				);
 				LLVM_LTO = YES_THIN;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.7.5556;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.openemu.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";

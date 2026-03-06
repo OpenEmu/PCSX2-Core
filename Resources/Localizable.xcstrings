@@ -1,0 +1,246 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "PCSX2_BLENDING_ACCURACY" : {
+      "comment" : "Blending Accuracy",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Blending Accuracy"
+          }
+        }
+      }
+    },
+    "PCSX2_BLENDING_ACCURACY_0" : {
+      "comment" : "Minimum (Fastest)",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Minimum (Fastest)"
+          }
+        }
+      }
+    },
+    "PCSX2_BLENDING_ACCURACY_1" : {
+      "comment" : "Basic (Recommended)",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Basic (Recommended)"
+          }
+        }
+      }
+    },
+    "PCSX2_BLENDING_ACCURACY_2" : {
+      "comment" : "Medium",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Medium"
+          }
+        }
+      }
+    },
+    "PCSX2_BLENDING_ACCURACY_3" : {
+      "comment" : "High",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "High"
+          }
+        }
+      }
+    },
+    "PCSX2_BLENDING_ACCURACY_4" : {
+      "comment" : "Full (Very Slow)",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Full (Very Slow)"
+          }
+        }
+      }
+    },
+    "PCSX2_BLENDING_ACCURACY_5" : {
+      "comment" : "Ultra (Ultra Slow, or Apple Silicon)",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Ultra (Ultra Slow, or Apple Silicon)"
+          }
+        }
+      }
+    },
+    "PCSX2_INTERNAL_RESOLUTION" : {
+      "comment" : "Internal Resolution",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Internal Resolution"
+          }
+        }
+      }
+    },
+    "PCSX2_INTERNAL_RESOLUTION_1X" : {
+      "comment" : "1x (default)",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "1x (default)"
+          }
+        }
+      }
+    },
+    "PCSX2_INTERNAL_RESOLUTION_2X" : {
+      "comment" : "2x (~720p)",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "2x (~720p)"
+          }
+        }
+      }
+    },
+    "PCSX2_INTERNAL_RESOLUTION_3X" : {
+      "comment" : "3x (~1080p)",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "3x (~1080p)"
+          }
+        }
+      }
+    },
+    "PCSX2_INTERNAL_RESOLUTION_4X" : {
+      "comment" : "4x (~1440p 2k)",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "4x (~1440p 2k)"
+          }
+        }
+      }
+    },
+    "PCSX2_INTERNAL_RESOLUTION_5X" : {
+      "comment" : "5x (~1620p)",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "5x (~1620p)"
+          }
+        }
+      }
+    },
+    "PCSX2_INTERNAL_RESOLUTION_6X" : {
+      "comment" : "6x (~2160p 4k)",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "6x (~2160p 4k)"
+          }
+        }
+      }
+    },
+    "PCSX2_INTERNAL_RESOLUTION_7X" : {
+      "comment" : "7x (~2520p)",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "7x (~2520p)"
+          }
+        }
+      }
+    },
+    "PCSX2_INTERNAL_RESOLUTION_8X" : {
+      "comment" : "8x (~2880p)",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "8x (~2880p)"
+          }
+        }
+      }
+    },
+    "PCSX2_NOT_INITIALIZED_SAVE_STATE" : {
+      "comment" : "PCSX2 is not initialized, creating save state impossible.",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "PCSX2 is not initialized, creating save state impossible."
+          }
+        }
+      }
+    },
+    "PCSX2_RELAUNCH_REASON" : {
+      "comment" : "PCSX2 does not run natively on Apple Silicon.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PCSX2 does not run natively on Apple Silicon."
+          }
+        }
+      }
+    },
+    "PCSX2_RELAUNCH_SUGGESTION" : {
+      "comment" : "Tell the user to relaunch OpenEmu under Rosetta 2.",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Relaunch OpenEmu under Rosetta 2 and try running the game again."
+          }
+        }
+      }
+    },
+    "PCSX2_SAVE_STATE_FAIL" : {
+      "comment" : "PCSX2 Could not save the current state: followed by a C string.",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "PCSX2 Could not save the current state: %s"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.1"
+}
